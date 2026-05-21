@@ -1,118 +1,36 @@
 <template>
-  <section class="flex flex-col gap-4 min-h-[640px] min-w-0">
-    <h2 class="text-base font-medium">Service requests</h2>
-
-    <div
-      v-if="!requests.length"
-      class="border bg-card p-12 text-center text-sm text-muted-foreground"
-    >
-      No requests yet
-    </div>
-
-    <template v-else>
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Customer</TableHead>
-          <TableHead>Remarks</TableHead>
-          <TableHead>Schedule</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead class="w-12"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow v-for="r in pageItems" :key="r.id">
-          <TableCell>
-            <div class="flex items-center gap-3">
-              <UserAvatar :name="r.customer_name ?? ''" :variant="avatarVariant(r)" />
-              <div class="leading-tight">
-                <div class="text-sm font-medium">{{ r.customer_name }}</div>
-                <div class="text-xs text-muted-foreground">{{ r.address }}</div>
-                <div class="text-xs text-muted-foreground">{{ r.pincode }}</div>
-              </div>
-            </div>
-          </TableCell>
-          <TableCell class="text-muted-foreground max-w-xs">
-            {{ r.remarks || "No remarks" }}
-          </TableCell>
-          <TableCell class="whitespace-nowrap">
-            {{ formatDateTime(r.scheduled_time) }}
-          </TableCell>
-          <TableCell><StatusBadge :status="r.service_status" /></TableCell>
-          <TableCell>
-            <DropdownMenu>
-              <DropdownMenuTrigger as-child>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  :disabled="!hasActions(r.service_status)"
-                  aria-label="Open menu"
-                >
-                  <MoreVertical class="size-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  v-if="r.service_status === 'requested'"
-                  @click="$emit('updateStatus', r.id, 'accepted')"
-                >
-                  <CheckCircle class="mr-2 size-4" />
-                  Accept request
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  v-if="r.service_status === 'accepted'"
-                  @click="$emit('updateStatus', r.id, 'in_progress')"
-                >
-                  <PlayCircle class="mr-2 size-4" />
-                  Start work
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  v-if="r.service_status === 'in_progress'"
-                  @click="$emit('updateStatus', r.id, 'completed')"
-                >
-                  <CheckCircle class="mr-2 size-4" />
-                  Mark as complete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-
-    <Pagination
-      class="mt-auto"
-      :page="page"
-      :page-size="PAGE_SIZE"
-      :total="requests.length"
-      @update:page="page = $event"
-    />
-    </template>
-  </section>
+  <DataTable
+    :columns="columns"
+    :data="requests"
+    title="Service requests"
+    description="Active and historical bookings assigned to you."
+    search-placeholder="Search requests"
+    :global-filter-accessor="
+      (r) => `${r.customer_name ?? ''} ${r.address} ${r.pincode} ${r.remarks ?? ''}`
+    "
+    empty-message="No requests match your filters."
+  />
 </template>
 
 <script lang="ts" setup>
-import { CheckCircle, MoreVertical, PlayCircle } from "lucide-vue-next";
-import { computed, ref } from "vue";
+import {
+  CheckCircle,
+  MoreVertical,
+  PlayCircle,
+} from "lucide-vue-next";
+import { h } from "vue";
+import type { ColumnDef } from "@tanstack/vue-table";
 
 import UserAvatar, { type AvatarVariant } from "@/components/Avatar.vue";
-import Pagination from "@/components/Pagination.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { formatDateTime } from "@/lib/format";
 
 export interface ProRequest {
@@ -127,18 +45,8 @@ export interface ProRequest {
 }
 
 const props = defineProps<{ requests: ProRequest[] }>();
-defineEmits<{ updateStatus: [id: number, status: string] }>();
-
-const PAGE_SIZE = 10;
-const page = ref(1);
-const pageItems = computed(() => {
-  const start = (page.value - 1) * PAGE_SIZE;
-  return props.requests.slice(start, start + PAGE_SIZE);
-});
-
-function hasActions(status: string): boolean {
-  return ["requested", "accepted", "in_progress"].includes(status);
-}
+const emit = defineEmits<{ updateStatus: [id: number, status: string] }>();
+void props;
 
 function avatarVariant(r: ProRequest): AvatarVariant {
   switch (r.service_status) {
@@ -156,4 +64,159 @@ function avatarVariant(r: ProRequest): AvatarVariant {
       return "primary";
   }
 }
+
+const columns: ColumnDef<ProRequest>[] = [
+  {
+    accessorKey: "customer_name",
+    header: "Customer",
+    enableSorting: true,
+    meta: { label: "Customer" },
+    cell: ({ row }) => {
+      const r = row.original;
+      return h(
+        "div",
+        { class: "flex items-center gap-3 min-w-0" },
+        [
+          h(UserAvatar, {
+            name: r.customer_name ?? "",
+            variant: avatarVariant(r),
+          }),
+          h(
+            "div",
+            { class: "leading-tight min-w-0" },
+            [
+              h(
+                "div",
+                { class: "text-sm font-medium truncate" },
+                r.customer_name ?? "—",
+              ),
+              h(
+                "div",
+                { class: "text-xs text-muted-foreground truncate" },
+                r.address,
+              ),
+              h(
+                "div",
+                { class: "text-xs text-muted-foreground" },
+                r.pincode,
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  },
+  {
+    accessorKey: "remarks",
+    header: "Remarks",
+    enableSorting: false,
+    meta: { label: "Remarks", cellClass: "text-muted-foreground max-w-xs" },
+    cell: ({ row }) => row.original.remarks || "No remarks",
+  },
+  {
+    accessorKey: "scheduled_time",
+    header: "Schedule",
+    enableSorting: true,
+    meta: { label: "Schedule", nowrap: true },
+    cell: ({ row }) => formatDateTime(row.original.scheduled_time),
+  },
+  {
+    id: "service_status",
+    accessorKey: "service_status",
+    header: "Status",
+    enableSorting: true,
+    filterFn: (row, _id, value: string[]) =>
+      value.includes(row.original.service_status),
+    meta: {
+      label: "Status",
+      filterOptions: [
+        { label: "Requested", value: "requested" },
+        { label: "Accepted", value: "accepted" },
+        { label: "In progress", value: "in_progress" },
+        { label: "Completed", value: "completed" },
+        { label: "Cancelled", value: "cancelled" },
+      ],
+    },
+    cell: ({ row }) => h(StatusBadge, { status: row.original.service_status }),
+  },
+  {
+    id: "actions",
+    header: "",
+    enableSorting: false,
+    enableHiding: false,
+    meta: { align: "right" },
+    cell: ({ row }) => {
+      const r = row.original;
+      const items: ReturnType<typeof h>[] = [];
+
+      if (r.service_status === "requested") {
+        items.push(
+          h(
+            DropdownMenuItem,
+            { onClick: () => emit("updateStatus", r.id, "accepted") },
+            {
+              default: () => [
+                h(CheckCircle, { class: "mr-2 size-4" }),
+                "Accept request",
+              ],
+            },
+          ),
+        );
+      } else if (r.service_status === "accepted") {
+        items.push(
+          h(
+            DropdownMenuItem,
+            { onClick: () => emit("updateStatus", r.id, "in_progress") },
+            {
+              default: () => [
+                h(PlayCircle, { class: "mr-2 size-4" }),
+                "Start work",
+              ],
+            },
+          ),
+        );
+      } else if (r.service_status === "in_progress") {
+        items.push(
+          h(
+            DropdownMenuItem,
+            { onClick: () => emit("updateStatus", r.id, "completed") },
+            {
+              default: () => [
+                h(CheckCircle, { class: "mr-2 size-4" }),
+                "Mark as complete",
+              ],
+            },
+          ),
+        );
+      }
+
+      const hasActions = items.length > 0;
+
+      return h(DropdownMenu, null, {
+        default: () => [
+          h(
+            DropdownMenuTrigger,
+            { asChild: true },
+            {
+              default: () =>
+                h(
+                  Button,
+                  {
+                    variant: "ghost",
+                    size: "icon",
+                    disabled: !hasActions,
+                    "aria-label": "Open menu",
+                  },
+                  { default: () => h(MoreVertical, { class: "size-4" }) },
+                ),
+            },
+          ),
+          hasActions
+            ? h(DropdownMenuContent, { align: "end" }, { default: () => items })
+            : null,
+        ],
+      });
+    },
+  },
+];
 </script>

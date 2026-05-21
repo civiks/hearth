@@ -1,65 +1,30 @@
 <template>
-  <div class="px-6 py-8 flex flex-col gap-4 min-h-[700px] min-w-0">
-    <header>
+  <div class="px-6 py-8 min-w-0">
+    <header class="mb-4">
       <h1 class="text-2xl font-light tracking-tight">All service requests</h1>
       <p class="text-sm text-muted-foreground">
         Read-only view of every request on the platform.
       </p>
     </header>
 
-    <div
-      v-if="!requests.length"
-      class="border bg-card p-12 text-center text-sm text-muted-foreground"
-    >
-      No service requests yet
-    </div>
-
-    <template v-else>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Service</TableHead>
-            <TableHead>Customer</TableHead>
-            <TableHead>Scheduled</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Pincode</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow v-for="r in pageItems" :key="r.id">
-            <TableCell class="font-medium">{{ r.service_name }}</TableCell>
-            <TableCell>{{ r.customer_name }}</TableCell>
-            <TableCell>{{ formatDateTime(r.scheduled_time) }}</TableCell>
-            <TableCell><StatusBadge :status="r.service_status" /></TableCell>
-            <TableCell>{{ r.pincode }}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-
-      <Pagination
-        class="mt-auto"
-        :page="page"
-        :page-size="PAGE_SIZE"
-        :total="requests.length"
-        @update:page="page = $event"
-      />
-    </template>
+    <DataTable
+      :columns="columns"
+      :data="requests"
+      search-placeholder="Search requests"
+      :global-filter-accessor="
+        (r) => `${r.service_name ?? ''} ${r.customer_name ?? ''} ${r.pincode}`
+      "
+      empty-message="No service requests yet."
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from "vue";
+import { h, onMounted, ref } from "vue";
+import type { ColumnDef } from "@tanstack/vue-table";
 
-import Pagination from "@/components/Pagination.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { DataTable } from "@/components/ui/data-table";
 import { api } from "@/lib/api";
 import { formatDateTime } from "@/lib/format";
 
@@ -76,13 +41,6 @@ interface AdminRequest {
 
 const requests = ref<AdminRequest[]>([]);
 
-const PAGE_SIZE = 10;
-const page = ref(1);
-const pageItems = computed(() => {
-  const start = (page.value - 1) * PAGE_SIZE;
-  return requests.value.slice(start, start + PAGE_SIZE);
-});
-
 onMounted(async () => {
   try {
     requests.value = await api.get<AdminRequest[]>("/api/requests");
@@ -90,4 +48,53 @@ onMounted(async () => {
     console.error("requests fetch failed", err);
   }
 });
+
+const columns: ColumnDef<AdminRequest>[] = [
+  {
+    accessorKey: "service_name",
+    header: "Service",
+    enableSorting: true,
+    meta: { label: "Service", cellClass: "font-medium" },
+    cell: ({ row }) => row.original.service_name ?? "—",
+  },
+  {
+    accessorKey: "customer_name",
+    header: "Customer",
+    enableSorting: true,
+    meta: { label: "Customer" },
+    cell: ({ row }) => row.original.customer_name ?? "—",
+  },
+  {
+    accessorKey: "scheduled_time",
+    header: "Scheduled",
+    enableSorting: true,
+    meta: { label: "Scheduled", nowrap: true },
+    cell: ({ row }) => formatDateTime(row.original.scheduled_time),
+  },
+  {
+    id: "service_status",
+    accessorKey: "service_status",
+    header: "Status",
+    enableSorting: true,
+    filterFn: (row, _id, value: string[]) =>
+      value.includes(row.original.service_status),
+    meta: {
+      label: "Status",
+      filterOptions: [
+        { label: "Requested", value: "requested" },
+        { label: "Accepted", value: "accepted" },
+        { label: "In progress", value: "in_progress" },
+        { label: "Completed", value: "completed" },
+        { label: "Cancelled", value: "cancelled" },
+      ],
+    },
+    cell: ({ row }) => h(StatusBadge, { status: row.original.service_status }),
+  },
+  {
+    accessorKey: "pincode",
+    header: "Pincode",
+    enableSorting: true,
+    meta: { label: "Pincode", nowrap: true },
+  },
+];
 </script>

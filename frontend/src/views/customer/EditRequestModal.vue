@@ -62,7 +62,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
-import type { CustomerRequest } from "./HistoryTable.vue";
+import type { CustomerRequest } from "./RequestCard.vue";
 
 const props = defineProps<{ request: CustomerRequest }>();
 const emit = defineEmits<{ close: []; updated: [] }>();

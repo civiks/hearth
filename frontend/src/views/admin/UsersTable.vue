@@ -1,138 +1,165 @@
 <template>
-  <section class="flex flex-col gap-4 min-h-[640px] min-w-0">
-    <header
-      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
-    >
-      <div>
-        <h2 class="text-base font-medium">Users</h2>
-        <p class="text-xs text-muted-foreground">Registered customers on the platform.</p>
-      </div>
-      <div class="relative w-full sm:w-64">
-        <Search class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-        <Input
-          v-model="search"
-          placeholder="Search users"
-          aria-label="Search users"
-          class="pl-9"
-        />
-      </div>
-    </header>
-
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Pincode</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead class="w-12"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow v-for="u in pageItems" :key="u.id">
-          <TableCell>
-            <div class="flex items-center gap-3">
-              <UserAvatar :name="u.full_name" :variant="u.is_blocked ? 'danger' : 'primary'" />
-              <div class="leading-tight">
-                <RouterLink
-                  :to="`/users/${u.id}`"
-                  class="text-sm font-medium hover:text-primary"
-                >
-                  {{ u.full_name }}
-                </RouterLink>
-                <div class="text-xs text-muted-foreground">{{ u.email }}</div>
-              </div>
-            </div>
-          </TableCell>
-          <TableCell>{{ u.pincode }}</TableCell>
-          <TableCell><StatusBadge :status="u.is_blocked ? 'blocked' : 'active'" /></TableCell>
-          <TableCell>
-            <DropdownMenu>
-              <DropdownMenuTrigger as-child>
-                <Button variant="ghost" size="icon" aria-label="Open menu">
-                  <MoreVertical class="size-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem @click="$emit('toggleBlock', u)">
-                  <component :is="u.is_blocked ? Unlock : Lock" class="mr-2 size-4" />
-                  {{ u.is_blocked ? "Unblock" : "Block" }}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  class="text-destructive focus:text-destructive"
-                  @click="$emit('delete', u.id)"
-                >
-                  <Trash2 class="mr-2 size-4" />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-
-    <Pagination
-      class="mt-auto"
-      :page="page"
-      :page-size="PAGE_SIZE"
-      :total="filtered.length"
-      @update:page="page = $event"
-    />
-  </section>
+  <DataTable
+    :columns="columns"
+    :data="users"
+    title="Users"
+    description="Registered customers on the platform."
+    search-placeholder="Search users"
+    :global-filter-accessor="
+      (u) => `${u.full_name} ${u.email} ${u.pincode ?? ''}`
+    "
+    empty-message="No users match your filters."
+  />
 </template>
 
 <script lang="ts" setup>
-import { Lock, MoreVertical, Search, Trash2, Unlock } from "lucide-vue-next";
-import { computed, ref, watch } from "vue";
+import { Lock, MoreVertical, Trash2, Unlock } from "lucide-vue-next";
+import { h } from "vue";
 import { RouterLink } from "vue-router";
+import type { ColumnDef } from "@tanstack/vue-table";
 
 import UserAvatar from "@/components/Avatar.vue";
-import Pagination from "@/components/Pagination.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import type { AdminUser } from "./ProfessionalsTable.vue";
 
 const props = defineProps<{ users: AdminUser[] }>();
-defineEmits<{
+const emit = defineEmits<{
   toggleBlock: [user: AdminUser];
   delete: [id: number];
 }>();
+void props;
 
-const search = ref("");
-
-const filtered = computed(() => {
-  if (!search.value) return props.users;
-  const q = search.value.toLowerCase().trim();
-  return props.users.filter(
-    (u) =>
-      u.full_name.toLowerCase().includes(q) ||
-      u.email.toLowerCase().includes(q) ||
-      (u.pincode ?? "").includes(q),
-  );
-});
-
-const PAGE_SIZE = 10;
-const page = ref(1);
-const pageItems = computed(() => {
-  const start = (page.value - 1) * PAGE_SIZE;
-  return filtered.value.slice(start, start + PAGE_SIZE);
-});
-watch(search, () => {
-  page.value = 1;
-});
+const columns: ColumnDef<AdminUser>[] = [
+  {
+    accessorKey: "full_name",
+    header: "Name",
+    enableSorting: true,
+    meta: { label: "Name" },
+    cell: ({ row }) => {
+      const u = row.original;
+      return h(
+        "div",
+        { class: "flex items-center gap-3 min-w-0" },
+        [
+          h(UserAvatar, {
+            name: u.full_name,
+            variant: u.is_blocked ? "danger" : "primary",
+          }),
+          h(
+            "div",
+            { class: "leading-tight min-w-0" },
+            [
+              h(
+                RouterLink,
+                {
+                  to: `/users/${u.id}`,
+                  class: "text-sm font-medium hover:text-primary truncate block",
+                },
+                () => u.full_name,
+              ),
+              h(
+                "div",
+                { class: "text-xs text-muted-foreground truncate" },
+                u.email,
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  },
+  {
+    accessorKey: "pincode",
+    header: "Pincode",
+    enableSorting: true,
+    meta: { label: "Pincode", nowrap: true },
+    cell: ({ row }) => row.original.pincode ?? "—",
+  },
+  {
+    id: "status",
+    accessorFn: (u) => (u.is_blocked ? "blocked" : "active"),
+    header: "Status",
+    enableSorting: true,
+    filterFn: (row, _id, value: string[]) =>
+      value.includes(row.original.is_blocked ? "blocked" : "active"),
+    meta: {
+      label: "Status",
+      filterOptions: [
+        { label: "Active", value: "active" },
+        { label: "Blocked", value: "blocked" },
+      ],
+    },
+    cell: ({ row }) =>
+      h(StatusBadge, {
+        status: row.original.is_blocked ? "blocked" : "active",
+      }),
+  },
+  {
+    id: "actions",
+    header: "",
+    enableSorting: false,
+    enableHiding: false,
+    meta: { align: "right" },
+    cell: ({ row }) => {
+      const u = row.original;
+      return h(DropdownMenu, null, {
+        default: () => [
+          h(
+            DropdownMenuTrigger,
+            { asChild: true },
+            {
+              default: () =>
+                h(
+                  Button,
+                  {
+                    variant: "ghost",
+                    size: "icon",
+                    "aria-label": "Open menu",
+                  },
+                  { default: () => h(MoreVertical, { class: "size-4" }) },
+                ),
+            },
+          ),
+          h(DropdownMenuContent, { align: "end" }, {
+            default: () => [
+              h(
+                DropdownMenuItem,
+                { onClick: () => emit("toggleBlock", u) },
+                {
+                  default: () => [
+                    h(u.is_blocked ? Unlock : Lock, {
+                      class: "mr-2 size-4",
+                    }),
+                    u.is_blocked ? "Unblock" : "Block",
+                  ],
+                },
+              ),
+              h(
+                DropdownMenuItem,
+                {
+                  class: "text-destructive focus:text-destructive",
+                  onClick: () => emit("delete", u.id),
+                },
+                {
+                  default: () => [
+                    h(Trash2, { class: "mr-2 size-4" }),
+                    "Delete",
+                  ],
+                },
+              ),
+            ],
+          }),
+        ],
+      });
+    },
+  },
+];
 </script>
