@@ -1,0 +1,65 @@
+name: deploy-pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One concurrent deploy per ref; cancel in-flight if a newer push lands.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - run: pnpm install --frozen-lockfile
+
+      # VITE_BASE matches the GitHub Pages project-page path
+      # (https://<user>.github.io/<repo>/).
+      - name: Build (demo mode, /<repo>/ base)
+        env:
+          VITE_DEMO: "1"
+          VITE_BASE: /${{ github.event.repository.name }}/
+        run: pnpm build
+
+      # SPA fallback: GitHub Pages serves 404.html for unknown paths; copying
+      # index.html into it makes deep links like /home/browse load the SPA.
+      - run: cp dist/index.html dist/404.html
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

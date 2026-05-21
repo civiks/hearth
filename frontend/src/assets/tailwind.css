@@ -1,0 +1,363 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Hide the horizontal scrollbar on overflow containers while keeping the
+ * scroll behavior. Applied to the tab navs so the macOS scrollbar (when
+ * "Always show" is set) doesn't push the bottom border 15px below the tabs.
+ */
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/*
+ * Animated 1px blue border that sweeps around a card on hover.
+ * Static state is a thin gray-20 border (matches the rest of Carbon).
+ * Hover fades in a conic-gradient ring that rotates over 3s.
+ * Reduced-motion users get a flat blue border instead.
+ */
+@property --hb-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@utility card-animated-border {
+  position: relative;
+  border: 1px solid hsl(var(--border));
+  transition: border-color 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+.card-animated-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--hb-angle),
+    transparent 0deg,
+    hsl(var(--primary)) 90deg,
+    transparent 180deg
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+.card-animated-border:hover {
+  border-color: transparent;
+}
+.card-animated-border:hover::before {
+  opacity: 1;
+  animation: hb-rotate 3s linear infinite;
+}
+@keyframes hb-rotate {
+  to {
+    --hb-angle: 360deg;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-animated-border:hover {
+    border-color: hsl(var(--primary));
+  }
+  .card-animated-border::before {
+    display: none;
+  }
+}
+
+/*
+ * Carbon Design System theme for shadcn-vue.
+ * IBM Plex Sans + #0f62fe blue + zero radius + Carbon greyscale.
+ * HSL values chosen so they convert cleanly back to the source hex.
+ */
+:root {
+  /* Surfaces */
+  --background: 0 0% 95.7%;          /* #f4f4f4 carbon gray-10 */
+  --foreground: 0 0% 8.6%;           /* #161616 carbon gray-100 */
+  --card: 0 0% 100%;                 /* #ffffff */
+  --card-foreground: 0 0% 8.6%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 8.6%;
+
+  /* Brand */
+  --primary: 219 99% 53%;            /* #0f62fe carbon blue-60 */
+  --primary-foreground: 0 0% 100%;
+
+  /* Neutrals */
+  --secondary: 0 0% 87.8%;           /* #e0e0e0 carbon gray-20 */
+  --secondary-foreground: 0 0% 8.6%;
+  --muted: 0 0% 95.7%;
+  --muted-foreground: 0 0% 32.2%;    /* #525252 carbon gray-70 */
+  --accent: 0 0% 87.8%;
+  --accent-foreground: 0 0% 8.6%;
+
+  /* Status */
+  --destructive: 354 77% 49%;        /* #da1e28 carbon red-60 */
+  --destructive-foreground: 0 0% 100%;
+  --success: 137 49% 50%;            /* #42be65 */
+  --warning: 47 89% 53%;             /* #f1c21b */
+  --info: 219 100% 64%;              /* #4589ff */
+
+  /* Borders / focus */
+  --border: 0 0% 87.8%;              /* #e0e0e0 */
+  --input: 0 0% 87.8%;
+  --ring: 219 99% 53%;               /* #0f62fe focus ring */
+
+  /* Charts */
+  --chart-1: 219 99% 53%;
+  --chart-2: 219 100% 64%;
+  --chart-3: 219 100% 75%;
+  --chart-4: 219 100% 85%;
+  --chart-5: 137 49% 50%;
+
+  /* Zero radius — Carbon signature */
+  --radius: 0px;
+
+  /* Sidebar (light theme) */
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 0 0% 8.6%;
+  --sidebar-primary: 219 99% 53%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 0 0% 95.7%;
+  --sidebar-accent-foreground: 0 0% 8.6%;
+  --sidebar-border: 0 0% 87.8%;
+  --sidebar-ring: 219 99% 53%;
+}
+
+@theme inline {
+  --font-sans:
+    "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif:
+    "IBM Plex Serif", ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar: hsl(var(--sidebar));
+
+  --color-chart-5: hsl(var(--chart-5));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-1: hsl(var(--chart-1));
+
+  --color-ring: hsl(var(--ring));
+  --color-input: hsl(var(--input));
+  --color-border: hsl(var(--border));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-success: hsl(var(--success));
+  --color-warning: hsl(var(--warning));
+  --color-info: hsl(var(--info));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card: hsl(var(--card));
+  --color-foreground: hsl(var(--foreground));
+  --color-background: hsl(var(--background));
+
+  /* All radius variants point to 0 — Carbon signature */
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+
+  /* Carbon-paced motion */
+  --default-transition-duration: 110ms;
+  --default-transition-timing-function: cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: hsl(var(--border));
+  }
+  * {
+    @apply outline-ring/50;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    /*
+     * Match the dark dashboard top bar so Safari/Chrome rubber-band overscroll
+     * doesn't expose a white sliver above the header. Routes with a light top
+     * (auth) cover this with their own surface inside min-h-svh anyway.
+     */
+    background-color: #161616;
+    /* Belt-and-braces: also disable the bounce on Safari 16+ / Chrome 63+. */
+    overscroll-behavior: none;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Carbon-style headings: light weight, tight tracking */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  /*
+   * Carbon-style inline notifications (toasts).
+   * - Zero radius, no drop shadow
+   * - 3px solid left bar in the status color (no outline on the other sides)
+   * - Title bold + subtitle inline next to it
+   * - Filled status icon on the left
+   * - No close button
+   */
+  [data-sonner-toast] {
+    border-radius: 0 !important;
+    border: 0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    padding: 14px 16px !important;
+    gap: 12px !important;
+    font-family: var(--font-sans);
+  }
+  [data-rich-colors="true"][data-sonner-toast][data-type] {
+    border-left: 3px solid var(--bar-color, currentColor) !important;
+  }
+  [data-rich-colors="true"][data-sonner-toast][data-type="success"] {
+    --bar-color: #198038;
+  }
+  [data-rich-colors="true"][data-sonner-toast][data-type="error"] {
+    --bar-color: #da1e28;
+  }
+  [data-rich-colors="true"][data-sonner-toast][data-type="warning"] {
+    --bar-color: #b28600;
+  }
+  [data-rich-colors="true"][data-sonner-toast][data-type="info"] {
+    --bar-color: #0043ce;
+  }
+  [data-sonner-toast] [data-content] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 6px;
+  }
+  [data-sonner-toast] [data-title] {
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  [data-sonner-toast] [data-description] {
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    opacity: 1;
+    margin: 0;
+  }
+  [data-sonner-toast] [data-icon] {
+    align-self: flex-start;
+    margin-top: 1px;
+  }
+}
+
+/*
+ * View Transitions API — fast, Carbon-paced crossfade.
+ * Persistent elements (.vt-sidebar / .vt-topbar / .vt-brand) get their own
+ * view-transition-name so they stay rock-still while content morphs.
+ */
+@layer base {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 260ms;
+    animation-timing-function: cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+  ::view-transition-old(root) {
+    animation-name: vt-fade-out;
+  }
+  ::view-transition-new(root) {
+    animation-name: vt-fade-in;
+  }
+  @keyframes vt-fade-out {
+    to {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+  @keyframes vt-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  .vt-sidebar {
+    view-transition-name: app-sidebar;
+  }
+  .vt-topbar {
+    view-transition-name: app-topbar;
+  }
+  .vt-tabbar {
+    view-transition-name: app-tabbar;
+  }
+  .vt-brand {
+    view-transition-name: app-brand;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+    }
+  }
+
+  /*
+   * Vue <Transition> applied inside each tabs-layout, around the inner
+   * <router-view>. Fast Carbon-paced crossfade — tab bar stays pinned.
+   */
+  .page-enter-active,
+  .page-leave-active {
+    transition:
+      opacity 120ms cubic-bezier(0.2, 0, 0.38, 0.9),
+      transform 120ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+  .page-enter-from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  .page-leave-to {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-enter-active,
+    .page-leave-active {
+      transition: none;
+    }
+    .page-enter-from,
+    .page-leave-to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
