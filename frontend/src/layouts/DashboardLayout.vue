@@ -47,9 +47,7 @@
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
-
-    <!-- Page content (each role provides its own tabs layout) -->
-    <main class="flex-1 min-h-0 overflow-hidden">
+    <main class="flex-1 min-h-0 overflow-y-auto">
       <slot />
     </main>
   </div>
