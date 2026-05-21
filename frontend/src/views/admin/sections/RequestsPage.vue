@@ -1,15 +1,10 @@
 <template>
   <div class="px-6 py-8 min-w-0">
-    <header class="mb-4">
-      <h1 class="text-2xl font-light tracking-tight">All service requests</h1>
-      <p class="text-sm text-muted-foreground">
-        Read-only view of every request on the platform.
-      </p>
-    </header>
-
     <DataTable
       :columns="columns"
       :data="requests"
+      title="All service requests"
+      description="View every request on the platform."
       search-placeholder="Search requests"
       :global-filter-accessor="
         (r) => `${r.service_name ?? ''} ${r.customer_name ?? ''} ${r.pincode}`
