@@ -2,4 +2,5 @@ allowBuilds:
   core-js: true
   esbuild: true
   maplibre-gl: false
+  sharp: true
   vue-demi: true

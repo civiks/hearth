@@ -10,7 +10,7 @@
 
     <!-- Step 1: pick role -->
     <template v-if="step === 'role'">
-      <h1 class="text-3xl font-light tracking-tight">
+      <h1 class="text-2xl font-light tracking-tight">
         Join <span class="font-medium">hearth</span>
       </h1>
       <p class="mt-1 text-sm text-muted-foreground">
@@ -64,7 +64,7 @@
         <ArrowLeft class="size-3.5" /> Back
       </button>
 
-      <h1 class="text-3xl font-light tracking-tight">
+      <h1 class="text-2xl font-light tracking-tight">
         {{ role === "user" ? "Sign up as Customer" : "Sign up as Professional" }}
       </h1>
       <p class="mt-1 text-sm text-muted-foreground">

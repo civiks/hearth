@@ -12,7 +12,7 @@
         loading="lazy"
         class="size-full object-cover"
       />
-      <!-- Carbon-style scrim on hover: strong gray gradient from the bottom -->
+      <!-- scrim on hover: strong gray gradient from the bottom -->
       <div
         class="pointer-events-none absolute inset-0 bg-gradient-to-t from-foreground/50 via-foreground/20 to-transparent opacity-0 transition-opacity duration-150 ease-out group-hover:opacity-100"
         aria-hidden="true"

@@ -8,7 +8,7 @@
       <BrandMark class="h-8 w-auto" />
     </RouterLink>
 
-    <h1 class="text-3xl font-light tracking-tight">
+    <h1 class="text-2xl font-light tracking-tight">
       Welcome back to <span class="font-medium">hearth</span>
     </h1>
     <p class="mt-1 text-sm text-muted-foreground">Sign in to continue</p>

@@ -203,14 +203,8 @@
 
   html {
     font-family: var(--font-sans);
-    /*
-     * Match the dark dashboard top bar so Safari/Chrome rubber-band overscroll
-     * doesn't expose a white sliver above the header. Routes with a light top
-     * (auth) cover this with their own surface inside min-h-svh anyway.
-     */
     background-color: #161616;
-    /* Belt-and-braces: also disable the bounce on Safari 16+ / Chrome 63+. */
-    overscroll-behavior: none;
+    overscroll-behavior-y: none;
   }
   body {
     @apply bg-background text-foreground;
@@ -219,14 +213,14 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Carbon-style headings: light weight, tight tracking */
+  /* headings: light weight, tight tracking */
   h1, h2, h3, h4, h5, h6 {
     font-weight: 400;
     letter-spacing: 0;
   }
 
   /*
-   * Carbon-style inline notifications (toasts).
+   * inline notifications (toasts).
    * - Zero radius, no drop shadow
    * - 3px solid left bar in the status color (no outline on the other sides)
    * - Title bold + subtitle inline next to it
