@@ -8,7 +8,7 @@ const routes = [
   {
     path: "/",
     component: () => import("@/views/LandingView.vue"),
-    meta: { layout: "public" },
+    meta: { layout: "public", title: "" },
     beforeEnter: () => {
       const auth = useAuthStore();
       if (auth.logged_in) return homePathForRole(auth.role);
@@ -18,22 +18,22 @@ const routes = [
   {
     path: "/terms",
     component: () => import("@/views/TermsView.vue"),
-    meta: { layout: "public" },
+    meta: { layout: "public", title: "Terms of Service" },
   },
   {
     path: "/privacy",
     component: () => import("@/views/PrivacyView.vue"),
-    meta: { layout: "public" },
+    meta: { layout: "public", title: "Privacy Policy" },
   },
   {
     path: "/login",
     component: () => import("@/views/LoginView.vue"),
-    meta: { requiresUnauth: true, layout: "auth" },
+    meta: { requiresUnauth: true, layout: "auth", title: "Sign in" },
   },
   {
     path: "/register",
     component: () => import("@/views/RegisterView.vue"),
-    meta: { requiresUnauth: true, layout: "auth" },
+    meta: { requiresUnauth: true, layout: "auth", title: "Create account" },
   },
   // Customer
   {
@@ -42,10 +42,15 @@ const routes = [
     meta: { requiresAuth: true, role: "user", layout: "dashboard" },
     children: [
       { path: "", redirect: "/home/browse" },
-      { path: "browse", component: () => import("@/views/customer/sections/BrowsePage.vue") },
+      {
+        path: "browse",
+        component: () => import("@/views/customer/sections/BrowsePage.vue"),
+        meta: { title: "Browse services" },
+      },
       {
         path: "requests",
         component: () => import("@/views/customer/sections/MyRequestsPage.vue"),
+        meta: { title: "My requests" },
       },
     ],
   },
@@ -59,14 +64,17 @@ const routes = [
       {
         path: "overview",
         component: () => import("@/views/professional/sections/OverviewPage.vue"),
+        meta: { title: "Overview" },
       },
       {
         path: "requests",
         component: () => import("@/views/professional/sections/RequestsPage.vue"),
+        meta: { title: "Requests" },
       },
       {
         path: "earnings",
         component: () => import("@/views/professional/sections/EarningsPage.vue"),
+        meta: { title: "Earnings" },
       },
     ],
   },
@@ -78,34 +86,60 @@ const routes = [
     meta: { requiresAuth: true, role: "admin", layout: "dashboard" },
     children: [
       { path: "", redirect: "/admin/overview" },
-      { path: "overview", component: () => import("@/views/admin/sections/OverviewPage.vue") },
-      { path: "services", component: () => import("@/views/admin/sections/ServicesPage.vue") },
+      {
+        path: "overview",
+        component: () => import("@/views/admin/sections/OverviewPage.vue"),
+        meta: { title: "Overview" },
+      },
+      {
+        path: "services",
+        component: () => import("@/views/admin/sections/ServicesPage.vue"),
+        meta: { title: "Services" },
+      },
       {
         path: "professionals",
         component: () => import("@/views/admin/sections/ProfessionalsPage.vue"),
+        meta: { title: "Professionals" },
       },
-      { path: "users", component: () => import("@/views/admin/sections/UsersPage.vue") },
-      { path: "requests", component: () => import("@/views/admin/sections/RequestsPage.vue") },
-      { path: "export", component: () => import("@/views/admin/sections/ExportPage.vue") },
-      { path: "testing", component: () => import("@/views/admin/sections/TestingPage.vue") },
+      {
+        path: "users",
+        component: () => import("@/views/admin/sections/UsersPage.vue"),
+        meta: { title: "Users" },
+      },
+      {
+        path: "requests",
+        component: () => import("@/views/admin/sections/RequestsPage.vue"),
+        meta: { title: "Requests" },
+      },
+      {
+        path: "export",
+        component: () => import("@/views/admin/sections/ExportPage.vue"),
+        meta: { title: "Export" },
+      },
+      {
+        path: "testing",
+        component: () => import("@/views/admin/sections/TestingPage.vue"),
+        meta: { title: "Testing" },
+      },
     ],
   },
   { path: "/admin-dashboard", redirect: "/admin/overview" },
   {
     path: "/account",
     component: () => import("@/views/AccountView.vue"),
-    meta: { requiresAuth: true, layout: "dashboard" },
+    meta: { requiresAuth: true, layout: "dashboard", title: "Account" },
   },
   {
     path: "/users/:id",
     component: () => import("@/views/AccountView.vue"),
-    meta: { requiresAuth: true, layout: "dashboard" },
+    // Title is set dynamically in AccountView once the user loads.
+    meta: { requiresAuth: true, layout: "dashboard", title: "User profile" },
     props: true,
   },
   {
     path: "/:pathMatch(.*)*",
     component: () => import("@/views/NotFoundView.vue"),
-    meta: { layout: "public" },
+    meta: { layout: "public", title: "Page not found" },
   },
 ];
 
@@ -154,6 +188,13 @@ router.beforeEach((to: RouteLocationNormalized) => {
   }
 
   return true;
+});
+
+const BRAND = "hearth";
+router.afterEach((to) => {
+  const titled = [...to.matched].reverse().find((r) => r.meta.title);
+  const t = titled?.meta.title as string | undefined;
+  document.title = t ? `${t} — ${BRAND}` : BRAND;
 });
 
 export default router;

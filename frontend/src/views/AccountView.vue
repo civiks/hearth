@@ -207,6 +207,14 @@ const avatarFallbackClass = computed(() => {
 onMounted(fetchUser);
 watch(() => route.params.id, fetchUser);
 
+watch(
+  [userData, isOwnProfile],
+  ([u, own]) => {
+    if (!u) return;
+    document.title = own ? "Account — hearth" : `${u.full_name} — hearth`;
+  },
+);
+
 async function fetchUser() {
   loading.value = true;
   error.value = null;
