@@ -1,9 +1,3 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
-
-/*
- ---break---
- */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -118,12 +112,19 @@
   --input: 0 0% 87.8%;
   --ring: 219 99% 53%;               /* #0f62fe focus ring */
 
-  /* Charts */
+  /* Charts — sequential single-hue blue ramp for trend series */
   --chart-1: 219 99% 53%;
   --chart-2: 219 100% 64%;
   --chart-3: 219 100% 75%;
   --chart-4: 219 100% 85%;
   --chart-5: 137 49% 50%;
+
+  /* Charts — categorical palette for status / multi-category charts. */
+  --chart-cat-1: 262 67% 46%;        /* #6929c4  purple-70 */
+  --chart-cat-2: 198 86% 49%;        /* #1192e8  cyan-50 */
+  --chart-cat-3: 180 100% 18%;       /* #005d5d  teal-70 */
+  --chart-cat-4: 333 71% 35%;        /* #9f1853  magenta-70 */
+  --chart-cat-5: 358 95% 64%;        /* #fa4d56  red-50 */
 
   /* Zero radius —  signature */
   --radius: 0px;
@@ -371,5 +372,60 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  :root {
+    --vis-font-family: var(--font-sans);
+  }
+  .chart svg text {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    fill: hsl(var(--muted-foreground));
+  }
+  .chart .vis-axis-tick-line,
+  .chart .vis-axis-domain-path {
+    stroke: hsl(var(--border));
+  }
+  .chart .vis-axis-grid-line {
+    stroke: hsl(var(--border));
+    stroke-dasharray: 0;
+    opacity: 0.6;
+  }
+  .chart .vis-crosshair-line {
+    stroke: hsl(var(--foreground));
+    stroke-opacity: 0.25;
+    stroke-width: 1;
+  }
+  .chart .vis-tooltip {
+    background: hsl(var(--foreground));
+    color: hsl(var(--primary-foreground));
+    border-radius: 0;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-family: var(--font-sans);
+    box-shadow: none;
+    border: 0;
+  }
+
+  .chart .vis-donut-segment {
+    transition: opacity 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    cursor: pointer;
+  }
+  .chart .vis-donut:hover .vis-donut-segment {
+    opacity: 0.45;
+  }
+  .chart .vis-donut:hover .vis-donut-segment:hover {
+    opacity: 1;
+  }
+
+  .chart .vis-grouped-bar-bar {
+    transition: opacity 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    cursor: pointer;
+  }
+  .chart .vis-grouped-bar:hover .vis-grouped-bar-bar {
+    opacity: 0.55;
+  }
+  .chart .vis-grouped-bar:hover .vis-grouped-bar-bar:hover {
+    opacity: 1;
   }
 }

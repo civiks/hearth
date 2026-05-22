@@ -457,7 +457,8 @@ function buildRequests(users: DemoUser[], services: DemoService[]): DemoRequest[
 
   for (let i = 0; i < statusPlan.length; i++) {
     const status = statusPlan[i];
-    const service = services[i % services.length];
+    const skew = Math.floor(Math.pow(i / statusPlan.length, 1.6) * services.length);
+    const service = services[Math.min(skew, services.length - 1)];
     const customer = customers[i % customers.length];
     const matchingPros = pros.filter((p) => p.service_id === service.id);
     const pro =

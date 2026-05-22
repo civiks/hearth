@@ -1,98 +1,130 @@
+<script lang="ts" setup>
+import { h, onMounted, ref } from "vue";
+import type { ColumnDef } from "@tanstack/vue-table";
+
+import { DataTable } from "@/components/ui/data-table";
+import { ApiError, api } from "@/lib/api";
+import { useAuthStore } from "@/stores/auth";
+import { useNotificationsStore } from "@/stores/notifications";
+import ApprovalNotice from "@/views/professional/ApprovalNotice.vue";
+
+interface ProRequestRaw {
+  id: number;
+  service_id: number;
+  customer_name: string | null;
+  service_status: string;
+  scheduled_time: string | null;
+  date_of_completion?: string | null;
+  date_of_request?: string;
+}
+
+interface Service {
+  id: number;
+  name: string;
+  base_price: number;
+}
+
+interface EarningRow {
+  id: number;
+  date: string | null;
+  customer_name: string;
+  service_name: string;
+  amount: number;
+}
+
+const auth = useAuthStore();
+const toasts = useNotificationsStore();
+
+const earnings = ref<EarningRow[]>([]);
+
+onMounted(async () => {
+  if (auth.approval_status !== "approved") return;
+  try {
+    const [reqs, svcs] = await Promise.all([
+      api.get<ProRequestRaw[]>("/api/requests"),
+      api.get<Service[]>("/api/services"),
+    ]);
+    const mine = reqs.filter(
+      (r) => r.service_id === auth.service_id && r.service_status === "completed",
+    );
+    earnings.value = mine
+      .map((r) => {
+        const svc = svcs.find((s) => s.id === r.service_id);
+        return {
+          id: r.id,
+          date: r.date_of_completion ?? r.date_of_request ?? null,
+          customer_name: r.customer_name ?? "—",
+          service_name: svc?.name ?? "—",
+          amount: svc?.base_price ?? 0,
+        };
+      })
+      .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
+  } catch (err) {
+    toasts.error(err instanceof ApiError ? err.detail : "Failed to load earnings");
+  }
+});
+
+function inrLong(v: number): string {
+  return `₹${Math.round(v).toLocaleString("en-IN")}`;
+}
+
+function asLongDate(s: string | null): string {
+  if (!s) return "—";
+  const d = new Date(s);
+  if (Number.isNaN(d.getTime())) return s;
+  return d.toLocaleString(undefined, { day: "2-digit", month: "short", year: "numeric" });
+}
+
+const columns: ColumnDef<EarningRow>[] = [
+  {
+    accessorKey: "date",
+    header: "Completed",
+    enableSorting: true,
+    sortingFn: (a, b) => (a.original.date ?? "").localeCompare(b.original.date ?? ""),
+    meta: { label: "Completed", nowrap: true },
+    cell: ({ row }) => asLongDate(row.original.date),
+  },
+  {
+    accessorKey: "customer_name",
+    header: "Customer",
+    enableSorting: true,
+    meta: { label: "Customer" },
+    cell: ({ row }) =>
+      h("span", { class: "text-sm" }, row.original.customer_name),
+  },
+  {
+    accessorKey: "service_name",
+    header: "Service",
+    enableSorting: true,
+    meta: { label: "Service" },
+  },
+  {
+    accessorKey: "amount",
+    header: "Amount",
+    enableSorting: true,
+    meta: { label: "Amount", align: "right", nowrap: true, cellClass: "tabular-nums" },
+    cell: ({ row }) => inrLong(row.original.amount),
+  },
+];
+</script>
+
 <template>
   <div class="px-6 py-8 space-y-6">
     <ApprovalNotice
       v-if="auth.approval_status === 'pending' || auth.approval_status === 'rejected'"
       :kind="auth.approval_status as 'pending' | 'rejected'"
     />
-    <ProfessionalAnalytics v-else :data="analytics" />
+
+    <template v-if="auth.approval_status === 'approved'">
+      <DataTable
+        :columns="columns"
+        :data="earnings"
+        title="Payouts"
+        description="One row per completed booking, most recent first."
+        search-placeholder="Search by customer or service"
+        :global-filter-accessor="(r) => `${r.customer_name} ${r.service_name}`"
+        empty-message="No completed bookings yet."
+      />
+    </template>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { onMounted, ref } from "vue";
-
-import { api } from "@/lib/api";
-import { useAuthStore } from "@/stores/auth";
-import { useNotificationsStore } from "@/stores/notifications";
-import ApprovalNotice from "@/views/professional/ApprovalNotice.vue";
-import ProfessionalAnalytics, {
-  type ProfessionalAnalyticsData,
-} from "@/views/professional/ProfessionalAnalytics.vue";
-import type { ChartData } from "@/views/admin/AdminAnalytics.vue";
-
-interface AnalyticsApi {
-  completion_rate: number;
-  monthly_earnings: { date: string; earnings: number }[];
-  status_distribution: { status: string; count: number }[];
-}
-
-const EMPTY_ANALYTICS: ProfessionalAnalyticsData = {
-  monthlyEarnings: null,
-  completionRate: null,
-  statusDistribution: null,
-};
-
-const auth = useAuthStore();
-const toasts = useNotificationsStore();
-const analytics = ref<ProfessionalAnalyticsData>({ ...EMPTY_ANALYTICS });
-
-onMounted(async () => {
-  if (auth.approval_status !== "approved") return;
-  try {
-    const data = await api.get<AnalyticsApi>("/api/analytics/professional");
-    analytics.value = transformAnalytics(data);
-  } catch (err) {
-    console.error(err);
-    toasts.error("Failed to fetch analytics");
-  }
-});
-
-function transformAnalytics(data: AnalyticsApi): ProfessionalAnalyticsData {
-  const rate = data.completion_rate || 0;
-  const completionRate: ChartData = {
-    labels: ["Completed", "Remaining"],
-    datasets: [
-      {
-        label: "Service Completion Rate",
-        data: [Number(rate.toFixed(1)), Number((100 - rate).toFixed(1))],
-        backgroundColor: ["#0043ce", "#4589ff"],
-      },
-    ],
-  };
-
-  const monthlyEarnings: ChartData | null = data.monthly_earnings.length
-    ? {
-        labels: data.monthly_earnings.map((e) =>
-          new Date(e.date).toLocaleString(undefined, { month: "short", year: "numeric" }),
-        ),
-        datasets: [
-          {
-            label: "Monthly Earnings (₹)",
-            data: data.monthly_earnings.map((e) => Math.round(e.earnings)),
-            borderColor: "#0043ce",
-            tension: 0.4,
-            fill: true,
-            backgroundColor: "rgba(0, 67, 206, 0.1)",
-          },
-        ],
-      }
-    : null;
-
-  const statusDistribution: ChartData | null = data.status_distribution.length
-    ? {
-        labels: data.status_distribution.map(
-          (s) => s.status.charAt(0).toUpperCase() + s.status.slice(1).replace("_", " "),
-        ),
-        datasets: [
-          {
-            label: "Request Status Distribution",
-            data: data.status_distribution.map((s) => Math.round(s.count)),
-            backgroundColor: ["#0043ce", "#4589ff", "#78a9ff", "#a6c8ff"],
-          },
-        ],
-      }
-    : null;
-
-  return { monthlyEarnings, completionRate, statusDistribution };
-}
-</script>

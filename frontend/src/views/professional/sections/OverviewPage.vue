@@ -1,69 +1,9 @@
-<template>
-  <div class="px-6 py-8 space-y-6">
-    <ApprovalNotice
-      v-if="auth.approval_status === 'pending' || auth.approval_status === 'rejected'"
-      :kind="auth.approval_status as 'pending' | 'rejected'"
-    />
-
-    <template v-if="auth.approval_status === 'approved'">
-      <!-- Profile header (richer in demo mode where avatar/rating exist) -->
-      <article
-        v-if="profile"
-        class="bg-card p-5 flex flex-col md:flex-row items-start md:items-center gap-4"
-      >
-        <ProfessionalAvatar
-          :name="profile.full_name"
-          :src="profile.avatar_url"
-          class="size-16 shrink-0"
-        />
-        <div class="flex-1 min-w-0">
-          <div class="flex flex-wrap items-center gap-2">
-            <h1 class="text-lg font-medium">{{ profile.full_name }}</h1>
-            <Badge variant="secondary" v-if="profile.service_name">
-              {{ profile.service_name }}
-            </Badge>
-          </div>
-          <p
-            v-if="profile.description"
-            class="text-sm text-muted-foreground mt-1 max-w-prose"
-          >
-            {{ profile.description }}
-          </p>
-          <div class="flex flex-wrap items-center gap-4 text-xs text-muted-foreground mt-2">
-            <span v-if="profile.rating != null" class="inline-flex items-center gap-1">
-              <Star class="size-3.5 fill-amber-400 text-amber-400" />
-              <span class="text-foreground font-medium">
-                {{ profile.rating.toFixed(1) }}
-              </span>
-              <span v-if="profile.review_count != null">
-                ({{ profile.review_count }} reviews)
-              </span>
-            </span>
-            <span v-if="profile.experience != null">
-              {{ profile.experience }} years experience
-            </span>
-            <span v-if="profile.pincode">PIN {{ profile.pincode }}</span>
-          </div>
-        </div>
-      </article>
-
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Pending" :value="pending.length" />
-        <StatCard label="In progress" :value="inProgress.length" />
-        <StatCard label="Completed" :value="completed.length" />
-        <StatCard label="Earnings" :value="`₹${totalEarnings}`" />
-      </div>
-    </template>
-  </div>
-</template>
-
 <script lang="ts" setup>
-import { Star } from "lucide-vue-next";
 import { computed, onMounted, ref } from "vue";
 
-import ProfessionalAvatar from "@/components/marketplace/ProfessionalAvatar.vue";
-import StatCard from "@/components/StatCard.vue";
-import { Badge } from "@/components/ui/badge";
+import { DonutChart } from "@/components/charts";
+import { categoricalPalette } from "@/components/charts/palette";
+import { DashboardWidget, MetricStrip, type StripTile } from "@/components/dashboard";
 import { ApiError, api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 import { useNotificationsStore } from "@/stores/notifications";
@@ -75,15 +15,10 @@ interface Service {
   base_price: number;
 }
 
-interface ProfileMe {
-  full_name: string;
-  service_name?: string | null;
-  description?: string | null;
-  pincode?: string | null;
-  experience?: number | null;
-  avatar_url?: string;
-  rating?: number | null;
-  review_count?: number | null;
+interface ProAnalytics {
+  completion_rate?: number;
+  monthly_earnings?: { date: string; earnings: number }[];
+  status_distribution?: { status: string; count: number }[];
 }
 
 const auth = useAuthStore();
@@ -91,10 +26,12 @@ const toasts = useNotificationsStore();
 
 const requests = ref<ProRequest[]>([]);
 const services = ref<Service[]>([]);
-const profile = ref<ProfileMe | null>(null);
+const analytics = ref<ProAnalytics>({});
 
 const pending = computed(() => requests.value.filter((r) => r.service_status === "requested"));
-const inProgress = computed(() => requests.value.filter((r) => r.service_status === "in_progress"));
+const inProgress = computed(() =>
+  requests.value.filter((r) => r.service_status === "in_progress" || r.service_status === "accepted"),
+);
 const completed = computed(() => requests.value.filter((r) => r.service_status === "completed"));
 
 const totalEarnings = computed(() =>
@@ -104,15 +41,108 @@ const totalEarnings = computed(() =>
   }, 0),
 );
 
+const earningsLabel = computed(() => {
+  const v = totalEarnings.value;
+  if (v >= 100_000) return `₹${(v / 100_000).toFixed(1)}L`;
+  if (v >= 1_000) return `₹${(v / 1_000).toFixed(1)}k`;
+  return `₹${v}`;
+});
+
+const stripTiles = computed<StripTile[]>(() => [
+  { label: "Pending", value: pending.value.length, to: "/professional/requests" },
+  { label: "In progress", value: inProgress.value.length, to: "/professional/requests" },
+  { label: "Completed", value: completed.value.length, to: "/professional/requests" },
+  { label: "Earnings", value: earningsLabel.value, to: "/professional/earnings" },
+]);
+
+const firstName = computed(() => auth.full_name?.split(" ")[0] ?? "");
+
+const greeting = computed(() => {
+  const hour = new Date().getHours();
+  if (hour < 5) return "Hello";
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+});
+
+const catColors = computed(() => categoricalPalette());
+
+const statusLegend = computed(() =>
+  (analytics.value.status_distribution ?? []).map((d, i) => ({
+    label: capitalize(d.status),
+    value: d.count,
+    color: catColors.value[i % catColors.value.length],
+  })),
+);
+
+function capitalize(s: string) {
+  return s.charAt(0).toUpperCase() + s.slice(1).replace("_", " ");
+}
+
 onMounted(async () => {
   if (auth.approval_status !== "approved") return;
   try {
     const all = await api.get<ProRequest[]>("/api/requests");
     requests.value = all.filter((r) => r.service_id === auth.service_id);
     services.value = await api.get<Service[]>("/api/services");
-    profile.value = await api.get<ProfileMe>("/api/users/me");
+    analytics.value = await api.get<ProAnalytics>("/api/analytics/professional");
   } catch (err) {
     toasts.error(err instanceof ApiError ? err.detail : "Failed to load data");
   }
 });
 </script>
+
+<template>
+  <div class="px-6 py-8 space-y-6">
+    <ApprovalNotice
+      v-if="auth.approval_status === 'pending' || auth.approval_status === 'rejected'"
+      :kind="auth.approval_status as 'pending' | 'rejected'"
+    />
+
+    <template v-if="auth.approval_status === 'approved'">
+      <header>
+        <h1 class="text-2xl font-light tracking-tight">
+          {{ greeting }}<template v-if="firstName">, {{ firstName }}</template>
+        </h1>
+        <p class="mt-1 text-sm text-muted-foreground">
+          Here's how your service is doing today.
+        </p>
+      </header>
+
+      <MetricStrip title="This month" :tiles="stripTiles" />
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+        <DashboardWidget
+          title="Status breakdown"
+          :subtitle="`${requests.length} total requests`"
+          view-all-to="/professional/requests"
+          body-class="h-40 pt-0 flex items-center gap-3"
+          chart
+        >
+          <div v-if="statusLegend.length" class="size-32 shrink-0">
+            <DonutChart
+              :data="analytics.status_distribution ?? []"
+              :value="(d) => d.count"
+              :arc-width="6"
+              :height="128"
+            />
+          </div>
+          <ul v-if="statusLegend.length" class="flex-1 min-w-0 space-y-1.5 text-xs">
+            <li
+              v-for="item in statusLegend"
+              :key="item.label"
+              class="flex items-center gap-2"
+            >
+              <span class="block size-2 shrink-0" :style="{ background: item.color }" />
+              <span class="text-muted-foreground truncate">{{ item.label }}</span>
+              <span class="ml-auto font-medium tabular-nums">{{ item.value }}</span>
+            </li>
+          </ul>
+          <p v-if="!statusLegend.length" class="text-xs text-muted-foreground">
+            No data yet.
+          </p>
+        </DashboardWidget>
+      </div>
+    </template>
+  </div>
+</template>
