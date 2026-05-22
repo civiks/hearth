@@ -1,6 +1,6 @@
 <template>
-  <section class="mx-auto max-w-7xl px-6 py-16 border-t">
-    <h2 class="text-2xl font-light tracking-tight text-center mb-10">
+  <section class="mx-auto max-w-7xl px-6 py-10 sm:py-16 border-t">
+    <h2 class="text-2xl font-light tracking-tight text-center mb-8 sm:mb-10">
       What our customers say
     </h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -1,7 +1,7 @@
 <template>
-  <section v-if="services.length" class="mx-auto max-w-7xl px-6 py-16 border-t">
-    <div class="flex items-end justify-between mb-8">
-      <div>
+  <section v-if="services.length" class="mx-auto max-w-7xl px-6 py-10 sm:py-16 border-t">
+    <div class="flex flex-wrap items-end justify-between gap-2 mb-6 sm:mb-8">
+      <div class="min-w-0">
         <h2 class="text-2xl font-light tracking-tight">Popular services</h2>
         <p class="text-sm text-muted-foreground mt-1">
           Most-booked services in your area this month.
@@ -9,7 +9,7 @@
       </div>
       <RouterLink
         to="/register"
-        class="text-sm text-primary hover:underline underline-offset-4 inline-flex items-center gap-1"
+        class="text-sm text-primary hover:underline underline-offset-4 inline-flex items-center gap-1 shrink-0"
       >
         See all
         <ArrowRight class="size-3.5" />

@@ -36,6 +36,7 @@
           title="Top rated"
           subtitle="Highest-reviewed pros, by your neighbors"
           :icon="Star"
+          icon-class="fill-amber-400 text-amber-400"
           sort-by="top-rated"
           :limit="3"
           view-all-to="/home/services"

@@ -1,10 +1,10 @@
 <template>
   <section v-if="featured.length" class="space-y-4">
-    <header class="flex items-end justify-between gap-3">
-      <div>
-        <h2 class="text-lg font-medium tracking-tight inline-flex items-center gap-2">
+    <header class="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
+      <div class="min-w-0">
+        <h2 class="text-base sm:text-lg font-medium tracking-tight inline-flex items-center gap-2">
+          <component v-if="icon" :is="icon" :class="['size-4', iconClass]" />
           {{ title }}
-          <component v-if="icon" :is="icon" class="size-4 text-primary" />
         </h2>
         <p v-if="subtitle" class="text-xs text-muted-foreground mt-0.5">
           {{ subtitle }}
@@ -57,6 +57,7 @@ const props = withDefaults(
     title?: string;
     subtitle?: string;
     icon?: LucideIcon | null;
+    iconClass?: string;
     sortBy?: SortMode;
     limit?: number;
     viewAllTo?: RouteLocationRaw;
@@ -65,6 +66,7 @@ const props = withDefaults(
     title: "Most booked this week",
     subtitle: "Top picks from your neighbors",
     icon: () => TrendingUp,
+    iconClass: "text-primary",
     sortBy: "popular",
     limit: 3,
   },
