@@ -4,21 +4,22 @@ import { cva } from 'class-variance-authority'
 export { default as Button } from './Button.vue'
 
 export const buttonVariants = cva(
-  'group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap text-sm font-normal cursor-pointer transition-colors outline-none select-none border border-transparent [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive',
+  // -style focus: 2px solid inset primary outline (drawn inside the button bounds, never clipped).
+  // Hover/active per-variant. Click also briefly compresses via active:scale-[0.98] on icon buttons for tactile feedback.
+  'group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap text-sm font-normal cursor-pointer transition-colors outline-none select-none border border-transparent [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--primary))] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive',
   {
     variants: {
       variant: {
-        // Primary — Carbon blue-60, hover blue-70.
-        default: 'bg-primary text-primary-foreground hover:bg-[#0353e9]',
-        // Tertiary — Carbon outline button (transparent fill, primary border + text, fills on hover).
-        outline: 'border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground aria-expanded:bg-primary aria-expanded:text-primary-foreground',
-        // Secondary — Carbon gray-80 fill + white text, hover gray-70.
-        secondary: 'bg-[#393939] text-white hover:bg-[#4c4c4c] aria-expanded:bg-[#4c4c4c]',
+        // Primary —  blue-60, hover blue-70, active blue-80.
+        default: 'bg-primary text-primary-foreground hover:bg-[#0353e9] active:bg-[#002d9c]',
+        outline: 'border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground active:bg-[#002d9c] active:text-primary-foreground aria-expanded:bg-primary aria-expanded:text-primary-foreground',
+        // Secondary —  gray-80 fill + white text, hover gray-70, active gray-60.
+        secondary: 'bg-[#393939] text-white hover:bg-[#4c4c4c] active:bg-[#6f6f6f] aria-expanded:bg-[#4c4c4c]',
         // Ghost — for low-emphasis actions inside cards/menus.
-        ghost: 'hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground',
-        // Danger — Carbon red-60 fill, hover red-70.
-        destructive: 'bg-destructive text-destructive-foreground hover:bg-[#b81921] focus-visible:outline-destructive',
-        link: 'text-primary underline-offset-4 hover:underline border-transparent',
+        ghost: 'hover:bg-foreground/10 hover:text-foreground active:shadow-[inset_0_0_0_2px_hsl(var(--primary))] aria-expanded:shadow-[inset_0_0_0_2px_hsl(var(--primary))]',
+        // Danger —  red-60 fill, hover red-70, active red-80, inset destructive focus.
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-[#b81921] active:bg-[#750e13] focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--destructive))]',
+        link: 'text-primary underline-offset-4 hover:underline border-transparent focus-visible:shadow-none focus-visible:underline',
       },
       size: {
         'default': 'h-10 gap-1.5 px-4 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3',

@@ -1,3 +1,9 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
+
+/*
+ ---break---
+ */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -18,7 +24,7 @@
 
 /*
  * Animated 1px blue border that sweeps around a card on hover.
- * Static state is a thin gray-20 border (matches the rest of Carbon).
+ * Static state is a thin gray-20 border (matches the rest of ).
  * Hover fades in a conic-gradient ring that rotates over 3s.
  * Reduced-motion users get a flat blue border instead.
  */
@@ -75,33 +81,33 @@
 }
 
 /*
- * Carbon Design System theme for shadcn-vue.
- * IBM Plex Sans + #0f62fe blue + zero radius + Carbon greyscale.
+ *  Design System theme for shadcn-vue.
+ * IBM Plex Sans + #0f62fe blue + zero radius +  greyscale.
  * HSL values chosen so they convert cleanly back to the source hex.
  */
 :root {
   /* Surfaces */
-  --background: 0 0% 95.7%;          /* #f4f4f4 carbon gray-10 */
-  --foreground: 0 0% 8.6%;           /* #161616 carbon gray-100 */
+  --background: 0 0% 95.7%;          /* #f4f4f4  gray-10 */
+  --foreground: 0 0% 8.6%;           /* #161616  gray-100 */
   --card: 0 0% 100%;                 /* #ffffff */
   --card-foreground: 0 0% 8.6%;
   --popover: 0 0% 100%;
   --popover-foreground: 0 0% 8.6%;
 
   /* Brand */
-  --primary: 219 99% 53%;            /* #0f62fe carbon blue-60 */
+  --primary: 219 99% 53%;            /* #0f62fe  blue-60 */
   --primary-foreground: 0 0% 100%;
 
   /* Neutrals */
-  --secondary: 0 0% 87.8%;           /* #e0e0e0 carbon gray-20 */
+  --secondary: 0 0% 87.8%;           /* #e0e0e0  gray-20 */
   --secondary-foreground: 0 0% 8.6%;
   --muted: 0 0% 95.7%;
-  --muted-foreground: 0 0% 32.2%;    /* #525252 carbon gray-70 */
+  --muted-foreground: 0 0% 32.2%;    /* #525252  gray-70 */
   --accent: 0 0% 87.8%;
   --accent-foreground: 0 0% 8.6%;
 
   /* Status */
-  --destructive: 354 77% 49%;        /* #da1e28 carbon red-60 */
+  --destructive: 354 77% 49%;        /* #da1e28  red-60 */
   --destructive-foreground: 0 0% 100%;
   --success: 137 49% 50%;            /* #42be65 */
   --warning: 47 89% 53%;             /* #f1c21b */
@@ -119,7 +125,7 @@
   --chart-4: 219 100% 85%;
   --chart-5: 137 49% 50%;
 
-  /* Zero radius — Carbon signature */
+  /* Zero radius —  signature */
   --radius: 0px;
 
   /* Sidebar (light theme) */
@@ -180,15 +186,16 @@
   --color-foreground: hsl(var(--foreground));
   --color-background: hsl(var(--background));
 
-  /* All radius variants point to 0 — Carbon signature */
+  /* All radius variants point to 0 —  signature */
   --radius-sm: var(--radius);
   --radius-md: var(--radius);
   --radius-lg: var(--radius);
   --radius-xl: var(--radius);
 
-  /* Carbon-paced motion */
+  /* -paced motion */
   --default-transition-duration: 110ms;
   --default-transition-timing-function: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --font-heading: var(--font-sans);
 }
 
 @layer base {
@@ -275,7 +282,7 @@
 }
 
 /*
- * View Transitions API — fast, Carbon-paced crossfade.
+ * View Transitions API — fast, -paced crossfade.
  * Persistent elements (.vt-sidebar / .vt-topbar / .vt-brand) get their own
  * view-transition-name so they stay rock-still while content morphs.
  */
@@ -326,7 +333,7 @@
 
   /*
    * Vue <Transition> applied inside each tabs-layout, around the inner
-   * <router-view>. Fast Carbon-paced crossfade — tab bar stays pinned.
+   * <router-view>. Fast -paced crossfade — tab bar stays pinned.
    */
   .page-enter-active,
   .page-leave-active {
@@ -353,5 +360,16 @@
       opacity: 1;
       transform: none;
     }
+  }
+}
+/*
+ ---break---
+ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
