@@ -1,6 +1,6 @@
 <template>
   <div
-    class="border bg-card p-12 text-center text-sm text-muted-foreground"
+    class="bg-card p-12 text-center text-sm text-muted-foreground"
     role="status"
   >
     <slot>{{ message }}</slot>

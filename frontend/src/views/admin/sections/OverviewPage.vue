@@ -88,6 +88,7 @@ function capitalize(s: string) {
       <StatWidget
         class="sm:col-span-4"
         title="Service requests"
+        unit="All time"
         :value="totalRequests"
         :delta="requestStats.delta"
         :trend="requestStats.sparkline"
@@ -96,6 +97,7 @@ function capitalize(s: string) {
       <StatWidget
         class="sm:col-span-4"
         title="Registered users"
+        unit="All time"
         :value="users.length"
         :delta="userStats.delta"
         :trend="userStats.sparkline"
@@ -104,6 +106,7 @@ function capitalize(s: string) {
       <StatWidget
         class="sm:col-span-4"
         title="Active professionals"
+        unit="Current"
         :value="professionals.length"
         to="/admin/professionals"
       />

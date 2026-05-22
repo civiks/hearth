@@ -24,7 +24,7 @@ withDefaults(
   <Card :class="$props.class">
     <CardHeader class="flex flex-row items-start justify-between gap-3 pb-3">
       <div class="min-w-0">
-        <h3 class="text-sm font-medium leading-tight truncate">{{ title }}</h3>
+        <h3 class="text-sm font-semibold leading-tight truncate">{{ title }}</h3>
         <p v-if="subtitle" class="text-xs text-muted-foreground mt-0.5 truncate">
           {{ subtitle }}
         </p>
