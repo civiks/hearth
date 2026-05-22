@@ -1,47 +1,32 @@
+import { execSync } from "node:child_process";
 import path from "node:path";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
-import { VitePWA } from "vite-plugin-pwa";
 
-// Allow overriding the base path at build time so GitHub Pages can serve us
-// from /<repo-name>/ while local dev + Vercel serve from /.
+// Allow overriding the base path at build time so GitHub Pages can serve
+// from repo while local dev + Vercel serve from /.
 //
 //   VITE_BASE=/hearth/ pnpm build:demo
 //
 const base = process.env.VITE_BASE ?? "/";
 
+// Per-build identifier (short git SHA). Used as the demo-state cache key so
+// every deploy auto-invalidates.
+const buildId = (() => {
+  try {
+    return execSync("git rev-parse --short HEAD").toString().trim();
+  } catch {
+    return "dev";
+  }
+})();
+
 export default defineConfig({
   base,
-  plugins: [
-    vue(),
-    tailwindcss(),
-    VitePWA({
-      registerType: "autoUpdate",
-      includeAssets: ["favicon.svg", "apple-touch-icon-180x180.png"],
-      manifest: {
-        name: "hearth",
-        short_name: "hearth",
-        description: "Household services platform",
-        theme_color: "#161616",
-        background_color: "#ffffff",
-        display: "standalone",
-        start_url: base,
-        scope: base,
-        icons: [
-          { src: "pwa-64x64.png", sizes: "64x64", type: "image/png" },
-          { src: "pwa-192x192.png", sizes: "192x192", type: "image/png" },
-          { src: "pwa-512x512.png", sizes: "512x512", type: "image/png" },
-          {
-            src: "maskable-icon-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "maskable",
-          },
-        ],
-      },
-    }),
-  ],
+  define: {
+    "import.meta.env.VITE_BUILD_ID": JSON.stringify(buildId),
+  },
+  plugins: [vue(), tailwindcss()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

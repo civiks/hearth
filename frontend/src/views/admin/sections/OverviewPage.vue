@@ -91,8 +91,9 @@ function capitalize(s: string) {
       </p>
     </header>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+    <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-stretch">
       <StatWidget
+        class="sm:col-span-4"
         title="Service requests"
         :value="totalRequests"
         :delta="requestStats.delta"
@@ -100,6 +101,7 @@ function capitalize(s: string) {
         to="/admin/requests"
       />
       <StatWidget
+        class="sm:col-span-4"
         title="Registered users"
         :value="users.length"
         :delta="userStats.delta"
@@ -107,15 +109,18 @@ function capitalize(s: string) {
         to="/admin/users"
       />
       <StatWidget
+        class="sm:col-span-4"
         title="Active professionals"
         :value="professionals.length"
         to="/admin/professionals"
       />
 
       <DashboardWidget
+        class="sm:col-span-4"
         title="Top services"
         subtitle="By bookings"
         view-all-to="/admin/services"
+        body-class="h-44"
       >
         <ul v-if="topServices.length" class="divide-y">
           <li
@@ -131,10 +136,11 @@ function capitalize(s: string) {
       </DashboardWidget>
 
       <DashboardWidget
+        class="sm:col-span-4"
         title="Professional status"
         :subtitle="`${proStatusTotal} total`"
         view-all-to="/admin/professionals"
-        body-class="h-40 pt-0 flex items-center gap-3"
+        body-class="h-44 pt-0 flex items-center gap-3"
         chart
       >
         <div v-if="proStatusLegend.length" class="size-32 shrink-0">
@@ -162,10 +168,11 @@ function capitalize(s: string) {
       </DashboardWidget>
 
       <DashboardWidget
+        class="sm:col-span-4"
         title="User status"
         :subtitle="`${userStatusTotal} total`"
         view-all-to="/admin/users"
-        body-class="h-40 pt-0 flex items-center gap-3"
+        body-class="h-44 pt-0 flex items-center gap-3"
         chart
       >
         <div v-if="userStatusLegend.length" class="size-32 shrink-0">

@@ -79,7 +79,7 @@ export interface DemoReview {
 }
 
 export interface DemoState {
-  version: number;
+  version: string;
   users: DemoUser[];
   services: DemoService[];
   requests: DemoRequest[];
@@ -90,7 +90,10 @@ export interface DemoState {
   exports: Record<string, { startedAt: number; filename: string }>;
 }
 
-export const DEMO_STATE_VERSION = 2;
+// Tied to the git SHA injected via vite.config.ts so every deploy invalidates
+// cached fixtures in localStorage. Falls back to "dev" in
+// repos without git history.
+export const DEMO_STATE_VERSION = import.meta.env.VITE_BUILD_ID ?? "dev";
 
 const photo = (id: string) =>
   `https://images.unsplash.com/photo-${id}?w=800&auto=format&fit=crop`;

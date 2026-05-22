@@ -24,11 +24,13 @@
 
     <!-- Only this area transitions on tab change; the tab bar stays put -->
     <div class="flex-1 min-w-0 overflow-auto">
-      <router-view v-slot="{ Component, route: r }">
-        <Transition name="page" mode="out-in" :appear="false">
-          <component :is="Component" :key="r.path" />
-        </Transition>
-      </router-view>
+      <div class="mx-auto w-full max-w-[1440px]">
+        <router-view v-slot="{ Component, route: r }">
+          <Transition name="page" mode="out-in" :appear="false">
+            <component :is="Component" :key="r.path" />
+          </Transition>
+        </router-view>
+      </div>
     </div>
   </div>
 </template>
