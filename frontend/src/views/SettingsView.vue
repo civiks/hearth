@@ -29,7 +29,7 @@
       <h2 class="text-xs font-medium uppercase tracking-wide text-muted-foreground pb-3 border-b">
         Appearance
       </h2>
-      <Row label="Theme" hint="Light follows the IBM  palette; dark mirrors  g100.">
+      <Row label="Theme" hint="Choose your preferred theme.">
         <Select v-model="prefs.theme">
           <SelectTrigger class="w-40">
             <SelectValue />

@@ -84,13 +84,6 @@ function capitalize(s: string) {
 
 <template>
   <div class="px-6 py-8">
-    <header class="mb-6">
-      <h1 class="text-2xl font-light tracking-tight">Overview</h1>
-      <p class="mt-1 text-sm text-muted-foreground">
-        Activity across the platform at a glance.
-      </p>
-    </header>
-
     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-stretch">
       <StatWidget
         class="sm:col-span-4"

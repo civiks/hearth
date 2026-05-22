@@ -1,13 +1,8 @@
 <template>
   <div class="px-6 py-8 space-y-6">
-    <div class="flex items-end justify-between">
-      <div>
-        <h1 class="text-xl font-light tracking-tight">My requests</h1>
-        <p class="text-xs text-muted-foreground mt-1">
-          {{ history.length }} {{ history.length === 1 ? "request" : "requests" }} on your account
-        </p>
-      </div>
-    </div>
+    <p class="text-xs text-muted-foreground">
+      {{ history.length }} {{ history.length === 1 ? "request" : "requests" }} on your account
+    </p>
 
     <div
       v-if="!history.length"
