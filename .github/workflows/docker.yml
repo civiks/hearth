@@ -2,12 +2,7 @@ name: docker
 
 on:
   push:
-    branches: [main]
     tags: ['v*']
-    paths-ignore:
-      - '**.md'
-      - 'docs/**'
-      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 env:

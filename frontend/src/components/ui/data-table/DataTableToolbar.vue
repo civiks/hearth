@@ -1,16 +1,17 @@
 <template>
-  <div
-    class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
-  >
-    <div class="min-w-0">
-      <h2 v-if="title" class="text-base font-medium">{{ title }}</h2>
-      <p v-if="description" class="text-xs text-muted-foreground">
+  <div class="space-y-3 sm:space-y-4">
+    <div v-if="title || description" class="min-w-0">
+      <h2 v-if="title" class="text-base font-medium truncate">{{ title }}</h2>
+      <p v-if="description" class="text-xs text-muted-foreground truncate">
         {{ description }}
       </p>
     </div>
 
-    <div class="flex flex-wrap items-center gap-2">
-      <div v-if="searchable" class="relative flex-1 min-w-[12rem] sm:flex-none sm:w-64">
+    <div
+      v-if="searchable || filterColumns.length || $slots.actions"
+      class="flex items-center gap-2"
+    >
+      <div v-if="searchable" class="relative flex-1 min-w-0">
         <Search
           class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground"
           :stroke-width="2"
@@ -27,14 +28,15 @@
       <DataTableFacetedFilter
         v-for="col in filterColumns"
         :key="col.id"
+        class="shrink-0"
         :column="col"
         :title="columnLabel(col)"
         :options="(col.columnDef.meta?.filterOptions as { label: string; value: string | number | boolean }[]) ?? []"
       />
 
-      <slot name="actions" />
+      <DataTableViewOptions class="shrink-0" :table="table" />
 
-      <DataTableViewOptions class="shrink-0 order-last" :table="table" />
+      <slot name="actions" />
     </div>
   </div>
 </template>

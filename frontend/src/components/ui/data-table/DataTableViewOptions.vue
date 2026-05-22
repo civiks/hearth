@@ -1,9 +1,14 @@
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger as-child>
-      <Button variant="outline" size="sm" aria-label="Toggle columns">
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        aria-label="Toggle columns"
+        title="Toggle columns"
+        class="border border-border"
+      >
         <SlidersHorizontal class="size-4" :stroke-width="2" />
-        <span class="hidden sm:inline ml-1.5">View</span>
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" class="w-44">

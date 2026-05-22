@@ -2,17 +2,20 @@
   <DropdownMenu>
     <DropdownMenuTrigger as-child>
       <Button
-        variant="outline"
-        size="sm"
-        class="border-dashed"
+        variant="ghost"
+        size="icon-sm"
         :aria-label="`Filter ${title}`"
+        :title="`Filter ${title}`"
+        :class="[
+          'border border-border',
+          selectedCount > 0 && 'text-primary hover:text-primary',
+        ]"
       >
-        <Filter class="size-4" :stroke-width="2" />
-        <span class="ml-1.5">{{ title }}</span>
-        <template v-if="selectedCount > 0">
-          <span class="mx-2 h-4 w-px bg-border" aria-hidden="true" />
-          <span class="text-xs">{{ selectedCount }} selected</span>
-        </template>
+        <Filter
+          class="size-4"
+          :stroke-width="2"
+          :fill="selectedCount > 0 ? 'currentColor' : 'none'"
+        />
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="start" class="w-52">

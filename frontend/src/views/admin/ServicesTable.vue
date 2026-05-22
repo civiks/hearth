@@ -11,7 +11,7 @@
     <template #actions>
       <Button size="sm" @click="openCreate">
         <Plus class="size-4" />
-        <span class="ml-1">Add service</span>
+        <span class="ml-1">Add</span>
       </Button>
     </template>
   </DataTable>

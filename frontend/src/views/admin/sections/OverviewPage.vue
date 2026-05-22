@@ -83,8 +83,8 @@ function capitalize(s: string) {
 </script>
 
 <template>
-  <div class="px-6 py-8">
-    <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-stretch">
+  <div class="px-4 py-4 sm:px-6 sm:py-8">
+    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-stretch">
       <StatWidget
         class="sm:col-span-4"
         title="Service requests"

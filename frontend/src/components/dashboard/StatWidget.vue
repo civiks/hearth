@@ -39,13 +39,13 @@ const hasTrend = computed(() => Boolean(props.trend && props.trend.length));
   <DashboardWidget
     :title="title"
     :view-all-to="to"
-    body-class="h-28 flex flex-col justify-end"
+    body-class="h-20 sm:h-28 flex flex-col justify-end"
   >
     <div class="flex items-end justify-between gap-3">
       <div class="min-w-0 space-y-1.5">
         <p v-if="unit" class="text-xs text-muted-foreground leading-none">{{ unit }}</p>
         <div class="flex items-baseline gap-2 min-w-0">
-          <span class="text-3xl font-light leading-none tabular-nums">{{ value }}</span>
+          <span class="text-2xl sm:text-3xl font-light leading-none tabular-nums">{{ value }}</span>
           <span
             v-if="deltaText"
             class="inline-flex items-baseline gap-0.5 text-xs font-medium"

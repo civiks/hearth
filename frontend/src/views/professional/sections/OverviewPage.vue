@@ -109,7 +109,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="px-6 py-8 space-y-6">
+  <div class="px-4 py-4 sm:px-6 sm:py-8 space-y-4 sm:space-y-6">
     <ApprovalNotice
       v-if="auth.approval_status === 'pending' || auth.approval_status === 'rejected'"
       :kind="auth.approval_status as 'pending' | 'rejected'"
@@ -117,7 +117,7 @@ onMounted(async () => {
 
     <template v-if="auth.approval_status === 'approved'">
       <header>
-        <h1 class="text-2xl font-light tracking-tight">
+        <h1 class="text-xl sm:text-2xl font-light tracking-tight">
           {{ greeting }}<template v-if="firstName">, {{ firstName }}</template>
         </h1>
         <p class="mt-1 text-sm text-muted-foreground">
@@ -127,7 +127,7 @@ onMounted(async () => {
 
       <MetricStrip title="This month" :tiles="stripTiles" />
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 items-stretch">
         <DashboardWidget
           title="Up next"
           :subtitle="`${pending.length + inProgress.length} active`"

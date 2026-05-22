@@ -8,7 +8,7 @@
 
 ## Highlights
 
-- **Three-role marketplace** — customers book services, professionals accept and fulfill, admins approve professionals and moderate the catalogue
+- **Multi-role marketplace** — customers book services, professionals accept and fulfill, admins approve professionals and moderate the catalogue
 - **Booking lifecycle** — `requested → assigned → in_progress → completed` (or `cancelled`); transitions are role-gated on the server and mirrored by client state
 - **Background pipelines** — Celery beat schedules daily reminder emails to professionals with pending requests and monthly activity reports to customers; admins kick off CSV exports as async jobs and poll for the download
 - **Role-aware analytics** — Chart.js dashboards: system-wide metrics for admin, personal earnings and status mix for professionals
@@ -32,12 +32,10 @@
 | --- | --- |
 | **Backend** | Python 3.13, FastAPI, SQLAlchemy 2.0 (typed), Alembic, Pydantic v2, Celery, Redis, PostgreSQL |
 | **Frontend** | Vue 3, TypeScript, Vite, Pinia, Tailwind CSS, Chart.js |
-| **Infra** | Docker, GitHub Actions, GitHub Pages |
+| **Infra** | Docker |
 | **Tooling** | pytest, Ruff, vue-tsc, ESLint |
 
 ## Docker
-
-Multi-arch image published to GHCR on every push to `main` (FastAPI + Celery eager + built frontend, SQLite at `/data/hearth.db`):
 
 ```bash
 docker run -p 8000:8000 -v hearth-data:/data ghcr.io/civiks/hearth:latest
