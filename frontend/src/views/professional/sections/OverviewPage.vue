@@ -10,6 +10,11 @@ import { useNotificationsStore } from "@/stores/notifications";
 import ApprovalNotice from "@/views/professional/ApprovalNotice.vue";
 import type { ProRequest } from "@/views/professional/RequestsTable.vue";
 
+interface ProRequestFull extends ProRequest {
+  service_name?: string;
+  date_of_request?: string;
+}
+
 interface Service {
   id: number;
   base_price: number;
@@ -24,7 +29,7 @@ interface ProAnalytics {
 const auth = useAuthStore();
 const toasts = useNotificationsStore();
 
-const requests = ref<ProRequest[]>([]);
+const requests = ref<ProRequestFull[]>([]);
 const services = ref<Service[]>([]);
 const analytics = ref<ProAnalytics>({});
 
@@ -75,6 +80,17 @@ const statusLegend = computed(() =>
   })),
 );
 
+const upNext = computed(() =>
+  requests.value
+    .filter((r) =>
+      r.service_status === "requested" ||
+      r.service_status === "accepted" ||
+      r.service_status === "in_progress",
+    )
+    .sort((a, b) => (b.date_of_request ?? "").localeCompare(a.date_of_request ?? ""))
+    .slice(0, 5),
+);
+
 function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1).replace("_", " ");
 }
@@ -82,7 +98,7 @@ function capitalize(s: string) {
 onMounted(async () => {
   if (auth.approval_status !== "approved") return;
   try {
-    const all = await api.get<ProRequest[]>("/api/requests");
+    const all = await api.get<ProRequestFull[]>("/api/requests");
     requests.value = all.filter((r) => r.service_id === auth.service_id);
     services.value = await api.get<Service[]>("/api/services");
     analytics.value = await api.get<ProAnalytics>("/api/analytics/professional");
@@ -111,12 +127,38 @@ onMounted(async () => {
 
       <MetricStrip title="This month" :tiles="stripTiles" />
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
+        <DashboardWidget
+          title="Up next"
+          :subtitle="`${pending.length + inProgress.length} active`"
+          view-all-to="/professional/requests"
+          body-class="h-44"
+        >
+          <ul v-if="upNext.length" class="divide-y">
+            <li
+              v-for="r in upNext"
+              :key="r.id"
+              class="flex items-center gap-3 py-1.5 text-sm"
+            >
+              <span class="flex-1 min-w-0 truncate">{{ r.customer_name ?? "—" }}</span>
+              <span class="text-xs text-muted-foreground shrink-0">
+                {{ capitalize(r.service_status) }}
+              </span>
+            </li>
+          </ul>
+          <p
+            v-else
+            class="h-full flex items-center justify-center text-xs text-muted-foreground"
+          >
+            Nothing active right now.
+          </p>
+        </DashboardWidget>
+
         <DashboardWidget
           title="Status breakdown"
           :subtitle="`${requests.length} total requests`"
           view-all-to="/professional/requests"
-          body-class="h-40 pt-0 flex items-center gap-3"
+          body-class="h-44 pt-0 flex items-center gap-3"
           chart
         >
           <div v-if="statusLegend.length" class="size-32 shrink-0">
