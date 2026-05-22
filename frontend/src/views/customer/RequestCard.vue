@@ -40,14 +40,9 @@
           </div>
         </div>
 
-        <DropdownMenu>
+        <DropdownMenu v-if="isActionable">
           <DropdownMenuTrigger as-child>
-            <Button
-              variant="ghost"
-              size="icon"
-              :disabled="!isActionable"
-              aria-label="Open menu"
-            >
+            <Button variant="ghost" size="icon" aria-label="Open menu">
               <MoreVertical class="size-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -60,7 +55,6 @@
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem
-              v-if="['requested', 'accepted'].includes(request.service_status)"
               class="text-destructive focus:text-destructive"
               @click="$emit('cancel')"
             >

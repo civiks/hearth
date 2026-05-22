@@ -70,7 +70,7 @@
       :message="emptyMessage ?? 'No matching results'"
     />
 
-    <DataTablePagination class="mt-auto" :table="table" />
+    <DataTablePagination v-if="totalRows" class="mt-auto" :table="table" />
   </section>
 </template>
 

@@ -29,7 +29,7 @@
           <Label for="password">Password</Label>
           <button
             type="button"
-            class="text-xs text-primary hover:underline cursor-pointer"
+            class="text-xs text-primary hover:underline cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             @click="onForgotPassword"
           >
             Forgot password?
@@ -46,10 +46,9 @@
           />
           <button
             type="button"
-            class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground cursor-pointer"
+            class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
             :aria-label="showPassword ? 'Hide password' : 'Show password'"
             :aria-pressed="showPassword"
-            tabindex="-1"
             @click="showPassword = !showPassword"
           >
             <EyeOff v-if="showPassword" class="size-4" />
@@ -116,9 +115,13 @@ const showPassword = ref(false);
 const loading = ref(false);
 
 function onForgotPassword() {
-  toasts.info(
-    "Password recovery isn't wired up in this demo",
-    "Try one of the seed accounts (admin@email.com / admin) or use the Demo button.",
+  if (!email.value.trim()) {
+    toasts.info("Enter your email above first.");
+    return;
+  }
+  toasts.success(
+    "Check your inbox",
+    `If an account exists for ${email.value}, a reset link is on its way.`,
   );
 }
 

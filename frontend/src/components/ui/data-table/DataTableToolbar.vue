@@ -9,8 +9,8 @@
       </p>
     </div>
 
-    <div class="flex flex-col sm:flex-row sm:items-center gap-2">
-      <div v-if="searchable" class="relative w-full sm:w-64">
+    <div class="flex flex-wrap items-center gap-2">
+      <div v-if="searchable" class="relative flex-1 min-w-[12rem] sm:flex-none sm:w-64">
         <Search
           class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground"
           :stroke-width="2"
@@ -24,19 +24,17 @@
         />
       </div>
 
-      <div v-if="filterColumns.length" class="flex flex-wrap items-center gap-2">
-        <DataTableFacetedFilter
-          v-for="col in filterColumns"
-          :key="col.id"
-          :column="col"
-          :title="columnLabel(col)"
-          :options="(col.columnDef.meta?.filterOptions as { label: string; value: string | number | boolean }[]) ?? []"
-        />
-      </div>
+      <DataTableFacetedFilter
+        v-for="col in filterColumns"
+        :key="col.id"
+        :column="col"
+        :title="columnLabel(col)"
+        :options="(col.columnDef.meta?.filterOptions as { label: string; value: string | number | boolean }[]) ?? []"
+      />
 
       <slot name="actions" />
 
-      <DataTableViewOptions :table="table" />
+      <DataTableViewOptions class="shrink-0 order-last" :table="table" />
     </div>
   </div>
 </template>

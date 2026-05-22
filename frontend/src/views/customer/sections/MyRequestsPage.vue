@@ -11,9 +11,12 @@
 
     <div
       v-if="!history.length"
-      class="border bg-card p-12 text-center text-sm text-muted-foreground"
+      class="border bg-card p-12 text-center text-sm text-muted-foreground space-y-3"
     >
-      No service history yet — head to Browse to book your first service.
+      <p>No service history yet.</p>
+      <RouterLink to="/home/browse">
+        <Button variant="outline" size="sm">Browse services</Button>
+      </RouterLink>
     </div>
 
     <div v-else class="space-y-4">
@@ -43,7 +46,9 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from "vue";
+import { RouterLink } from "vue-router";
 
+import { Button } from "@/components/ui/button";
 import { ApiError, api } from "@/lib/api";
 import { useNotificationsStore } from "@/stores/notifications";
 import EditRequestModal from "@/views/customer/EditRequestModal.vue";

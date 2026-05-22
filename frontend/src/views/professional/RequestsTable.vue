@@ -190,7 +190,7 @@ const columns: ColumnDef<ProRequest>[] = [
         );
       }
 
-      const hasActions = items.length > 0;
+      if (items.length === 0) return null;
 
       return h(DropdownMenu, null, {
         default: () => [
@@ -204,16 +204,13 @@ const columns: ColumnDef<ProRequest>[] = [
                   {
                     variant: "ghost",
                     size: "icon",
-                    disabled: !hasActions,
                     "aria-label": "Open menu",
                   },
                   { default: () => h(MoreVertical, { class: "size-4" }) },
                 ),
             },
           ),
-          hasActions
-            ? h(DropdownMenuContent, { align: "end" }, { default: () => items })
-            : null,
+          h(DropdownMenuContent, { align: "end" }, { default: () => items }),
         ],
       });
     },

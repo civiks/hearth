@@ -100,10 +100,9 @@
               />
               <button
                 type="button"
-                class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground cursor-pointer"
+                class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
                 :aria-label="showPassword ? 'Hide password' : 'Show password'"
                 :aria-pressed="showPassword"
-                tabindex="-1"
                 @click="showPassword = !showPassword"
               >
                 <EyeOff v-if="showPassword" class="size-4" />
