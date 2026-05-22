@@ -48,6 +48,11 @@ const routes = [
         meta: { title: "Browse services" },
       },
       {
+        path: "services",
+        component: () => import("@/views/customer/sections/AllServicesPage.vue"),
+        meta: { title: "All services" },
+      },
+      {
         path: "requests",
         component: () => import("@/views/customer/sections/MyRequestsPage.vue"),
         meta: { title: "My requests" },

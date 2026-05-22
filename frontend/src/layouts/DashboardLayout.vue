@@ -41,6 +41,31 @@
             <Settings class="mr-2 size-4" />
             Settings
           </DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <component :is="themeIcon" class="mr-2 size-4" />
+              Theme
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent class="w-40">
+              <DropdownMenuRadioGroup
+                :model-value="theme"
+                @update:model-value="(v) => setTheme(v as Theme)"
+              >
+                <DropdownMenuRadioItem value="light">
+                  <Sun class="mr-2 size-4" />
+                  Light
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="dark">
+                  <Moon class="mr-2 size-4" />
+                  Dark
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="system">
+                  <Monitor class="mr-2 size-4" />
+                  System
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             class="text-destructive focus:text-destructive"
@@ -59,7 +84,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ChevronDown, LogOut, Settings, UserCircle } from "lucide-vue-next";
+import {
+  ChevronDown,
+  LogOut,
+  Monitor,
+  Moon,
+  Settings,
+  Sun,
+  UserCircle,
+} from "lucide-vue-next";
 import { computed } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
@@ -70,16 +103,28 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTheme, type Theme } from "@/composables/useTheme";
 import { initials } from "@/lib/format";
 import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
 const auth = useAuthStore();
+const { theme, effectiveTheme, setTheme } = useTheme();
 
 const firstName = computed(() => auth.full_name?.split(" ")[0] ?? "");
+
+const themeIcon = computed(() => {
+  if (theme.value === "system") return Monitor;
+  return effectiveTheme.value === "dark" ? Moon : Sun;
+});
 
 async function handleLogout() {
   await auth.logout();

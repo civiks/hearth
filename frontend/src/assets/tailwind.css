@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 /*
  * Hide the horizontal scrollbar on overflow containers while keeping the
@@ -138,6 +138,64 @@
   --sidebar-accent-foreground: 0 0% 8.6%;
   --sidebar-border: 0 0% 87.8%;
   --sidebar-ring: 219 99% 53%;
+}
+
+:root.dark {
+  /* Surfaces */
+  --background: 0 0% 8.6%;           /* #161616 gray-100 */
+  --foreground: 0 0% 95.7%;          /* #f4f4f4 gray-10 */
+  --card: 0 0% 15%;                  /* #262626 gray-90 */
+  --card-foreground: 0 0% 95.7%;
+  --popover: 0 0% 15%;
+  --popover-foreground: 0 0% 95.7%;
+
+  /* Brand — same Carbon blue */
+  --primary: 219 99% 53%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Neutrals */
+  --secondary: 0 0% 22.4%;           /* #393939 gray-80 */
+  --secondary-foreground: 0 0% 95.7%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 65.9%;    /* #a8a8a8 gray-40 */
+  --accent: 0 0% 22.4%;
+  --accent-foreground: 0 0% 95.7%;
+
+  /* Status — red lifted to red-50 for legibility on dark */
+  --destructive: 354 94% 64%;        /* #fa4d56 */
+  --destructive-foreground: 0 0% 100%;
+  --success: 137 49% 50%;
+  --warning: 47 89% 53%;
+  --info: 219 100% 64%;
+
+  /* Borders / focus */
+  --border: 0 0% 22.4%;
+  --input: 0 0% 22.4%;
+  --ring: 219 100% 64%;              /* lighter focus ring on dark */
+
+  /* Sequential blue ramp — shifted one notch lighter for dark surfaces */
+  --chart-1: 219 100% 64%;
+  --chart-2: 219 100% 75%;
+  --chart-3: 219 100% 85%;
+  --chart-4: 219 100% 92%;
+  --chart-5: 137 49% 60%;
+
+  /* Categorical palette — lifted variants chosen from Carbon's dark-mode tokens */
+  --chart-cat-1: 262 81% 70%;        /* #a56eff purple-50 */
+  --chart-cat-2: 198 90% 65%;        /* #33b1ff cyan-40 */
+  --chart-cat-3: 180 49% 58%;        /* #08bdba teal-40 */
+  --chart-cat-4: 333 80% 65%;        /* #ee5396 magenta-50 */
+  --chart-cat-5: 358 95% 64%;        /* #fa4d56 red-50 */
+
+  /* Sidebar */
+  --sidebar: 0 0% 15%;
+  --sidebar-foreground: 0 0% 95.7%;
+  --sidebar-primary: 219 99% 53%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 0 0% 22.4%;
+  --sidebar-accent-foreground: 0 0% 95.7%;
+  --sidebar-border: 0 0% 22.4%;
+  --sidebar-ring: 219 100% 64%;
 }
 
 @theme inline {

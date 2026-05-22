@@ -3,7 +3,7 @@
     <DropdownMenuTrigger as-child>
       <Button
         variant="ghost"
-        size="icon-sm"
+        size="icon"
         aria-label="Toggle columns"
         title="Toggle columns"
         class="border border-border"

@@ -9,6 +9,21 @@
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
     <link rel="dns-prefetch" href="https://api.dicebear.com" />
     <title>hearth</title>
+    <script>
+      // Apply theme before paint so dark mode doesn't flash on load.
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var effective =
+            stored === "dark" ? "dark"
+            : stored === "system" ? (prefersDark ? "dark" : "light")
+            : "light";
+          if (effective === "dark") document.documentElement.classList.add("dark");
+          document.documentElement.style.colorScheme = effective;
+        } catch (_) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>

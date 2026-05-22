@@ -1,6 +1,6 @@
 <template>
   <section v-if="categories.length" class="border-b bg-card">
-    <div class="px-6 py-3">
+    <div class="mx-auto w-full max-w-[1440px] px-6 py-3">
       <ul class="flex flex-wrap gap-2">
         <li>
           <button

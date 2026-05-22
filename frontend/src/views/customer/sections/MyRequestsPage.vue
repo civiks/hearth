@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 py-8 space-y-6">
+  <div class="mx-auto w-full max-w-[1440px] px-6 py-8 space-y-6">
     <p class="text-xs text-muted-foreground">
       {{ history.length }} {{ history.length === 1 ? "request" : "requests" }} on your account
     </p>

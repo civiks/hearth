@@ -9,7 +9,7 @@
     empty-message="No services match your filters."
   >
     <template #actions>
-      <Button size="sm" @click="openCreate">
+      <Button @click="openCreate">
         <Plus class="size-4" />
         <span class="ml-1">Add</span>
       </Button>

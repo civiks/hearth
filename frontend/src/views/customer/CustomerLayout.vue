@@ -22,25 +22,24 @@
     </nav>
 
     <div class="flex-1 min-w-0 overflow-auto">
-      <div class="mx-auto w-full max-w-[1440px]">
-        <router-view v-slot="{ Component, route: r }">
-          <Transition name="page" mode="out-in" :appear="false">
-            <component :is="Component" :key="r.path" />
-          </Transition>
-        </router-view>
-      </div>
+      <router-view v-slot="{ Component, route: r }">
+        <Transition name="page" mode="out-in" :appear="false">
+          <component :is="Component" :key="r.path" />
+        </Transition>
+      </router-view>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ClipboardList, ShoppingBag } from "lucide-vue-next";
+import { ClipboardList, LayoutGrid, ShoppingBag } from "lucide-vue-next";
 import { RouterLink, useRoute } from "vue-router";
 
 const route = useRoute();
 
 const tabs = [
-  { label: "Browse services", to: "/home/browse", icon: ShoppingBag },
+  { label: "Browse", to: "/home/browse", icon: ShoppingBag },
+  { label: "All services", to: "/home/services", icon: LayoutGrid },
   { label: "My requests", to: "/home/requests", icon: ClipboardList },
 ];
 

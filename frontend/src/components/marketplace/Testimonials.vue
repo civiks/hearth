@@ -50,7 +50,7 @@ const testimonials: {
 }[] = [
   {
     name: "Anitha Bose",
-    role: "Customer in HSR Layout",
+    role: "Mahipalpur",
     parts: [
       { text: "Booked an AC service at 9 AM. Technician was at my door " },
       { text: "before noon", highlight: true },
@@ -59,7 +59,7 @@ const testimonials: {
   },
   {
     name: "Karan Vyas",
-    role: "Customer in Indiranagar",
+    role: "Indiranagar",
     parts: [
       { text: "I picked the carpenter I wanted from the list. Loved being able to see " },
       { text: "ratings and years of experience", highlight: true },
@@ -68,7 +68,7 @@ const testimonials: {
   },
   {
     name: "Priya Iyer",
-    role: "Customer in Koramangala",
+    role: "Koramangala",
     parts: [
       { text: "Their cleaning team handled my move-out spotlessly. " },
       { text: "Honest pricing", highlight: true },

@@ -1,6 +1,6 @@
 <template>
   <section class="border-b bg-card">
-    <div class="px-6 py-6 space-y-3">
+    <div class="mx-auto w-full max-w-[1440px] px-6 py-6 space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -24,6 +24,7 @@
             placeholder="Search for plumbing, AC repair, cleaning…"
             class="pl-9 h-10"
             @update:model-value="$emit('update:modelValue', String($event))"
+            @keyup.enter="$emit('submit', modelValue)"
           />
         </div>
       </div>
@@ -38,7 +39,10 @@ import { computed } from "vue";
 import { Input } from "@/components/ui/input";
 
 const props = defineProps<{ modelValue: string; bookingsThisWeek?: number }>();
-defineEmits<{ "update:modelValue": [value: string] }>();
+defineEmits<{
+  "update:modelValue": [value: string];
+  submit: [value: string];
+}>();
 
 const bookedToday = computed(() => props.bookingsThisWeek ?? 147);
 </script>

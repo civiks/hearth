@@ -14,11 +14,13 @@ import { useRoute, useRouter, type RouteRecordRaw } from "vue-router";
 import DemoBar from "@/components/DemoBar.vue";
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
 import { Toaster } from "@/components/ui/sonner";
+import { useTheme } from "@/composables/useTheme";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import PublicLayout from "@/layouts/PublicLayout.vue";
 import { DEMO } from "@/lib/demo/flag";
 
+useTheme();
 const route = useRoute();
 const router = useRouter();
 
