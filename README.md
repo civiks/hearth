@@ -2,7 +2,7 @@
 
 # hearth
 
-[demo](https://civiks.github.io/hearth/) · [docker](#docker) · [setup](#setup)
+[demo](https://civiks.github.io/hearth/) · [docker](#docker) · [setup](#setup) · [todo](TODO.md)
 
 > A marketplace for home services.
 

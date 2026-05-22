@@ -28,6 +28,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ApiError, api } from "@/lib/api";
+import { DEMO } from "@/lib/demo/flag";
 import { useNotificationsStore } from "@/stores/notifications";
 
 interface ExportStatus {
@@ -58,6 +59,26 @@ async function run() {
   }
 }
 
+// In demo builds hand the user a small client-side CSV
+function downloadDemoCsv(filename: string) {
+  const rows = [
+    ["id", "customer", "service", "status", "scheduled_at"],
+    ["1", "Aanya Iyer", "Plumbing repair", "completed", "2026-05-18T09:30:00Z"],
+    ["2", "Rohan Mehta", "Deep cleaning", "in_progress", "2026-05-20T14:00:00Z"],
+    ["3", "Sneha Kapoor", "AC servicing", "requested", "2026-05-23T11:00:00Z"],
+  ];
+  const csv = rows.map((r) => r.join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 function poll(taskId: string) {
   if (pollHandle.value) clearInterval(pollHandle.value);
   pollHandle.value = setInterval(async () => {
@@ -67,8 +88,12 @@ function poll(taskId: string) {
         if (pollHandle.value) clearInterval(pollHandle.value);
         busy.value = false;
         toasts.success("Export ready. Downloading…");
-        const base = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
-        window.location.href = `${base}/api/download-export/${data.filename}`;
+        if (DEMO) {
+          downloadDemoCsv(data.filename);
+        } else {
+          const base = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+          window.location.href = `${base}/api/download-export/${data.filename}`;
+        }
       } else if (data.status === "FAILURE") {
         if (pollHandle.value) clearInterval(pollHandle.value);
         busy.value = false;

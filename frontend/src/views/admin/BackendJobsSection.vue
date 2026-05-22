@@ -54,6 +54,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ApiError, api } from "@/lib/api";
+import { DEMO } from "@/lib/demo/flag";
 import { useNotificationsStore } from "@/stores/notifications";
 
 type JobKey = "daily" | "monthly" | "activity";
@@ -80,6 +81,13 @@ async function trigger(path: JobPath, key: JobKey, successMsg: string) {
 }
 
 function openMailHog() {
+  if (DEMO) {
+    toasts.info(
+      "MailHog runs in local dev only",
+      "Clone the repo and run `make dev` — MailHog catches outbound mail at :8025.",
+    );
+    return;
+  }
   window.open("http://localhost:8025", "_blank");
 }
 </script>
