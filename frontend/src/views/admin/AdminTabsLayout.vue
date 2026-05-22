@@ -37,8 +37,7 @@
 import {
   Briefcase,
   ClipboardList,
-  Download,
-  FlaskConical,
+  Hammer,
   LayoutDashboard,
   Users,
   Wrench,
@@ -53,8 +52,7 @@ const tabs = [
   { label: "Professionals", to: "/admin/professionals", icon: Briefcase },
   { label: "Users", to: "/admin/users", icon: Users },
   { label: "Requests", to: "/admin/requests", icon: ClipboardList },
-  { label: "Export", to: "/admin/export", icon: Download },
-  { label: "Testing", to: "/admin/testing", icon: FlaskConical },
+  { label: "Tools", to: "/admin/tools", icon: Hammer },
 ];
 
 function isActive(to: string): boolean {

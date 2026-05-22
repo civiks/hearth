@@ -112,15 +112,13 @@ const routes = [
         meta: { title: "Requests" },
       },
       {
-        path: "export",
-        component: () => import("@/views/admin/sections/ExportPage.vue"),
-        meta: { title: "Export" },
+        path: "tools",
+        component: () => import("@/views/admin/sections/ToolsPage.vue"),
+        meta: { title: "Admin tools" },
       },
-      {
-        path: "testing",
-        component: () => import("@/views/admin/sections/TestingPage.vue"),
-        meta: { title: "Testing" },
-      },
+      // Legacy redirects for the now-merged Export + Testing pages.
+      { path: "export", redirect: "/admin/tools" },
+      { path: "testing", redirect: "/admin/tools" },
     ],
   },
   { path: "/admin-dashboard", redirect: "/admin/overview" },
@@ -128,6 +126,11 @@ const routes = [
     path: "/account",
     component: () => import("@/views/AccountView.vue"),
     meta: { requiresAuth: true, layout: "dashboard", title: "Account" },
+  },
+  {
+    path: "/settings",
+    component: () => import("@/views/SettingsView.vue"),
+    meta: { requiresAuth: true, layout: "dashboard", title: "Settings" },
   },
   {
     path: "/users/:id",

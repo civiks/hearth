@@ -13,7 +13,7 @@
         <DropdownMenuTrigger as-child>
           <button
             type="button"
-            class="flex items-center gap-2 px-2 py-1 transition hover:bg-white/10"
+            class="flex items-center gap-2 px-2 py-1 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#161616]"
           >
             <Avatar class="size-6">
               <AvatarFallback class="bg-primary text-primary-foreground text-[10px]">
@@ -21,6 +21,7 @@
               </AvatarFallback>
             </Avatar>
             <span class="hidden sm:inline text-xs">{{ auth.email }}</span>
+            <span class="sm:hidden text-xs">{{ firstName }}</span>
             <ChevronDown class="size-3.5 opacity-70" />
           </button>
         </DropdownMenuTrigger>
@@ -35,6 +36,10 @@
           <DropdownMenuItem @click="$router.push('/account')">
             <UserCircle class="mr-2 size-4" />
             Account
+          </DropdownMenuItem>
+          <DropdownMenuItem @click="$router.push('/settings')">
+            <Settings class="mr-2 size-4" />
+            Settings
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -54,7 +59,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ChevronDown, LogOut, UserCircle } from "lucide-vue-next";
+import { ChevronDown, LogOut, Settings, UserCircle } from "lucide-vue-next";
+import { computed } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import BrandMark from "@/components/BrandMark.vue";
@@ -72,6 +78,8 @@ import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
 const auth = useAuthStore();
+
+const firstName = computed(() => auth.full_name?.split(" ")[0] ?? "");
 
 async function handleLogout() {
   await auth.logout();
