@@ -1,7 +1,7 @@
 import { nextTick } from "vue";
 import { createRouter, createWebHistory, type RouteLocationNormalized } from "vue-router";
 
-import { homePathForRole } from "@/lib/api";
+import { LOGGED_OUT_PATH, homePathForRole } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 
 const routes = [
@@ -184,7 +184,7 @@ router.beforeEach((to: RouteLocationNormalized) => {
   const auth = useAuthStore();
 
   if (to.matched.some((r) => r.meta.requiresAuth)) {
-    if (!auth.logged_in) return "/login";
+    if (!auth.logged_in) return LOGGED_OUT_PATH;
     const requiredRole = to.meta.role as string | undefined;
     if (requiredRole && auth.role !== requiredRole) {
       return homePathForRole(auth.role);

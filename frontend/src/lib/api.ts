@@ -51,6 +51,11 @@ export const api = {
   delete: <T>(path: string, init?: RequestInit) => request<T>("DELETE", path, undefined, init),
 };
 
+// Fallback when there's no role: in DEMO the demo entry lives on the landing
+// page (`/`), so logged-out visitors land there. In production, route them to
+// the auth form.
+export const LOGGED_OUT_PATH = DEMO ? "/" : "/login";
+
 export function homePathForRole(role: Role | string | null | undefined): string {
   switch (role) {
     case "admin":
@@ -60,6 +65,6 @@ export function homePathForRole(role: Role | string | null | undefined): string 
     case "user":
       return "/home/browse";
     default:
-      return "/login";
+      return LOGGED_OUT_PATH;
   }
 }

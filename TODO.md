@@ -15,6 +15,10 @@
 - [x] **Theme toggle (light/dark).** Stub UI in `/settings`. tokens already wired in `tailwind.css` — needs a Pinia store + persisted preference + `<html data-theme>` switch.
 - [ ] **Density preference.** Stub UI. Compact vs. comfortable spacing for tables and forms.
 
+## Marketing site
+
+- [ ] **Public footer stub links.** `PublicLayout.vue` footer items `Book a service`, `Browse services`, `Help center`, `Become a pro`, `Pro resources`, `Pro app` point at `#`. Wire each to a real route (or repoint to portfolio destinations e.g. GitHub README).
+
 ## Marketplace
 
 - [ ] **Ratings & reviews.** Customers should be able to rate professionals after a completed booking. Schema scaffolded but write path / display widget not wired.

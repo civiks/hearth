@@ -9,7 +9,7 @@
         <span class="font-semibold text-base tracking-tight">hearth</span>
       </RouterLink>
 
-      <DropdownMenu>
+      <DropdownMenu :modal="false">
         <DropdownMenuTrigger as-child>
           <button
             type="button"
@@ -66,7 +66,35 @@
               </DropdownMenuRadioGroup>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
+          <DropdownMenuSub v-if="DEMO">
+            <DropdownMenuSubTrigger>
+              <Repeat class="mr-2 size-4" />
+              Switch role
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent class="w-44">
+              <DropdownMenuRadioGroup
+                :model-value="auth.role ?? ''"
+                @update:model-value="(v) => loginAs(v as Role)"
+              >
+                <DropdownMenuRadioItem
+                  v-for="r in DEMO_ROLES"
+                  :key="r.value"
+                  :value="r.value"
+                >
+                  <component :is="r.icon" class="mr-2 size-4" />
+                  {{ r.label }}
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
           <DropdownMenuSeparator />
+          <DropdownMenuItem
+            v-if="DEMO"
+            @click="resetDemoData"
+          >
+            <RotateCcw class="mr-2 size-4" />
+            Reset demo data
+          </DropdownMenuItem>
           <DropdownMenuItem
             variant="destructive"
             @click="handleLogout"
@@ -89,6 +117,8 @@ import {
   LogOut,
   Monitor,
   Moon,
+  Repeat,
+  RotateCcw,
   Settings,
   Sun,
   UserCircle,
@@ -111,13 +141,17 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDemoLogin, DEMO_ROLES } from "@/composables/useDemoLogin";
 import { useTheme, type Theme } from "@/composables/useTheme";
+import { type Role } from "@/lib/api";
+import { DEMO } from "@/lib/demo/flag";
 import { initials } from "@/lib/format";
 import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
 const auth = useAuthStore();
 const { theme, effectiveTheme, setTheme } = useTheme();
+const { loginAs, resetDemoData } = useDemoLogin();
 
 const firstName = computed(() => auth.full_name?.split(" ")[0] ?? "");
 

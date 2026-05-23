@@ -3,7 +3,6 @@
   <component :is="layoutComponent">
     <router-view />
   </component>
-  <DemoBar v-if="DEMO && route.meta.layout === 'auth'" />
   <Toaster position="top-right" rich-colors />
 </template>
 
@@ -11,14 +10,12 @@
 import { computed, defineComponent, h, onMounted } from "vue";
 import { useRoute, useRouter, type RouteRecordRaw } from "vue-router";
 
-import DemoBar from "@/components/DemoBar.vue";
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
 import { Toaster } from "@/components/ui/sonner";
 import { useTheme } from "@/composables/useTheme";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import PublicLayout from "@/layouts/PublicLayout.vue";
-import { DEMO } from "@/lib/demo/flag";
 
 useTheme();
 const route = useRoute();

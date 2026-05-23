@@ -304,6 +304,8 @@
   --radius-md: var(--radius);
   --radius-lg: var(--radius);
   --radius-xl: var(--radius);
+  --radius-2xl: var(--radius);
+  --radius-3xl: var(--radius);
 
   /* -paced motion */
   --default-transition-duration: 110ms;

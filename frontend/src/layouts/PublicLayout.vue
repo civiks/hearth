@@ -46,6 +46,69 @@
     <main :class="['flex-1', !overlayHeader && 'pt-12']">
       <slot />
     </main>
+
+    <footer v-if="isLanding" class="bg-surface-inverse text-surface-inverse-foreground">
+      <div class="mx-auto max-w-7xl px-6 py-10">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-8">
+          <div class="col-span-2 sm:col-span-1">
+            <div class="flex items-center gap-2">
+              <BrandMark class="h-5 w-auto" />
+              <span class="font-semibold text-base tracking-tight leading-none">hearth</span>
+            </div>
+          </div>
+          <div>
+            <h3
+              class="text-[11px] uppercase tracking-wider text-surface-inverse-foreground/60 font-normal mb-3"
+            >
+              For customers
+            </h3>
+            <ul class="space-y-2 text-sm">
+              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Book a service</a></li>
+              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Browse services</a></li>
+              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Help center</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3
+              class="text-[11px] uppercase tracking-wider text-surface-inverse-foreground/60 font-normal mb-3"
+            >
+              For pros
+            </h3>
+            <ul class="space-y-2 text-sm">
+              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Become a pro</a></li>
+              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Pro resources</a></li>
+              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Pro app</a></li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="mt-8 pt-6 border-t border-surface-inverse-foreground/10 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-xs text-surface-inverse-foreground/60"
+        >
+          <span>© 2026 hearth</span>
+          <div class="flex gap-x-6">
+            <RouterLink to="/privacy" class="hover:underline">Privacy</RouterLink>
+            <RouterLink to="/terms" class="hover:underline">Terms</RouterLink>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Minimal footer — every other public route (terms, privacy, etc) -->
+    <footer v-else class="bg-surface-inverse text-surface-inverse-foreground">
+      <div
+        class="mx-auto max-w-7xl px-6 py-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-xs"
+      >
+        <div class="flex items-center gap-2">
+          <BrandMark class="h-4 w-auto" />
+          <span class="font-semibold tracking-tight leading-none">hearth</span>
+          <span class="text-surface-inverse-foreground/60 ml-3">© 2026</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-surface-inverse-foreground/70">
+          <RouterLink to="/privacy" class="hover:underline">Privacy</RouterLink>
+          <RouterLink to="/terms" class="hover:underline">Terms</RouterLink>
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -64,7 +127,10 @@ const home = computed(() => homePathForRole(auth.role));
 
 // On the homepage (/) the hero has its own full-bleed background image, so
 // the header floats transparently over it instead of sitting on a solid dark bar.
-const overlayHeader = computed(() => route.path === "/");
+// Landing also gets the full footer (link columns); /terms, /privacy, etc.
+// get the minimal one-row variant.
+const isLanding = computed(() => route.path === "/");
+const overlayHeader = isLanding;
 
 // On the homepage the header bg fades from transparent to solid #161616 once the
 // hero's internal top-down gradient is no longer covering the header area
