@@ -70,7 +70,7 @@
                 <ShieldCheck class="size-4 text-white/90" />
                 <span>Verified professionals</span>
               </div>
-              <div class="flex items-center gap-2">
+              <div class="hidden sm:flex items-center gap-2">
                 <Clock class="size-4 text-white/90" />
                 <span>Same-day service</span>
               </div>
@@ -81,7 +81,7 @@
     </section>
 
     <!-- Popular services (live data from /api/services) -->
-    <PopularServicesRow v-if="services.length" :services="services" />
+    <PopularServicesRow :services="services" :loading="loading" />
 
     <!-- How it works -->
     <HowItWorks />
@@ -126,15 +126,33 @@ interface PublicService {
   review_count?: number;
 }
 
-const services = ref<PublicService[]>([]);
+// Module-scope cache survives component unmount. Without this, navigating
+// to /register and back re-runs the fetch and triggers a layout shift when
+// PopularServicesRow appears mid-transition.
+const cachedServices = ref<PublicService[]>([]);
+let inflight: Promise<void> | null = null;
+
+const services = cachedServices;
+const loading = ref(cachedServices.value.length === 0);
 
 onMounted(async () => {
-  try {
-    const data = await api.get<PublicService[]>("/api/services");
-    services.value = data.filter((s) => s.rating != null).slice(0, 6);
-  } catch {
-    services.value = [];
+  if (cachedServices.value.length) {
+    loading.value = false;
+    return;
   }
+  loading.value = true;
+  inflight ??= (async () => {
+    try {
+      const data = await api.get<PublicService[]>("/api/services");
+      cachedServices.value = data.filter((s) => s.rating != null).slice(0, 6);
+    } catch {
+      cachedServices.value = [];
+    } finally {
+      inflight = null;
+    }
+  })();
+  await inflight;
+  loading.value = false;
 });
 
 </script>

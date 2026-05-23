@@ -12,7 +12,7 @@
 ## Settings
 
 - [ ] **Notification preferences.** Stub UI in `/settings`. Needs a `user_preferences` table (email opt-ins per category), wired into the Celery reminder/report tasks.
-- [ ] **Theme toggle (light/dark).** Stub UI in `/settings`. tokens already wired in `tailwind.css` — needs a Pinia store + persisted preference + `<html data-theme>` switch.
+- [x] **Theme toggle (light/dark).** Stub UI in `/settings`. tokens already wired in `tailwind.css` — needs a Pinia store + persisted preference + `<html data-theme>` switch.
 - [ ] **Density preference.** Stub UI. Compact vs. comfortable spacing for tables and forms.
 
 ## Marketplace
