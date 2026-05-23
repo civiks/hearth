@@ -95,8 +95,10 @@ export interface DemoState {
 // repos without git history.
 export const DEMO_STATE_VERSION = import.meta.env.VITE_BUILD_ID ?? "dev";
 
+// Base width sized for the smallest realistic card slot (~390 px mobile);
+// ServiceCard derives a srcset from this URL for retina + larger viewports.
 const photo = (id: string) =>
-  `https://images.unsplash.com/photo-${id}?w=800&auto=format&fit=crop`;
+  `https://images.unsplash.com/photo-${id}?w=480&q=75&auto=format&fit=crop`;
 const avatar = (seed: string) =>
   `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}`;
 

@@ -7,7 +7,16 @@
     >
       <div class="relative mx-auto max-w-7xl">
         <img
-          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1800&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1280&q=75&auto=format&fit=crop"
+          srcset="
+            https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=640&q=75&auto=format&fit=crop 640w,
+            https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=960&q=75&auto=format&fit=crop 960w,
+            https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1280&q=75&auto=format&fit=crop 1280w,
+            https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1920&q=75&auto=format&fit=crop 1920w
+          "
+          sizes="(max-width: 1280px) 100vw, 1280px"
+          fetchpriority="high"
+          decoding="async"
           alt=""
           aria-hidden="true"
           class="absolute inset-0 w-full h-full object-cover opacity-90"

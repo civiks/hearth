@@ -12,7 +12,7 @@
       >
         <RouterLink to="/" class="vt-brand flex items-center gap-2">
           <BrandMark class="h-4 w-auto" />
-          <span class="font-serif font-semibold text-base tracking-tight">hearth</span>
+          <span class="font-semibold text-base tracking-tight">hearth</span>
         </RouterLink>
         <nav class="flex items-center gap-1">
           <Button

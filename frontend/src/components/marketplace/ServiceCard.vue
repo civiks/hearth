@@ -8,6 +8,8 @@
       <img
         v-if="service.image_url"
         :src="service.image_url"
+        :srcset="imageSrcset"
+        :sizes="imageSrcset ? '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px' : undefined"
         :alt="service.name"
         loading="lazy"
         class="size-full object-cover"
@@ -66,10 +68,11 @@
 
 <script lang="ts" setup>
 import { Clock, IndianRupee, Star } from "lucide-vue-next";
+import { computed } from "vue";
 
 import { Badge } from "@/components/ui/badge";
 
-defineProps<{
+const props = defineProps<{
   service: {
     id: number;
     name: string;
@@ -84,4 +87,15 @@ defineProps<{
 }>();
 
 defineEmits<{ select: [] }>();
+
+// Builds a responsive srcset from an Unsplash URL by swapping the `w=` param.
+// Returns undefined for non-Unsplash URLs so the browser falls back to `src`.
+const SRCSET_WIDTHS = [320, 480, 768, 960];
+const imageSrcset = computed(() => {
+  const url = props.service.image_url;
+  if (!url || !url.includes("images.unsplash.com") || !/w=\d+/.test(url)) {
+    return undefined;
+  }
+  return SRCSET_WIDTHS.map((w) => `${url.replace(/w=\d+/, `w=${w}`)} ${w}w`).join(", ");
+});
 </script>

@@ -354,7 +354,7 @@ function createService(body: Record<string, unknown>) {
       base_price: Number(body.base_price ?? 0),
       time_required: Number(body.time_required ?? 60),
       is_active: true,
-      image_url: `https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&auto=format&fit=crop`,
+      image_url: `https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=480&q=75&auto=format&fit=crop`,
       rating: 4.5,
       review_count: 0,
     };
