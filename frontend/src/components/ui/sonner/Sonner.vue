@@ -19,23 +19,23 @@ const props = defineProps<ToasterProps>()
   <Sonner
     :class="cn('toaster group', props.class)"
     :style="{
-      // Default toast (no rich-colors): white surface, gray-100 text, gray-20 border.
-      '--normal-bg': '#ffffff',
-      '--normal-text': '#161616',
-      '--normal-border': '#e0e0e0',
-      // Carbon notification palette for rich-colors variants.
-      '--success-bg': '#defbe6',
-      '--success-border': '#198038',
-      '--success-text': '#0e6027',
-      '--error-bg': '#fff1f1',
-      '--error-border': '#da1e28',
-      '--error-text': '#a2191f',
-      '--warning-bg': '#fdf6dd',
-      '--warning-border': '#b28600',
-      '--warning-text': '#684e00',
-      '--info-bg': '#edf5ff',
-      '--info-border': '#0043ce',
-      '--info-text': '#002d9c',
+      // Default toast (no rich-colors) — popover surface, foreground text, border token.
+      '--normal-bg': 'hsl(var(--popover))',
+      '--normal-text': 'hsl(var(--popover-foreground))',
+      '--normal-border': 'hsl(var(--border))',
+      // Status variants — bg/text are pale tints, border = corresponding `*-strong` token.
+      '--success-bg': 'hsl(var(--toast-success-bg))',
+      '--success-border': 'hsl(var(--success-strong))',
+      '--success-text': 'hsl(var(--toast-success-text))',
+      '--error-bg': 'hsl(var(--toast-error-bg))',
+      '--error-border': 'hsl(var(--destructive))',
+      '--error-text': 'hsl(var(--toast-error-text))',
+      '--warning-bg': 'hsl(var(--toast-warning-bg))',
+      '--warning-border': 'hsl(var(--warning-strong))',
+      '--warning-text': 'hsl(var(--toast-warning-text))',
+      '--info-bg': 'hsl(var(--toast-info-bg))',
+      '--info-border': 'hsl(var(--info-strong))',
+      '--info-text': 'hsl(var(--toast-info-text))',
       '--border-radius': '0px',
     }"
     v-bind="props"

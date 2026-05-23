@@ -55,11 +55,11 @@
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem
-              class="text-destructive focus:text-destructive"
+              variant="destructive"
               @click="$emit('cancel')"
             >
               <XCircle class="mr-2 size-4" />
-              Cancel request
+              Cancel
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

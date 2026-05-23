@@ -10,15 +10,15 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Primary —  blue-60, hover blue-70, active blue-80.
-        default: 'bg-primary text-primary-foreground hover:bg-[#0353e9] active:bg-[#002d9c]',
-        outline: 'border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground active:bg-[#002d9c] active:text-primary-foreground aria-expanded:bg-primary aria-expanded:text-primary-foreground',
-        // Secondary —  gray-80 fill + white text, hover gray-70, active gray-60.
-        secondary: 'bg-[#393939] text-white hover:bg-[#4c4c4c] active:bg-[#6f6f6f] aria-expanded:bg-[#4c4c4c]',
+        // Primary — blue-60, hover blue-70, active blue-80 (all tokenized).
+        default: 'bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active',
+        outline: 'border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground active:bg-primary-active active:text-primary-foreground aria-expanded:bg-primary aria-expanded:text-primary-foreground',
+        // Secondary — theme-aware: dark theme inherits gray-80 hover→gray-70; light theme uses gray-20 hover→gray-30.
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary-hover active:bg-secondary-active aria-expanded:bg-secondary-hover',
         // Ghost — for low-emphasis actions inside cards/menus.
         ghost: 'hover:bg-foreground/10 hover:text-foreground active:shadow-[inset_0_0_0_2px_hsl(var(--primary))] aria-expanded:shadow-[inset_0_0_0_2px_hsl(var(--primary))]',
-        // Danger —  red-60 fill, hover red-70, active red-80, inset destructive focus.
-        destructive: 'bg-destructive text-destructive-foreground hover:bg-[#b81921] active:bg-[#750e13] focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--destructive))]',
+        // Danger — red-60 fill, hover red-70, active red-80, inset destructive focus.
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--destructive))]',
         link: 'text-primary underline-offset-4 hover:underline border-transparent focus-visible:shadow-none focus-visible:underline',
       },
       size: {

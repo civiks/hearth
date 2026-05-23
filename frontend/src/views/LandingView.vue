@@ -3,7 +3,7 @@
     <!-- Hero — full-bleed image with a left-side dark gradient scrim under the CTA copy -->
     <section
       data-public-hero
-      class="relative bg-[#161616] text-white overflow-hidden"
+      class="relative bg-surface-inverse text-surface-inverse-foreground overflow-hidden"
     >
       <div class="relative mx-auto max-w-7xl">
         <img
@@ -22,28 +22,23 @@
           class="absolute inset-0 w-full h-full object-cover opacity-90"
         />
         <div
-          class="absolute inset-0 bg-gradient-to-r from-[#161616] from-30% via-[#161616]/85 to-[#161616]/20"
+          class="absolute inset-0 bg-gradient-to-r from-surface-inverse from-30% via-surface-inverse/85 to-surface-inverse/20"
           aria-hidden="true"
         />
-        <!-- Fade the right edge into the section's #161616 backdrop instead of stopping abruptly. -->
-        <!-- <div
-          class="absolute inset-y-0 right-0 w-32 sm:w-48 bg-gradient-to-l from-[#161616] to-transparent"
-          aria-hidden="true"
-        /> -->
         <div
-          class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#161616] via-[#161616]/80 to-transparent"
+          class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-surface-inverse via-surface-inverse/80 to-transparent"
           aria-hidden="true"
         />
         <div class="relative px-6 py-20 sm:py-24 lg:py-32">
           <div class="max-w-xl">
-            <div class="inline-flex items-center gap-1.5 border border-white/20 px-2 py-1 mb-5 sm:mb-6 text-xs text-white/70">
+            <div class="inline-flex items-center gap-1.5 border border-surface-inverse-foreground/20 px-2 py-1 mb-5 sm:mb-6 text-xs text-surface-inverse-foreground/70">
               <MapPin class="size-3" />
               Now in Bangalore
             </div>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-5 sm:mb-6 leading-tight">
               Home services, done right.
             </h1>
-            <p class="text-base sm:text-lg text-white/80 mb-7 sm:mb-8 max-w-lg">
+            <p class="text-base sm:text-lg text-surface-inverse-foreground/80 mb-7 sm:mb-8 max-w-lg">
               Plumbers, electricians, cleaners and more — verified pros at your
               doorstep within hours. Honest pricing, real reviews.
             </p>
@@ -55,23 +50,23 @@
               <Button
                 variant="outline"
                 size="lg"
-                class="bg-transparent text-white border-white/30 hover:bg-white/10 hover:text-white hover:border-white/60"
+                class="bg-transparent text-surface-inverse-foreground border-surface-inverse-foreground/30 hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground hover:border-surface-inverse-foreground/60"
                 @click="$router.push('/login')"
               >
                 Sign In
               </Button>
             </div>
-            <div class="flex flex-wrap items-center gap-x-5 gap-y-2 mt-8 sm:mt-10 text-xs text-white/70">
+            <div class="flex flex-wrap items-center gap-x-5 gap-y-2 mt-8 sm:mt-10 text-xs text-surface-inverse-foreground/70">
               <div class="flex items-center gap-2">
                 <Star class="size-4 fill-amber-400 text-amber-400" />
                 <span>4.7 average rating</span>
               </div>
               <div class="flex items-center gap-2">
-                <ShieldCheck class="size-4 text-white/90" />
+                <ShieldCheck class="size-4 text-surface-inverse-foreground/90" />
                 <span>Verified professionals</span>
               </div>
               <div class="hidden sm:flex items-center gap-2">
-                <Clock class="size-4 text-white/90" />
+                <Clock class="size-4 text-surface-inverse-foreground/90" />
                 <span>Same-day service</span>
               </div>
             </div>
@@ -90,7 +85,7 @@
     <Testimonials />
 
     <!-- CTA -->
-    <section class="bg-[#161616] text-white">
+    <section class="bg-surface-inverse text-surface-inverse-foreground">
       <div class="mx-auto max-w-7xl px-6 py-12 sm:py-16 text-center">
         <h2 class="text-2xl sm:text-3xl font-light tracking-tight mb-5 sm:mb-6">
           Ready to book your first service?

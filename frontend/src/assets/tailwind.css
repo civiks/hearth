@@ -91,10 +91,14 @@
   /* Brand */
   --primary: 219 99% 53%;            /* #0f62fe  blue-60 */
   --primary-foreground: 0 0% 100%;
+  --primary-hover: 219 97% 46%;      /* #0353e9  blue-70 */
+  --primary-active: 222 100% 31%;    /* #002d9c  blue-80 */
 
   /* Neutrals */
   --secondary: 0 0% 87.8%;           /* #e0e0e0  gray-20 */
   --secondary-foreground: 0 0% 8.6%;
+  --secondary-hover: 0 0% 78%;       /* #c6c6c6  gray-30 */
+  --secondary-active: 0 0% 66%;      /* #a8a8a8  gray-40 */
   --muted: 0 0% 95.7%;
   --muted-foreground: 0 0% 32.2%;    /* #525252  gray-70 */
   --accent: 0 0% 87.8%;
@@ -103,9 +107,37 @@
   /* Status */
   --destructive: 354 77% 49%;        /* #da1e28  red-60 */
   --destructive-foreground: 0 0% 100%;
+  --destructive-hover: 357 76% 41%;  /* #b81921  red-70 */
+  --destructive-active: 357 79% 26%; /* #750e13  red-80 */
   --success: 137 49% 50%;            /* #42be65 */
+  --success-strong: 145 100% 24%;    /* #198038  green-70 — toast left bar */
   --warning: 47 89% 53%;             /* #f1c21b */
-  --info: 219 100% 64%;              /* #4589ff */
+  --warning-strong: 45 100% 35%;     /* #b28600  yellow-70 — toast left bar */
+  --info: 219 100% 64%;              /* #4589ff  blue-50 */
+  --info-strong: 219 100% 40%;       /* #0043ce  blue-80 — toast left bar */
+
+  /*
+   * Inverse surface — the always-dark global topbar / hero scrim.
+   * Stays gray-100 across themes by design (brand accent), but lives as a
+   * token so any future light-mode-friendly redesign is a one-line change.
+   */
+  --surface-inverse: 0 0% 8.6%;             /* #161616 */
+  --surface-inverse-foreground: 0 0% 100%;  /* #ffffff */
+
+  /* Switch off-state — gray-50 / gray-60. Not derivable from --muted because
+   * the switch needs a higher-contrast off track than the muted surface. */
+  --switch-off: 0 0% 55.3%;          /* #8d8d8d  gray-50 */
+  --switch-off-hover: 0 0% 43.5%;    /* #6f6f6f  gray-60 */
+
+  /* Toast notification palette (consumed via @style block in Sonner.vue) */
+  --toast-success-bg: 130 71% 92%;   /* #defbe6  green-10 */
+  --toast-success-text: 145 100% 22%; /* #0e6027 green-90 */
+  --toast-error-bg: 0 100% 97%;      /* #fff1f1  red-10 */
+  --toast-error-text: 357 71% 36%;   /* #a2191f red-90 */
+  --toast-warning-bg: 50 89% 93%;    /* #fdf6dd  yellow-10 */
+  --toast-warning-text: 47 100% 20%; /* #684e00 yellow-90 */
+  --toast-info-bg: 213 100% 96%;     /* #edf5ff  blue-10 */
+  --toast-info-text: 222 100% 31%;   /* #002d9c blue-90 */
 
   /* Borders / focus */
   --border: 0 0% 87.8%;              /* #e0e0e0 */
@@ -149,13 +181,17 @@
   --popover: 0 0% 15%;
   --popover-foreground: 0 0% 95.7%;
 
-  /* Brand — same Carbon blue */
+  /* Brand — same Carbon blue, same monotonic darken on hover */
   --primary: 219 99% 53%;
   --primary-foreground: 0 0% 100%;
+  --primary-hover: 219 97% 46%;
+  --primary-active: 222 100% 31%;
 
-  /* Neutrals */
+  /* Neutrals — secondary direction flips: dark theme lightens on hover */
   --secondary: 0 0% 22.4%;           /* #393939 gray-80 */
   --secondary-foreground: 0 0% 95.7%;
+  --secondary-hover: 0 0% 30%;       /* #4c4c4c gray-70 */
+  --secondary-active: 0 0% 43.5%;    /* #6f6f6f gray-60 */
   --muted: 0 0% 15%;
   --muted-foreground: 0 0% 65.9%;    /* #a8a8a8 gray-40 */
   --accent: 0 0% 22.4%;
@@ -164,9 +200,14 @@
   /* Status — red lifted to red-50 for legibility on dark */
   --destructive: 354 94% 64%;        /* #fa4d56 */
   --destructive-foreground: 0 0% 100%;
+  --destructive-hover: 357 76% 41%;
+  --destructive-active: 357 79% 26%;
   --success: 137 49% 50%;
+  --success-strong: 137 49% 50%;     /* keep mid-tone on dark for legibility */
   --warning: 47 89% 53%;
+  --warning-strong: 47 89% 53%;
   --info: 219 100% 64%;
+  --info-strong: 219 100% 64%;
 
   /* Borders / focus */
   --border: 0 0% 22.4%;
@@ -227,6 +268,19 @@
   --color-border: hsl(var(--border));
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-hover: hsl(var(--destructive-hover));
+  --color-destructive-active: hsl(var(--destructive-active));
+  --color-primary-hover: hsl(var(--primary-hover));
+  --color-primary-active: hsl(var(--primary-active));
+  --color-secondary-hover: hsl(var(--secondary-hover));
+  --color-secondary-active: hsl(var(--secondary-active));
+  --color-surface-inverse: hsl(var(--surface-inverse));
+  --color-surface-inverse-foreground: hsl(var(--surface-inverse-foreground));
+  --color-switch-off: hsl(var(--switch-off));
+  --color-switch-off-hover: hsl(var(--switch-off-hover));
+  --color-success-strong: hsl(var(--success-strong));
+  --color-warning-strong: hsl(var(--warning-strong));
+  --color-info-strong: hsl(var(--info-strong));
   --color-success: hsl(var(--success));
   --color-warning: hsl(var(--warning));
   --color-info: hsl(var(--info));
@@ -269,7 +323,7 @@
 
   html {
     font-family: var(--font-sans);
-    background-color: #161616;
+    background-color: hsl(var(--surface-inverse));
     overscroll-behavior-y: none;
   }
   body {
@@ -305,16 +359,16 @@
     border-left: 3px solid var(--bar-color, currentColor) !important;
   }
   [data-rich-colors="true"][data-sonner-toast][data-type="success"] {
-    --bar-color: #198038;
+    --bar-color: hsl(var(--success-strong));
   }
   [data-rich-colors="true"][data-sonner-toast][data-type="error"] {
-    --bar-color: #da1e28;
+    --bar-color: hsl(var(--destructive));
   }
   [data-rich-colors="true"][data-sonner-toast][data-type="warning"] {
-    --bar-color: #b28600;
+    --bar-color: hsl(var(--warning-strong));
   }
   [data-rich-colors="true"][data-sonner-toast][data-type="info"] {
-    --bar-color: #0043ce;
+    --bar-color: hsl(var(--info-strong));
   }
   [data-sonner-toast] [data-content] {
     display: flex;

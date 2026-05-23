@@ -2,9 +2,9 @@
   <div class="min-h-screen flex flex-col bg-background">
     <header
       :class="[
-        'vt-topbar text-white fixed top-0 left-0 right-0 z-30',
+        'vt-topbar text-surface-inverse-foreground fixed top-0 left-0 right-0 z-30',
         'transition-colors duration-300 ease-out',
-        !overlayHeader || scrolledPast ? 'bg-[#161616]' : '',
+        !overlayHeader || scrolledPast ? 'bg-surface-inverse' : '',
       ]"
     >
       <div
@@ -19,7 +19,7 @@
             v-if="!auth.logged_in"
             variant="ghost"
             size="sm"
-            class="text-white hover:bg-white/10 hover:text-white"
+            class="text-surface-inverse-foreground hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground"
             @click="$router.push('/login')"
           >
             Sign in
@@ -35,7 +35,7 @@
             v-else
             variant="ghost"
             size="sm"
-            class="text-white hover:bg-white/10 hover:text-white"
+            class="text-surface-inverse-foreground hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground"
             @click="$router.push(home)"
           >
             Go to dashboard

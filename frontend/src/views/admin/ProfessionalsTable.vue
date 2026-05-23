@@ -173,7 +173,7 @@ const columns: ColumnDef<AdminUser>[] = [
         h(
           DropdownMenuItem,
           {
-            class: "text-destructive focus:text-destructive",
+            variant: "destructive",
             onClick: () => emit("delete", u.id),
           },
           { default: () => [h(Trash2, { class: "mr-2 size-4" }), "Delete"] },

@@ -4,7 +4,7 @@
       <DropdownMenuTrigger as-child>
         <button
           type="button"
-          class="bg-primary text-primary-foreground inline-flex items-center gap-2 h-10 pl-3 pr-2 text-xs font-medium shadow-lg hover:bg-[#0353e9] transition-colors"
+          class="bg-primary text-primary-foreground inline-flex items-center gap-2 h-10 pl-3 pr-2 text-xs font-medium shadow-lg hover:bg-primary-hover transition-colors"
           :aria-label="ariaLabel"
         >
           <span>
@@ -40,7 +40,7 @@
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          class="text-destructive focus:text-destructive"
+          variant="destructive"
           @click="reset"
         >
           <RotateCcw class="mr-2 size-4" />

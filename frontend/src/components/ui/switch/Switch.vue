@@ -38,8 +38,8 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
     :class="cn(
       'group/switch peer relative inline-flex shrink-0 items-center cursor-pointer rounded-full border border-transparent outline-none transition-colors',
       'data-[size=default]:h-6 data-[size=default]:w-12 data-[size=sm]:h-4 data-[size=sm]:w-8',
-      'data-[state=unchecked]:bg-[#8d8d8d] data-[state=unchecked]:hover:bg-[#6f6f6f]',
-      'data-[state=checked]:bg-primary data-[state=checked]:hover:bg-[#0353e9]',
+      'data-[state=unchecked]:bg-switch-off data-[state=unchecked]:hover:bg-switch-off-hover',
+      'data-[state=checked]:bg-primary data-[state=checked]:hover:bg-primary-hover',
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
       'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
       props.class,
