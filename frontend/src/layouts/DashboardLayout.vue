@@ -117,7 +117,7 @@
         :auto-save-id="CHAT_SPLITTER_ID"
       >
         <SplitterPanel :min-size="40" :order="1">
-          <main class="h-full overflow-y-auto">
+          <main ref="scrollMain" class="h-full overflow-y-auto">
             <slot />
           </main>
         </SplitterPanel>
@@ -146,7 +146,7 @@
         </SplitterPanel>
       </SplitterGroup>
     </div>
-    <main v-else class="flex-1 min-h-0 overflow-y-auto">
+    <main v-else ref="scrollMain" class="flex-1 min-h-0 overflow-y-auto">
       <slot />
     </main>
     <ChatWidget v-if="!isDesktop" mode="overlay" />
@@ -180,7 +180,7 @@ import {
   UserCircle,
 } from "lucide-vue-next";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { RouterLink, useRouter } from "vue-router";
+import { RouterLink, useRouter, useRoute } from "vue-router";
 
 import AiMark from "@/components/AiMark.vue";
 import BrandMark from "@/components/BrandMark.vue";
@@ -220,6 +220,7 @@ import {
 } from "@/stores/chat";
 
 const router = useRouter();
+const route = useRoute();
 const auth = useAuthStore();
 const chat = useChatStore();
 const { theme, effectiveTheme, setTheme } = useTheme();
@@ -228,6 +229,12 @@ const { loginAs, resetDemoData } = useDemoLogin();
 const isDesktop = useMediaQuery("(min-width: 640px)");
 
 const chatPanelRef = ref<SplitterPanelHandle | null>(null);
+const scrollMain = ref<HTMLElement | null>(null);
+
+watch(
+  () => route.path,
+  () => { scrollMain.value?.scrollTo({ top: 0, behavior: "instant" }); },
+);
 
 async function syncChatPanel(open: boolean) {
   await nextTick();
