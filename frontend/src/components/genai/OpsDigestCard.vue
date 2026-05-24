@@ -59,6 +59,7 @@ interface Analytics {
 
 const props = defineProps<{
   analytics: Analytics | null;
+  loaded?: boolean;
 }>();
 
 defineOptions({ inheritAttrs: false });
@@ -120,13 +121,13 @@ function buildLines(): string[] {
 
 /** Instant render — used on mount once analytics arrives. */
 function generate() {
-  if (!props.analytics) return;
+  if (!props.loaded || !props.analytics) return;
   narrative.value = buildLines().join("\n");
 }
 
 /** Streaming render — used on user-initiated regenerate. */
 async function regenerate() {
-  if (streaming.value || !props.analytics) return;
+  if (streaming.value || !props.loaded || !props.analytics) return;
   streaming.value = true;
   narrative.value = "";
   const script: AgentEvent[] = [];
@@ -147,11 +148,14 @@ async function regenerate() {
   }
 }
 
-// Re-render whenever the analytics payload meaningfully changes.
-// (Watching the trend length covers both initial empty {} → loaded and reloads.)
+// Wait for the parent to finish loading before rendering — otherwise the
+// initial empty `{}` analytics produces a flash of "0 lifetime requests"
+// that gets replaced once the real payload arrives.
 watch(
-  () => props.analytics?.request_trends?.length ?? 0,
-  () => generate(),
+  () => [props.loaded, props.analytics?.request_trends?.length ?? 0] as const,
+  ([loaded]) => {
+    if (loaded) generate();
+  },
   { immediate: true },
 );
 

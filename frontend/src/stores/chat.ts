@@ -79,7 +79,6 @@ interface State {
   open: boolean;
   streaming: boolean;
   messages: ChatMessage[];
-  panelWidth: number;
   modelId: string;
   conversations: Conversation[];
   currentConversationId: string | null;
@@ -87,6 +86,15 @@ interface State {
 
 const MODEL_KEY = "hearth.chat.modelId";
 const HISTORY_KEY_PREFIX = "hearth.chat.history.";
+
+/** Reka splitter `autoSaveId` — handles its own % layout persistence. */
+export const CHAT_SPLITTER_ID = "hearth.chat.splitter";
+/** Default chat panel size as a percentage of the splitter group width. */
+export const CHAT_DEFAULT_SIZE = 28;
+/** Lower bound — anything smaller would clip the composer. */
+export const CHAT_MIN_SIZE = 22;
+/** Upper bound — half the screen, per design. */
+export const CHAT_MAX_SIZE = 50;
 
 function historyKeyFor(userId: number | null): string | null {
   return userId == null ? null : `${HISTORY_KEY_PREFIX}${userId}`;
@@ -130,20 +138,6 @@ function readModelId(): string {
   return CHAT_MODELS[0].id;
 }
 
-const DEFAULT_PANEL_WIDTH = 460;
-const MIN_PANEL_WIDTH = 320;
-const MAX_PANEL_WIDTH = 720;
-const PANEL_WIDTH_KEY = "hearth.chat.panelWidth";
-
-function readPanelWidth(): number {
-  if (typeof window === "undefined") return DEFAULT_PANEL_WIDTH;
-  const raw = window.localStorage.getItem(PANEL_WIDTH_KEY);
-  if (!raw) return DEFAULT_PANEL_WIDTH;
-  const n = Number(raw);
-  if (Number.isNaN(n)) return DEFAULT_PANEL_WIDTH;
-  return Math.min(MAX_PANEL_WIDTH, Math.max(MIN_PANEL_WIDTH, n));
-}
-
 let msgSeq = 0;
 function nextId(): string {
   return `m_${++msgSeq}_${Date.now().toString(36)}`;
@@ -154,7 +148,6 @@ export const useChatStore = defineStore("chat", {
     open: false,
     streaming: false,
     messages: [],
-    panelWidth: readPanelWidth(),
     modelId: readModelId(),
     conversations: [],
     currentConversationId: null,
@@ -249,13 +242,6 @@ export const useChatStore = defineStore("chat", {
         this.currentConversationId = null;
       }
       writeHistory(auth.user_id, this.conversations);
-    },
-    setPanelWidth(px: number) {
-      const clamped = Math.min(MAX_PANEL_WIDTH, Math.max(MIN_PANEL_WIDTH, px));
-      this.panelWidth = clamped;
-      if (typeof window !== "undefined") {
-        window.localStorage.setItem(PANEL_WIDTH_KEY, String(clamped));
-      }
     },
     setModel(id: string) {
       if (!CHAT_MODELS.some((m) => m.id === id)) return;

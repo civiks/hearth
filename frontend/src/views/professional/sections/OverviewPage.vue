@@ -33,6 +33,7 @@ const toasts = useNotificationsStore();
 const requests = ref<ProRequestFull[]>([]);
 const services = ref<Service[]>([]);
 const analytics = ref<ProAnalytics>({});
+const loaded = ref(false);
 
 const pending = computed(() => requests.value.filter((r) => r.service_status === "requested"));
 const inProgress = computed(() =>
@@ -105,6 +106,8 @@ onMounted(async () => {
     analytics.value = await api.get<ProAnalytics>("/api/analytics/professional");
   } catch (err) {
     toasts.error(err instanceof ApiError ? err.detail : "Failed to load data");
+  } finally {
+    loaded.value = true;
   }
 });
 </script>
@@ -126,7 +129,7 @@ onMounted(async () => {
         </p>
       </header>
 
-      <ProDigestCard :requests="requests" :services="services" />
+      <ProDigestCard :requests="requests" :services="services" :loaded="loaded" />
 
       <MetricStrip title="This month" :tiles="stripTiles" />
 

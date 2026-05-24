@@ -105,9 +105,51 @@
           </DropdownMenuContent>
         </DropdownMenu>
     </header>
-    <main class="flex-1 min-h-0 overflow-y-auto">
+
+    <!--
+      Desktop: chat docks into a Splitter as a second panel beside the route
+      content. Mobile (<640px): route content takes the full width and the
+      chat (when open) overlays via Teleport from ChatWidget.
+    -->
+    <div v-if="isDesktop" class="flex-1 min-h-0">
+      <SplitterGroup
+        direction="horizontal"
+        :auto-save-id="CHAT_SPLITTER_ID"
+      >
+        <SplitterPanel :min-size="40" :order="1">
+          <main class="h-full overflow-y-auto">
+            <slot />
+          </main>
+        </SplitterPanel>
+        <SplitterResizeHandle
+          v-show="chat.open"
+          class="chat-handle-transition"
+        />
+        <!--
+          Chat panel is always mounted but starts collapsed (size=0). On
+          chat.open it imperatively expands/collapses; the `chat-panel` class
+          adds a CSS transition on flex-grow so the change animates. The
+          inner ChatWidget only renders while open to keep its state lazy.
+        -->
+        <SplitterPanel
+          ref="chatPanelRef"
+          id="chat-pane"
+          collapsible
+          :default-size="0"
+          :collapsed-size="0"
+          :min-size="CHAT_MIN_SIZE"
+          :max-size="CHAT_MAX_SIZE"
+          :order="2"
+          class="chat-panel"
+        >
+          <ChatWidget v-if="chat.open" mode="inline" />
+        </SplitterPanel>
+      </SplitterGroup>
+    </div>
+    <main v-else class="flex-1 min-h-0 overflow-y-auto">
       <slot />
     </main>
+    <ChatWidget v-if="!isDesktop" mode="overlay" />
 
     <!-- Floating "Ask" launcher — hidden while the panel is open. -->
     <button
@@ -121,12 +163,11 @@
       <span class="text-sm font-medium">Ask</span>
       <AiMark class="size-5" />
     </button>
-
-    <ChatWidget />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useMediaQuery } from "@vueuse/core";
 import {
   ChevronDown,
   LogOut,
@@ -138,7 +179,7 @@ import {
   Sun,
   UserCircle,
 } from "lucide-vue-next";
-import { computed } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import AiMark from "@/components/AiMark.vue";
@@ -158,19 +199,56 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  SplitterGroup,
+  SplitterPanel,
+  type SplitterPanelHandle,
+  SplitterResizeHandle,
+} from "@/components/ui/splitter";
 import { useDemoLogin, DEMO_ROLES } from "@/composables/useDemoLogin";
 import { useTheme, type Theme } from "@/composables/useTheme";
 import { type Role } from "@/lib/api";
 import { DEMO } from "@/lib/demo/flag";
 import { initials } from "@/lib/format";
 import { useAuthStore } from "@/stores/auth";
-import { useChatStore } from "@/stores/chat";
+import {
+  CHAT_DEFAULT_SIZE,
+  CHAT_MAX_SIZE,
+  CHAT_MIN_SIZE,
+  CHAT_SPLITTER_ID,
+  useChatStore,
+} from "@/stores/chat";
 
 const router = useRouter();
 const auth = useAuthStore();
 const chat = useChatStore();
 const { theme, effectiveTheme, setTheme } = useTheme();
 const { loginAs, resetDemoData } = useDemoLogin();
+
+const isDesktop = useMediaQuery("(min-width: 640px)");
+
+const chatPanelRef = ref<SplitterPanelHandle | null>(null);
+
+async function syncChatPanel(open: boolean) {
+  await nextTick();
+  const p = chatPanelRef.value;
+  if (!p) return;
+  if (open) {
+    p.expand();
+    if (Math.abs(p.getSize() - CHAT_MIN_SIZE) < 0.5) {
+      p.resize(CHAT_DEFAULT_SIZE);
+    }
+  } else {
+    p.collapse();
+  }
+}
+
+watch(() => chat.open, syncChatPanel);
+watch(isDesktop, (desktop) => {
+  // Coming back to desktop with the chat open: re-apply the open state to
+  // the freshly mounted splitter panel.
+  if (desktop && chat.open) void syncChatPanel(true);
+});
 
 const firstName = computed(() => auth.full_name?.split(" ")[0] ?? "");
 
@@ -183,4 +261,32 @@ async function handleLogout() {
   await auth.logout();
   router.push("/");
 }
+
+// Global Cmd/Ctrl+K toggles the chat from anywhere; Esc closes it when open.
+function onGlobalKey(e: KeyboardEvent) {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+    e.preventDefault();
+    chat.toggle();
+    return;
+  }
+  if (e.key === "Escape" && chat.open) {
+    chat.close();
+  }
+}
+onMounted(() => {
+  window.addEventListener("keydown", onGlobalKey);
+  // Restore chat-open state into the splitter on initial mount.
+  if (isDesktop.value && chat.open) void syncChatPanel(true);
+});
+onBeforeUnmount(() => window.removeEventListener("keydown", onGlobalKey));
 </script>
+
+<style scoped>
+
+.chat-panel {
+  transition: flex 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.chat-handle-transition {
+  transition: opacity 150ms ease-out;
+}
+</style>

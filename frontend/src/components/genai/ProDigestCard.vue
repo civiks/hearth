@@ -60,6 +60,7 @@ interface ServiceLite {
 const props = defineProps<{
   requests: ProRequestStat[];
   services: ServiceLite[];
+  loaded?: boolean;
 }>();
 
 defineOptions({ inheritAttrs: false });
@@ -173,13 +174,13 @@ function buildLines(): string[] {
 
 /** Instant render — used on mount once data arrives. */
 function generate() {
-  if (!props.requests) return;
+  if (!props.loaded || !props.requests) return;
   narrative.value = buildLines().join("\n\n");
 }
 
 /** Streaming render — used on user-initiated regenerate. */
 async function regenerate() {
-  if (streaming.value || !props.requests) return;
+  if (streaming.value || !props.loaded || !props.requests) return;
   streaming.value = true;
   narrative.value = "";
   const script: AgentEvent[] = [];
@@ -200,10 +201,14 @@ async function regenerate() {
   }
 }
 
-// Re-render whenever the underlying data meaningfully changes.
+// Wait for the parent to finish loading before rendering — otherwise the
+// initial empty `[]` requests array produces a flash of the "all set up"
+// empty-state copy that gets replaced once the real payload arrives.
 watch(
-  () => props.requests?.length ?? 0,
-  () => generate(),
+  () => [props.loaded, props.requests?.length ?? 0] as const,
+  ([loaded]) => {
+    if (loaded) generate();
+  },
   { immediate: true },
 );
 

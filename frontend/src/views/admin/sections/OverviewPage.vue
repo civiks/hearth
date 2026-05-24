@@ -23,6 +23,7 @@ interface AdminAnalyticsApi {
 const { professionals, users, refreshAll } = useAdminData();
 const toasts = useNotificationsStore();
 const analytics = ref<AdminAnalyticsApi>({});
+const analyticsLoaded = ref(false);
 
 onMounted(async () => {
   await refreshAll();
@@ -31,6 +32,8 @@ onMounted(async () => {
   } catch (err) {
     console.error("analytics fetch failed", err);
     toasts.error("Failed to fetch analytics data");
+  } finally {
+    analyticsLoaded.value = true;
   }
 });
 
@@ -86,7 +89,7 @@ function capitalize(s: string) {
 <template>
   <div class="px-4 py-4 sm:px-6 sm:py-8">
     <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-stretch">
-      <OpsDigestCard class="sm:col-span-12" :analytics="analytics" />
+      <OpsDigestCard class="sm:col-span-12" :analytics="analytics" :loaded="analyticsLoaded" />
 
       <StatWidget
         class="sm:col-span-4"

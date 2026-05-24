@@ -1,5 +1,12 @@
 <template>
-  <Teleport to="body">
+  <!--
+    Two render modes:
+      • inline  — child of a SplitterPanel on desktop. Fills its parent, no
+                  Teleport, no transition.
+      • overlay — Teleported to body on mobile (<640px). Backdrop + slide-in
+                  from the right.
+  -->
+  <Teleport to="body" :disabled="mode === 'inline'">
     <Transition
       enter-active-class="transition-opacity duration-150"
       leave-active-class="transition-opacity duration-150"
@@ -7,37 +14,30 @@
       leave-to-class="opacity-0"
     >
       <div
-        v-if="chat.open && !isDesktop"
-        class="fixed inset-0 z-40 bg-black/40 sm:hidden"
+        v-if="mode === 'overlay' && chat.open"
+        class="fixed inset-0 z-40 bg-black/40"
         aria-hidden="true"
         @click="chat.close()"
       />
     </Transition>
 
     <Transition
-      enter-active-class="transition-transform duration-200 ease-out"
-      leave-active-class="transition-transform duration-150 ease-in"
-      enter-from-class="translate-x-full"
-      leave-to-class="translate-x-full"
+      :enter-active-class="mode === 'overlay' ? 'transition-transform duration-200 ease-out' : ''"
+      :leave-active-class="mode === 'overlay' ? 'transition-transform duration-150 ease-in' : ''"
+      :enter-from-class="mode === 'overlay' ? 'translate-x-full' : ''"
+      :leave-to-class="mode === 'overlay' ? 'translate-x-full' : ''"
     >
       <aside
-        v-if="chat.open"
-        class="fixed z-50 flex flex-col bg-background shadow-2xl sm:top-12 inset-0 sm:left-auto sm:right-0 sm:bottom-0 ai-surface ai-outline"
-        :style="panelStyle"
-        role="dialog"
+        v-if="visible"
+        :class="[
+          'flex flex-col bg-background ai-surface ai-outline',
+          mode === 'overlay'
+            ? 'fixed inset-0 z-50 shadow-2xl'
+            : 'h-full',
+        ]"
+        :role="mode === 'overlay' ? 'dialog' : 'complementary'"
         aria-label="Assistant"
       >
-        <!-- Resize handle (desktop only, left edge) -->
-        <div
-          class="hidden sm:block absolute top-0 left-0 bottom-0 w-1 -translate-x-1/2 cursor-ew-resize group z-10"
-          @mousedown="onResizeStart"
-        >
-          <div
-            class="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-transparent group-hover:bg-primary/60 transition-colors"
-            :class="resizing && 'bg-primary/60'"
-          />
-        </div>
-
         <!-- Header — name (with model picker) left, actions right -->
         <header class="flex h-11 shrink-0 items-center justify-between border-b pl-2 pr-2 bg-background/80 backdrop-blur">
           <DropdownMenu>
@@ -151,9 +151,14 @@
         </header>
 
         <!-- Messages -->
+        <!--
+          pb-16 reserves a safe area at the bottom so the last message sits
+          above the (pixel-fixed) fade mask rather than streaming/landing
+          inside it.
+        -->
         <div
           ref="scrollEl"
-          class="flex-1 overflow-y-auto px-4 py-4 space-y-5 scroll-fade"
+          class="flex-1 overflow-y-auto px-4 pt-4 pb-16 space-y-5 scroll-fade"
           role="log"
           aria-label="Conversation"
           aria-live="polite"
@@ -345,7 +350,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useMediaQuery } from "@vueuse/core";
 import {
   AlertCircle,
   CheckCircle2,
@@ -362,7 +366,7 @@ import {
   Trash2,
   X,
 } from "lucide-vue-next";
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 
 import AiMark from "@/components/AiMark.vue";
 import { Button } from "@/components/ui/button";
@@ -379,18 +383,21 @@ import { labelForTool } from "@/lib/genai";
 import { useAuthStore } from "@/stores/auth";
 import { CHAT_MODELS, useChatStore } from "@/stores/chat";
 
+const props = withDefaults(
+  defineProps<{ mode?: "inline" | "overlay" }>(),
+  { mode: "overlay" },
+);
+
 const chat = useChatStore();
 const auth = useAuthStore();
-
-const isDesktop = useMediaQuery("(min-width: 640px)");
 
 const composer = ref("");
 const scrollEl = ref<HTMLDivElement | null>(null);
 const textareaEl = ref<HTMLTextAreaElement | null>(null);
 
-const panelStyle = computed(() => ({
-  width: isDesktop.value ? `${chat.panelWidth}px` : undefined,
-}));
+// Inline mode is gated by parent mount (it only mounts when chat.open is
+// true). Overlay mode toggles via chat.open + transition.
+const visible = computed(() => props.mode === "inline" || chat.open);
 
 const firstName = computed(() => auth.full_name?.split(" ")[0] || "there");
 
@@ -522,54 +529,6 @@ function renderMarkdownish(text: string): string {
     .replace(/\n/g, "<br />");
 }
 
-// ─── Left-edge resize ───
-const resizing = ref(false);
-let startX = 0;
-let startWidth = 0;
-
-function onResizeStart(e: MouseEvent) {
-  resizing.value = true;
-  startX = e.clientX;
-  startWidth = chat.panelWidth;
-  window.addEventListener("mousemove", onResizeMove);
-  window.addEventListener("mouseup", onResizeEnd, { once: true });
-  document.body.style.userSelect = "none";
-  document.body.style.cursor = "ew-resize";
-  e.preventDefault();
-}
-function onResizeMove(e: MouseEvent) {
-  if (!resizing.value) return;
-  // Panel is right-docked: dragging left grows it.
-  const next = startWidth + (startX - e.clientX);
-  chat.setPanelWidth(next);
-}
-function onResizeEnd() {
-  resizing.value = false;
-  window.removeEventListener("mousemove", onResizeMove);
-  document.body.style.userSelect = "";
-  document.body.style.cursor = "";
-}
-onBeforeUnmount(() => {
-  window.removeEventListener("mousemove", onResizeMove);
-  window.removeEventListener("keydown", onGlobalKey);
-});
-
-// ─── Keyboard shortcuts ───
-// Cmd/Ctrl+K toggles the panel from anywhere; Esc closes it when open.
-function onGlobalKey(e: KeyboardEvent) {
-  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-    e.preventDefault();
-    chat.toggle();
-    return;
-  }
-  if (e.key === "Escape" && chat.open) {
-    chat.close();
-  }
-}
-onMounted(() => {
-  window.addEventListener("keydown", onGlobalKey);
-});
-
 // ─── Autoscroll ───
 watch(
   () => chat.messages.flatMap((m) => [m.text, m.toolCalls.length, m.pending ? 1 : 0]),
@@ -585,9 +544,13 @@ watch(
 </script>
 
 <style scoped>
-/* Bottom fade mask on the message scroller — content dissolves into composer. */
+/*
+ * Bottom fade mask on the message scroller — content dissolves into the
+ * composer. Fixed at 48px so the pb-16 (64px) bottom padding always leaves
+ * ~16px of unmasked clearance regardless of viewport height.
+ */
 .scroll-fade {
-  mask-image: linear-gradient(180deg, black 0%, black 92%, transparent 100%);
-  -webkit-mask-image: linear-gradient(180deg, black 0%, black 92%, transparent 100%);
+  mask-image: linear-gradient(180deg, black, black calc(100% - 48px), transparent);
+  -webkit-mask-image: linear-gradient(180deg, black, black calc(100% - 48px), transparent);
 }
 </style>
