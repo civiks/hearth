@@ -1,14 +1,18 @@
 <template>
   <div class="min-h-screen flex flex-col bg-background">
     <header
-      :class="[
-        'vt-topbar text-surface-inverse-foreground fixed top-0 left-0 right-0 z-30',
-        'transition-colors duration-300 ease-out',
-        !overlayHeader || scrolledPast ? 'bg-surface-inverse' : '',
-      ]"
+      class="vt-topbar text-surface-inverse-foreground fixed top-0 left-0 right-0 z-30"
     >
+
       <div
-        class="mx-auto w-full max-w-7xl h-12 flex items-center justify-between px-6"
+        aria-hidden="true"
+        :class="[
+          'pointer-events-none absolute inset-x-0 top-0',
+          overlayHeader ? 'h-32 topbar-mask-gradient' : 'h-12 bg-surface-inverse',
+        ]"
+      />
+      <div
+        class="relative mx-auto w-full max-w-7xl h-12 flex items-center justify-between px-6"
       >
         <RouterLink to="/" class="vt-brand flex items-center gap-2">
           <BrandMark class="h-4 w-auto" />
@@ -113,7 +117,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 
 import BrandMark from "@/components/BrandMark.vue";
@@ -126,29 +130,9 @@ const route = useRoute();
 const home = computed(() => homePathForRole(auth.role));
 
 // On the homepage (/) the hero has its own full-bleed background image, so
-// the header floats transparently over it instead of sitting on a solid dark bar.
-// Landing also gets the full footer (link columns); /terms, /privacy, etc.
-// get the minimal one-row variant.
+// the header floats over it with a soft mask-gradient backdrop instead of
+// sitting on a solid dark bar. Landing also gets the full footer (link
+// columns); /terms, /privacy, etc. get the minimal one-row variant.
 const isLanding = computed(() => route.path === "/");
 const overlayHeader = isLanding;
-
-// On the homepage the header bg fades from transparent to solid #161616 once the
-// hero's internal top-down gradient is no longer covering the header area
-// (~80px of scroll = hero scrim height 128px − header height 48px).
-const HERO_SCRIM_HANDOFF_PX = 80;
-const scrolledPast = ref(false);
-
-function onScroll() {
-  scrolledPast.value = overlayHeader.value && window.scrollY > HERO_SCRIM_HANDOFF_PX;
-}
-
-onMounted(() => {
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-});
-onUnmounted(() => {
-  window.removeEventListener("scroll", onScroll);
-});
-
-watch(() => route.path, () => onScroll());
 </script>
