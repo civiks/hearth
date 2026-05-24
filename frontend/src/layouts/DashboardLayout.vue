@@ -9,24 +9,7 @@
         <span class="font-semibold text-base tracking-tight">hearth</span>
       </RouterLink>
 
-      <div class="flex items-center gap-2">
-        <button
-          type="button"
-          :aria-pressed="chat.open"
-          aria-label="Ask AI"
-          class="flex items-center gap-2 h-7 pl-3 pr-2 rounded-full text-xs font-medium text-surface-inverse-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse"
-          :class="
-            chat.open
-              ? 'bg-surface-inverse-foreground/20'
-              : 'bg-surface-inverse-foreground/10 hover:bg-surface-inverse-foreground/20'
-          "
-          @click="chat.toggle()"
-        >
-          Ask
-          <AiMark class="size-4" />
-        </button>
-
-        <DropdownMenu :modal="false">
+      <DropdownMenu :modal="false">
           <DropdownMenuTrigger as-child>
             <button
               type="button"
@@ -121,11 +104,23 @@
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
     </header>
     <main class="flex-1 min-h-0 overflow-y-auto">
       <slot />
     </main>
+
+    <!-- Floating "Ask" launcher — hidden while the panel is open. -->
+    <button
+      v-if="!chat.open"
+      type="button"
+      aria-label="Ask AI"
+      class="fixed bottom-5 right-5 z-30 flex items-center gap-2.5 h-11 pl-5 pr-3.5 rounded-full bg-surface-inverse text-surface-inverse-foreground shadow-lg shadow-black/15 hover:bg-[#393939] active:bg-[#4c4c4c] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 dark:bg-card dark:text-foreground dark:ring-1 dark:ring-inset dark:ring-white/10 dark:shadow-black/60 dark:hover:bg-[#393939] dark:active:bg-[#525252]"
+      @click="chat.toggle()"
+    >
+      <span class="text-sm font-medium">Ask</span>
+      <AiMark class="size-5" />
+    </button>
+
     <ChatWidget />
   </div>
 </template>
