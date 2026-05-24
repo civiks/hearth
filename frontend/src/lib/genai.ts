@@ -12,7 +12,28 @@ export type AgentEvent =
   | { type: "text"; delta: string }
   | { type: "tool_call"; id: string; name: string; args: Record<string, unknown> }
   | { type: "tool_result"; id: string; ok: boolean; data: unknown }
+  | { type: "state"; status: string }
   | { type: "done" };
+
+/** Maps a tool name to a single-word progress verb shown in the agent state. */
+function stateForTool(name: string): string {
+  if (name.startsWith("search_") || name.startsWith("list_")) return "Searching";
+  if (
+    name.startsWith("check_") ||
+    name.startsWith("get_") ||
+    name === "weekly_summary"
+  ) {
+    return "Analyzing";
+  }
+  if (
+    name.startsWith("accept_") ||
+    name.startsWith("approve_") ||
+    name.startsWith("book_")
+  ) {
+    return "Updating";
+  }
+  return "Working";
+}
 
 // ──────────────────────────────────────────────── Stream helper
 
@@ -277,15 +298,19 @@ export function runAgent(
             ? 25 + Math.random() * 45
             : ev.type === "tool_call"
               ? 280 + Math.random() * 220
-              : 180 + Math.random() * 200;
-        await new Promise((r) => setTimeout(r, delay));
+              : ev.type === "state"
+                ? 0 // state events are instant; the surrounding work is what takes time
+                : 180 + Math.random() * 200;
+        if (delay > 0) await new Promise((r) => setTimeout(r, delay));
         controller.enqueue(ev);
       }
       async function emitText(text: string) {
+        await emit({ type: "state", status: "Writing" });
         for (const ev of tokenize(text)) await emit(ev);
       }
       async function callTool(name: string, args: Record<string, unknown>) {
         const id = nextToolId();
+        await emit({ type: "state", status: stateForTool(name) });
         await emit({ type: "tool_call", id, name, args });
         const tool = findTool(role, name);
         try {
@@ -305,6 +330,11 @@ export function runAgent(
       }
 
       try {
+        // Initial "Thinking" beat — the agent considers the request before
+        // picking tools or starting to write.
+        await emit({ type: "state", status: "Thinking" });
+        await new Promise((r) => setTimeout(r, 500 + Math.random() * 400));
+
         if (role === "admin") {
           await runAdmin(msg, emitText, callTool);
         } else if (role === "professional") {

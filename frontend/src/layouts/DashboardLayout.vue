@@ -25,7 +25,7 @@
               <ChevronDown class="size-3.5 opacity-70" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" class="w-56">
+          <DropdownMenuContent align="end" class="w-56 z-[60]">
             <DropdownMenuLabel>
               <div class="flex flex-col leading-tight">
                 <span class="text-sm font-medium">{{ auth.full_name }}</span>
@@ -113,7 +113,8 @@
     <button
       v-if="!chat.open"
       type="button"
-      aria-label="Ask AI"
+      aria-label="Ask AI (Ctrl/Cmd+K)"
+      title="Ask AI · ⌘K"
       class="fixed bottom-5 right-5 z-30 flex items-center gap-2.5 h-11 pl-5 pr-3.5 rounded-full bg-surface-inverse text-surface-inverse-foreground shadow-lg shadow-black/15 hover:bg-[#393939] active:bg-[#4c4c4c] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 dark:bg-card dark:text-foreground dark:ring-1 dark:ring-inset dark:ring-white/10 dark:shadow-black/60 dark:hover:bg-[#393939] dark:active:bg-[#525252]"
       @click="chat.toggle()"
     >

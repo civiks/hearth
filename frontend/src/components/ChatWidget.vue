@@ -84,13 +84,14 @@
           <div class="flex items-center gap-0.5">
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
-                <button
-                  type="button"
-                  class="size-8 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  class="size-8"
                   aria-label="Conversation history"
                 >
                   <History class="size-4" />
-                </button>
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" class="w-72 max-h-80 overflow-y-auto">
                 <DropdownMenuLabel class="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
@@ -153,24 +154,28 @@
         <div
           ref="scrollEl"
           class="flex-1 overflow-y-auto px-4 py-4 space-y-5 scroll-fade"
+          role="log"
+          aria-label="Conversation"
+          aria-live="polite"
         >
           <!-- Empty state -->
           <div v-if="!chat.hasMessages" class="space-y-5 pt-2">
             <AiMark class="size-9" />
-            <p class="text-sm text-muted-foreground leading-relaxed">
-              Ask anything about {{ roleScopeLabel }}. I can call tools to fetch real data
-              from your account.
-            </p>
-            <div class="space-y-1.5">
-              <div class="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
-                Try
-              </div>
-              <div class="flex flex-col gap-1.5">
+            <div class="space-y-2">
+              <p class="text-base font-medium">Hi {{ firstName }},</p>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                I'm hearth AI. {{ roleIntro }} Ask me anything below.
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <p class="text-sm text-muted-foreground">Or try one of these</p>
+              <div class="grid grid-cols-2 gap-2">
                 <button
                   v-for="p in suggestedPrompts"
                   :key="p"
                   type="button"
-                  class="text-left text-sm border border-primary/30 text-primary hover:bg-primary/5 px-3 py-1.5 rounded-full transition w-fit"
+                  class="text-left text-sm border border-primary/30 text-primary hover:bg-primary/5 px-3 py-2 rounded-full transition truncate"
                   @click="onSuggested(p)"
                 >
                   {{ p }}
@@ -181,24 +186,32 @@
 
           <!-- Messages -->
           <template v-for="m in chat.messages" :key="m.id">
-            <!-- User turn — right-aligned grey bubble, time below -->
-            <div v-if="m.role === 'user'" class="space-y-0.5">
+            <!-- User turn — byline above, right-aligned grey bubble below -->
+            <div v-if="m.role === 'user'" class="space-y-1.5">
+              <div class="flex items-center justify-end gap-2 text-[11px]">
+                <span class="font-medium">You</span>
+                <span class="text-muted-foreground">{{ formatTime(m.timestamp) }}</span>
+              </div>
               <div class="flex justify-end">
-                <div class="text-sm bg-muted px-3 py-2 rounded-lg rounded-tr-sm max-w-[85%] whitespace-pre-wrap break-words">
+                <div class="text-sm bg-secondary text-secondary-foreground px-3 py-2 rounded-lg rounded-tr-sm max-w-[85%] whitespace-pre-wrap break-words">
                   {{ m.text }}
                 </div>
               </div>
-              <div class="text-[10px] text-muted-foreground text-right">
-                {{ formatTime(m.timestamp) }}
-              </div>
             </div>
 
-            <!-- Assistant turn — avatar + name + time, body indented -->
+            <!-- Assistant turn — avatar + name + time + live state -->
             <div v-else class="space-y-1.5">
               <div class="flex items-center gap-2 text-[11px]">
                 <AiMark class="size-5" />
                 <span class="font-medium">hearth AI</span>
                 <span class="text-muted-foreground">{{ formatTime(m.timestamp) }}</span>
+                <span
+                  v-if="m.state"
+                  class="ml-auto inline-flex items-center gap-1.5 text-muted-foreground"
+                >
+                  <Loader2 class="size-3 animate-spin" />
+                  {{ m.state }}…
+                </span>
               </div>
 
               <div class="space-y-2">
@@ -238,19 +251,10 @@
                 </details>
 
                 <div
-                  v-if="m.text || m.pending"
+                  v-if="m.text"
                   class="text-sm leading-relaxed"
                   v-html="renderMarkdownish(m.text)"
                 />
-                <span
-                  v-if="m.pending && !m.text && m.toolCalls.length === 0"
-                  class="inline-flex gap-1"
-                  aria-label="Thinking"
-                >
-                  <span class="size-1.5 rounded-full bg-muted-foreground/60 animate-pulse" />
-                  <span class="size-1.5 rounded-full bg-muted-foreground/60 animate-pulse" style="animation-delay: 120ms" />
-                  <span class="size-1.5 rounded-full bg-muted-foreground/60 animate-pulse" style="animation-delay: 240ms" />
-                </span>
 
                 <!-- Feedback row -->
                 <div
@@ -358,7 +362,7 @@ import {
   Trash2,
   X,
 } from "lucide-vue-next";
-import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 import AiMark from "@/components/AiMark.vue";
 import { Button } from "@/components/ui/button";
@@ -388,27 +392,44 @@ const panelStyle = computed(() => ({
   width: isDesktop.value ? `${chat.panelWidth}px` : undefined,
 }));
 
-const roleScopeLabel = computed(() => {
+const firstName = computed(() => auth.full_name?.split(" ")[0] || "there");
+
+const roleIntro = computed(() => {
   switch (auth.role) {
     case "admin":
-      return "users, professionals, services, and metrics";
+      return "I can summarise platform metrics, walk through pending approvals, and surface trends across categories.";
     case "professional":
-      return "your inbox, scheduled jobs, and earnings";
+      return "I can check incoming requests in your area, help you accept jobs, and recap your weekly activity.";
     case "user":
-      return "services, professionals, and your bookings";
+      return "I can help you find services, book new ones from a description, and track the status of your requests.";
     default:
-      return "the marketplace";
+      return "I can help you explore the marketplace.";
   }
 });
 
 const suggestedPrompts = computed(() => {
   switch (auth.role) {
     case "admin":
-      return ["How are we doing this month?", "Show pending approvals", "Top services"];
+      return [
+        "How are we doing?",
+        "Show pending approvals",
+        "Top categories",
+        "Any flagged users?",
+      ];
     case "professional":
-      return ["What's in my inbox?", "Weekly recap", "Accept #1"];
+      return [
+        "What's in my inbox?",
+        "Weekly recap",
+        "Accept the oldest one",
+        "How are my earnings?",
+      ];
     case "user":
-      return ["Find me a plumber", "Status of my requests", "I need urgent cleaning"];
+      return [
+        "Find me a plumber",
+        "Status of my requests",
+        "I need urgent cleaning",
+        "Recommend a top-rated pro",
+      ];
     default:
       return ["What can you do?"];
   }
@@ -530,6 +551,23 @@ function onResizeEnd() {
 }
 onBeforeUnmount(() => {
   window.removeEventListener("mousemove", onResizeMove);
+  window.removeEventListener("keydown", onGlobalKey);
+});
+
+// ─── Keyboard shortcuts ───
+// Cmd/Ctrl+K toggles the panel from anywhere; Esc closes it when open.
+function onGlobalKey(e: KeyboardEvent) {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+    e.preventDefault();
+    chat.toggle();
+    return;
+  }
+  if (e.key === "Escape" && chat.open) {
+    chat.close();
+  }
+}
+onMounted(() => {
+  window.addEventListener("keydown", onGlobalKey);
 });
 
 // ─── Autoscroll ───

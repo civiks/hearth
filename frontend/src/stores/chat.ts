@@ -19,6 +19,12 @@ export interface ChatMessage {
   pending?: boolean;
   timestamp: number;
   feedback?: "up" | "down";
+  /**
+   * Current agent activity verb ("Thinking", "Searching", "Writing", …).
+   * Set by `state` events from the agent stream; cleared once text starts
+   * arriving or on completion.
+   */
+  state?: string;
 }
 
 export interface Conversation {
@@ -308,7 +314,13 @@ export const useChatStore = defineStore("chat", {
       if (!msg) return;
       switch (ev.type) {
         case "text":
+          // First text token clears the state label — once writing begins
+          // the visible stream is its own progress indicator.
+          if (msg.state) msg.state = undefined;
           msg.text += ev.delta;
+          break;
+        case "state":
+          msg.state = ev.status;
           break;
         case "tool_call":
           msg.toolCalls.push({
@@ -328,6 +340,7 @@ export const useChatStore = defineStore("chat", {
         }
         case "done":
           msg.pending = false;
+          msg.state = undefined;
           break;
       }
     },

@@ -344,12 +344,12 @@ function buildUsers(services: DemoService[]): DemoUser[] {
     id: 1,
     email: "admin@demo.local",
     role: "admin",
-    full_name: "Demo Admin",
+    full_name: "Riya Goel",
     address: null,
     pincode: null,
     is_blocked: false,
     active: true,
-    avatar_url: avatar("Demo Admin"),
+    avatar_url: avatar("Riya Goel"),
   });
 
   // Demo customer (id 2)
