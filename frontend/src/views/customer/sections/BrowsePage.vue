@@ -9,6 +9,21 @@
     </Alert>
 
     <template v-else>
+      <AiSurface
+        as="button"
+        class="w-full p-4 flex items-center gap-4 text-left transition group hover:brightness-105"
+        @click="nlOpen = true"
+      >
+        <AiMark class="size-7" />
+        <span class="flex-1 min-w-0">
+          <span class="block text-sm font-medium">Tell us what you need</span>
+          <span class="block text-xs text-muted-foreground">
+            Describe it and we'll match the right service for you.
+          </span>
+        </span>
+        <ChevronRight class="size-4 text-muted-foreground group-hover:text-primary" />
+      </AiSurface>
+
       <section v-if="loading" class="space-y-4">
         <header>
           <div class="h-5 w-40 bg-muted animate-pulse" />
@@ -52,13 +67,22 @@
       @close="bookingFor = null"
       @booked="onBooked"
     />
+
+    <NlBookingDialog
+      v-if="nlOpen"
+      @close="nlOpen = false"
+      @booked="onNlBooked"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, Star, TrendingUp } from "lucide-vue-next";
+import { AlertCircle, ChevronRight, Star, TrendingUp } from "lucide-vue-next";
 import { computed, onMounted, ref } from "vue";
 
+import AiMark from "@/components/AiMark.vue";
+import AiSurface from "@/components/AiSurface.vue";
+import NlBookingDialog from "@/components/genai/NlBookingDialog.vue";
 import FeaturedRow from "@/components/marketplace/FeaturedRow.vue";
 import ServiceCardSkeleton from "@/components/marketplace/ServiceCardSkeleton.vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -76,6 +100,7 @@ const toasts = useNotificationsStore();
 const services = ref<Service[]>([]);
 const professionals = ref<ProfessionalOption[]>([]);
 const bookingFor = ref<Service | null>(null);
+const nlOpen = ref(false);
 const loading = ref(true);
 
 const professionalsForService = computed(() =>
@@ -129,6 +154,11 @@ function openBooking(service: Service) {
 
 function onBooked() {
   bookingFor.value = null;
+  toasts.success("Service booked — track it under My Requests");
+}
+
+function onNlBooked() {
+  nlOpen.value = false;
   toasts.success("Service booked — track it under My Requests");
 }
 </script>

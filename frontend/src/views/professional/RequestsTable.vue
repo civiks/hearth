@@ -22,6 +22,7 @@ import { h } from "vue";
 import type { ColumnDef } from "@tanstack/vue-table";
 
 import UserAvatar, { type AvatarVariant } from "@/components/Avatar.vue";
+import SmartReplyChip from "@/components/genai/SmartReplyChip.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -32,6 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { formatDateTime } from "@/lib/format";
+import { useNotificationsStore } from "@/stores/notifications";
 
 export interface ProRequest {
   id: number;
@@ -42,11 +44,14 @@ export interface ProRequest {
   scheduled_time: string | null;
   service_status: string;
   remarks: string | null;
+  base_price?: number | null;
 }
 
 const props = defineProps<{ requests: ProRequest[] }>();
 const emit = defineEmits<{ updateStatus: [id: number, status: string] }>();
 void props;
+
+const toasts = useNotificationsStore();
 
 function avatarVariant(r: ProRequest): AvatarVariant {
   switch (r.service_status) {
@@ -111,7 +116,23 @@ const columns: ColumnDef<ProRequest>[] = [
     header: "Remarks",
     enableSorting: false,
     meta: { label: "Remarks", cellClass: "text-muted-foreground max-w-xs" },
-    cell: ({ row }) => row.original.remarks || "No remarks",
+    cell: ({ row }) => {
+      const r = row.original;
+      const showChip = r.service_status === "requested" || r.service_status === "accepted";
+      return h("div", { class: "space-y-1.5" }, [
+        h("div", null, r.remarks || "No remarks"),
+        showChip
+          ? h(SmartReplyChip, {
+              requestId: r.id,
+              remarks: r.remarks,
+              basePrice: r.base_price,
+              customerName: r.customer_name,
+              onPick: (reply: string) =>
+                toasts.success("Reply queued", reply),
+            })
+          : null,
+      ]);
+    },
   },
   {
     accessorKey: "scheduled_time",

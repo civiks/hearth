@@ -9,105 +9,124 @@
         <span class="font-semibold text-base tracking-tight">hearth</span>
       </RouterLink>
 
-      <DropdownMenu :modal="false">
-        <DropdownMenuTrigger as-child>
-          <button
-            type="button"
-            class="flex items-center gap-2 px-2 py-1 transition hover:bg-surface-inverse-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse"
-          >
-            <Avatar class="size-6">
-              <AvatarFallback class="bg-primary text-primary-foreground text-[10px]">
-                {{ initials(auth.full_name) }}
-              </AvatarFallback>
-            </Avatar>
-            <span class="hidden sm:inline text-xs">{{ auth.email }}</span>
-            <span class="sm:hidden text-xs">{{ firstName }}</span>
-            <ChevronDown class="size-3.5 opacity-70" />
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" class="w-56">
-          <DropdownMenuLabel>
-            <div class="flex flex-col leading-tight">
-              <span class="text-sm font-medium">{{ auth.full_name }}</span>
-              <span class="text-xs text-muted-foreground">{{ auth.email }}</span>
-            </div>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem @click="$router.push('/account')">
-            <UserCircle class="mr-2 size-4" />
-            Account
-          </DropdownMenuItem>
-          <DropdownMenuItem @click="$router.push('/settings')">
-            <Settings class="mr-2 size-4" />
-            Settings
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <component :is="themeIcon" class="mr-2 size-4" />
-              Theme
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent class="w-40">
-              <DropdownMenuRadioGroup
-                :model-value="theme"
-                @update:model-value="(v) => setTheme(v as Theme)"
-              >
-                <DropdownMenuRadioItem value="light">
-                  <Sun class="mr-2 size-4" />
-                  Light
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="dark">
-                  <Moon class="mr-2 size-4" />
-                  Dark
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="system">
-                  <Monitor class="mr-2 size-4" />
-                  System
-                </DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-          <DropdownMenuSub v-if="DEMO">
-            <DropdownMenuSubTrigger>
-              <Repeat class="mr-2 size-4" />
-              Switch role
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent class="w-44">
-              <DropdownMenuRadioGroup
-                :model-value="auth.role ?? ''"
-                @update:model-value="(v) => loginAs(v as Role)"
-              >
-                <DropdownMenuRadioItem
-                  v-for="r in DEMO_ROLES"
-                  :key="r.value"
-                  :value="r.value"
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          :aria-pressed="chat.open"
+          aria-label="Ask AI"
+          class="flex items-center gap-2 h-7 pl-3 pr-2 rounded-full text-xs font-medium text-surface-inverse-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse"
+          :class="
+            chat.open
+              ? 'bg-surface-inverse-foreground/20'
+              : 'bg-surface-inverse-foreground/10 hover:bg-surface-inverse-foreground/20'
+          "
+          @click="chat.toggle()"
+        >
+          Ask
+          <AiMark class="size-4" />
+        </button>
+
+        <DropdownMenu :modal="false">
+          <DropdownMenuTrigger as-child>
+            <button
+              type="button"
+              class="flex items-center gap-2 px-2 py-1 transition hover:bg-surface-inverse-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse"
+            >
+              <Avatar class="size-6">
+                <AvatarFallback class="bg-primary text-primary-foreground text-[10px]">
+                  {{ initials(auth.full_name) }}
+                </AvatarFallback>
+              </Avatar>
+              <span class="hidden sm:inline text-xs">{{ auth.email }}</span>
+              <span class="sm:hidden text-xs">{{ firstName }}</span>
+              <ChevronDown class="size-3.5 opacity-70" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" class="w-56">
+            <DropdownMenuLabel>
+              <div class="flex flex-col leading-tight">
+                <span class="text-sm font-medium">{{ auth.full_name }}</span>
+                <span class="text-xs text-muted-foreground">{{ auth.email }}</span>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem @click="$router.push('/account')">
+              <UserCircle class="mr-2 size-4" />
+              Account
+            </DropdownMenuItem>
+            <DropdownMenuItem @click="$router.push('/settings')">
+              <Settings class="mr-2 size-4" />
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <component :is="themeIcon" class="mr-2 size-4" />
+                Theme
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent class="w-40">
+                <DropdownMenuRadioGroup
+                  :model-value="theme"
+                  @update:model-value="(v) => setTheme(v as Theme)"
                 >
-                  <component :is="r.icon" class="mr-2 size-4" />
-                  {{ r.label }}
-                </DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            v-if="DEMO"
-            @click="resetDemoData"
-          >
-            <RotateCcw class="mr-2 size-4" />
-            Reset demo data
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            variant="destructive"
-            @click="handleLogout"
-          >
-            <LogOut class="mr-2 size-4" />
-            Sign out
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+                  <DropdownMenuRadioItem value="light">
+                    <Sun class="mr-2 size-4" />
+                    Light
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="dark">
+                    <Moon class="mr-2 size-4" />
+                    Dark
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="system">
+                    <Monitor class="mr-2 size-4" />
+                    System
+                  </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            <DropdownMenuSub v-if="DEMO">
+              <DropdownMenuSubTrigger>
+                <Repeat class="mr-2 size-4" />
+                Switch role
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent class="w-44">
+                <DropdownMenuRadioGroup
+                  :model-value="auth.role ?? ''"
+                  @update:model-value="(v) => loginAs(v as Role)"
+                >
+                  <DropdownMenuRadioItem
+                    v-for="r in DEMO_ROLES"
+                    :key="r.value"
+                    :value="r.value"
+                  >
+                    <component :is="r.icon" class="mr-2 size-4" />
+                    {{ r.label }}
+                  </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              v-if="DEMO"
+              @click="resetDemoData"
+            >
+              <RotateCcw class="mr-2 size-4" />
+              Reset demo data
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              variant="destructive"
+              @click="handleLogout"
+            >
+              <LogOut class="mr-2 size-4" />
+              Sign out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </header>
     <main class="flex-1 min-h-0 overflow-y-auto">
       <slot />
     </main>
+    <ChatWidget />
   </div>
 </template>
 
@@ -126,7 +145,9 @@ import {
 import { computed } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
+import AiMark from "@/components/AiMark.vue";
 import BrandMark from "@/components/BrandMark.vue";
+import ChatWidget from "@/components/ChatWidget.vue";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -147,9 +168,11 @@ import { type Role } from "@/lib/api";
 import { DEMO } from "@/lib/demo/flag";
 import { initials } from "@/lib/format";
 import { useAuthStore } from "@/stores/auth";
+import { useChatStore } from "@/stores/chat";
 
 const router = useRouter();
 const auth = useAuthStore();
+const chat = useChatStore();
 const { theme, effectiveTheme, setTheme } = useTheme();
 const { loginAs, resetDemoData } = useDemoLogin();
 

@@ -17,6 +17,56 @@
 }
 
 /*
+ * AI surface — subtle blue→violet wash from the bottom + blue
+ * outline. Use `ai-surface ai-outline` together on any container that
+ * represents an AI feature (chat panel, AI booking dialog, ops digest, etc).
+ * `ai-surface-soft` is the lighter variant for nested elements (tool cards).
+ */
+@utility ai-surface {
+  background:
+    linear-gradient(
+      0deg,
+      rgb(78 135 255 / 0.13) 0%,
+      rgb(139 92 246 / 0.05) 35%,
+      transparent 60%
+    ),
+    hsl(var(--background));
+}
+.dark .ai-surface {
+  background:
+    linear-gradient(
+      0deg,
+      rgb(99 155 255 / 0.14) 0%,
+      rgb(167 139 250 / 0.06) 35%,
+      transparent 60%
+    ),
+    hsl(var(--background));
+}
+@utility ai-surface-soft {
+  background: linear-gradient(
+    0deg,
+    rgb(78 135 255 / 0.08) 0%,
+    transparent 100%
+  );
+}
+@utility ai-outline {
+  border: 1px solid rgb(69 137 255 / 0.45);
+}
+@utility ai-mark {
+  display: inline-block;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #06b6d4,
+    #3b82f6,
+    #8b5cf6,
+    #ec4899,
+    #06b6d4
+  );
+}
+
+/*
  * Animated 1px blue border that sweeps around a card on hover.
  * Static state is a thin gray-20 border (matches the rest of ).
  * Hover fades in a conic-gradient ring that rotates over 3s.

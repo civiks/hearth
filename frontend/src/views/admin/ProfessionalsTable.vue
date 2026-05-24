@@ -24,6 +24,7 @@ import { RouterLink } from "vue-router";
 import type { ColumnDef } from "@tanstack/vue-table";
 
 import UserAvatar, { type AvatarVariant } from "@/components/Avatar.vue";
+import ApprovalSummaryChip from "@/components/genai/ApprovalSummaryChip.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
@@ -43,6 +44,8 @@ export interface AdminUser {
   experience?: number | null;
   approval_status?: string | null;
   is_blocked: boolean;
+  description?: string | null;
+  service_name?: string | null;
 }
 
 const props = defineProps<{ professionals: AdminUser[] }>();
@@ -51,7 +54,6 @@ const emit = defineEmits<{
   reject: [id: number];
   delete: [id: number];
 }>();
-void props;
 
 function avatarVariant(u: AdminUser): AvatarVariant {
   if (u.is_blocked) return "danger";
@@ -129,10 +131,23 @@ const columns: ColumnDef<AdminUser>[] = [
         { label: "Rejected", value: "rejected" },
       ],
     },
-    cell: ({ row }) =>
-      h(StatusBadge, {
-        status: row.original.approval_status ?? "pending",
-      }),
+    cell: ({ row }) => {
+      const u = row.original;
+      const isPending = (u.approval_status ?? "pending") === "pending";
+      return h(
+        "div",
+        { class: "flex flex-col items-start gap-1.5" },
+        [
+          h(StatusBadge, { status: u.approval_status ?? "pending" }),
+          isPending
+            ? h(ApprovalSummaryChip, {
+                professional: u,
+                cohort: props.professionals,
+              })
+            : null,
+        ],
+      );
+    },
   },
   {
     id: "actions",

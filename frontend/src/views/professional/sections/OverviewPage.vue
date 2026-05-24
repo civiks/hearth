@@ -4,6 +4,7 @@ import { computed, onMounted, ref } from "vue";
 import { DonutChart } from "@/components/charts";
 import { categoricalPalette } from "@/components/charts/palette";
 import { DashboardWidget, MetricStrip, type StripTile } from "@/components/dashboard";
+import ProDigestCard from "@/components/genai/ProDigestCard.vue";
 import { ApiError, api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 import { useNotificationsStore } from "@/stores/notifications";
@@ -124,6 +125,8 @@ onMounted(async () => {
           Here's how your service is doing today.
         </p>
       </header>
+
+      <ProDigestCard :requests="requests" :services="services" />
 
       <MetricStrip title="This month" :tiles="stripTiles" />
 

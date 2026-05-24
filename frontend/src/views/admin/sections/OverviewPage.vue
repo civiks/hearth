@@ -4,6 +4,7 @@ import { computed, onMounted, ref } from "vue";
 import { DonutChart } from "@/components/charts";
 import { categoricalPalette } from "@/components/charts/palette";
 import { DashboardWidget, StatWidget } from "@/components/dashboard";
+import OpsDigestCard from "@/components/genai/OpsDigestCard.vue";
 import { useAdminData } from "@/composables/useAdminData";
 import { api } from "@/lib/api";
 import { useNotificationsStore } from "@/stores/notifications";
@@ -85,10 +86,12 @@ function capitalize(s: string) {
 <template>
   <div class="px-4 py-4 sm:px-6 sm:py-8">
     <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-stretch">
+      <OpsDigestCard class="sm:col-span-12" :analytics="analytics" />
+
       <StatWidget
         class="sm:col-span-4"
         title="Service requests"
-        unit="All time"
+        unit="Bookings"
         :value="totalRequests"
         :delta="requestStats.delta"
         :trend="requestStats.sparkline"
@@ -97,7 +100,7 @@ function capitalize(s: string) {
       <StatWidget
         class="sm:col-span-4"
         title="Registered users"
-        unit="All time"
+        unit="Customers"
         :value="users.length"
         :delta="userStats.delta"
         :trend="userStats.sparkline"
@@ -106,7 +109,7 @@ function capitalize(s: string) {
       <StatWidget
         class="sm:col-span-4"
         title="Active professionals"
-        unit="Current"
+        unit="Approved"
         :value="professionals.length"
         to="/admin/professionals"
       />

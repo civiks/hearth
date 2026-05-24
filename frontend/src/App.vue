@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineComponent, h, onMounted } from "vue";
+import { computed, defineComponent, h, onMounted, watch } from "vue";
 import { useRoute, useRouter, type RouteRecordRaw } from "vue-router";
 
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
@@ -16,10 +16,25 @@ import { useTheme } from "@/composables/useTheme";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import PublicLayout from "@/layouts/PublicLayout.vue";
+import { useAuthStore } from "@/stores/auth";
+import { useChatStore } from "@/stores/chat";
 
 useTheme();
 const route = useRoute();
 const router = useRouter();
+
+// Reset the chat panel + reload per-user conversation history whenever the
+// authenticated user changes
+const auth = useAuthStore();
+const chat = useChatStore();
+watch(
+  () => auth.user_id,
+  () => {
+    chat.close();
+    chat.loadUserHistory();
+  },
+  { immediate: true },
+);
 
 // Fallback layout with no chrome. Prevents a flash of landing-page chrome
 // on /login or /register before route.meta.layout resolves.

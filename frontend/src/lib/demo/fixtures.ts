@@ -93,7 +93,10 @@ export interface DemoState {
 // Tied to the git SHA injected via vite.config.ts so every deploy invalidates
 // cached fixtures in localStorage. Falls back to "dev" in
 // repos without git history.
-export const DEMO_STATE_VERSION = import.meta.env.VITE_BUILD_ID ?? "dev";
+// Bump the suffix (e.g. "dev.3") whenever fixtures change so dev sessions
+// reseed automatically. Production uses VITE_BUILD_ID (the git SHA) which
+// invalidates on every deploy.
+export const DEMO_STATE_VERSION = import.meta.env.VITE_BUILD_ID ?? "dev.2";
 
 // Base width sized for the smallest realistic card slot (~390 px mobile);
 // ServiceCard derives a srcset from this URL for retina + larger viewports.
@@ -407,8 +410,10 @@ function buildUsers(services: DemoService[]): DemoUser[] {
     // Distribute across services roughly evenly
     const service = services[(i + 2) % services.length];
     const area = AREAS[i % AREAS.length];
-    const approval =
-      i === PRO_NAMES.length - 1 ? "pending" : i === PRO_NAMES.length - 2 ? "rejected" : "approved";
+    let approval: string;
+    if (i >= PRO_NAMES.length - 4) approval = "pending";
+    else if (i >= PRO_NAMES.length - 6) approval = "rejected";
+    else approval = "approved";
     users.push({
       id: proId,
       email: `${name.toLowerCase().replace(/\s+/g, ".")}@demo.local`,
@@ -446,24 +451,38 @@ function isoDateTimeNDaysFromNow(n: number, hour = 10): string {
   return d.toISOString();
 }
 
+const REMARK_POOL: (string | null)[] = [
+  "Please call before arriving.",
+  "Apartment is on the 3rd floor — lift available.",
+  "Building gate code: 4521. Park in B2 visitor spot.",
+  "Pet-friendly please — we have a small dog.",
+  "Issue started yesterday, gets worse in the evening.",
+  "Bring your own safety gear, balcony work involved.",
+  "Materials are already on-site, just need labor.",
+  "Need it sorted before family visit on the weekend.",
+  null,
+  null,
+  null,
+  "Quote me before starting any extra work.",
+  "Previous attempt didn't fix it — needs proper diagnosis.",
+];
+
 function buildRequests(users: DemoUser[], services: DemoService[]): DemoRequest[] {
   const customers = users.filter((u) => u.role === "user");
   const pros = users.filter((u) => u.role === "professional" && u.approval_status === "approved");
   const requests: DemoRequest[] = [];
-
-  // Status weighting target: completed 22, in_progress 2, accepted 6, requested 4, cancelled 6 ≈ 40
   const statusPlan: DemoRequest["service_status"][] = [
-    ...Array(22).fill("completed") as DemoRequest["service_status"][],
-    ...Array(2).fill("in_progress") as DemoRequest["service_status"][],
-    ...Array(6).fill("accepted") as DemoRequest["service_status"][],
-    ...Array(4).fill("requested") as DemoRequest["service_status"][],
-    ...Array(6).fill("cancelled") as DemoRequest["service_status"][],
+    ...Array(50).fill("completed") as DemoRequest["service_status"][],
+    ...Array(4).fill("in_progress") as DemoRequest["service_status"][],
+    ...Array(12).fill("accepted") as DemoRequest["service_status"][],
+    ...Array(11).fill("requested") as DemoRequest["service_status"][],
+    ...Array(8).fill("cancelled") as DemoRequest["service_status"][],
   ];
 
   for (let i = 0; i < statusPlan.length; i++) {
     const status = statusPlan[i];
-    const skew = Math.floor(Math.pow(i / statusPlan.length, 1.6) * services.length);
-    const service = services[Math.min(skew, services.length - 1)];
+    const skew = (i * 7) % services.length;
+    const service = services[skew];
     const customer = customers[i % customers.length];
     const matchingPros = pros.filter((p) => p.service_id === service.id);
     const pro =
@@ -472,14 +491,14 @@ function buildRequests(users: DemoUser[], services: DemoService[]): DemoRequest[
         : (matchingPros[i % Math.max(1, matchingPros.length)] ?? pros[i % pros.length]);
     const daysAgo =
       status === "completed"
-        ? 4 + ((i * 3) % 80)
+        ? 2 + ((i * 5) % 150) // spread across ~5 months for trend lines
         : status === "cancelled"
-        ? 6 + ((i * 5) % 50)
-        : status === "in_progress"
-        ? 1
-        : status === "accepted"
-        ? (i % 4) + 1
-        : (i % 3) + 1;
+          ? 4 + ((i * 7) % 90)
+          : status === "in_progress"
+            ? (i % 3) + 1
+            : status === "accepted"
+              ? (i % 5) + 1
+              : (i % 4) + 1;
     const date_of_request = isoDateNDaysAgo(daysAgo);
     const date_of_completion =
       status === "completed" ? isoDateNDaysAgo(Math.max(0, daysAgo - 1)) : null;
@@ -502,7 +521,7 @@ function buildRequests(users: DemoUser[], services: DemoService[]): DemoRequest[
       scheduled_time,
       address: customer.address ?? `${10 + i}, ${area.area}`,
       pincode: customer.pincode ?? area.pin,
-      remarks: i % 3 === 0 ? "Please call before arriving." : null,
+      remarks: REMARK_POOL[i % REMARK_POOL.length],
     });
   }
 
