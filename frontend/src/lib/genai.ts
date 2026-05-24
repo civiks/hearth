@@ -3,7 +3,8 @@
  * NL → request intent parser. Tools execute against the existing api.* client.
  */
 
-import { api } from "@/lib/api";
+import { api, API_BASE_URL } from "@/lib/api";
+import { DEMO } from "@/lib/demo/flag";
 import { CATEGORIES } from "@/lib/demo/fixtures";
 
 // ──────────────────────────────────────────────── Event protocol
@@ -280,11 +281,137 @@ function nextToolId(): string {
 
 // ──────────────────────────────────────────────── Agent loop
 
+export interface ChatHistoryMessage {
+  role: "user" | "assistant";
+  text: string;
+}
+
 /**
- * Routes a user message to a role-specific handler, which emits a stream of
- * text deltas and tool calls.
+ * Single entrypoint the chat store calls. Branches on whether the build is
+ * the static demo (in-browser scripted agent) or the real app (server-side
+ * Gemini via SSE). The chat UI never sees the difference — both paths emit
+ * the same `AgentEvent` stream.
  */
 export function runAgent(
+  userMessage: string,
+  role: string | null | undefined,
+  history: ChatHistoryMessage[],
+  modelId: string,
+): ReadableStream<AgentEvent> {
+  if (DEMO) return runAgentInBrowser(userMessage, role);
+  return runAgentSSE(userMessage, history, modelId);
+}
+
+/**
+ * POSTs to /api/agent/chat and decodes the server-sent-events response
+ * into `AgentEvent`s. Uses fetch + a manual reader (not EventSource) so
+ * we can send a JSON body and ride the existing cookie auth.
+ *
+ * The Gemini API key is read on the backend from the user's encrypted
+ * record (or the server fallback); the browser never holds it.
+ */
+function runAgentSSE(
+  userMessage: string,
+  history: ChatHistoryMessage[],
+  modelId: string,
+): ReadableStream<AgentEvent> {
+  return new ReadableStream<AgentEvent>({
+    async start(controller) {
+      let res: Response;
+      try {
+        res = await fetch(`${API_BASE_URL}/api/agent/chat`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model_id: modelId,
+            messages: history,
+            message: userMessage,
+          }),
+        });
+      } catch (err) {
+        controller.enqueue({
+          type: "text",
+          delta: `\n\n_Network error: ${err instanceof Error ? err.message : String(err)}_`,
+        });
+        controller.enqueue({ type: "done" });
+        controller.close();
+        return;
+      }
+
+      if (!res.ok || !res.body) {
+        // Surface the backend's `detail` verbatim — `agent.py` sets a
+        // friendly message for the common cases (503 "AI is not configured",
+        // 401 "not authenticated") so the chat can show them as-is.
+        let detail = `Request failed (${res.status})`;
+        try {
+          const body = await res.json();
+          if (typeof body?.detail === "string") detail = body.detail;
+        } catch {
+          // body wasn't JSON
+        }
+        controller.enqueue({ type: "text", delta: detail });
+        controller.enqueue({ type: "done" });
+        controller.close();
+        return;
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      try {
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          // SSE frames are separated by a blank line. Split on \n\n, keep
+          // any partial trailing frame in the buffer.
+          let sep = buffer.indexOf("\n\n");
+          while (sep !== -1) {
+            const frame = buffer.slice(0, sep);
+            buffer = buffer.slice(sep + 2);
+            const event = parseSseFrame(frame);
+            if (event) controller.enqueue(event);
+            sep = buffer.indexOf("\n\n");
+          }
+        }
+      } catch (err) {
+        controller.enqueue({
+          type: "text",
+          delta: `\n\n_Stream error: ${err instanceof Error ? err.message : String(err)}_`,
+        });
+      } finally {
+        controller.enqueue({ type: "done" });
+        controller.close();
+      }
+    },
+  });
+}
+
+function parseSseFrame(frame: string): AgentEvent | null {
+  let eventType = "message";
+  let data = "";
+  for (const line of frame.split("\n")) {
+    if (line.startsWith("event: ")) eventType = line.slice(7).trim();
+    else if (line.startsWith("data: ")) data = line.slice(6);
+  }
+  if (!data) return null;
+  try {
+    const parsed = JSON.parse(data) as Record<string, unknown>;
+    return { type: eventType, ...parsed } as AgentEvent;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Demo-build agent — keyword-matches the user message, picks a script,
+ * and dispatches in-browser tool calls. Used only when VITE_DEMO=1.
+ */
+function runAgentInBrowser(
   userMessage: string,
   role: string | null | undefined,
 ): ReadableStream<AgentEvent> {

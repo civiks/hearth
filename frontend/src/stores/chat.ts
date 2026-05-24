@@ -44,27 +44,15 @@ export interface ChatModel {
   tagline: string;
 }
 
+// Flash is the default — cheaper and fast enough for the agent loop. Pro
+// is kept as an opt-in for long-context conversations.
 export const CHAT_MODELS: ChatModel[] = [
   {
-    id: "claude-opus-4-7",
-    name: "Claude Opus 4.7",
-    provider: "Anthropic",
-    color: "#D97757",
-    tagline: "Most capable",
-  },
-  {
-    id: "claude-sonnet-4-6",
-    name: "Claude Sonnet 4.6",
-    provider: "Anthropic",
-    color: "#E8A66E",
-    tagline: "Fast & balanced",
-  },
-  {
-    id: "gpt-5",
-    name: "GPT-5",
-    provider: "OpenAI",
-    color: "#10A37F",
-    tagline: "OpenAI flagship",
+    id: "gemini-2.5-flash",
+    name: "Gemini 2.5 Flash",
+    provider: "Google",
+    color: "#34A853",
+    tagline: "Fast & cheap (default)",
   },
   {
     id: "gemini-2.5-pro",
@@ -82,6 +70,12 @@ interface State {
   modelId: string;
   conversations: Conversation[];
   currentConversationId: string | null;
+  /**
+   * One-shot signal: the last turn failed because no Gemini API key is
+   * configured. ChatWidget watches this to auto-open the AiKeyDialog, then
+   * clears it. Lets the SSE transport stay decoupled from UI state.
+   */
+  needsKeySetup: boolean;
 }
 
 const MODEL_KEY = "hearth.chat.modelId";
@@ -151,6 +145,7 @@ export const useChatStore = defineStore("chat", {
     modelId: readModelId(),
     conversations: [],
     currentConversationId: null,
+    needsKeySetup: false,
   }),
   getters: {
     availableTools: () => {
@@ -277,10 +272,14 @@ export const useChatStore = defineStore("chat", {
         pending: true,
         timestamp: now,
       };
+      // History to send to the agent — everything *before* the just-pushed
+      // user message + pending assistant placeholder. Map to the minimal
+      // {role, text} shape the backend (and the demo path) accept.
+      const history = this.messages.map((m) => ({ role: m.role, text: m.text }));
       this.messages.push(userMsg, assistantMsg);
       this.streaming = true;
 
-      const stream = runAgent(trimmed, auth.role);
+      const stream = runAgent(trimmed, auth.role, history, this.modelId);
       const reader = stream.getReader();
       try {
         // eslint-disable-next-line no-constant-condition
@@ -292,6 +291,12 @@ export const useChatStore = defineStore("chat", {
       } finally {
         assistantMsg.pending = false;
         this.streaming = false;
+        // If the backend asked for a key (503), flag it so the UI can
+        // open the setup dialog. Match the exact backend detail so this
+        // only fires for the configuration case, not arbitrary errors.
+        if (assistantMsg.text.includes("Add your Gemini API key")) {
+          this.needsKeySetup = true;
+        }
         this.persistCurrent();
       }
     },

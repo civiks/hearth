@@ -34,6 +34,12 @@ dependencies = [
 
     # Email
     "jinja2>=3.1.5",
+
+    # Gemini via google-genai
+    "google-genai>=0.3.0",
+
+    # Symmetric encryption for per-user BYOK Gemini key (Fernet)
+    "cryptography>=44.0.0",
 ]
 
 [dependency-groups]

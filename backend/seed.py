@@ -183,9 +183,22 @@ def ensure_user(
 ) -> User:
     user = session.scalars(select(User).where(User.email == email)).first()
     if user is not None:
-        # Top up marketplace fields if a previous seed (pre-migration) left them empty
+        # Re-seeding should pick up edits the developer made to this file —
+        # profile fields are always pulled forward. Password is left alone
+        # so manually-changed credentials survive a re-seed. Marketplace
+        # fields are top-ups (only filled if currently empty) so they don't
+        # clobber ratings/reviews accumulated by other seed paths.
         dirty = False
-        if avatar_url and not user.avatar_url:
+        if user.full_name != full_name:
+            user.full_name = full_name
+            dirty = True
+        if user.address != address:
+            user.address = address
+            dirty = True
+        if user.pincode != pincode:
+            user.pincode = pincode
+            dirty = True
+        if avatar_url and user.avatar_url != avatar_url:
             user.avatar_url = avatar_url
             dirty = True
         if rating is not None and user.rating is None:
@@ -337,11 +350,11 @@ def seed(session: Session) -> None:
         session,
         email="admin@email.com",
         password="admin",
-        full_name="Demo Admin",
+        full_name="Rahul Kumar",
         address="MG Road",
         pincode="560001",
         role=admin_role,
-        avatar_url=_avatar("Demo Admin"),
+        avatar_url=_avatar("Rahul Kumar"),
     )
 
     # Legacy customers (kept for backward compatibility with user01..user05)

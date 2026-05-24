@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from enum import StrEnum
 
-from sqlalchemy import Date, DateTime, Float, ForeignKey, Integer, String
+from sqlalchemy import Date, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -40,6 +40,9 @@ class User(Base):
     avatar_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
     rating: Mapped[float | None] = mapped_column(Float, nullable=True)
     review_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    # BYOK — Fernet-encrypted Gemini API key for the agent. Server reads this
+    # in `routers/agent.py`; never round-tripped back to the client.
+    gemini_api_key_encrypted: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     roles: Mapped[list["Role"]] = relationship(
         "Role", secondary="user_role", backref="users", lazy="select"

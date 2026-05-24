@@ -9,7 +9,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 
-from backend.api.routers import analytics, auth, exports, requests, services, users
+from backend.api.routers import agent, analytics, auth, exports, requests, services, users
 from backend.core.config import get_settings
 
 settings = get_settings()
@@ -45,6 +45,7 @@ def create_app() -> FastAPI:
     app.include_router(requests.router)
     app.include_router(exports.router)
     app.include_router(analytics.router)
+    app.include_router(agent.router)
 
     # Mount the built frontend if present (bundled Docker image path).
     # Skipped during dev since the Vite dev server serves the frontend separately.

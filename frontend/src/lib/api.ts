@@ -8,6 +8,9 @@ export type Role = "admin" | "professional" | "user";
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
+/** Public alias so other modules (e.g. agent SSE transport) can use the same backend URL. */
+export const API_BASE_URL = BASE_URL;
+
 async function request<T>(
   method: string,
   path: string,

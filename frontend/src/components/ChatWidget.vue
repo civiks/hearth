@@ -173,6 +173,7 @@
               </p>
             </div>
 
+
             <div class="space-y-3">
               <p class="text-sm text-muted-foreground">Or try one of these</p>
               <div class="grid grid-cols-2 gap-2">
@@ -187,6 +188,12 @@
                 </button>
               </div>
             </div>
+
+            <p v-if="!DEMO" class="text-[11px] text-muted-foreground pt-2">
+              API key isn't configured.
+              <RouterLink to="/settings" class="text-primary hover:underline">
+                Settings → AI</RouterLink>.
+            </p>
           </div>
 
           <!-- Messages -->
@@ -346,6 +353,10 @@
         </form>
       </aside>
     </Transition>
+
+    <!-- AiKeyDialog teleports to body via reka's Dialog primitive, so its
+         position here only affects mount lifetime. -->
+    <AiKeyDialog v-model:open="keyDialogOpen" />
   </Teleport>
 </template>
 
@@ -367,9 +378,12 @@ import {
   X,
 } from "lucide-vue-next";
 import { computed, nextTick, ref, watch } from "vue";
+import { RouterLink } from "vue-router";
 
+import AiKeyDialog from "@/components/AiKeyDialog.vue";
 import AiMark from "@/components/AiMark.vue";
 import { Button } from "@/components/ui/button";
+import { DEMO } from "@/lib/demo/flag";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -383,6 +397,11 @@ import { labelForTool } from "@/lib/genai";
 import { useAuthStore } from "@/stores/auth";
 import { CHAT_MODELS, useChatStore } from "@/stores/chat";
 
+// Auto-opens when chat.needsKeySetup flips true (backend 503'd because no
+// Gemini key was configured). Reset to false once the dialog is shown so
+// the next failure re-opens it.
+const keyDialogOpen = ref(false);
+
 const props = withDefaults(
   defineProps<{ mode?: "inline" | "overlay" }>(),
   { mode: "overlay" },
@@ -390,6 +409,17 @@ const props = withDefaults(
 
 const chat = useChatStore();
 const auth = useAuthStore();
+
+// Auto-pop the key dialog when the backend signals it needs one.
+watch(
+  () => chat.needsKeySetup,
+  (v) => {
+    if (v) {
+      keyDialogOpen.value = true;
+      chat.needsKeySetup = false; // one-shot — clear so future 503s re-open
+    }
+  },
+);
 
 const composer = ref("");
 const scrollEl = ref<HTMLDivElement | null>(null);

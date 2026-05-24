@@ -1,9 +1,11 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from backend.core import crypto
 from backend.core.db import get_session
 from backend.core.security import AdminUser, CurrentUser
 from backend.models import Role, ServiceProfessional, ServiceRequest, User
@@ -15,9 +17,56 @@ router = APIRouter(prefix="/api/users", tags=["users"])
 VALID_APPROVAL_STATUSES = {"approved", "rejected", "pending"}
 
 
+class GeminiKeyStatus(BaseModel):
+    """Whether the caller has a stored Gemini key. The key itself is never
+    returned — once stored, the only operations are 'replace' and 'delete'."""
+
+    configured: bool
+
+
+class GeminiKeySet(BaseModel):
+    api_key: str = Field(min_length=20, max_length=200)
+
+
 @router.get("/me", response_model=UserRead)
 def get_me(user: CurrentUser):
     return serialize_user(user)
+
+
+@router.get("/me/gemini-key", response_model=GeminiKeyStatus)
+def get_my_gemini_key_status(user: CurrentUser) -> GeminiKeyStatus:
+    return GeminiKeyStatus(configured=bool(user.gemini_api_key_encrypted))
+
+
+@router.put("/me/gemini-key", response_model=GeminiKeyStatus)
+def set_my_gemini_key(
+    payload: GeminiKeySet,
+    user: CurrentUser,
+    session: Annotated[Session, Depends(get_session)],
+) -> GeminiKeyStatus:
+    """Encrypt and store the user's Gemini API key.
+
+    503 if the server has no encryption key configured — without one we
+    refuse to write plaintext-equivalent secrets to the DB.
+    """
+    try:
+        token = crypto.encrypt(payload.api_key.strip())
+    except crypto.EncryptionUnavailable as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(e)
+        ) from e
+    user.gemini_api_key_encrypted = token
+    session.commit()
+    return GeminiKeyStatus(configured=True)
+
+
+@router.delete("/me/gemini-key", status_code=status.HTTP_204_NO_CONTENT)
+def delete_my_gemini_key(
+    user: CurrentUser,
+    session: Annotated[Session, Depends(get_session)],
+) -> None:
+    user.gemini_api_key_encrypted = None
+    session.commit()
 
 
 @router.put("/me", response_model=UserRead)

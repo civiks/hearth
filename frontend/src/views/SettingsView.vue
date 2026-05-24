@@ -3,34 +3,16 @@
     <header>
       <h1 class="text-2xl font-light tracking-tight">Settings</h1>
       <p class="text-sm text-muted-foreground mt-1">
-        Manage notifications, appearance, and account preferences.
+        Appearance and AI.
       </p>
     </header>
 
     <section class="space-y-1">
       <h2 class="text-xs font-medium uppercase tracking-wide text-muted-foreground pb-3 border-b">
-        Notifications
-      </h2>
-      <Row label="Booking updates" hint="Status changes for your service requests.">
-        <Switch v-model="prefs.bookingUpdates" />
-      </Row>
-      <Row label="Promotional emails" hint="Occasional offers and feature announcements.">
-        <Switch v-model="prefs.promotions" />
-      </Row>
-      <Row label="Weekly digest" hint="Summary of activity across your account, every Monday.">
-        <Switch v-model="prefs.weeklyDigest" />
-      </Row>
-      <Row label="In-app sounds" hint="Audible cue when a toast appears.">
-        <Switch v-model="prefs.sounds" />
-      </Row>
-    </section>
-
-    <section class="space-y-1">
-      <h2 class="text-xs font-medium uppercase tracking-wide text-muted-foreground pb-3 border-b">
         Appearance
       </h2>
-      <Row label="Theme" hint="Choose your preferred theme.">
-        <Select v-model="prefs.theme">
+      <Row label="Theme" hint="Used everywhere in the app.">
+        <Select :model-value="theme" @update:model-value="(v) => setTheme(v as Theme)">
           <SelectTrigger class="w-40">
             <SelectValue />
           </SelectTrigger>
@@ -41,48 +23,63 @@
           </SelectContent>
         </Select>
       </Row>
-      <Row label="Density" hint="Comfortable padding for desks, compact for dashboards.">
-        <Select v-model="prefs.density">
-          <SelectTrigger class="w-40">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="comfortable">Comfortable</SelectItem>
-            <SelectItem value="compact">Compact</SelectItem>
-          </SelectContent>
-        </Select>
-      </Row>
-      <Row label="Reduce motion" hint="Disable view-transitions and other animations.">
-        <Switch v-model="prefs.reduceMotion" />
-      </Row>
     </section>
 
     <section class="space-y-1">
       <h2 class="text-xs font-medium uppercase tracking-wide text-muted-foreground pb-3 border-b">
-        Security
+        AI
       </h2>
-      <Row label="Change password" hint="You'll be signed out of other sessions.">
-        <Button variant="outline" size="sm" @click="onChangePassword">Update</Button>
-      </Row>
-      <Row label="Two-factor authentication" hint="Add an authenticator app for sign-in.">
-        <Button variant="outline" size="sm" @click="onEnable2FA">Set up</Button>
-      </Row>
-      <Row label="Active sessions" hint="Sign out of other devices currently signed in.">
-        <Button variant="outline" size="sm" @click="onViewSessions">Manage</Button>
+      <Row label="Gemini API key">
+        <template #hint>
+          <template v-if="DEMO">
+            Not needed in demo mode.
+          </template>
+          <template v-else>
+            Get a free key at
+            <a
+              href="https://aistudio.google.com/apikey"
+              target="_blank"
+              rel="noopener"
+              class="text-primary hover:underline"
+            >aistudio.google.com/apikey</a>.
+          </template>
+        </template>
+        <div class="flex items-center gap-2">
+          <span
+            v-if="DEMO"
+            class="text-xs text-muted-foreground italic"
+          >
+            Demo mode
+          </span>
+          <span
+            v-else-if="gemini.loaded.value"
+            class="text-xs"
+            :class="gemini.hasKey.value ? 'text-emerald-600' : 'text-muted-foreground'"
+          >
+            {{ gemini.hasKey.value ? "Configured" : "Not configured" }}
+          </span>
+          <Button
+            size="sm"
+            variant="outline"
+            :disabled="DEMO"
+            @click="keyDialogOpen = true"
+          >
+            {{ gemini.hasKey.value ? "Replace" : "Set up" }}
+          </Button>
+        </div>
       </Row>
     </section>
 
-    <div class="flex items-center justify-end gap-2 pt-4">
-      <Button variant="secondary" size="sm" @click="onReset">Reset</Button>
-      <Button size="sm" @click="onSave">Save changes</Button>
-    </div>
+    <AiKeyDialog v-if="!DEMO" v-model:open="keyDialogOpen" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
+import { onMounted, ref } from "vue";
 
+import AiKeyDialog from "@/components/AiKeyDialog.vue";
 import { Button } from "@/components/ui/button";
+import { DEMO } from "@/lib/demo/flag";
 import {
   Select,
   SelectContent,
@@ -90,42 +87,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { useNotificationsStore } from "@/stores/notifications";
+import { useGeminiKey } from "@/composables/useGeminiKey";
+import { useTheme, type Theme } from "@/composables/useTheme";
 import Row from "@/views/settings/Row.vue";
 
-const toasts = useNotificationsStore();
+const { theme, setTheme } = useTheme();
 
-const defaults = {
-  bookingUpdates: true,
-  promotions: false,
-  weeklyDigest: true,
-  sounds: false,
-  theme: "light",
-  density: "comfortable",
-  reduceMotion: false,
-};
+const gemini = useGeminiKey();
+const keyDialogOpen = ref(false);
 
-const prefs = reactive({ ...defaults });
-
-function onSave() {
-  toasts.success("Preferences saved");
-}
-
-function onReset() {
-  Object.assign(prefs, defaults);
-  toasts.info("Preferences reset to defaults");
-}
-
-function onChangePassword() {
-  toasts.info("TODO");
-}
-
-function onEnable2FA() {
-  toasts.info("TODO");
-}
-
-function onViewSessions() {
-  toasts.info("TODO");
-}
+onMounted(() => {
+  if (!DEMO) void gemini.refresh();
+});
 </script>

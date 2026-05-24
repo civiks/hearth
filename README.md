@@ -4,17 +4,17 @@
 
 [demo](https://civiks.github.io/hearth/) · [docker](#docker) · [setup](#setup) · [todo](TODO.md)
 
-> A marketplace for home services.
+> GenAI-backed marketplace for home services.
 
 ## Highlights
 
-- **Multi-role marketplace** — customers book services, professionals accept and fulfill, admins approve professionals and moderate the catalogue
-- **Booking lifecycle** — `requested → assigned → in_progress → completed` (or `cancelled`); transitions are role-gated on the server and mirrored by client state
-- **Background pipelines** — Celery beat schedules daily reminder emails to professionals with pending requests and monthly activity reports to customers; admins kick off CSV exports as async jobs and poll for the download
-- **Role-aware analytics** — Chart.js dashboards: system-wide metrics for admin, personal earnings and status mix for professionals
-- **RBAC end-to-end** — FastAPI dependencies guard every protected route by role; Vue Router runs the same guards client-side to keep routes unreachable for the wrong role
-- **Cookie auth + rate limiting** — JWT in `HttpOnly` cookies, `slowapi` token buckets on the public auth endpoints
-- **Generated API client** — TypeScript types regenerated from `/openapi.json`
+- **Chat to do anything in the app** — find a service, book a job, check a request, accept incoming work, approve a pro. You type what you want; the chatbot picks the right action and runs it. [How it works ↓](#the-chatbot)
+- **Three roles** — customers book, professionals fulfill, admins moderate. Permissions are enforced on the server and mirrored in the router so wrong-role pages aren't even reachable.
+- **Booking lifecycle** — `requested → accepted → in_progress → completed` (or `cancelled`), with status transitions gated by role.
+- **Background jobs** — daily reminder emails to pros with pending requests, monthly activity reports to customers, async CSV exports admins can kick off and poll.
+- **Dashboards per role** — system-wide metrics for admins, personal earnings and status mix for pros.
+- **Cookie auth + rate limiting** — JWT in `HttpOnly` cookies, `slowapi` token buckets on the auth endpoints.
+- **Generated TypeScript client** — frontend types come from the backend's `/openapi.json`.
 
 ## Gallery
 
@@ -26,12 +26,28 @@
 
 ![Login](docs/04-auth.png)
 
+## The chatbot
+
+Actions are invoked through natural language. "Find a plumber" maps to a catalogue search; "book the first one for tomorrow" maps to a booking request. The model selects an action, the backend runs it against the database, and the result is returned in the same response stream.
+
+All three roles use the same interface: customers book, professionals accept jobs, and admins approve applications.
+
+### Available actions by role
+
+| Role | Actions |
+| --- | --- |
+| Customer | Search services, list own requests, check request status, create a booking |
+| Professional | View pending requests in their area, accept a request, view weekly summary |
+| Admin | View platform metrics, list pending applicants, approve a professional |
+
+**Bring your own key.** Each user adds their own Gemini key in Settings → AI; the server encrypts it and stores it tied to their account. The browser never sees the stored key. If you'd rather run a shared key for everyone, set `GEMINI_API_KEY` in `.env` and skip the per-user step.
+
 ## Stack
 
 | | |
 | --- | --- |
 | **Backend** | Python 3.13, FastAPI, SQLAlchemy 2.0 (typed), Alembic, Pydantic v2, Celery, Redis, PostgreSQL |
-| **Frontend** | Vue 3, TypeScript, Vite, Pinia, Tailwind CSS, Chart.js |
+| **Frontend** | Vue 3, TypeScript, Vite, Pinia, Tailwind CSS | 
 | **Infra** | Docker |
 | **Tooling** | pytest, Ruff, vue-tsc, ESLint |
 

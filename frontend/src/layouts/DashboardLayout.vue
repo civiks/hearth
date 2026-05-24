@@ -245,9 +245,10 @@ async function syncChatPanel(open: boolean) {
 
 watch(() => chat.open, syncChatPanel);
 watch(isDesktop, (desktop) => {
-  // Coming back to desktop with the chat open: re-apply the open state to
-  // the freshly mounted splitter panel.
-  if (desktop && chat.open) void syncChatPanel(true);
+  // Crossing back to desktop: re-apply the chat-open state to the
+  // freshly mounted splitter panel. Both branches matter — closed must
+  // explicitly collapse or reka's saved layout leaves a ghost panel.
+  if (desktop) void syncChatPanel(chat.open);
 });
 
 const firstName = computed(() => auth.full_name?.split(" ")[0] ?? "");
@@ -275,8 +276,12 @@ function onGlobalKey(e: KeyboardEvent) {
 }
 onMounted(() => {
   window.addEventListener("keydown", onGlobalKey);
-  // Restore chat-open state into the splitter on initial mount.
-  if (isDesktop.value && chat.open) void syncChatPanel(true);
+  // Sync chat-open state into the splitter on initial mount AND across
+  // HMR/relogin. Reka persists the panel layout via `autoSaveId`, so on
+  // mount it may restore the user's last width (e.g. 28%) even though the
+  // store's `chat.open` is false — leaving a ghost empty panel. Always
+  // call syncChatPanel so the closed case explicitly collapses.
+  if (isDesktop.value) void syncChatPanel(chat.open);
 });
 onBeforeUnmount(() => window.removeEventListener("keydown", onGlobalKey));
 </script>
