@@ -5,6 +5,7 @@ import { DonutChart } from "@/components/charts";
 import { categoricalPalette } from "@/components/charts/palette";
 import { DashboardWidget, MetricStrip, type StripTile } from "@/components/dashboard";
 import ProDigestCard from "@/components/genai/ProDigestCard.vue";
+import StatusBadge from "@/components/StatusBadge.vue";
 import { ApiError, api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 import { useNotificationsStore } from "@/stores/notifications";
@@ -147,9 +148,7 @@ onMounted(async () => {
               class="flex items-center gap-3 py-1.5 text-sm"
             >
               <span class="flex-1 min-w-0 truncate">{{ r.customer_name ?? "—" }}</span>
-              <span class="text-xs text-muted-foreground shrink-0">
-                {{ capitalize(r.service_status) }}
-              </span>
+              <StatusBadge :status="r.service_status" class="shrink-0" />
             </li>
           </ul>
           <p
