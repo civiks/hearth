@@ -9,7 +9,18 @@
         <span class="font-semibold text-base tracking-tight">hearth</span>
       </RouterLink>
 
-      <DropdownMenu :modal="false">
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          aria-label="Ask AI"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-inverse-foreground/10 hover:bg-surface-inverse-foreground/20 active:bg-surface-inverse-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse text-xs font-medium"
+          @click="chat.toggle()"
+        >
+          <span>Ask</span>
+          <AiMark class="size-3.5" />
+        </button>
+
+        <DropdownMenu :modal="false">
           <DropdownMenuTrigger as-child>
             <button
               type="button"
@@ -104,6 +115,7 @@
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+      </div>
     </header>
 
     <!--
@@ -152,7 +164,7 @@
     <ChatWidget v-if="!isDesktop" mode="overlay" />
 
     <!-- Floating "Ask" launcher — hidden while the panel is open. -->
-    <button
+    <!-- <button
       v-if="!chat.open"
       type="button"
       aria-label="Ask AI (Ctrl/Cmd+K)"
@@ -162,7 +174,7 @@
     >
       <span class="text-sm font-medium">Ask</span>
       <AiMark class="size-5" />
-    </button>
+    </button> -->
   </div>
 </template>
 

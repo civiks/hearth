@@ -1,56 +1,67 @@
 <template>
-  <nav
+  <PaginationRoot
     v-if="totalPages > 1"
     ref="rootEl"
-    class="flex items-center justify-between gap-2 pt-2"
+    :page="page"
+    :total="total"
+    :items-per-page="pageSize"
+    :sibling-count="1"
+    show-edges
     aria-label="Pagination"
+    class="flex items-center justify-center sm:justify-between gap-2 pt-2"
+    @update:page="onPage"
   >
-    <span class="text-xs text-muted-foreground">{{ rangeLabel }}</span>
+    <span class="hidden sm:inline text-xs text-muted-foreground shrink-0">{{ rangeLabel }}</span>
 
-    <div class="flex items-center gap-1">
-      <button
-        type="button"
-        class="inline-flex items-center gap-1 px-2 h-7 text-xs hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
-        :disabled="page === 1"
-        @click="go(Math.max(1, page - 1))"
+    <PaginationList
+      v-slot="{ items }"
+      class="flex items-center gap-1"
+    >
+      <PaginationPrev
+        aria-label="Previous page"
+        class="inline-flex items-center gap-1 px-2 h-7 text-xs hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors shrink-0"
       >
         <ChevronLeft class="size-3.5" />
-        Previous
-      </button>
+        <span class="hidden sm:inline">Previous</span>
+      </PaginationPrev>
 
-      <ol class="flex items-center gap-1">
-        <li v-for="p in totalPages" :key="p">
-          <button
-            type="button"
-            class="size-7 text-xs cursor-pointer transition-colors"
-            :class="
-              p === page
-                ? 'bg-primary text-primary-foreground'
-                : 'hover:bg-muted'
-            "
-            :aria-current="p === page ? 'page' : undefined"
-            @click="go(p)"
-          >
-            {{ p }}
-          </button>
-        </li>
-      </ol>
+      <template v-for="(item, idx) in items" :key="idx">
+        <PaginationListItem
+          v-if="item.type === 'page'"
+          :value="item.value"
+          class="size-7 text-xs cursor-pointer transition-colors shrink-0 hover:bg-muted data-[selected]:bg-primary data-[selected]:text-primary-foreground data-[selected]:hover:bg-primary"
+        >
+          {{ item.value }}
+        </PaginationListItem>
+        <PaginationEllipsis
+          v-else
+          class="size-7 inline-flex items-center justify-center text-muted-foreground shrink-0"
+        >
+          <MoreHorizontal class="size-3.5" />
+        </PaginationEllipsis>
+      </template>
 
-      <button
-        type="button"
-        class="inline-flex items-center gap-1 px-2 h-7 text-xs hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
-        :disabled="page === totalPages"
-        @click="go(Math.min(totalPages, page + 1))"
+      <PaginationNext
+        aria-label="Next page"
+        class="inline-flex items-center gap-1 px-2 h-7 text-xs hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors shrink-0"
       >
-        Next
+        <span class="hidden sm:inline">Next</span>
         <ChevronRight class="size-3.5" />
-      </button>
-    </div>
-  </nav>
+      </PaginationNext>
+    </PaginationList>
+  </PaginationRoot>
 </template>
 
 <script lang="ts" setup>
-import { ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-vue-next";
+import {
+  PaginationEllipsis,
+  PaginationList,
+  PaginationListItem,
+  PaginationNext,
+  PaginationPrev,
+  PaginationRoot,
+} from "reka-ui";
 import { computed, nextTick, ref } from "vue";
 
 const props = defineProps<{
@@ -60,7 +71,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{ "update:page": [n: number] }>();
 
-const rootEl = ref<HTMLElement | null>(null);
+const rootEl = ref<{ $el: HTMLElement } | null>(null);
 
 const totalPages = computed(() =>
   Math.max(1, Math.ceil(props.total / props.pageSize)),
@@ -87,7 +98,7 @@ function findScrollable(el: HTMLElement | null): HTMLElement | null {
   return null;
 }
 
-function go(n: number) {
+function onPage(n: number) {
   if (n === props.page) return;
   emit("update:page", n);
   nextTick(() => {
@@ -96,7 +107,8 @@ function go(n: number) {
 
     // Prefer the closest <section> the pagination lives in — scrolls JUST that
     // panel into view, leaving any sibling sections (hero, featured row) above.
-    const section = rootEl.value?.closest("section");
+    const navEl = rootEl.value?.$el ?? null;
+    const section = navEl?.closest("section");
     if (section) {
       section.scrollIntoView({ block: "start", behavior });
       return;
@@ -105,7 +117,7 @@ function go(n: number) {
     // No section wrapper (e.g. admin RequestsPage uses a <div> root) — fall
     // back to scrolling the nearest scrollable ancestor to the top.
     const target =
-      findScrollable(rootEl.value) ??
+      findScrollable(navEl) ??
       document.scrollingElement ??
       document.documentElement;
     target.scrollTo({ top: 0, behavior });

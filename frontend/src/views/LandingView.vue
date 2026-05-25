@@ -128,7 +128,7 @@
     <!-- Testimonials -->
     <Testimonials />
 
-    <section class="bg-secondary">
+    <section class="ai-surface">
       <div class="mx-auto max-w-7xl px-6 py-20 sm:py-28 lg:py-32">
         <div class="max-w-2xl">
           <h2 class="text-2xl sm:text-3xl font-light tracking-tight mb-4">

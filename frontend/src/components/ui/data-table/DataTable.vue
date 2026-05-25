@@ -14,7 +14,8 @@
       </template>
     </DataTableToolbar>
 
-    <Table>
+    <div class="flex-1 overflow-y-auto min-w-0">
+      <Table>
       <TableHeader>
         <TableRow
           v-for="hg in table.getHeaderGroups()"
@@ -65,12 +66,15 @@
       </TableBody>
     </Table>
 
-    <DataTableEmpty
-      v-if="!totalRows"
-      :message="emptyMessage ?? 'No matching results'"
-    />
+      <DataTableEmpty
+        v-if="!totalRows"
+        :message="emptyMessage ?? 'No matching results'"
+      />
+    </div>
 
-    <DataTablePagination v-if="totalRows" class="mt-auto" :table="table" />
+    <div v-if="totalRows" class="sticky bottom-0 border-t bg-background px-6 pt-3 pb-3">
+      <DataTablePagination :table="table" />
+    </div>
   </section>
 </template>
 
