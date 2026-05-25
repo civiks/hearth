@@ -97,13 +97,12 @@ function handle(
   // -------------------- Users --------------------
   if (method === "GET" && path === "/api/users") {
     const role = params.get("role");
-    // Customers may list approved professionals (to power the booking picker).
-    // Anything else (no filter, or listing customers) is admin-only.
-    if (role !== "professional") requireAdmin();
-    else requireAuth();
+    const u = requireAuth();
+    // Admins see everything; customers see only approved professionals.
+    if (role !== "professional" && u.role !== "admin") return fail(403, "Admin only");
     const all = getState().users.filter((u) => (role ? u.role === role : true));
     const visible =
-      role === "professional"
+      role === "professional" && u.role !== "admin"
         ? all.filter((u) => u.approval_status === "approved" && !u.is_blocked)
         : all;
     return visible.map(toUserRead);
