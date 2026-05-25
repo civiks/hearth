@@ -57,7 +57,7 @@ const hasTrend = computed(() => Boolean(props.trend && props.trend.length));
           </span>
         </div>
       </div>
-      <div v-if="hasTrend" class="w-20 -mr-1 shrink-0">
+      <div v-if="hasTrend" class="w-14 md:w-20 -mr-1 shrink-0">
         <Sparkline :data="trend!" :height="28" />
       </div>
     </div>

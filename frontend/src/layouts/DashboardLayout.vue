@@ -157,7 +157,7 @@
       type="button"
       aria-label="Ask AI (Ctrl/Cmd+K)"
       title="Ask AI · ⌘K"
-      class="fixed bottom-5 right-5 z-30 flex items-center gap-2.5 h-11 pl-5 pr-3.5 rounded-full bg-surface-inverse text-surface-inverse-foreground shadow-lg shadow-black/15 hover:bg-[#393939] active:bg-[#4c4c4c] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 dark:bg-card dark:text-foreground dark:ring-1 dark:ring-inset dark:ring-white/10 dark:shadow-black/60 dark:hover:bg-[#393939] dark:active:bg-[#525252]"
+      class="fixed bottom-5 right-5 z-30 flex items-center gap-2.5 h-11 pl-5 pr-3.5 rounded-full bg-surface-inverse text-surface-inverse-foreground shadow-lg shadow-black/15 hover:bg-surface-inverse-hover active:bg-surface-inverse-active transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 dark:bg-card dark:text-foreground dark:ring-1 dark:ring-inset dark:ring-surface-inverse-foreground/10 dark:shadow-black/60 dark:hover:bg-surface-inverse-hover dark:active:bg-surface-inverse-active"
       @click="chat.toggle()"
     >
       <span class="text-sm font-medium">Ask</span>

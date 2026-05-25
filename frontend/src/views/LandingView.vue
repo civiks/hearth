@@ -29,6 +29,10 @@
           class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-surface-inverse via-surface-inverse/80 to-transparent"
           aria-hidden="true"
         />
+        <div
+          class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-surface-inverse via-surface-inverse/70 to-transparent"
+          aria-hidden="true"
+        />
         <div class="relative px-6 py-20 sm:py-24 lg:py-32">
           <div class="max-w-xl">
             <div class="inline-flex items-center gap-1.5 border border-surface-inverse-foreground/20 px-2 py-1 mb-5 sm:mb-6 text-xs text-surface-inverse-foreground/70">

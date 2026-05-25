@@ -124,11 +124,11 @@ const recommendation = computed(() => {
 const recColor = computed(() => {
   switch (recommendation.value) {
     case "Approve":
-      return "text-emerald-600";
+      return "text-success";
     case "Reject":
-      return "text-red-600";
+      return "text-destructive";
     default:
-      return "text-amber-600";
+      return "text-warning";
   }
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
   <section
     v-if="loading || services.length"
-    class="mx-auto max-w-7xl px-6 py-10 sm:py-16 border-t"
+    class="mx-auto max-w-7xl px-6 pt-4 pb-10 sm:pt-6 sm:pb-16"
   >
     <div class="flex flex-wrap items-end justify-between gap-2 mb-6 sm:mb-8">
       <div class="min-w-0">

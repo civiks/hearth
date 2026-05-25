@@ -15,7 +15,7 @@
         height="60"
         fill="none"
         viewBox="0 0 80 60"
-        class="h-12 w-auto text-muted-foreground/40 animate-pulse"
+        class="h-12 w-auto text-muted-foreground/60 animate-pulse"
         aria-hidden="true"
       >
         <path

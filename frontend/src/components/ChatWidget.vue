@@ -241,11 +241,11 @@
                     />
                     <CheckCircle2
                       v-else-if="tc.status === 'ok'"
-                      class="size-3 shrink-0 text-emerald-600"
+                      class="size-3 shrink-0 text-success"
                     />
                     <AlertCircle
                       v-else
-                      class="size-3 shrink-0 text-red-600"
+                      class="size-3 shrink-0 text-destructive"
                     />
                     <span class="truncate">
                       {{ labelForTool(auth.role, tc.name, tc.args) }}
@@ -343,7 +343,7 @@
             <button
               type="submit"
               :disabled="!composer.trim() || chat.streaming"
-              class="text-primary hover:text-primary/80 disabled:text-muted-foreground/40 p-1 transition"
+              class="text-primary hover:text-primary/80 disabled:text-muted-foreground/60 p-1 transition"
               aria-label="Send"
             >
               <Loader2 v-if="chat.streaming" class="size-4 animate-spin" />

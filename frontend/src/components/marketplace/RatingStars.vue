@@ -4,7 +4,7 @@
       v-for="i in 5"
       :key="i"
       class="size-3.5"
-      :class="i <= rounded ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/30'"
+      :class="i <= rounded ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/50'"
     />
   </span>
 </template>

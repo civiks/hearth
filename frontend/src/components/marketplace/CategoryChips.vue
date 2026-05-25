@@ -18,7 +18,7 @@
             <span
               v-if="totalCount"
               class="inline-flex items-center justify-center min-w-[18px] px-1 text-[10px] font-medium"
-              :class="modelValue === null ? 'bg-white/20 text-primary-foreground' : 'bg-muted text-muted-foreground'"
+              :class="modelValue === null ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'"
             >
               {{ totalCount }}
             </span>
@@ -41,7 +41,7 @@
               class="inline-flex items-center justify-center min-w-[18px] px-1 text-[10px] font-medium"
               :class="
                 modelValue === entry.name
-                  ? 'bg-white/20 text-primary-foreground'
+                  ? 'bg-primary-foreground/20 text-primary-foreground'
                   : 'bg-muted text-muted-foreground'
               "
             >
@@ -80,7 +80,7 @@ const props = defineProps<{
 }>();
 defineEmits<{ "update:modelValue": [value: string | null] }>();
 
-// Active chip uses Carbon blue-60 (primary); inactive sits on the gray-10 card surface.
+// Active chip uses blue-60 (primary); inactive sits on the gray-10 card surface.
 const activeClasses = "bg-primary text-primary-foreground border-primary";
 const inactiveClasses = "bg-card text-foreground border-border hover:bg-muted";
 

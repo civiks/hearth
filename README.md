@@ -8,13 +8,11 @@
 
 ## Highlights
 
-- **Chat to do anything in the app** — find a service, book a job, check a request, accept incoming work, approve a pro. You type what you want; the chatbot picks the right action and runs it. [How it works ↓](#the-chatbot)
-- **Three roles** — customers book, professionals fulfill, admins moderate. Permissions are enforced on the server and mirrored in the router so wrong-role pages aren't even reachable.
+- **Chat to do anything in the app** — You type what you want; the chatbot picks the right action and runs it. [How it works ↓](#the-chatbot)
+- **Multi-role** — customers book, professionals fulfill, admins moderate.
 - **Booking lifecycle** — `requested → accepted → in_progress → completed` (or `cancelled`), with status transitions gated by role.
 - **Background jobs** — daily reminder emails to pros with pending requests, monthly activity reports to customers, async CSV exports admins can kick off and poll.
 - **Dashboards per role** — system-wide metrics for admins, personal earnings and status mix for pros.
-- **Cookie auth + rate limiting** — JWT in `HttpOnly` cookies, `slowapi` token buckets on the auth endpoints.
-- **Generated TypeScript client** — frontend types come from the backend's `/openapi.json`.
 
 ## Gallery
 
@@ -28,9 +26,7 @@
 
 ## The chatbot
 
-Actions are invoked through natural language. "Find a plumber" maps to a catalogue search; "book the first one for tomorrow" maps to a booking request. The model selects an action, the backend runs it against the database, and the result is returned in the same response stream.
-
-All three roles use the same interface: customers book, professionals accept jobs, and admins approve applications.
+Actions are invoked through natural language. The model selects an action, the backend runs it against the database, and the result is returned in the same response stream.
 
 ### Available actions by role
 

@@ -16,7 +16,7 @@
         v-else
         class="size-full flex items-center justify-center aspect-[4/3] md:aspect-auto"
       >
-        <Image class="size-8 text-muted-foreground/40" />
+        <Image class="size-8 text-muted-foreground/60" />
       </div>
     </div>
 

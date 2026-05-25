@@ -36,9 +36,10 @@ withDefaults(
           <RouterLink
             v-if="viewAllTo"
             :to="viewAllTo"
+            :aria-label="viewAllLabel"
             class="text-xs text-primary inline-flex items-center gap-1 hover:underline underline-offset-4 focus-visible:outline-none focus-visible:underline"
           >
-            {{ viewAllLabel }}
+            <span class="sm:hidden md:inline">{{ viewAllLabel }}</span>
             <ArrowRight class="size-3.5" :stroke-width="2" />
           </RouterLink>
         </slot>

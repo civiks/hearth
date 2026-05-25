@@ -121,7 +121,6 @@
           :disabled="!prompt.trim()"
           @click="onParse"
         >
-          <AiMark class="size-3 mr-1.5" />
           Parse
         </Button>
         <Button

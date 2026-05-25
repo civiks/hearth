@@ -49,6 +49,13 @@
     transparent 100%
   );
 }
+.dark .ai-surface-soft {
+  background: linear-gradient(
+    0deg,
+    rgb(99 155 255 / 0.10) 0%,
+    transparent 100%
+  );
+}
 @utility ai-outline {
   border: 1px solid rgb(69 137 255 / 0.45);
 }
@@ -143,6 +150,9 @@
   --primary-foreground: 0 0% 100%;
   --primary-hover: 219 97% 46%;      /* #0353e9  blue-70 */
   --primary-active: 222 100% 31%;    /* #002d9c  blue-80 */
+  --button-primary: 219 99% 53%;         /* #0f62fe blue-60 */
+  --button-primary-hover: 219 97% 46%;   /* #0353e9 blue-70 */
+  --button-primary-active: 222 100% 31%; /* #002d9c blue-80 */
 
   /* Neutrals */
   --secondary: 0 0% 87.8%;           /* #e0e0e0  gray-20 */
@@ -173,6 +183,8 @@
    */
   --surface-inverse: 0 0% 8.6%;             /* #161616 */
   --surface-inverse-foreground: 0 0% 100%;  /* #ffffff */
+  --surface-inverse-hover: 0 0% 22.4%;      /* #393939 gray-80 */
+  --surface-inverse-active: 0 0% 30%;       /* #4c4c4c gray-70 */
 
   /* Switch off-state — gray-50 / gray-60. Not derivable from --muted because
    * the switch needs a higher-contrast off track than the muted surface. */
@@ -230,12 +242,10 @@
   --card-foreground: 0 0% 95.7%;
   --popover: 0 0% 15%;
   --popover-foreground: 0 0% 95.7%;
-
-  /* Brand — same Carbon blue, same monotonic darken on hover */
-  --primary: 219 99% 53%;
+  --primary: 219 100% 64%;           /* #4589ff blue-50 */
   --primary-foreground: 0 0% 100%;
-  --primary-hover: 219 97% 46%;
-  --primary-active: 222 100% 31%;
+  --primary-hover: 219 99% 53%;      /* #0f62fe blue-60 */
+  --primary-active: 219 97% 46%;     /* #0353e9 blue-70 */
 
   /* Neutrals — secondary direction flips: dark theme lightens on hover */
   --secondary: 0 0% 22.4%;           /* #393939 gray-80 */
@@ -243,25 +253,21 @@
   --secondary-hover: 0 0% 30%;       /* #4c4c4c gray-70 */
   --secondary-active: 0 0% 43.5%;    /* #6f6f6f gray-60 */
   --muted: 0 0% 15%;
-  --muted-foreground: 0 0% 65.9%;    /* #a8a8a8 gray-40 */
+  --muted-foreground: 0 0% 78%;      /* #c6c6c6 gray-30 $text-secondary */
   --accent: 0 0% 22.4%;
   --accent-foreground: 0 0% 95.7%;
-
-  /* Status — red lifted to red-50 for legibility on dark */
-  --destructive: 354 94% 64%;        /* #fa4d56 */
+  --destructive: 354 94% 64%;        /* #fa4d56 red-50 */
   --destructive-foreground: 0 0% 100%;
-  --destructive-hover: 357 76% 41%;
-  --destructive-active: 357 79% 26%;
+  --destructive-hover: 357 100% 76%; /* #ff8389 red-40 */
+  --destructive-active: 356 100% 85%;/* #ffb3b8 red-30 */
   --success: 137 49% 50%;
   --success-strong: 137 49% 50%;     /* keep mid-tone on dark for legibility */
   --warning: 47 89% 53%;
   --warning-strong: 47 89% 53%;
   --info: 219 100% 64%;
   --info-strong: 219 100% 64%;
-
-  /* Borders / focus */
-  --border: 0 0% 22.4%;
-  --input: 0 0% 22.4%;
+  --border: 0 0% 30%;                /* #4c4c4c gray-70 */
+  --input: 0 0% 30%;
   --ring: 219 100% 64%;              /* lighter focus ring on dark */
 
   /* Sequential blue ramp — shifted one notch lighter for dark surfaces */
@@ -271,7 +277,6 @@
   --chart-4: 219 100% 92%;
   --chart-5: 137 49% 60%;
 
-  /* Categorical palette — lifted variants chosen from Carbon's dark-mode tokens */
   --chart-cat-1: 262 81% 70%;        /* #a56eff purple-50 */
   --chart-cat-2: 198 90% 65%;        /* #33b1ff cyan-40 */
   --chart-cat-3: 180 49% 58%;        /* #08bdba teal-40 */
@@ -281,11 +286,11 @@
   /* Sidebar */
   --sidebar: 0 0% 15%;
   --sidebar-foreground: 0 0% 95.7%;
-  --sidebar-primary: 219 99% 53%;
+  --sidebar-primary: 219 100% 64%;   /* #4589ff blue-50 */
   --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: 0 0% 22.4%;
   --sidebar-accent-foreground: 0 0% 95.7%;
-  --sidebar-border: 0 0% 22.4%;
+  --sidebar-border: 0 0% 30%;
   --sidebar-ring: 219 100% 64%;
 }
 
@@ -322,10 +327,15 @@
   --color-destructive-active: hsl(var(--destructive-active));
   --color-primary-hover: hsl(var(--primary-hover));
   --color-primary-active: hsl(var(--primary-active));
+  --color-button-primary: hsl(var(--button-primary));
+  --color-button-primary-hover: hsl(var(--button-primary-hover));
+  --color-button-primary-active: hsl(var(--button-primary-active));
   --color-secondary-hover: hsl(var(--secondary-hover));
   --color-secondary-active: hsl(var(--secondary-active));
   --color-surface-inverse: hsl(var(--surface-inverse));
   --color-surface-inverse-foreground: hsl(var(--surface-inverse-foreground));
+  --color-surface-inverse-hover: hsl(var(--surface-inverse-hover));
+  --color-surface-inverse-active: hsl(var(--surface-inverse-active));
   --color-switch-off: hsl(var(--switch-off));
   --color-switch-off-hover: hsl(var(--switch-off-hover));
   --color-success-strong: hsl(var(--success-strong));

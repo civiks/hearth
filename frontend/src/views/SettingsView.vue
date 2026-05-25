@@ -54,7 +54,7 @@
           <span
             v-else-if="gemini.loaded.value"
             class="text-xs"
-            :class="gemini.hasKey.value ? 'text-emerald-600' : 'text-muted-foreground'"
+            :class="gemini.hasKey.value ? 'text-success' : 'text-muted-foreground'"
           >
             {{ gemini.hasKey.value ? "Configured" : "Not configured" }}
           </span>
