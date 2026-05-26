@@ -39,7 +39,7 @@ const route = useRoute();
 
 const tabs = [
   { label: "Browse", to: "/home/browse", icon: ShoppingBag },
-  { label: "All services", to: "/home/services", icon: LayoutGrid },
+  { label: "Services", to: "/home/services", icon: LayoutGrid },
   { label: "My requests", to: "/home/requests", icon: ClipboardList },
 ];
 

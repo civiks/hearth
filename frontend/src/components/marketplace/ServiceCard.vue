@@ -34,11 +34,11 @@
       <!-- Price overlaid on the image bottom — primary at-a-glance info -->
       <div class="absolute bottom-2 left-3 right-3 flex items-end justify-between text-white">
         <span class="inline-flex items-center gap-0.5 text-lg font-semibold leading-none">
-          <IndianRupee class="size-4" :stroke-width="2.25" />
+          <IndianRupee class="size-3.5 opacity-70" :stroke-width="2.25" />
           {{ service.base_price }}
         </span>
-        <span class="inline-flex items-center gap-1 text-[11px] opacity-90">
-          <Clock class="size-3" />
+        <span class="inline-flex items-center gap-1 text-[11px] opacity-70">
+          <Clock class="size-2.5" />
           {{ service.time_required }} min
         </span>
       </div>

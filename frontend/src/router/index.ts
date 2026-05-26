@@ -50,7 +50,7 @@ const routes = [
       {
         path: "services",
         component: () => import("@/views/customer/sections/AllServicesPage.vue"),
-        meta: { title: "All services" },
+        meta: { title: "Services" },
       },
       {
         path: "requests",

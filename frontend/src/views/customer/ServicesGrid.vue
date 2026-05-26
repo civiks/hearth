@@ -3,7 +3,7 @@
     <header class="flex items-end justify-between flex-wrap gap-2">
       <div>
         <h2 class="text-lg font-medium tracking-tight">
-          {{ category ? category : "All services" }}
+          {{ category ? category : "Services" }}
         </h2>
         <p class="text-xs text-muted-foreground mt-0.5">
           {{ filtered.length }} {{ filtered.length === 1 ? "service" : "services" }}

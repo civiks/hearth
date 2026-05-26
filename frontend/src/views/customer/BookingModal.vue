@@ -1,143 +1,139 @@
 <template>
-  <Dialog :open="true" @update:open="(v) => !v && $emit('close')">
-    <DialogContent class="sm:max-w-lg">
-      <DialogHeader>
-        <DialogTitle>Book {{ service.name }}</DialogTitle>
-        <DialogDescription>
+  <Drawer :open="true" @update:open="(v) => !v && $emit('close')">
+    <DrawerContent>
+      <DrawerHeader>
+        <DrawerTitle>Book {{ service.name }}</DrawerTitle>
+        <DrawerDescription>
           <span v-if="step === 'pro'">Choose a professional for this job.</span>
           <span v-else>{{ service.description }}</span>
-        </DialogDescription>
-      </DialogHeader>
+        </DrawerDescription>
+      </DrawerHeader>
 
-      <Alert v-if="auth.is_blocked" variant="destructive">
-        <AlertCircle class="size-4" />
-        <AlertTitle>Account blocked</AlertTitle>
-        <AlertDescription>Please contact support to resolve this.</AlertDescription>
-      </Alert>
+      <!-- scrollable body -->
+      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4">
+        <Alert v-if="auth.is_blocked" variant="destructive">
+          <AlertCircle class="size-4" />
+          <AlertTitle>Account blocked</AlertTitle>
+          <AlertDescription>Please contact support to resolve this.</AlertDescription>
+        </Alert>
 
-      <!-- Step 1: Pick a professional -->
-      <div v-if="step === 'pro'" class="space-y-3 max-h-[400px] overflow-y-auto pr-1">
-        <button
-          type="button"
-          class="w-full text-left rounded-lg p-3 flex items-center gap-3 transition-colors border"
-          :class="selectedProId === null ? 'border-primary/50 bg-primary/5' : 'border-border hover:bg-muted/50'"
-          @click="selectedProId = null"
-        >
-          <span
-            class="size-12 shrink-0 rounded-full bg-primary/10 flex items-center justify-center"
-          >
-            <Sparkles class="size-5 text-primary" />
-          </span>
-          <div class="flex-1">
-            <div class="text-sm font-medium">Any available professional</div>
-            <p class="text-xs text-muted-foreground">
-              We'll assign the best-rated pro near you.
-            </p>
-          </div>
-        </button>
-        <ProfessionalPickCard
-          v-for="pro in professionals"
-          :key="pro.id"
-          :professional="pro"
-          :selected="selectedProId === pro.id"
-          @select="selectedProId = pro.id"
-        />
-        <div
-          v-if="professionals.length === 0"
-          class="text-xs text-muted-foreground text-center py-4"
-        >
-          No specific pros listed — we'll match you with the best available.
-        </div>
-      </div>
-
-      <!-- Step 2: schedule + address -->
-      <form v-else class="space-y-4" @submit.prevent="onSubmit">
-        <div class="grid grid-cols-2 gap-3 text-sm">
-          <div class="border rounded-md bg-muted/50 p-3">
-            <div class="text-xs text-muted-foreground mb-1">Duration</div>
-            <div class="flex items-center gap-1 font-medium">
-              <Clock class="size-4 text-primary" />
-              {{ service.time_required }} min
-            </div>
-          </div>
-          <div class="border rounded-md bg-muted/50 p-3">
-            <div class="text-xs text-muted-foreground mb-1">Price</div>
-            <div class="flex items-center gap-1 font-medium">
-              <IndianRupee class="size-4 text-primary" />
-              {{ service.base_price }}
-            </div>
-          </div>
-        </div>
-
-        <div
-          v-if="selectedProName"
-          class="border rounded-md bg-muted/30 p-3 flex items-center gap-3 text-sm"
-        >
-          <UserCheck class="size-4 text-primary" />
-          <div>
-            <div class="font-medium">{{ selectedProName }}</div>
-            <div class="text-xs text-muted-foreground">Your chosen professional</div>
-          </div>
+        <!-- Step 1: Pick a professional -->
+        <div v-if="step === 'pro'" class="space-y-3">
           <button
             type="button"
-            class="ml-auto text-xs text-primary underline underline-offset-2"
-            @click="step = 'pro'"
+            class="w-full text-left rounded-lg p-3 flex items-center gap-3 transition-colors border"
+            :class="selectedProId === null ? 'border-primary/50 bg-primary/5' : 'border-border hover:bg-muted/50'"
+            @click="selectedProId = null"
           >
-            change
+            <span class="size-12 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
+              <Sparkles class="size-5 text-primary" />
+            </span>
+            <div class="flex-1">
+              <div class="text-sm font-medium">Any available professional</div>
+              <p class="text-xs text-muted-foreground">We'll assign the best-rated pro near you.</p>
+            </div>
           </button>
-        </div>
-
-        <div class="space-y-2">
-          <Label for="scheduled_time">Preferred time</Label>
-          <Input
-            id="scheduled_time"
-            v-model="form.scheduled_time"
-            type="datetime-local"
-            required
+          <ProfessionalPickCard
+            v-for="pro in professionals"
+            :key="pro.id"
+            :professional="pro"
+            :selected="selectedProId === pro.id"
+            @select="selectedProId = pro.id"
           />
+          <div v-if="professionals.length === 0" class="text-xs text-muted-foreground text-center py-4">
+            No specific pros listed — we'll match you with the best available.
+          </div>
         </div>
 
-        <div class="space-y-2">
-          <Label>Service location</Label>
-          <div class="flex gap-2">
-            <Input v-model="form.address" placeholder="Address" required />
+        <!-- Step 2: schedule + address -->
+        <form v-else class="space-y-4" @submit.prevent="onSubmit">
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="border rounded-md bg-muted/50 p-3">
+              <div class="text-xs text-muted-foreground mb-1">Duration</div>
+              <div class="flex items-center gap-1 font-medium">
+                <Clock class="size-3.5 text-primary opacity-70" />
+                {{ service.time_required }} min
+              </div>
+            </div>
+            <div class="border rounded-md bg-muted/50 p-3">
+              <div class="text-xs text-muted-foreground mb-1">Price</div>
+              <div class="flex items-center gap-1 font-medium">
+                <IndianRupee class="size-3.5 text-primary opacity-70" />
+                {{ service.base_price }}
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="selectedProName"
+            class="border rounded-md bg-muted/30 p-3 flex items-center gap-3 text-sm"
+          >
+            <UserCheck class="size-4 text-primary" />
+            <div>
+              <div class="font-medium">{{ selectedProName }}</div>
+              <div class="text-xs text-muted-foreground">Your chosen professional</div>
+            </div>
+            <button
+              type="button"
+              class="ml-auto text-xs text-primary underline underline-offset-2"
+              @click="step = 'pro'"
+            >
+              change
+            </button>
+          </div>
+
+          <div class="space-y-2">
+            <Label for="scheduled_time">Preferred time</Label>
             <Input
-              v-model="form.pincode"
-              placeholder="Pincode"
-              pattern="[0-9]{6}"
-              class="max-w-[140px]"
+              id="scheduled_time"
+              v-model="form.scheduled_time"
+              type="datetime-local"
               required
             />
           </div>
-          <Button
-            v-if="hasDefault"
-            type="button"
-            variant="link"
-            size="sm"
-            class="px-0 text-xs"
-            @click="useDefault"
-          >
-            Use my default address
-          </Button>
-        </div>
 
-        <div class="space-y-2">
-          <Label for="remarks">Additional notes</Label>
-          <Textarea
-            id="remarks"
-            v-model="form.remarks"
-            rows="2"
-            placeholder="Any specific requirements…"
-          />
-        </div>
+          <div class="space-y-2">
+            <Label>Service location</Label>
+            <div class="flex gap-2">
+              <Input v-model="form.address" placeholder="Address" required />
+              <Input
+                v-model="form.pincode"
+                placeholder="Pincode"
+                pattern="[0-9]{6}"
+                class="max-w-[140px]"
+                required
+              />
+            </div>
+            <Button
+              v-if="hasDefault"
+              type="button"
+              variant="link"
+              size="sm"
+              class="px-0 text-xs"
+              @click="useDefault"
+            >
+              Use my default address
+            </Button>
+          </div>
 
-        <Alert v-if="errorMessage" variant="destructive">
-          <AlertCircle class="size-4" />
-          <AlertDescription>{{ errorMessage }}</AlertDescription>
-        </Alert>
-      </form>
+          <div class="space-y-2">
+            <Label for="remarks">Additional notes</Label>
+            <Textarea
+              id="remarks"
+              v-model="form.remarks"
+              rows="3"
+              placeholder="Any specific requirements…"
+            />
+          </div>
 
-      <DialogFooter>
+          <Alert v-if="errorMessage" variant="destructive">
+            <AlertCircle class="size-4" />
+            <AlertDescription>{{ errorMessage }}</AlertDescription>
+          </Alert>
+        </form>
+      </div>
+
+      <DrawerFooter>
         <Button
           v-if="step === 'schedule'"
           type="button"
@@ -163,9 +159,9 @@
         >
           {{ submitting ? "Booking…" : "Confirm booking" }}
         </Button>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
+      </DrawerFooter>
+    </DrawerContent>
+  </Drawer>
 </template>
 
 <script lang="ts" setup>
@@ -182,13 +178,13 @@ import { computed, reactive, ref } from "vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";

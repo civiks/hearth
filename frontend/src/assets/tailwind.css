@@ -3,6 +3,12 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Tighten vaul-vue drawer animation (default is 0.5s) */
+[data-vaul-drawer], [data-vaul-overlay] {
+  animation-duration: 0.28s !important;
+  transition-duration: 0.28s !important;
+}
+
 /*
  * Hide the horizontal scrollbar on overflow containers while keeping the
  * scroll behavior. Applied to the tab navs so the macOS scrollbar (when
