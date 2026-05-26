@@ -1,6 +1,14 @@
 <template>
-  <Drawer :open="true" :should-scale-background="true" @update:open="(v) => !v && $emit('close')">
-    <DrawerContent>
+  <component
+    :is="isDesktop ? Sheet : Drawer"
+    :open="true"
+    v-bind="isDesktop ? {} : { shouldScaleBackground: true }"
+    @update:open="(v: boolean) => !v && $emit('close')"
+  >
+    <component
+      :is="isDesktop ? SheetContent : DrawerContent"
+      v-bind="isDesktop ? { onClose: () => $emit('close') } : {}"
+    >
       <DrawerHeader>
         <DrawerTitle>Book {{ service.name }}</DrawerTitle>
         <DrawerDescription>
@@ -9,7 +17,6 @@
         </DrawerDescription>
       </DrawerHeader>
 
-      <!-- scrollable body -->
       <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4">
         <Alert v-if="auth.is_blocked" variant="destructive">
           <AlertCircle class="size-4" />
@@ -64,66 +71,36 @@
             </div>
           </div>
 
-          <div
-            v-if="selectedProName"
-            class="border rounded-md bg-muted/30 p-3 flex items-center gap-3 text-sm"
-          >
+          <div v-if="selectedProName" class="border rounded-md bg-muted/30 p-3 flex items-center gap-3 text-sm">
             <UserCheck class="size-4 text-primary" />
             <div>
               <div class="font-medium">{{ selectedProName }}</div>
               <div class="text-xs text-muted-foreground">Your chosen professional</div>
             </div>
-            <button
-              type="button"
-              class="ml-auto text-xs text-primary underline underline-offset-2"
-              @click="step = 'pro'"
-            >
+            <button type="button" class="ml-auto text-xs text-primary underline underline-offset-2" @click="step = 'pro'">
               change
             </button>
           </div>
 
           <div class="space-y-2">
             <Label for="scheduled_time">Preferred time</Label>
-            <Input
-              id="scheduled_time"
-              v-model="form.scheduled_time"
-              type="datetime-local"
-              required
-            />
+            <Input id="scheduled_time" v-model="form.scheduled_time" type="datetime-local" required />
           </div>
 
           <div class="space-y-2">
             <Label>Service location</Label>
             <div class="flex gap-2">
               <Input v-model="form.address" placeholder="Address" required />
-              <Input
-                v-model="form.pincode"
-                placeholder="Pincode"
-                pattern="[0-9]{6}"
-                class="max-w-[140px]"
-                required
-              />
+              <Input v-model="form.pincode" placeholder="Pincode" pattern="[0-9]{6}" class="max-w-[140px]" required />
             </div>
-            <Button
-              v-if="hasDefault"
-              type="button"
-              variant="link"
-              size="sm"
-              class="px-0 text-xs"
-              @click="useDefault"
-            >
+            <Button v-if="hasDefault" type="button" variant="link" size="sm" class="px-0 text-xs" @click="useDefault">
               Use my default address
             </Button>
           </div>
 
           <div class="space-y-2">
             <Label for="remarks">Additional notes</Label>
-            <Textarea
-              id="remarks"
-              v-model="form.remarks"
-              rows="3"
-              placeholder="Any specific requirements…"
-            />
+            <Textarea id="remarks" v-model="form.remarks" rows="3" placeholder="Any specific requirements…" />
           </div>
 
           <Alert v-if="errorMessage" variant="destructive">
@@ -134,36 +111,19 @@
       </div>
 
       <DrawerFooter>
-        <Button
-          v-if="step === 'schedule'"
-          type="button"
-          variant="outline"
-          size="icon"
-          @click="step = 'pro'"
-        >
+        <Button v-if="step === 'schedule'" type="button" variant="outline" size="icon" @click="step = 'pro'">
           <ArrowLeft class="size-4" />
         </Button>
-        <Button
-          v-if="step === 'pro'"
-          type="button"
-          class="flex-1"
-          @click="step = 'schedule'"
-        >
+        <Button v-if="step === 'pro'" type="button" class="flex-1" @click="step = 'schedule'">
           Continue
           <ChevronRight class="size-3.5 ml-1" />
         </Button>
-        <Button
-          v-else
-          type="button"
-          class="flex-1"
-          :disabled="submitting || auth.is_blocked"
-          @click="onSubmit"
-        >
+        <Button v-else type="button" class="flex-1" :disabled="submitting || auth.is_blocked" @click="onSubmit">
           {{ submitting ? "Booking…" : "Confirm booking" }}
         </Button>
       </DrawerFooter>
-    </DrawerContent>
-  </Drawer>
+    </component>
+  </component>
 </template>
 
 <script lang="ts" setup>
@@ -177,19 +137,14 @@ import {
   UserCheck,
 } from "lucide-vue-next";
 import { computed, reactive, ref } from "vue";
+import { useMediaQuery } from "@vueuse/core";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
@@ -215,15 +170,15 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{ close: []; booked: [] }>();
 
+const isDesktop = useMediaQuery("(min-width: 640px)");
 const auth = useAuthStore();
 const professionals = computed(() => props.professionals ?? []);
 
 const step = ref<"pro" | "schedule">(professionals.value.length > 0 ? "pro" : "schedule");
 const selectedProId = ref<number | null>(null);
-const selectedProName = computed(() => {
-  if (selectedProId.value == null) return null;
-  return professionals.value.find((p) => p.id === selectedProId.value)?.full_name ?? null;
-});
+const selectedProName = computed(() =>
+  selectedProId.value == null ? null : professionals.value.find((p) => p.id === selectedProId.value)?.full_name ?? null,
+);
 
 const submitting = ref(false);
 const errorMessage = ref("");
@@ -250,10 +205,7 @@ function useDefault() {
 }
 
 async function onSubmit() {
-  if (auth.is_blocked) {
-    errorMessage.value = "Account is blocked.";
-    return;
-  }
+  if (auth.is_blocked) { errorMessage.value = "Account is blocked."; return; }
   submitting.value = true;
   errorMessage.value = "";
   try {
@@ -267,8 +219,7 @@ async function onSubmit() {
     });
     emit("booked");
   } catch (err) {
-    errorMessage.value =
-      err instanceof ApiError ? err.detail : "Failed to book service.";
+    errorMessage.value = err instanceof ApiError ? err.detail : "Failed to book service.";
   } finally {
     submitting.value = false;
   }
