@@ -1,5 +1,5 @@
 <template>
-  <section class="mx-auto max-w-7xl px-6 py-10 sm:py-16 border-t">
+  <section class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
     <h2 class="text-2xl font-medium tracking-tight mb-8 sm:mb-10">
       What our customers say
     </h2>

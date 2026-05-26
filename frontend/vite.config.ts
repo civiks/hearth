@@ -36,11 +36,28 @@ export default defineConfig({
     port: 5173,
   },
   build: {
+    modulePreload: {
+      resolveDependencies: (_filename, deps) =>
+        deps.filter(
+          (dep) =>
+            !dep.includes("admin-pages") &&
+            !dep.includes("pro-pages") &&
+            !dep.includes("customer-pages"),
+        ),
+    },
     rollupOptions: {
       output: {
-        // Group each role's tab sub-pages into one chunk. First tab visit
-        // downloads ~30KB once; subsequent tab switches are in-memory.
         manualChunks(id) {
+          if (id.includes("/src/components/ui/")) return "ui";
+          if (id.includes("/src/lib/demo/")) return "demo";
+          if (
+            id.includes("/src/views/LoginView") ||
+            id.includes("/src/views/RegisterView") ||
+            id.includes("/src/views/LandingView") ||
+            id.includes("/src/views/AccountView") ||
+            id.includes("/src/views/SettingsView")
+          )
+            return "public-views";
           if (id.includes("/src/views/admin/sections/")) return "admin-pages";
           if (id.includes("/src/views/professional/sections/")) return "pro-pages";
           if (id.includes("/src/views/customer/sections/")) return "customer-pages";

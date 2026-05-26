@@ -39,12 +39,11 @@
               <MapPin class="size-3" />
               Now in Bangalore
             </div>
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl tracking-tight mb-5 sm:mb-6 leading-tight">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-5 sm:mb-6 leading-tight">
               Home services, done right.
             </h1>
             <p class="text-base sm:text-lg text-surface-inverse-foreground/80 font-light mb-7 sm:mb-8 max-w-lg">
-              Plumbers, electricians, cleaners and more. Verified pros at your
-              doorstep within hours. Honest pricing, real reviews.
+              Verified plumbers, electricians, cleaners and more. At your doorstep within hours, with honest pricing and real reviews.
             </p>
             <div class="flex flex-wrap gap-3">
               <DropdownMenu v-if="DEMO" :modal="false">
@@ -129,7 +128,7 @@
     <Testimonials />
 
     <section class="ai-surface">
-      <div class="mx-auto max-w-7xl px-6 py-20 sm:py-28 lg:py-32">
+      <div class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
         <div class="max-w-2xl">
           <h2 class="text-2xl sm:text-3xl font-medium tracking-tight mb-4">
             Ready to book your first service?
