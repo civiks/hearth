@@ -22,6 +22,6 @@
 ## Site
 
 - [x] **Footer links** — wire up public footer pages (done)
-- [] **Email delivery** — production SMTP/SES setup
+- [ ] **Email delivery** — production SMTP/SES setup
 - [ ] **Per-user CSV export** — bookings download for customers/professionals
 - [ ] **Observability** — logs + metrics dashboard

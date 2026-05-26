@@ -196,31 +196,19 @@
           </div>
         </div>
 
-        <p class="pt-2 text-xs leading-relaxed text-muted-foreground">
-          By creating an account you agree to hearth's
-          <RouterLink
-            to="/terms"
-            target="_blank"
-            class="text-primary hover:underline"
-          >
-            Terms of Service
-          </RouterLink>
-          and
-          <RouterLink
-            to="/privacy"
-            target="_blank"
-            class="text-primary hover:underline"
-          >
-            Privacy Policy</RouterLink>.
-          {{
-            role === "professional"
-              ? "Professional profiles are reviewed before going live."
-              : ""
-          }}
-        </p>
+        <div class="flex items-start gap-2.5 pt-2">
+          <Checkbox id="tos" v-model:checked="agreedToTos" class="mt-0.5" />
+          <label for="tos" class="text-xs leading-relaxed text-muted-foreground cursor-pointer">
+            I agree to hearth's
+            <RouterLink to="/terms" target="_blank" class="text-primary hover:underline">Terms of Service</RouterLink>
+            and
+            <RouterLink to="/privacy" target="_blank" class="text-primary hover:underline">Privacy Policy</RouterLink>.
+            <span v-if="role === 'professional'">Professional profiles are reviewed before going live.</span>
+          </label>
+        </div>
 
         <div class="flex items-center gap-2 pt-2">
-          <Button type="submit" :disabled="loading">
+          <Button type="submit" :disabled="loading || !agreedToTos">
             {{ loading ? "Creating…" : "Create account" }}
           </Button>
           <Button type="button" variant="outline" @click="step = 'role'">
@@ -239,6 +227,7 @@ import { RouterLink, useRouter } from "vue-router";
 
 import BrandMark from "@/components/BrandMark.vue";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -281,6 +270,7 @@ const experienceStr = computed<string>({
 });
 const description = ref("");
 
+const agreedToTos = ref(false);
 const services = ref<Service[]>([]);
 const loading = ref(false);
 

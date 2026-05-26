@@ -5,7 +5,7 @@
     </p>
 
     <div
-      v-if="!history.length"
+      v-if="!loading && !history.length"
       class="rounded-lg bg-card soft-card p-12 text-center text-sm text-muted-foreground space-y-3"
     >
       <p>No service history yet.</p>
@@ -55,6 +55,7 @@ import RequestCard, {
 
 const toasts = useNotificationsStore();
 
+const loading = ref(true);
 const history = ref<CustomerRequest[]>([]);
 const services = ref<RelatedService[]>([]);
 const professionals = ref<RelatedProfessional[]>([]);
@@ -67,6 +68,7 @@ const professionalsById = computed(
 
 onMounted(async () => {
   await Promise.all([fetchHistory(), fetchServices(), fetchProfessionals()]);
+  loading.value = false;
 });
 
 async function fetchHistory() {

@@ -158,7 +158,7 @@
         -->
         <div
           ref="scrollEl"
-          class="flex-1 overflow-y-auto px-4 pt-4 pb-16 space-y-5 scroll-fade"
+          class="flex-1 overflow-y-auto overscroll-contain px-4 pt-4 pb-16 space-y-5 scroll-fade"
           role="log"
           aria-label="Conversation"
           aria-live="polite"
