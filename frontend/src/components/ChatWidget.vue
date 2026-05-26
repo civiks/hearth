@@ -32,9 +32,12 @@
         :class="[
           'flex flex-col bg-background ai-surface ai-outline',
           mode === 'overlay'
-            ? 'fixed inset-y-0 right-0 z-50 w-[calc(100vw-3rem)] shadow-2xl'
+            ? 'fixed right-0 z-50 w-[calc(100vw-3rem)] shadow-2xl'
             : 'h-full',
         ]"
+        :style="mode === 'overlay'
+          ? { top: vvOffsetTop + 'px', height: vvHeight + 'px' }
+          : undefined"
         :role="mode === 'overlay' ? 'dialog' : 'complementary'"
         aria-label="Assistant"
       >
@@ -309,7 +312,7 @@
         <!-- Composer -->
         <form
           class="px-3 py-2 bg-background/80 backdrop-blur"
-          @submit.prevent="onSubmit"
+          @submit.prevent="() => onSubmit()"
         >
           <div class="flex items-end gap-1 px-1 py-1">
             <button
@@ -326,8 +329,9 @@
               rows="1"
               placeholder="Type something…"
               autocomplete="off"
+              enterkeyhint="send"
               class="flex-1 resize-none bg-transparent text-sm py-1 outline-none placeholder:text-muted-foreground/70 max-h-32"
-              @keydown.enter.exact.prevent="onSubmit"
+              @keydown.enter.exact.prevent="() => onSubmit()"
               @input="autoresize"
               ref="textareaEl"
             />
@@ -377,7 +381,8 @@ import {
   Trash2,
   X,
 } from "lucide-vue-next";
-import { computed, nextTick, ref, watch } from "vue";
+import { useEventListener, useScrollLock } from "@vueuse/core";
+import { computed, nextTick, ref, watch, watchEffect } from "vue";
 import { RouterLink } from "vue-router";
 
 import AiKeyDialog from "@/components/AiKeyDialog.vue";
@@ -429,6 +434,24 @@ const textareaEl = ref<HTMLTextAreaElement | null>(null);
 // true). Overlay mode toggles via chat.open + transition.
 const visible = computed(() => props.mode === "inline" || chat.open);
 
+// Lock body scroll when overlay is open.
+const bodyScrollLocked = useScrollLock(document.body);
+watchEffect(() => {
+  bodyScrollLocked.value = props.mode === "overlay" && chat.open;
+});
+
+// Track the visual viewport so the panel shrinks to fit the visible area when
+// the virtual keyboard opens, keeping the composer above the keyboard instead
+// of letting the browser scroll the fixed panel up to reveal it.
+const vvHeight = ref(window.visualViewport?.height ?? window.innerHeight);
+const vvOffsetTop = ref(window.visualViewport?.offsetTop ?? 0);
+function syncVV() {
+  vvHeight.value = window.visualViewport?.height ?? window.innerHeight;
+  vvOffsetTop.value = window.visualViewport?.offsetTop ?? 0;
+}
+useEventListener(window.visualViewport, "resize", syncVV);
+useEventListener(window.visualViewport, "scroll", syncVV);
+
 const firstName = computed(() => auth.full_name?.split(" ")[0] || "there");
 
 const roleIntro = computed(() => {
@@ -474,18 +497,19 @@ const suggestedPrompts = computed(() => {
 
 function onSuggested(text: string) {
   composer.value = text;
-  void onSubmit();
+  void onSubmit({ refocus: false });
 }
 
-async function onSubmit() {
+async function onSubmit({ refocus = true } = {}) {
   const text = composer.value;
   if (!text.trim() || chat.streaming) return;
   composer.value = "";
   if (textareaEl.value) textareaEl.value.style.height = "auto";
-  // Fire-and-forget so the textarea stays focused while streaming runs.
   void chat.send(text);
-  await nextTick();
-  textareaEl.value?.focus();
+  if (refocus) {
+    await nextTick();
+    textareaEl.value?.focus();
+  }
 }
 
 function autoresize(e: Event) {
