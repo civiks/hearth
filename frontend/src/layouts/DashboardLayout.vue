@@ -32,7 +32,6 @@
                   {{ initials(auth.full_name) }}
                 </AvatarFallback>
               </Avatar>
-              <span class="text-xs">{{ auth.email }}</span>
               <ChevronDown class="size-3.5 opacity-70" />
             </button>
           </DropdownMenuTrigger>
@@ -121,7 +120,6 @@
                 {{ initials(auth.full_name) }}
               </AvatarFallback>
             </Avatar>
-            <span class="text-xs">{{ firstName }}</span>
             <ChevronDown class="size-3.5 opacity-70" />
           </button>
 
@@ -439,8 +437,6 @@ watch(() => chat.open, syncChatPanel);
 watch(isDesktop, (desktop) => {
   if (desktop) void syncChatPanel(chat.open);
 });
-
-const firstName = computed(() => auth.full_name?.split(" ")[0] ?? "");
 
 const themeIcon = computed(() => {
   if (theme.value === "system") return Monitor;

@@ -112,6 +112,7 @@ onMounted(async () => {
     loaded.value = true;
   }
 });
+
 </script>
 
 <template>

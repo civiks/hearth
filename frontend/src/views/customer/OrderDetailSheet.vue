@@ -20,8 +20,8 @@
           <X class="size-4" />
           <span class="sr-only">Close</span>
         </SheetClose>
-        <p class="text-2xl font-light tracking-tight">
-          {{ request.scheduled_time ? formatDateTime(request.scheduled_time) : `Order #${request.id}` }}
+        <p class="text-2xl font-semibold tracking-tight">
+          {{ request.scheduled_time ? formatSmartDateTime(request.scheduled_time) : `Order #${request.id}` }}
         </p>
         <component :is="isDesktop ? SheetTitle : DrawerTitle" class="text-sm! font-medium! mt-1">
           {{ request.service_name }}
@@ -75,16 +75,16 @@
           <div v-if="service?.base_price != null || service?.time_required != null" class="flex items-center gap-2.5">
             <Tag class="size-4 shrink-0 text-muted-foreground" />
             <span class="flex items-baseline gap-1.5">
-              <span v-if="service?.base_price != null" class="inline-flex items-baseline gap-0.5">
-                <span class="text-[11px] text-muted-foreground">Rs</span>
-                <span>{{ service!.base_price }}</span>
+              <span v-if="service?.base_price != null" class="inline-flex items-end gap-0.5">
+                <span class="text-[11px] leading-none text-muted-foreground mb-px">Rs</span>
+                <span class="leading-none">{{ service!.base_price }}</span>
               </span>
               <span v-if="service?.base_price != null && service?.time_required != null" class="text-muted-foreground">·</span>
               <span v-if="service?.time_required != null">{{ service!.time_required }} min</span>
             </span>
           </div>
           <p v-if="request.date_of_request" class="text-xs text-muted-foreground pl-[26px]">
-            Ordered {{ formatDate(request.date_of_request) }}
+            Ordered {{ formatSmartDate(request.date_of_request) }}
           </p>
         </div>
 
@@ -105,7 +105,7 @@
         >
           Edit booking
         </Button>
-        <Button variant="destructive" class="flex-1" @click="$emit('cancel')">
+        <Button variant="destructive-soft" class="flex-1" @click="$emit('cancel')">
           Cancel request
         </Button>
       </div>
@@ -136,7 +136,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { formatDate, formatDateTime } from "@/lib/format";
+import { formatSmartDate, formatSmartDateTime } from "@/lib/format";
 import type { CustomerRequest, RelatedProfessional, RelatedService } from "./RequestCard.vue";
 
 const props = defineProps<{

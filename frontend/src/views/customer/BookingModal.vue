@@ -52,53 +52,54 @@
         </div>
 
         <!-- Step 2: schedule + address -->
-        <form v-else class="space-y-4" @submit.prevent="onSubmit">
-          <div class="grid grid-cols-2 gap-3 text-sm">
-            <div class="border rounded-md bg-muted/50 p-3">
-              <div class="text-xs text-muted-foreground mb-1">Duration</div>
-              <div class="flex items-center gap-1 font-medium">
-                <Clock class="size-3.5 text-primary opacity-70" />
-                {{ service.time_required }} min
-              </div>
-            </div>
-            <div class="border rounded-md bg-muted/50 p-3">
-              <div class="text-xs text-muted-foreground mb-1">Price</div>
-              <div class="inline-flex items-end gap-0.5 font-medium">
-                <span class="text-[11px] font-normal leading-none text-primary opacity-70">Rs</span>
-                {{ service.base_price }}
-              </div>
-            </div>
+        <form v-else class="space-y-6" @submit.prevent="onSubmit">
+          <!-- Summary strip -->
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm pb-4 border-b">
+            <span class="flex items-center gap-1 text-muted-foreground">
+              <Clock class="size-3" />
+              <span class="text-foreground font-medium">{{ service.time_required }} min</span>
+            </span>
+            <span class="text-muted-foreground/30">·</span>
+            <span class="inline-flex items-end gap-0.5 font-medium">
+              <span class="text-[11px] font-normal leading-none text-muted-foreground mb-px">Rs</span>
+              <span class="leading-none">{{ service.base_price }}</span>
+            </span>
+            <template v-if="selectedProName">
+              <span class="text-muted-foreground/30">·</span>
+              <span class="flex items-center gap-1.5">
+                <UserCheck class="size-3.5 text-primary" />
+                <span>{{ selectedProName }}</span>
+                <button type="button" class="text-xs text-primary underline underline-offset-2" @click="step = 'pro'">change</button>
+              </span>
+            </template>
           </div>
 
-          <div v-if="selectedProName" class="border rounded-md bg-muted/30 p-3 flex items-center gap-3 text-sm">
-            <UserCheck class="size-4 text-primary" />
-            <div>
-              <div class="font-medium">{{ selectedProName }}</div>
-              <div class="text-xs text-muted-foreground">Your chosen professional</div>
-            </div>
-            <button type="button" class="ml-auto text-xs text-primary underline underline-offset-2" @click="step = 'pro'">
-              change
-            </button>
-          </div>
-
+          <!-- When -->
           <div class="space-y-2">
-            <Label for="scheduled_time">Preferred time</Label>
+            <Label for="scheduled_time" class="text-sm font-semibold">When</Label>
             <Input id="scheduled_time" v-model="form.scheduled_time" type="datetime-local" required />
           </div>
 
+          <!-- Where -->
           <div class="space-y-2">
-            <Label>Service location</Label>
-            <div class="flex gap-2">
-              <Input v-model="form.address" placeholder="Address" required />
-              <Input v-model="form.pincode" placeholder="Pincode" pattern="[0-9]{6}" class="max-w-[140px]" required />
+            <div class="flex items-center justify-between">
+              <Label class="text-sm font-semibold">Where</Label>
+              <Button v-if="hasDefault" type="button" variant="link" size="sm" class="h-auto px-0 text-xs" @click="useDefault">
+                Use saved address
+              </Button>
             </div>
-            <Button v-if="hasDefault" type="button" variant="link" size="sm" class="px-0 text-xs" @click="useDefault">
-              Use my default address
-            </Button>
+            <Input v-model="form.address" placeholder="Street address" required />
+            <div class="flex gap-2 mt-2">
+              <Input v-model="form.pincode" placeholder="Pincode" pattern="[0-9]{6}" required class="w-32" />
+            </div>
           </div>
 
+          <!-- Notes -->
           <div class="space-y-2">
-            <Label for="remarks">Additional notes</Label>
+            <Label for="remarks" class="text-sm font-semibold">
+              Notes
+              <span class="font-normal text-muted-foreground">(optional)</span>
+            </Label>
             <Textarea id="remarks" v-model="form.remarks" rows="3" placeholder="Any specific requirements…" />
           </div>
 

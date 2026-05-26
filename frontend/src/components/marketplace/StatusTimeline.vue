@@ -3,34 +3,36 @@
     <Ban class="size-3.5" />
     <span class="font-medium">Cancelled</span>
   </div>
-  <div v-else class="space-y-2">
-    <ol class="flex items-center">
-      <template v-for="(step, i) in steps" :key="step.key">
-        <li
-          class="inline-flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-medium"
-          :class="[
-            i < currentIndex
-              ? 'bg-primary text-primary-foreground'
-              : i === currentIndex
-              ? 'bg-primary/90 text-primary-foreground ring-2 ring-primary/20'
-              : 'bg-muted text-muted-foreground',
-          ]"
-        >
-          <component :is="step.icon" v-if="i <= currentIndex" class="size-3" />
-          <span v-else>{{ i + 1 }}</span>
-        </li>
-        <div
-          v-if="i < steps.length - 1"
-          class="flex-1 h-px mx-1"
-          :class="i < currentIndex ? 'bg-primary' : 'bg-muted'"
-        />
-      </template>
-    </ol>
-    <p class="text-xs text-muted-foreground">
-      Step {{ currentIndex + 1 }} of {{ steps.length }}
-      <span class="font-medium text-foreground">· {{ steps[currentIndex]!.label }}</span>
-    </p>
-  </div>
+  <ol v-else>
+    <li
+      v-for="(step, i) in steps"
+      :key="step.key"
+      class="relative flex items-start gap-3"
+      :class="i < steps.length - 1 ? 'pb-3' : ''"
+    >
+      <div
+        v-if="i < steps.length - 1"
+        class="absolute left-[9px] top-5 bottom-0 border-l-2 border-dashed"
+        :class="i < currentIndex ? 'border-primary/30' : 'border-muted-foreground/15'"
+      />
+      <span
+        class="relative z-10 inline-flex size-5 shrink-0 items-center justify-center rounded-full"
+        :class="[
+          i < currentIndex ? 'bg-primary text-primary-foreground' :
+          i === currentIndex ? 'bg-primary text-primary-foreground ring-2 ring-primary/20 ring-offset-1' :
+          'bg-muted text-muted-foreground'
+        ]"
+      >
+        <component :is="step.icon" v-if="i <= currentIndex" class="size-3" />
+      </span>
+      <span
+        class="text-sm leading-5"
+        :class="i === currentIndex ? 'font-medium' : 'text-muted-foreground'"
+      >
+        {{ step.label }}
+      </span>
+    </li>
+  </ol>
 </template>
 
 <script lang="ts" setup>

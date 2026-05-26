@@ -6,7 +6,7 @@
     @click="$emit('open')"
   >
     <!-- Service thumbnail -->
-    <div class="w-16 sm:w-20 shrink-0 bg-muted self-stretch">
+    <div class="relative w-16 sm:w-20 shrink-0 bg-muted self-stretch overflow-hidden">
       <img
         v-if="service?.image_url"
         :src="service.image_url"
@@ -17,18 +17,21 @@
       <div v-else class="size-full flex items-center justify-center">
         <Image class="size-5 text-muted-foreground/40" />
       </div>
+      <div
+        class="absolute bottom-0 inset-x-0 py-1 text-center text-[9px] font-semibold uppercase tracking-tight"
+        :class="statusStripClass"
+      >{{ statusLabel }}</div>
     </div>
 
     <!-- Content -->
     <div class="flex-1 px-4 py-3 min-w-0 flex items-center gap-3">
       <div class="flex-1 min-w-0">
-        <div class="flex items-center gap-2 flex-wrap">
+        <div class="flex items-center gap-2">
           <p class="text-sm font-medium truncate">{{ request.service_name }}</p>
-          <StatusBadge :status="request.service_status" />
         </div>
         <div v-if="request.scheduled_time" class="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
           <CalendarClock class="size-3 shrink-0" />
-          <span>{{ formatDateTime(request.scheduled_time) }}</span>
+          <span>{{ formatSmartDateTime(request.scheduled_time) }}</span>
         </div>
         <div class="flex items-center gap-1 mt-0.5 text-xs text-muted-foreground truncate">
           <UserRound class="size-3 shrink-0" />
@@ -45,8 +48,7 @@
 import { CalendarClock, ChevronRight, Image, UserRound } from "lucide-vue-next";
 import { computed } from "vue";
 
-import StatusBadge from "@/components/StatusBadge.vue";
-import { formatDateTime } from "@/lib/format";
+import { formatSmartDateTime } from "@/lib/format";
 
 export interface CustomerRequest {
   id: number;
@@ -90,4 +92,17 @@ const props = defineProps<{
 defineEmits<{ open: [] }>();
 
 const cancelled = computed(() => props.request.service_status === "cancelled");
+
+const STATUS_STRIP: Record<string, { bg: string; label: string }> = {
+  requested:   { bg: "bg-amber-500/90 text-white",    label: "Pending"   },
+  accepted:    { bg: "bg-blue-500/90 text-white",     label: "Accepted"  },
+  in_progress: { bg: "bg-blue-700/90 text-white",     label: "Active"    },
+  completed:   { bg: "bg-emerald-600/90 text-white",  label: "Done"      },
+  cancelled:   { bg: "bg-neutral-500/80 text-white",  label: "Cancelled" },
+  rejected:    { bg: "bg-red-500/90 text-white",      label: "Rejected"  },
+};
+
+const strip = computed(() => STATUS_STRIP[props.request.service_status] ?? { bg: "bg-muted-foreground/50 text-white", label: props.request.service_status });
+const statusStripClass = computed(() => strip.value.bg);
+const statusLabel = computed(() => strip.value.label);
 </script>

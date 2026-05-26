@@ -33,9 +33,9 @@
       </Badge>
       <!-- Price overlaid on the image bottom — primary at-a-glance info -->
       <div class="absolute bottom-2 left-3 right-3 flex items-end justify-between text-white">
-        <span class="inline-flex items-baseline gap-0.5 text-lg font-semibold leading-none">
-          <span class="text-[11px] font-normal opacity-80">Rs</span>
-          {{ service.base_price }}
+        <span class="inline-flex items-end gap-0.5 text-lg font-semibold">
+          <span class="text-[11px] font-normal leading-none opacity-80 mb-px">Rs</span>
+          <span class="leading-none">{{ service.base_price }}</span>
         </span>
         <span class="inline-flex items-center gap-1 text-[11px] opacity-70">
           <Clock class="size-2.5" />

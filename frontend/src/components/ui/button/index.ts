@@ -18,6 +18,8 @@ export const buttonVariants = cva(
         ghost: 'hover:bg-foreground/10 hover:text-foreground active:shadow-[inset_0_0_0_2px_hsl(var(--primary))] aria-expanded:shadow-[inset_0_0_0_2px_hsl(var(--primary))]',
         // Danger — red-60 fill, hover red-70, active red-80, inset destructive focus.
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--destructive))]',
+        // Soft danger — tinted background, works on both light and dark surfaces without being too bright.
+        'destructive-soft': 'bg-destructive/12 text-destructive hover:bg-destructive/20 active:bg-destructive/25 focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--destructive))]',
         link: 'text-primary underline-offset-4 hover:underline border-transparent focus-visible:shadow-none focus-visible:underline',
       },
       size: {

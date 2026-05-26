@@ -118,20 +118,13 @@
       </div>
     </section>
 
-    <Motion v-bind="reveal">
-      <PopularServicesRow :services="services" :loading="loading" />
-    </Motion>
+    <PopularServicesRow :services="services" :loading="loading" />
 
-    <Motion v-bind="reveal">
-      <HowItWorks />
-    </Motion>
+    <HowItWorks />
 
-    <Motion v-bind="reveal">
-      <Testimonials />
-    </Motion>
+    <Testimonials />
 
-    <Motion v-bind="reveal">
-      <section class="ai-surface">
+    <section class="ai-surface">
         <div class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
           <div class="max-w-2xl">
             <h2 class="text-2xl sm:text-3xl font-medium tracking-tight mb-4">
@@ -187,15 +180,12 @@
           </div>
         </div>
       </section>
-    </Motion>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ArrowRight, ChevronDown, Clock, MapPin, RotateCcw, ShieldCheck, Star } from "lucide-vue-next";
-import { Motion } from "motion-v";
-import { computed, onMounted, ref } from "vue";
-import { usePreferredReducedMotion } from "@vueuse/core";
+import { onMounted, ref } from "vue";
 
 import HowItWorks from "@/components/marketplace/HowItWorks.vue";
 import PopularServicesRow from "@/components/marketplace/PopularServicesRow.vue";
@@ -217,17 +207,6 @@ import { useAuthStore } from "@/stores/auth";
 const auth = useAuthStore();
 const { loginAs, resetDemoData } = useDemoLogin();
 
-const prefersReducedMotion = usePreferredReducedMotion();
-const reveal = computed(() =>
-  prefersReducedMotion.value === "reduce"
-    ? {}
-    : {
-        initial: { opacity: 0, y: 16 },
-        whileInView: { opacity: 1, y: 0 },
-        transition: { duration: 0.4, easing: [0.2, 0, 0.38, 0.9] as [number, number, number, number] },
-        viewport: { once: true, margin: "-80px" },
-      },
-);
 
 interface PublicService {
   id: number;
