@@ -133,11 +133,6 @@ const routes = [
     meta: { requiresAuth: true, layout: "dashboard", title: "Account" },
   },
   {
-    path: "/settings",
-    component: () => import("@/views/SettingsView.vue"),
-    meta: { requiresAuth: true, layout: "dashboard", title: "Settings" },
-  },
-  {
     path: "/users/:id",
     component: () => import("@/views/AccountView.vue"),
     // Title is set dynamically in AccountView once the user loads.

@@ -194,8 +194,7 @@
 
             <p v-if="!DEMO" class="text-[11px] text-muted-foreground pt-2">
               API key isn't configured.
-              <RouterLink to="/settings" class="text-primary hover:underline">
-                Settings → AI</RouterLink>.
+              <button class="text-primary hover:underline" @click="settingsDrawer.show()">Settings → AI</button>.
             </p>
           </div>
 
@@ -383,8 +382,6 @@ import {
 } from "lucide-vue-next";
 import { useEventListener, useScrollLock } from "@vueuse/core";
 import { computed, nextTick, ref, watch, watchEffect } from "vue";
-import { RouterLink } from "vue-router";
-
 import AiKeyDialog from "@/components/AiKeyDialog.vue";
 import AiMark from "@/components/AiMark.vue";
 import { Button } from "@/components/ui/button";
@@ -399,6 +396,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { labelForTool } from "@/lib/genai";
+import { useSettingsDrawer } from "@/composables/useSettingsDrawer";
 import { useAuthStore } from "@/stores/auth";
 import { CHAT_MODELS, useChatStore } from "@/stores/chat";
 
@@ -414,6 +412,7 @@ const props = withDefaults(
 
 const chat = useChatStore();
 const auth = useAuthStore();
+const settingsDrawer = useSettingsDrawer();
 
 // Auto-pop the key dialog when the backend signals it needs one.
 watch(

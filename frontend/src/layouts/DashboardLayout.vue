@@ -47,7 +47,7 @@
               <UserCircle class="mr-2 size-4" />
               Account
             </DropdownMenuItem>
-            <DropdownMenuItem @click="$router.push('/settings')">
+            <DropdownMenuItem @click="settingsDrawer.show()">
               <Settings class="mr-2 size-4" />
               Settings
             </DropdownMenuItem>
@@ -147,7 +147,7 @@
                   <button
                     class="p-2 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                     aria-label="Settings"
-                    @click="navigate('/settings')"
+                    @click="menuOpen = false; settingsDrawer.show()"
                   >
                     <Settings class="size-5" />
                   </button>
@@ -266,6 +266,8 @@
 
   </div>
 
+  <SettingsDrawer />
+
   <!-- Teleported outside data-vaul-drawer-wrapper so CSS transform doesn't break position:fixed -->
   <Teleport to="body">
     <nav
@@ -359,6 +361,7 @@ import { RouterLink, useRouter, useRoute } from "vue-router";
 import AiMark from "@/components/AiMark.vue";
 import BrandMark from "@/components/BrandMark.vue";
 import ChatWidget from "@/components/ChatWidget.vue";
+import SettingsDrawer from "@/components/SettingsDrawer.vue";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import {
@@ -381,6 +384,7 @@ import {
   SplitterResizeHandle,
 } from "@/components/ui/splitter";
 import { useDemoLogin, DEMO_ROLES } from "@/composables/useDemoLogin";
+import { useSettingsDrawer } from "@/composables/useSettingsDrawer";
 import { useTheme, type Theme } from "@/composables/useTheme";
 import { type Role } from "@/lib/api";
 import { DEMO } from "@/lib/demo/flag";
@@ -403,6 +407,7 @@ const { loginAs, resetDemoData } = useDemoLogin();
 
 const isDesktop = useMediaQuery("(min-width: 640px)");
 const menuOpen = ref(false);
+const settingsDrawer = useSettingsDrawer();
 
 const tabbarRef = ref<HTMLElement | null>(null);
 const { width: tabbarWidth } = useElementSize(tabbarRef);

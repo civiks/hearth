@@ -1,8 +1,6 @@
 name: deploy-pages
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 # One concurrent deploy per ref; cancel in-flight if a newer push lands.

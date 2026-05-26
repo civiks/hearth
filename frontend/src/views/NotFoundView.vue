@@ -1,19 +1,19 @@
 <template>
-  <div class="min-h-[60vh] flex items-center justify-center px-6 py-16">
-    <div class="text-center max-w-md">
-      <h1 class="text-7xl font-light text-foreground mb-2">{{ code }}</h1>
-      <h2 class="text-xl font-light mb-3">{{ title }}</h2>
-      <p class="text-sm text-muted-foreground mb-6">{{ message }}</p>
-      <Button @click="goHome">
-        <Home class="mr-2 size-4" />
-        Back to {{ auth.logged_in ? "dashboard" : "home" }}
-      </Button>
-    </div>
+  <div class="min-h-[80vh] flex flex-col items-center justify-center px-6 py-16 select-none">
+    <span class="text-[clamp(7rem,20vw,11rem)] font-light leading-none tracking-tighter text-foreground/10 mb-8">
+      {{ code }}
+    </span>
+
+    <h1 class="text-2xl font-semibold text-foreground mb-2">{{ title }}</h1>
+    <p class="text-sm text-muted-foreground text-center max-w-xs mb-8">{{ message }}</p>
+
+    <Button @click="goHome">
+      Back to {{ auth.logged_in ? "dashboard" : "home" }}
+    </Button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Home } from "lucide-vue-next";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -31,8 +31,8 @@ const title = computed(() =>
 );
 const message = computed(() =>
   route.query.unauthorized
-    ? "You do not have permission to access this page."
-    : "The page you are looking for does not exist.",
+    ? "You don't have permission to view this page."
+    : "This page doesn't exist or may have been moved.",
 );
 
 function goHome() {
