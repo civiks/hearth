@@ -1,8 +1,8 @@
 <template>
   <button
     type="button"
-    class="w-full text-left border bg-card p-3 flex items-center gap-3 transition hover:border-primary/60"
-    :class="selected ? 'border-primary ring-2 ring-primary/15' : ''"
+    class="w-full text-left rounded-lg p-3 flex items-center gap-3 transition-colors border"
+    :class="selected ? 'border-primary/50 bg-primary/5' : 'border-border hover:bg-muted/50'"
     @click="$emit('select')"
   >
     <span class="relative">
@@ -13,7 +13,7 @@
       />
       <span
         v-if="selected"
-        class="absolute -bottom-1 -right-1 inline-flex size-4 items-center justify-center bg-primary text-primary-foreground"
+        class="absolute -bottom-1 -right-1 inline-flex size-4 items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-card"
       >
         <Check class="size-3" />
       </span>

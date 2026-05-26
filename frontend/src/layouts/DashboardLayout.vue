@@ -24,7 +24,7 @@
           <DropdownMenuTrigger as-child>
             <button
               type="button"
-              class="flex items-center gap-2 px-2 py-1 transition hover:bg-surface-inverse-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse"
+              class="flex items-center gap-2 px-2 py-1 rounded-full transition hover:bg-surface-inverse-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse"
             >
               <Avatar class="size-6">
                 <AvatarFallback class="bg-primary text-primary-foreground text-[10px]">

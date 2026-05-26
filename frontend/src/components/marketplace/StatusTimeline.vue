@@ -10,7 +10,7 @@
       class="flex items-center gap-1"
     >
       <span
-        class="inline-flex size-5 items-center justify-center text-[10px] font-medium"
+        class="inline-flex size-5 items-center justify-center rounded-full text-[10px] font-medium"
         :class="[
           i < currentIndex
             ? 'bg-primary text-primary-foreground'

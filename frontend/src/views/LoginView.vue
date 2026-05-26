@@ -1,5 +1,5 @@
 <template>
-  <Card class="w-full max-w-md ring-0 p-8 sm:p-10 gap-0">
+  <div class="w-full max-w-md flex flex-col">
     <RouterLink
       to="/"
       class="self-start mb-8 hover:opacity-80 transition-opacity"
@@ -11,7 +11,12 @@
     <h1 class="text-2xl font-light tracking-tight">
       Welcome back to <span class="font-medium">hearth</span>
     </h1>
-    <p class="mt-1 text-sm text-muted-foreground">Sign in to continue</p>
+    <p class="mt-1 text-sm text-muted-foreground">
+      Don't have an account?
+      <RouterLink to="/register" class="text-primary hover:underline">
+        Sign up
+      </RouterLink>
+    </p>
 
     <form class="space-y-6 mt-8" @submit.prevent="submit">
       <div class="space-y-1.5">
@@ -57,16 +62,9 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-2 pt-2">
+      <div class="pt-2">
         <Button type="submit" :disabled="loading">
           {{ loading ? "Signing in…" : "Sign in" }}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          @click="$router.push('/register')"
-        >
-          Create account
         </Button>
       </div>
 
@@ -88,7 +86,7 @@
           Privacy Policy</RouterLink>.
       </p>
     </form>
-  </Card>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -98,7 +96,6 @@ import { RouterLink, useRouter } from "vue-router";
 
 import BrandMark from "@/components/BrandMark.vue";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ApiError, api, homePathForRole, type User } from "@/lib/api";

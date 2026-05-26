@@ -19,7 +19,7 @@
     >
       <PaginationPrev
         aria-label="Previous page"
-        class="inline-flex items-center gap-1 px-2 h-7 text-xs hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors shrink-0"
+        class="inline-flex items-center gap-1 px-2 h-7 text-xs rounded-md hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors shrink-0"
       >
         <ChevronLeft class="size-3.5" />
         <span class="hidden sm:inline">Previous</span>
@@ -29,7 +29,7 @@
         <PaginationListItem
           v-if="item.type === 'page'"
           :value="item.value"
-          class="size-7 text-xs cursor-pointer transition-colors shrink-0 hover:bg-muted data-[selected]:bg-primary data-[selected]:text-primary-foreground data-[selected]:hover:bg-primary"
+          class="size-7 text-xs rounded-md inline-flex items-center justify-center cursor-pointer transition-colors shrink-0 hover:bg-muted data-[selected]:bg-primary data-[selected]:text-primary-foreground data-[selected]:hover:bg-primary"
         >
           {{ item.value }}
         </PaginationListItem>
@@ -43,7 +43,7 @@
 
       <PaginationNext
         aria-label="Next page"
-        class="inline-flex items-center gap-1 px-2 h-7 text-xs hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors shrink-0"
+        class="inline-flex items-center gap-1 px-2 h-7 text-xs rounded-md hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors shrink-0"
       >
         <span class="hidden sm:inline">Next</span>
         <ChevronRight class="size-3.5" />

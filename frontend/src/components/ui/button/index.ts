@@ -6,11 +6,11 @@ export { default as Button } from './Button.vue'
 export const buttonVariants = cva(
   // -style focus: 2px solid inset primary outline (drawn inside the button bounds, never clipped).
   // Hover/active per-variant. Click also briefly compresses via active:scale-[0.98] on icon buttons for tactile feedback.
-  'group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap text-sm font-normal cursor-pointer transition-colors outline-none select-none border border-transparent [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--primary))] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive',
+  'group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap text-sm font-normal cursor-pointer transition-colors outline-none select-none rounded-md border border-transparent [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--primary))] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive',
   {
     variants: {
       variant: {
-        default: 'bg-button-primary text-primary-foreground hover:bg-button-primary-hover active:bg-button-primary-active',
+        default: 'bg-button-primary text-primary-foreground hover:bg-button-primary-hover active:bg-button-primary-active btn-glow',
         outline: 'border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground active:bg-primary-active active:text-primary-foreground aria-expanded:bg-primary aria-expanded:text-primary-foreground',
         // Secondary — theme-aware: dark theme inherits gray-80 hover→gray-70; light theme uses gray-20 hover→gray-30.
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary-hover active:bg-secondary-active aria-expanded:bg-secondary-hover',

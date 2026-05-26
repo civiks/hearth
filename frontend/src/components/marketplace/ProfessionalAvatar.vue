@@ -3,7 +3,7 @@
     :src="finalSrc"
     :alt="name"
     loading="lazy"
-    class="bg-muted object-cover"
+    class="rounded-full bg-muted object-cover"
     :class="$attrs.class"
   />
 </template>

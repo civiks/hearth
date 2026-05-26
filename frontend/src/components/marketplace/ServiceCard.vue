@@ -1,10 +1,10 @@
 <template>
   <button
     type="button"
-    class="group block w-full text-left bg-card overflow-hidden focus-visible:outline-2 focus-visible:outline-primary"
+    class="group block w-full text-left bg-card overflow-hidden rounded-lg soft-card hover:soft-card-hover transition-shadow focus-visible:outline-2 focus-visible:outline-primary"
     @click="$emit('select')"
   >
-    <div class="relative aspect-[16/10] overflow-hidden bg-muted">
+    <div class="relative aspect-[16/9] overflow-hidden bg-muted">
       <img
         v-if="service.image_url"
         :src="service.image_url"
@@ -14,9 +14,9 @@
         loading="lazy"
         class="size-full object-cover"
       />
-      <!-- Permanent dark scrim at the bottom - headroom for the price overlay -->
+      <!-- Permanent dark scrim spanning the full image — anchors the price/category overlays and lifts text legibility against any photo. -->
       <div
-        class="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
+        class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10"
         aria-hidden="true"
       />
       <!-- Hover overlay -->

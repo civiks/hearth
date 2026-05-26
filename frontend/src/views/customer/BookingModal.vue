@@ -19,12 +19,12 @@
       <div v-if="step === 'pro'" class="space-y-3 max-h-[400px] overflow-y-auto pr-1">
         <button
           type="button"
-          class="w-full text-left border bg-card p-3 flex items-center gap-3 transition hover:border-primary/60"
-          :class="selectedProId === null ? 'border-primary ring-2 ring-primary/15' : ''"
+          class="w-full text-left rounded-lg p-3 flex items-center gap-3 transition-colors border"
+          :class="selectedProId === null ? 'border-primary/50 bg-primary/5' : 'border-border hover:bg-muted/50'"
           @click="selectedProId = null"
         >
           <span
-            class="size-12 shrink-0 bg-primary/10 flex items-center justify-center"
+            class="size-12 shrink-0 rounded-full bg-primary/10 flex items-center justify-center"
           >
             <Sparkles class="size-5 text-primary" />
           </span>
@@ -53,14 +53,14 @@
       <!-- Step 2: schedule + address -->
       <form v-else class="space-y-4" @submit.prevent="onSubmit">
         <div class="grid grid-cols-2 gap-3 text-sm">
-          <div class="border bg-muted/50 p-3">
+          <div class="border rounded-md bg-muted/50 p-3">
             <div class="text-xs text-muted-foreground mb-1">Duration</div>
             <div class="flex items-center gap-1 font-medium">
               <Clock class="size-4 text-primary" />
               {{ service.time_required }} min
             </div>
           </div>
-          <div class="border bg-muted/50 p-3">
+          <div class="border rounded-md bg-muted/50 p-3">
             <div class="text-xs text-muted-foreground mb-1">Price</div>
             <div class="flex items-center gap-1 font-medium">
               <IndianRupee class="size-4 text-primary" />
@@ -71,7 +71,7 @@
 
         <div
           v-if="selectedProName"
-          class="border bg-muted/30 p-3 flex items-center gap-3 text-sm"
+          class="border rounded-md bg-muted/30 p-3 flex items-center gap-3 text-sm"
         >
           <UserCheck class="size-4 text-primary" />
           <div>

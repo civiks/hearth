@@ -7,7 +7,7 @@
   <component
     :is="as"
     v-bind="$attrs"
-    :class="['ai-surface ai-outline', $attrs.class]"
+    :class="['ai-surface ai-outline rounded-lg', $attrs.class]"
   >
     <slot />
   </component>

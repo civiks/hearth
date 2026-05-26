@@ -35,14 +35,14 @@
         />
         <div class="relative px-6 py-20 sm:py-24 lg:py-32">
           <div class="max-w-xl">
-            <div class="inline-flex items-center gap-1.5 border border-surface-inverse-foreground/20 px-2 py-1 mb-5 sm:mb-6 text-xs text-surface-inverse-foreground/70">
+            <div class="inline-flex items-center gap-1.5 rounded-full border border-surface-inverse-foreground/20 bg-surface-inverse-foreground/5 px-3 py-1 mb-5 sm:mb-6 text-xs text-surface-inverse-foreground/80 backdrop-blur">
               <MapPin class="size-3" />
               Now in Bangalore
             </div>
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-5 sm:mb-6 leading-tight">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl tracking-tight mb-5 sm:mb-6 leading-tight">
               Home services, done right.
             </h1>
-            <p class="text-base sm:text-lg text-surface-inverse-foreground/80 mb-7 sm:mb-8 max-w-lg">
+            <p class="text-base sm:text-lg text-surface-inverse-foreground/80 font-light mb-7 sm:mb-8 max-w-lg">
               Plumbers, electricians, cleaners and more. Verified pros at your
               doorstep within hours. Honest pricing, real reviews.
             </p>
@@ -131,7 +131,7 @@
     <section class="ai-surface">
       <div class="mx-auto max-w-7xl px-6 py-20 sm:py-28 lg:py-32">
         <div class="max-w-2xl">
-          <h2 class="text-2xl sm:text-3xl font-light tracking-tight mb-4">
+          <h2 class="text-2xl sm:text-3xl font-medium tracking-tight mb-4">
             Ready to book your first service?
           </h2>
           <p class="text-sm sm:text-base text-muted-foreground mb-8 leading-relaxed max-w-xl">

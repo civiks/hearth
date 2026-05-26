@@ -1,5 +1,5 @@
 <template>
-  <Card class="w-full max-w-md ring-0 p-8 sm:p-10 gap-0">
+  <div class="w-full max-w-md flex flex-col">
     <RouterLink
       to="/"
       class="self-start mb-8 hover:opacity-80 transition-opacity"
@@ -14,44 +14,64 @@
         Join <span class="font-medium">hearth</span>
       </h1>
       <p class="mt-1 text-sm text-muted-foreground">
-        First, tell us why you're here
-      </p>
-
-      <div class="mt-8 space-y-3">
-        <button
-          type="button"
-          class="w-full flex items-start gap-3 border bg-card p-4 text-left transition hover:border-primary cursor-pointer"
-          @click="selectRole('user')"
-        >
-          <User class="mt-0.5 size-5 text-primary shrink-0" />
-          <div>
-            <div class="text-sm font-medium">Customer</div>
-            <div class="text-xs text-muted-foreground">
-              Book and manage home services
-            </div>
-          </div>
-        </button>
-        <button
-          type="button"
-          class="w-full flex items-start gap-3 border bg-card p-4 text-left transition hover:border-primary cursor-pointer"
-          @click="selectRole('professional')"
-        >
-          <Briefcase class="mt-0.5 size-5 text-primary shrink-0" />
-          <div>
-            <div class="text-sm font-medium">Service Professional</div>
-            <div class="text-xs text-muted-foreground">
-              Offer services and accept bookings
-            </div>
-          </div>
-        </button>
-      </div>
-
-      <p class="mt-8 text-sm text-muted-foreground">
         Already have an account?
         <RouterLink to="/login" class="text-primary hover:underline">
           Sign in
         </RouterLink>
       </p>
+
+      <div class="mt-8 flex flex-col gap-2">
+        <button
+          type="button"
+          :class="[
+            'flex items-center justify-between gap-4 rounded-lg bg-card px-4 py-3.5 text-left cursor-pointer transition-shadow',
+            role === 'user' ? 'soft-card-selected' : 'soft-card hover:soft-card-hover',
+          ]"
+          :aria-pressed="role === 'user'"
+          @click="role = 'user'"
+        >
+          <div>
+            <div class="text-sm font-medium">Customer</div>
+            <div class="text-xs text-muted-foreground mt-0.5">Book and manage home services</div>
+          </div>
+          <div
+            :class="[
+              'size-4 rounded-full border-2 shrink-0 flex items-center justify-center',
+              role === 'user' ? 'border-primary' : 'border-muted-foreground/30',
+            ]"
+          >
+            <div v-if="role === 'user'" class="size-1.5 rounded-full bg-primary" />
+          </div>
+        </button>
+        <button
+          type="button"
+          :class="[
+            'flex items-center justify-between gap-4 rounded-lg bg-card px-4 py-3.5 text-left cursor-pointer transition-shadow',
+            role === 'professional' ? 'shadow-[inset_0_0_0_2px_hsl(var(--primary)/0.5)] bg-[image:linear-gradient(hsl(var(--primary)/0.05),hsl(var(--primary)/0.05))]' : 'soft-card hover:soft-card-hover',
+          ]"
+          :aria-pressed="role === 'professional'"
+          @click="role = 'professional'"
+        >
+          <div>
+            <div class="text-sm font-medium">Service Professional</div>
+            <div class="text-xs text-muted-foreground mt-0.5">Offer services and accept bookings</div>
+          </div>
+          <div
+            :class="[
+              'size-4 rounded-full border-2 shrink-0 flex items-center justify-center',
+              role === 'professional' ? 'border-primary' : 'border-muted-foreground/30',
+            ]"
+          >
+            <div v-if="role === 'professional'" class="size-1.5 rounded-full bg-primary" />
+          </div>
+        </button>
+      </div>
+
+      <Button class="mt-6 w-full justify-between" @click="step = 'form'">
+        Continue
+        <ArrowRight class="size-4" />
+      </Button>
+
     </template>
 
     <!-- Step 2: form -->
@@ -209,17 +229,16 @@
         </div>
       </form>
     </template>
-  </Card>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { ArrowLeft, Briefcase, Eye, EyeOff, User } from "lucide-vue-next";
+import { ArrowLeft, ArrowRight, Eye, EyeOff } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import BrandMark from "@/components/BrandMark.vue";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -264,11 +283,6 @@ const description = ref("");
 
 const services = ref<Service[]>([]);
 const loading = ref(false);
-
-function selectRole(r: "user" | "professional") {
-  role.value = r;
-  step.value = "form";
-}
 
 // Only fetch services when the professional form is actually about to render.
 watch(

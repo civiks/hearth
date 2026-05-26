@@ -44,7 +44,7 @@
             <DropdownMenuTrigger as-child>
               <button
                 type="button"
-                class="flex items-center gap-1 px-2 h-8 text-sm font-medium hover:bg-muted transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                class="flex items-center gap-1 px-2 h-8 text-sm font-medium rounded-md hover:bg-muted transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                 :title="`Model: ${chat.currentModel.name}`"
               >
                 hearth AI
@@ -230,7 +230,7 @@
                 <details
                   v-for="tc in m.toolCalls"
                   :key="tc.id"
-                  class="text-xs border bg-card/60 ai-surface-soft"
+                  class="text-xs border rounded-md bg-card/60 ai-surface-soft"
                 >
                   <summary
                     class="cursor-pointer px-2.5 py-1.5 flex items-center gap-2 select-none"

@@ -5,7 +5,7 @@
   >
     <div class="flex flex-wrap items-end justify-between gap-2 mb-6 sm:mb-8">
       <div class="min-w-0">
-        <h2 class="text-2xl font-light tracking-tight">Popular services</h2>
+        <h2 class="text-2xl font-medium tracking-tight">Popular services</h2>
         <p class="text-sm text-muted-foreground mt-1">
           Most-booked services in your area this month.
         </p>

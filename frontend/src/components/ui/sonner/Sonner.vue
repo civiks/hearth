@@ -36,7 +36,6 @@ const props = defineProps<ToasterProps>()
       '--info-bg': 'hsl(var(--toast-info-bg))',
       '--info-border': 'hsl(var(--info-strong))',
       '--info-text': 'hsl(var(--toast-info-text))',
-      '--border-radius': '0px',
     }"
     v-bind="props"
   >

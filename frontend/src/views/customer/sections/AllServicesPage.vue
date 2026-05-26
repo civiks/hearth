@@ -18,7 +18,7 @@
             <div class="h-5 w-40 bg-muted animate-pulse" />
             <div class="h-3 w-56 bg-muted animate-pulse mt-2" />
           </header>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          <div class="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]">
             <ServiceCardSkeleton v-for="i in 8" :key="i" />
           </div>
         </section>

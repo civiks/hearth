@@ -6,7 +6,7 @@
 
     <div
       v-if="!history.length"
-      class="border bg-card p-12 text-center text-sm text-muted-foreground space-y-3"
+      class="rounded-lg bg-card soft-card p-12 text-center text-sm text-muted-foreground space-y-3"
     >
       <p>No service history yet.</p>
       <RouterLink to="/home/browse">

@@ -74,6 +74,70 @@
 }
 
 /*
+ * Card elevation. Borderless — definition comes purely from the drop
+ * shadow. Light theme uses a slate-tinted shadow (warmer than pure
+ * black, blends with the gray-10 background); dark theme uses a deep
+ * black shadow with spread so it actually reads against the near-black
+ * page. Compose as `soft-card hover:soft-card-hover transition-shadow`
+ * for interactive cards, or just `soft-card` on static ones.
+ * `soft-card-selected` is the active/picked state — a 2px primary ring
+ * + tinted glow.
+ */
+@utility soft-card {
+  box-shadow:
+    0 1px 2px 0 rgb(15 23 42 / 0.05),
+    0 4px 16px -4px rgb(15 23 42 / 0.10);
+}
+.dark .soft-card {
+  box-shadow:
+    0 2px 4px 0 rgb(0 0 0 / 0.35),
+    0 12px 24px -6px rgb(0 0 0 / 0.45);
+}
+@utility soft-card-hover {
+  box-shadow:
+    0 4px 8px -2px rgb(15 23 42 / 0.08),
+    0 12px 28px -6px rgb(15 23 42 / 0.14);
+}
+.dark .soft-card-hover {
+  box-shadow:
+    0 6px 12px -2px rgb(0 0 0 / 0.45),
+    0 20px 36px -8px rgb(0 0 0 / 0.55);
+}
+@utility soft-card-selected {
+  background-image: linear-gradient(
+    hsl(var(--primary) / 0.06),
+    hsl(var(--primary) / 0.06)
+  );
+  box-shadow: inset 0 0 0 2px hsl(var(--primary) / 0.5);
+}
+.dark .soft-card-selected {
+  background-image: linear-gradient(
+    hsl(var(--primary) / 0.12),
+    hsl(var(--primary) / 0.12)
+  );
+  box-shadow: inset 0 0 0 2px hsl(var(--primary) / 0.6);
+}
+
+@utility btn-glow {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0.14),
+    rgb(255 255 255 / 0) 45%,
+    rgb(0 0 0 / 0.10)
+  );
+  background-origin: border-box;
+  background-clip: border-box;
+}
+.dark .btn-glow {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0.16),
+    rgb(255 255 255 / 0) 45%,
+    rgb(0 0 0 / 0.14)
+  );
+}
+
+/*
  * Animated 1px blue border that sweeps around a card on hover.
  * Static state is a thin gray-20 border (matches the rest of ).
  * Hover fades in a conic-gradient ring that rotates over 3s.
@@ -133,7 +197,7 @@
 
 /*
  *  Design System theme for shadcn-vue.
- * IBM Plex Sans + #0f62fe blue + zero radius +  greyscale.
+ * SN Pro + #0f62fe blue + rounded radius + soft elevation.
  * HSL values chosen so they convert cleanly back to the source hex.
  */
 :root {
@@ -220,8 +284,8 @@
   --chart-cat-4: 333 71% 35%;        /* #9f1853  magenta-70 */
   --chart-cat-5: 358 95% 64%;        /* #fa4d56  red-50 */
 
-  /* Zero radius —  signature */
-  --radius: 0px;
+  /* Default radius */
+  --radius: 0.625rem;
 
   /* Sidebar (light theme) */
   --sidebar: 0 0% 100%;
@@ -296,12 +360,12 @@
 
 @theme inline {
   --font-sans:
-    "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "SN Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-serif:
-    "IBM Plex Serif", ui-serif, Georgia, "Times New Roman", serif;
+    ui-serif, Georgia, "Times New Roman", serif;
   --font-mono:
-    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-sidebar-ring: hsl(var(--sidebar-ring));
   --color-sidebar-border: hsl(var(--sidebar-border));
@@ -359,14 +423,6 @@
   --color-foreground: hsl(var(--foreground));
   --color-background: hsl(var(--background));
 
-  /* All radius variants point to 0 —  signature */
-  --radius-sm: var(--radius);
-  --radius-md: var(--radius);
-  --radius-lg: var(--radius);
-  --radius-xl: var(--radius);
-  --radius-2xl: var(--radius);
-  --radius-3xl: var(--radius);
-
   /* -paced motion */
   --default-transition-duration: 110ms;
   --default-transition-timing-function: cubic-bezier(0.2, 0, 0.38, 0.9);
@@ -403,14 +459,12 @@
 
   /*
    * inline notifications (toasts).
-   * - Zero radius, no drop shadow
    * - 3px solid left bar in the status color (no outline on the other sides)
    * - Title bold + subtitle inline next to it
    * - Filled status icon on the left
    * - No close button
    */
   [data-sonner-toast] {
-    border-radius: 0 !important;
     border: 0 !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
     padding: 14px 16px !important;
@@ -615,7 +669,6 @@
   .chart .vis-tooltip {
     background: hsl(var(--foreground));
     color: hsl(var(--primary-foreground));
-    border-radius: 0;
     padding: 8px 10px;
     font-size: 12px;
     font-family: var(--font-sans);

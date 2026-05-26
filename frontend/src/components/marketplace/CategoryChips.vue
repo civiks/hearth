@@ -5,7 +5,7 @@
         <li>
           <button
             type="button"
-            class="inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs transition-colors whitespace-nowrap"
+            class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors whitespace-nowrap"
             :class="
               modelValue === null
                 ? activeClasses
@@ -17,7 +17,7 @@
             All
             <span
               v-if="totalCount"
-              class="inline-flex items-center justify-center min-w-[18px] px-1 text-[10px] font-medium"
+              class="inline-flex items-center justify-center min-w-[18px] rounded-full px-1 text-[10px] font-medium"
               :class="modelValue === null ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'"
             >
               {{ totalCount }}
@@ -27,7 +27,7 @@
         <li v-for="entry in categories" :key="entry.name">
           <button
             type="button"
-            class="inline-flex items-center gap-1.5 border px-3 py-1.5 text-xs transition-colors whitespace-nowrap"
+            class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors whitespace-nowrap"
             :class="
               modelValue === entry.name
                 ? activeClasses
@@ -38,7 +38,7 @@
             <component :is="iconFor(entry.name)" class="size-3.5" />
             {{ entry.name }}
             <span
-              class="inline-flex items-center justify-center min-w-[18px] px-1 text-[10px] font-medium"
+              class="inline-flex items-center justify-center min-w-[18px] rounded-full px-1 text-[10px] font-medium"
               :class="
                 modelValue === entry.name
                   ? 'bg-primary-foreground/20 text-primary-foreground'

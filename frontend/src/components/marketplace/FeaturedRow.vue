@@ -19,7 +19,7 @@
         <ArrowRight class="size-3.5" />
       </RouterLink>
     </header>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
       <ServiceCard
         v-for="service in featured"
         :key="service.id"
@@ -49,7 +49,7 @@ interface Service {
   review_count?: number;
 }
 
-type SortMode = "popular" | "top-rated";
+type SortMode = "popular" | "top-rated" | "as-is";
 
 const props = withDefaults(
   defineProps<{
@@ -74,6 +74,9 @@ const props = withDefaults(
 defineEmits<{ select: [service: Service] }>();
 
 const featured = computed(() => {
+  if (props.sortBy === "as-is") {
+    return props.services.slice(0, props.limit);
+  }
   const list = [...props.services].filter((s) => s.rating != null);
   if (props.sortBy === "top-rated") {
     list.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
