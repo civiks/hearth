@@ -5,7 +5,7 @@
       <div
         v-for="step in steps"
         :key="step.title"
-        class="bg-card rounded-xl soft-card p-6 sm:p-7 space-y-3"
+        class="bg-card rounded-xl soft-card card-tilt p-6 sm:p-7 space-y-3"
       >
         <div
           class="inline-flex size-10 items-center justify-center rounded-full text-white"

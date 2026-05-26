@@ -10,7 +10,7 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-button-primary text-primary-foreground hover:bg-button-primary-hover active:bg-button-primary-active btn-glow',
+        default: 'bg-button-primary text-primary-foreground hover:bg-button-primary-hover active:bg-button-primary-active btn-glow btn-bounce',
         outline: 'border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground active:bg-primary-active active:text-primary-foreground aria-expanded:bg-primary aria-expanded:text-primary-foreground',
         // Secondary — theme-aware: dark theme inherits gray-80 hover→gray-70; light theme uses gray-20 hover→gray-30.
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary-hover active:bg-secondary-active aria-expanded:bg-secondary-hover',

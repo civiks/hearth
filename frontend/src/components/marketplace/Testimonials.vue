@@ -7,7 +7,7 @@
       <article
         v-for="t in testimonials"
         :key="t.name"
-        class="bg-card rounded-lg soft-card p-6 flex flex-col gap-4"
+        class="bg-card rounded-lg soft-card card-tilt p-6 flex flex-col gap-4"
       >
         <div class="flex items-center gap-1">
           <Star

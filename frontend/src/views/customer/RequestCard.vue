@@ -1,6 +1,6 @@
 <template>
   <article
-    class="bg-card rounded-lg soft-card overflow-hidden flex flex-col md:flex-row"
+    class="bg-card rounded-lg soft-card card-lift overflow-hidden flex flex-col md:flex-row"
     :class="cancelled ? 'opacity-70' : ''"
   >
     <!-- Service photo strip -->

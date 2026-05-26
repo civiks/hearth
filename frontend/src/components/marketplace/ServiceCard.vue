@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="group block w-full text-left bg-card overflow-hidden rounded-lg soft-card hover:soft-card-hover transition-shadow focus-visible:outline-2 focus-visible:outline-primary"
+    class="group block w-full text-left bg-card overflow-hidden rounded-lg soft-card hover:soft-card-hover card-lift focus-visible:outline-2 focus-visible:outline-primary"
     @click="$emit('select')"
   >
     <div class="relative aspect-[16/9] overflow-hidden bg-muted">

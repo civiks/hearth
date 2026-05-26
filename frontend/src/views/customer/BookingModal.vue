@@ -7,7 +7,6 @@
   >
     <component
       :is="isDesktop ? SheetContent : DrawerContent"
-      v-bind="isDesktop ? { onClose: () => $emit('close') } : {}"
     >
       <DrawerHeader>
         <DrawerTitle>Book {{ service.name }}</DrawerTitle>
@@ -28,7 +27,7 @@
         <div v-if="step === 'pro'" class="space-y-3">
           <button
             type="button"
-            class="w-full text-left rounded-lg p-3 flex items-center gap-3 transition-colors border"
+            class="w-full text-left rounded-lg p-3 flex items-center gap-3 card-lift border"
             :class="selectedProId === null ? 'border-primary/50 bg-primary/5' : 'border-border hover:bg-muted/50'"
             @click="selectedProId = null"
           >
