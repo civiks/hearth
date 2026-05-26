@@ -5,6 +5,7 @@ import { DonutChart } from "@/components/charts";
 import { categoricalPalette } from "@/components/charts/palette";
 import { DashboardWidget, StatWidget } from "@/components/dashboard";
 import OpsDigestCard from "@/components/genai/OpsDigestCard.vue";
+import PageHeader from "@/components/PageHeader.vue";
 import { useAdminData } from "@/composables/useAdminData";
 import { api } from "@/lib/api";
 import { useNotificationsStore } from "@/stores/notifications";
@@ -88,6 +89,7 @@ function capitalize(s: string) {
 
 <template>
   <div class="px-4 py-4 sm:px-6 sm:py-8">
+    <PageHeader title="Overview" description="Platform health at a glance." />
     <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-stretch">
       <OpsDigestCard class="sm:col-span-12" :analytics="analytics" :loaded="analyticsLoaded" />
 

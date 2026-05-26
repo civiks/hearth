@@ -5,7 +5,7 @@
       :class="dotClass"
       aria-hidden="true"
     />
-    <slot>{{ (label ?? status).replace('_', ' ') }}</slot>
+    <slot>{{ (label ?? status).replace(/_/g, ' ') }}</slot>
   </span>
 </template>
 

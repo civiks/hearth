@@ -1,0 +1,156 @@
+<template>
+  <component
+    :is="isDesktop ? Sheet : Drawer"
+    :open="true"
+    v-bind="isDesktop ? {} : { shouldScaleBackground: true }"
+    @update:open="(v: boolean) => !v && $emit('close')"
+  >
+    <component
+      :is="isDesktop ? SheetContent : DrawerContent"
+      class="sm:max-w-lg flex flex-col p-0 gap-0 max-h-[88svh] sm:max-h-full"
+    >
+      <component
+        :is="isDesktop ? SheetHeader : DrawerHeader"
+        class="relative px-5 pt-5 pb-4 shrink-0 space-y-0"
+      >
+        <SheetClose
+          v-if="isDesktop"
+          class="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-primary transition-opacity"
+        >
+          <X class="size-4" />
+          <span class="sr-only">Close</span>
+        </SheetClose>
+        <p class="text-2xl font-light tracking-tight">
+          {{ request.scheduled_time ? formatDateTime(request.scheduled_time) : `Order #${request.id}` }}
+        </p>
+        <component :is="isDesktop ? SheetTitle : DrawerTitle" class="text-sm! font-medium! mt-1">
+          {{ request.service_name }}
+        </component>
+        <component :is="isDesktop ? SheetDescription : DrawerDescription" class="text-xs!">
+          {{ service?.category ?? `Order #${request.id}` }}
+        </component>
+      </component>
+
+      <!-- Body -->
+      <div class="flex-1 overflow-y-auto min-h-0 px-5 py-5 space-y-6">
+
+        <!-- Status -->
+        <StatusTimeline :status="request.service_status" />
+
+        <!-- Professional -->
+        <div class="border-t pt-5">
+          <div v-if="professional" class="flex items-center gap-3">
+            <ProfessionalAvatar
+              :name="professional.full_name"
+              :src="professional.avatar_url"
+              class="size-9 shrink-0"
+            />
+            <div class="min-w-0">
+              <p class="text-sm font-medium">{{ professional.full_name }}</p>
+              <p class="text-xs text-muted-foreground mt-0.5">
+                <template v-if="professional.rating != null">
+                  <Star class="size-3 fill-amber-400 text-amber-400 inline-block -mt-px" />
+                  {{ professional.rating.toFixed(1) }}
+                  <template v-if="professional.review_count"> ({{ professional.review_count }})</template>
+                </template>
+                <template v-if="professional.experience">
+                  <span v-if="professional.rating != null"> · </span>
+                  {{ professional.experience }} yrs experience
+                </template>
+              </p>
+            </div>
+          </div>
+          <p v-else-if="!cancelled" class="text-sm text-muted-foreground">
+            Awaiting professional assignment
+          </p>
+          <p v-else class="text-sm text-muted-foreground">No professional assigned</p>
+        </div>
+
+        <!-- Details -->
+        <div class="border-t pt-5 space-y-3 text-sm">
+          <div class="flex items-start gap-2.5">
+            <MapPin class="size-4 shrink-0 mt-0.5 text-muted-foreground" />
+            <span>{{ request.address }}, {{ request.pincode }}</span>
+          </div>
+          <div v-if="service?.base_price != null || service?.time_required != null" class="flex items-center gap-2.5">
+            <Tag class="size-4 shrink-0 text-muted-foreground" />
+            <span class="flex items-baseline gap-1.5">
+              <span v-if="service?.base_price != null" class="inline-flex items-baseline gap-0.5">
+                <span class="text-[11px] text-muted-foreground">Rs</span>
+                <span>{{ service!.base_price }}</span>
+              </span>
+              <span v-if="service?.base_price != null && service?.time_required != null" class="text-muted-foreground">·</span>
+              <span v-if="service?.time_required != null">{{ service!.time_required }} min</span>
+            </span>
+          </div>
+          <p v-if="request.date_of_request" class="text-xs text-muted-foreground pl-[26px]">
+            Ordered {{ formatDate(request.date_of_request) }}
+          </p>
+        </div>
+
+        <!-- Notes -->
+        <div v-if="request.remarks" class="border-t pt-5">
+          <p class="text-xs text-muted-foreground mb-1.5">Notes</p>
+          <p class="text-sm leading-relaxed">{{ request.remarks }}</p>
+        </div>
+      </div>
+
+      <!-- Footer actions -->
+      <div v-if="isActionable" class="shrink-0 flex gap-2 px-5 py-4 border-t">
+        <Button
+          v-if="request.service_status === 'requested'"
+          variant="outline"
+          class="flex-1"
+          @click="$emit('edit')"
+        >
+          Edit booking
+        </Button>
+        <Button variant="destructive" class="flex-1" @click="$emit('cancel')">
+          Cancel request
+        </Button>
+      </div>
+    </component>
+  </component>
+</template>
+
+<script lang="ts" setup>
+import { MapPin, Star, Tag, X } from "lucide-vue-next";
+import { computed } from "vue";
+import { useMediaQuery } from "@vueuse/core";
+
+import ProfessionalAvatar from "@/components/marketplace/ProfessionalAvatar.vue";
+import StatusTimeline from "@/components/marketplace/StatusTimeline.vue";
+import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { formatDate, formatDateTime } from "@/lib/format";
+import type { CustomerRequest, RelatedProfessional, RelatedService } from "./RequestCard.vue";
+
+const props = defineProps<{
+  request: CustomerRequest;
+  service?: RelatedService | null;
+  professional?: RelatedProfessional | null;
+}>();
+
+defineEmits<{ close: []; edit: []; cancel: [] }>();
+
+const isDesktop = useMediaQuery("(min-width: 640px)");
+
+const cancelled = computed(() => props.request.service_status === "cancelled");
+const isActionable = computed(() =>
+  ["requested", "accepted"].includes(props.request.service_status),
+);
+</script>

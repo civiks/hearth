@@ -118,77 +118,84 @@
       </div>
     </section>
 
-    <!-- Popular services (live data from /api/services) -->
-    <PopularServicesRow :services="services" :loading="loading" />
+    <Motion v-bind="reveal">
+      <PopularServicesRow :services="services" :loading="loading" />
+    </Motion>
 
-    <!-- How it works -->
-    <HowItWorks />
+    <Motion v-bind="reveal">
+      <HowItWorks />
+    </Motion>
 
-    <!-- Testimonials -->
-    <Testimonials />
+    <Motion v-bind="reveal">
+      <Testimonials />
+    </Motion>
 
-    <section class="ai-surface">
-      <div class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
-        <div class="max-w-2xl">
-          <h2 class="text-2xl sm:text-3xl font-medium tracking-tight mb-4">
-            Ready to book your first service?
-          </h2>
-          <p class="text-sm sm:text-base text-muted-foreground mb-8 leading-relaxed max-w-xl">
-            {{ DEMO
-              ? "Pick a role to walk through the full booking flow. See how customers request work, how professionals accept jobs, and how admins keep the platform running."
-              : "Browse verified professionals across 15+ services. Pay only after the job is done, with honest pricing and real reviews." }}
-          </p>
-          <DropdownMenu v-if="DEMO" :modal="false">
-            <DropdownMenuTrigger as-child>
-              <Button size="lg">
-                Try the demo
-                <ChevronDown class="ml-2 size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" class="w-64">
-              <DropdownMenuLabel>
-                <div class="flex flex-col leading-tight">
-                  <span class="text-sm font-medium">Demo mode</span>
-                  <span class="text-xs text-muted-foreground">
-                    State persists in your browser only.
-                  </span>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuLabel
-                class="text-[11px] uppercase tracking-wide text-muted-foreground font-normal"
-              >
-                Sign in as
-              </DropdownMenuLabel>
-              <DropdownMenuItem
-                v-for="r in DEMO_ROLES"
-                :key="r.value"
-                :class="auth.role === r.value ? 'bg-muted font-medium' : ''"
-                @click="loginAs(r.value)"
-              >
-                <component :is="r.icon" class="mr-2 size-4" />
-                {{ r.label }}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive" @click="resetDemoData">
-                <RotateCcw class="mr-2 size-4" />
-                Reset demo data
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button v-else size="lg" @click="$router.push('/register')">
-            Get started
-            <ArrowRight class="ml-2 size-4" />
-          </Button>
+    <Motion v-bind="reveal">
+      <section class="ai-surface">
+        <div class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
+          <div class="max-w-2xl">
+            <h2 class="text-2xl sm:text-3xl font-medium tracking-tight mb-4">
+              Ready to book your first service?
+            </h2>
+            <p class="text-sm sm:text-base text-muted-foreground mb-8 leading-relaxed max-w-xl">
+              {{ DEMO
+                ? "Pick a role to walk through the full booking flow. See how customers request work, how professionals accept jobs, and how admins keep the platform running."
+                : "Browse verified professionals across 15+ services. Pay only after the job is done, with honest pricing and real reviews." }}
+            </p>
+            <DropdownMenu v-if="DEMO" :modal="false">
+              <DropdownMenuTrigger as-child>
+                <Button size="lg">
+                  Try the demo
+                  <ChevronDown class="ml-2 size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" class="w-64">
+                <DropdownMenuLabel>
+                  <div class="flex flex-col leading-tight">
+                    <span class="text-sm font-medium">Demo mode</span>
+                    <span class="text-xs text-muted-foreground">
+                      State persists in your browser only.
+                    </span>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel
+                  class="text-[11px] uppercase tracking-wide text-muted-foreground font-normal"
+                >
+                  Sign in as
+                </DropdownMenuLabel>
+                <DropdownMenuItem
+                  v-for="r in DEMO_ROLES"
+                  :key="r.value"
+                  :class="auth.role === r.value ? 'bg-muted font-medium' : ''"
+                  @click="loginAs(r.value)"
+                >
+                  <component :is="r.icon" class="mr-2 size-4" />
+                  {{ r.label }}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant="destructive" @click="resetDemoData">
+                  <RotateCcw class="mr-2 size-4" />
+                  Reset demo data
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button v-else size="lg" @click="$router.push('/register')">
+              Get started
+              <ArrowRight class="ml-2 size-4" />
+            </Button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </Motion>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ArrowRight, ChevronDown, Clock, MapPin, RotateCcw, ShieldCheck, Star } from "lucide-vue-next";
-import { onMounted, ref } from "vue";
+import { Motion } from "motion-v";
+import { computed, onMounted, ref } from "vue";
+import { usePreferredReducedMotion } from "@vueuse/core";
 
 import HowItWorks from "@/components/marketplace/HowItWorks.vue";
 import PopularServicesRow from "@/components/marketplace/PopularServicesRow.vue";
@@ -209,6 +216,18 @@ import { useAuthStore } from "@/stores/auth";
 
 const auth = useAuthStore();
 const { loginAs, resetDemoData } = useDemoLogin();
+
+const prefersReducedMotion = usePreferredReducedMotion();
+const reveal = computed(() =>
+  prefersReducedMotion.value === "reduce"
+    ? {}
+    : {
+        initial: { opacity: 0, y: 16 },
+        whileInView: { opacity: 1, y: 0 },
+        transition: { duration: 0.4, easing: [0.2, 0, 0.38, 0.9] as [number, number, number, number] },
+        viewport: { once: true, margin: "-80px" },
+      },
+);
 
 interface PublicService {
   id: number;
@@ -250,5 +269,4 @@ onMounted(async () => {
   await inflight;
   loading.value = false;
 });
-
 </script>

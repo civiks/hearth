@@ -4,6 +4,7 @@ import { computed, onMounted, ref } from "vue";
 import { DonutChart } from "@/components/charts";
 import { categoricalPalette } from "@/components/charts/palette";
 import { DashboardWidget, MetricStrip, type StripTile } from "@/components/dashboard";
+import PageHeader from "@/components/PageHeader.vue";
 import ProDigestCard from "@/components/genai/ProDigestCard.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
 import { ApiError, api } from "@/lib/api";
@@ -121,14 +122,10 @@ onMounted(async () => {
     />
 
     <template v-if="auth.approval_status === 'approved'">
-      <header>
-        <h1 class="text-xl sm:text-2xl font-light tracking-tight">
-          {{ greeting }}<template v-if="firstName">, {{ firstName }}</template>
-        </h1>
-        <p class="mt-1 text-sm text-muted-foreground">
-          Here's how your service is doing today.
-        </p>
-      </header>
+      <PageHeader
+        :title="firstName ? `${greeting}, ${firstName}` : greeting"
+        description="Here's how your service is doing today."
+      />
 
       <ProDigestCard :requests="requests" :services="services" :loaded="loaded" />
 

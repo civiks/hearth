@@ -1,11 +1,6 @@
 <template>
   <div class="px-6 py-8 max-w-3xl mx-auto space-y-10">
-    <header>
-      <h1 class="text-2xl font-light tracking-tight">Settings</h1>
-      <p class="text-sm text-muted-foreground mt-1">
-        Appearance and AI.
-      </p>
-    </header>
+    <PageHeader title="Settings" description="Appearance and AI." />
 
     <section class="space-y-1">
       <h2 class="text-xs font-medium uppercase tracking-wide text-muted-foreground pb-3 border-b">
@@ -78,6 +73,7 @@
 import { onMounted, ref } from "vue";
 
 import AiKeyDialog from "@/components/AiKeyDialog.vue";
+import PageHeader from "@/components/PageHeader.vue";
 import { Button } from "@/components/ui/button";
 import { DEMO } from "@/lib/demo/flag";
 import {

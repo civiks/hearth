@@ -63,8 +63,8 @@
             </div>
             <div class="border rounded-md bg-muted/50 p-3">
               <div class="text-xs text-muted-foreground mb-1">Price</div>
-              <div class="flex items-center gap-1 font-medium">
-                <IndianRupee class="size-3.5 text-primary opacity-70" />
+              <div class="inline-flex items-end gap-0.5 font-medium">
+                <span class="text-[11px] font-normal leading-none text-primary opacity-70">Rs</span>
                 {{ service.base_price }}
               </div>
             </div>
@@ -131,7 +131,6 @@ import {
   ArrowLeft,
   ChevronRight,
   Clock,
-  IndianRupee,
   Sparkles,
   UserCheck,
 } from "lucide-vue-next";

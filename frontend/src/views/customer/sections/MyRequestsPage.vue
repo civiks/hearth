@@ -14,7 +14,7 @@
       </RouterLink>
     </div>
 
-    <div v-else class="space-y-4">
+    <div v-else class="space-y-3">
       <RequestCard
         v-for="row in history"
         :key="row.id"
@@ -25,10 +25,23 @@
             ? (professionalsById.get(row.professional_id) ?? null)
             : null
         "
-        @edit="openEdit(row)"
-        @cancel="cancelRequest(row.id)"
+        @open="openDetail(row)"
       />
     </div>
+
+    <OrderDetailSheet
+      v-if="detailRequest"
+      :request="detailRequest"
+      :service="servicesById.get(detailRequest.service_id) ?? null"
+      :professional="
+        detailRequest.professional_id != null
+          ? (professionalsById.get(detailRequest.professional_id) ?? null)
+          : null
+      "
+      @close="detailRequest = null"
+      @edit="openEdit(detailRequest)"
+      @cancel="cancelRequest(detailRequest.id)"
+    />
 
     <EditRequestModal
       v-if="editingRequest"
@@ -47,6 +60,7 @@ import { Button } from "@/components/ui/button";
 import { ApiError, api } from "@/lib/api";
 import { useNotificationsStore } from "@/stores/notifications";
 import EditRequestModal from "@/views/customer/EditRequestModal.vue";
+import OrderDetailSheet from "@/views/customer/OrderDetailSheet.vue";
 import RequestCard, {
   type CustomerRequest,
   type RelatedProfessional,
@@ -59,6 +73,7 @@ const loading = ref(true);
 const history = ref<CustomerRequest[]>([]);
 const services = ref<RelatedService[]>([]);
 const professionals = ref<RelatedProfessional[]>([]);
+const detailRequest = ref<CustomerRequest | null>(null);
 const editingRequest = ref<CustomerRequest | null>(null);
 
 const servicesById = computed(() => new Map(services.value.map((s) => [s.id, s])));
@@ -97,14 +112,22 @@ async function fetchProfessionals() {
   }
 }
 
-function openEdit(request: CustomerRequest) {
-  editingRequest.value = request;
+function openDetail(request: CustomerRequest) {
+  detailRequest.value = request;
 }
 
-function onEdited() {
+function openEdit(request: CustomerRequest | null) {
+  if (request) editingRequest.value = request;
+}
+
+async function onEdited() {
   editingRequest.value = null;
   toasts.success("Request updated");
-  fetchHistory();
+  await fetchHistory();
+  if (detailRequest.value) {
+    detailRequest.value =
+      history.value.find((r) => r.id === detailRequest.value!.id) ?? detailRequest.value;
+  }
 }
 
 async function cancelRequest(id: number) {
@@ -113,6 +136,9 @@ async function cancelRequest(id: number) {
     await api.put(`/api/requests/${id}`, { service_status: "cancelled" });
     toasts.success("Request cancelled");
     fetchHistory();
+    if (detailRequest.value?.id === id) {
+      detailRequest.value = { ...detailRequest.value, service_status: "cancelled" };
+    }
   } catch (err) {
     toasts.error(err instanceof ApiError ? err.detail : "Failed to cancel");
   }

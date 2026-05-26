@@ -33,8 +33,8 @@
       </Badge>
       <!-- Price overlaid on the image bottom — primary at-a-glance info -->
       <div class="absolute bottom-2 left-3 right-3 flex items-end justify-between text-white">
-        <span class="inline-flex items-center gap-0.5 text-lg font-semibold leading-none">
-          <IndianRupee class="size-3.5 opacity-70" :stroke-width="2.25" />
+        <span class="inline-flex items-baseline gap-0.5 text-lg font-semibold leading-none">
+          <span class="text-[11px] font-normal opacity-80">Rs</span>
           {{ service.base_price }}
         </span>
         <span class="inline-flex items-center gap-1 text-[11px] opacity-70">
@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Clock, IndianRupee, Star } from "lucide-vue-next";
+import { Clock, Star } from "lucide-vue-next";
 import { computed } from "vue";
 
 import { Badge } from "@/components/ui/badge";

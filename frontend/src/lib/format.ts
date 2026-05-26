@@ -13,6 +13,14 @@ export function formatDateTime(input: string | null | undefined): string {
   });
 }
 
+/** Format a backend-issued date string (YYYY-MM-DD) into a readable form. */
+export function formatDate(input: string | null | undefined): string {
+  if (!input) return "";
+  const d = new Date(input);
+  if (Number.isNaN(d.getTime())) return input;
+  return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+}
+
 /** Two-letter uppercase initials for an avatar. */
 export function initials(name: string | null | undefined): string {
   if (!name) return "";
