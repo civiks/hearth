@@ -13,27 +13,16 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  CheckCircle,
-  MoreVertical,
-  Trash2,
-  XCircle,
-} from "lucide-vue-next";
+import { CheckCircle, Trash2, XCircle } from "lucide-vue-next";
 import { h } from "vue";
 import { RouterLink } from "vue-router";
 import type { ColumnDef } from "@tanstack/vue-table";
 
+import RowActions from "@/components/RowActions.vue";
 import UserAvatar, { type AvatarVariant } from "@/components/Avatar.vue";
 import ApprovalSummaryChip from "@/components/genai/ApprovalSummaryChip.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 export interface AdminUser {
   id: number;
@@ -157,67 +146,13 @@ const columns: ColumnDef<AdminUser>[] = [
     meta: { align: "right" },
     cell: ({ row }) => {
       const u = row.original;
-      const items: ReturnType<typeof h>[] = [];
+      const actions = [];
       if (u.approval_status === "pending") {
-        items.push(
-          h(
-            DropdownMenuItem,
-            { onClick: () => emit("approve", u.id) },
-            {
-              default: () => [
-                h(CheckCircle, { class: "mr-2 size-4" }),
-                "Approve",
-              ],
-            },
-          ),
-        );
-        items.push(
-          h(
-            DropdownMenuItem,
-            { onClick: () => emit("reject", u.id) },
-            {
-              default: () => [
-                h(XCircle, { class: "mr-2 size-4" }),
-                "Reject",
-              ],
-            },
-          ),
-        );
+        actions.push({ label: "Approve", icon: CheckCircle, onClick: () => emit("approve", u.id) });
+        actions.push({ label: "Reject", icon: XCircle, onClick: () => emit("reject", u.id) });
       }
-      items.push(
-        h(
-          DropdownMenuItem,
-          {
-            variant: "destructive",
-            onClick: () => emit("delete", u.id),
-          },
-          { default: () => [h(Trash2, { class: "mr-2 size-4" }), "Delete"] },
-        ),
-      );
-
-      return h(DropdownMenu, null, {
-        default: () => [
-          h(
-            DropdownMenuTrigger,
-            { asChild: true },
-            {
-              default: () =>
-                h(
-                  Button,
-                  {
-                    variant: "ghost",
-                    size: "icon",
-                    "aria-label": "Open menu",
-                  },
-                  {
-                    default: () => h(MoreVertical, { class: "size-4" }),
-                  },
-                ),
-            },
-          ),
-          h(DropdownMenuContent, { align: "end" }, { default: () => items }),
-        ],
-      });
+      actions.push({ label: "Delete", icon: Trash2, variant: "destructive" as const, onClick: () => emit("delete", u.id) });
+      return h(RowActions, { actions });
     },
   },
 ];

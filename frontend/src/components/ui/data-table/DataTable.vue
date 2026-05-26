@@ -49,6 +49,7 @@
         <TableRow
           v-for="row in table.getRowModel().rows"
           :key="row.id"
+          :class="row.index % 2 === 1 ? 'bg-muted/30' : ''"
         >
           <TableCell
             v-for="cell in row.getVisibleCells()"
@@ -58,6 +59,7 @@
               cell.column.columnDef.meta?.align === 'right' ? 'text-right' : '',
               cell.column.columnDef.meta?.align === 'center' ? 'text-center' : '',
               cell.column.columnDef.meta?.cellClass ?? '',
+              cell.column.columnDef.meta?.mono ? 'font-mono tabular-nums' : '',
             ]"
           >
             <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />

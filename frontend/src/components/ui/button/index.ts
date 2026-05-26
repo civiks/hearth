@@ -20,6 +20,8 @@ export const buttonVariants = cva(
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--destructive))]',
         // Soft danger — tinted background, works on both light and dark surfaces without being too bright.
         'destructive-soft': 'bg-destructive/12 text-destructive hover:bg-destructive/20 active:bg-destructive/25 focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--destructive))]',
+        // Soft primary — tinted background for low-emphasis primary actions (e.g. back buttons).
+        'primary-soft': 'bg-primary/10 text-primary hover:bg-primary/18 active:bg-primary/25',
         link: 'text-primary underline-offset-4 hover:underline border-transparent focus-visible:shadow-none focus-visible:underline',
       },
       size: {

@@ -13,21 +13,15 @@
 </template>
 
 <script lang="ts" setup>
-import { Lock, MoreVertical, Trash2, Unlock } from "lucide-vue-next";
+import { Lock, Trash2, Unlock } from "lucide-vue-next";
 import { h } from "vue";
 import { RouterLink } from "vue-router";
 import type { ColumnDef } from "@tanstack/vue-table";
 
+import RowActions from "@/components/RowActions.vue";
 import UserAvatar from "@/components/Avatar.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import type { AdminUser } from "./ProfessionalsTable.vue";
 
 const props = defineProps<{ users: AdminUser[] }>();
@@ -110,53 +104,14 @@ const columns: ColumnDef<AdminUser>[] = [
     meta: { align: "right" },
     cell: ({ row }) => {
       const u = row.original;
-      return h(DropdownMenu, null, {
-        default: () => [
-          h(
-            DropdownMenuTrigger,
-            { asChild: true },
-            {
-              default: () =>
-                h(
-                  Button,
-                  {
-                    variant: "ghost",
-                    size: "icon",
-                    "aria-label": "Open menu",
-                  },
-                  { default: () => h(MoreVertical, { class: "size-4" }) },
-                ),
-            },
-          ),
-          h(DropdownMenuContent, { align: "end" }, {
-            default: () => [
-              h(
-                DropdownMenuItem,
-                { onClick: () => emit("toggleBlock", u) },
-                {
-                  default: () => [
-                    h(u.is_blocked ? Unlock : Lock, {
-                      class: "mr-2 size-4",
-                    }),
-                    u.is_blocked ? "Unblock" : "Block",
-                  ],
-                },
-              ),
-              h(
-                DropdownMenuItem,
-                {
-                  variant: "destructive",
-                  onClick: () => emit("delete", u.id),
-                },
-                {
-                  default: () => [
-                    h(Trash2, { class: "mr-2 size-4" }),
-                    "Delete",
-                  ],
-                },
-              ),
-            ],
-          }),
+      return h(RowActions, {
+        actions: [
+          {
+            label: u.is_blocked ? "Unblock" : "Block",
+            icon: u.is_blocked ? Unlock : Lock,
+            onClick: () => emit("toggleBlock", u),
+          },
+          { label: "Delete", icon: Trash2, variant: "destructive" as const, onClick: () => emit("delete", u.id) },
         ],
       });
     },

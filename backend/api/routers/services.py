@@ -17,6 +17,11 @@ def list_services(session: Annotated[Session, Depends(get_session)]):
     return list(session.scalars(select(Service).where(Service.is_active.is_(True))).all())
 
 
+@router.get("/all", response_model=list[ServiceRead])
+def list_all_services(_admin: AdminUser, session: Annotated[Session, Depends(get_session)]):
+    return list(session.scalars(select(Service)).all())
+
+
 @router.get("/{service_id}", response_model=ServiceRead)
 def get_service(service_id: int, session: Annotated[Session, Depends(get_session)]):
     service = session.get(Service, service_id)

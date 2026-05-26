@@ -148,6 +148,10 @@ function handle(
   if (method === "GET" && path === "/api/services") {
     return getState().services.filter((s) => s.is_active);
   }
+  if (method === "GET" && path === "/api/services/all") {
+    requireAdmin();
+    return getState().services;
+  }
   if (method === "POST" && path === "/api/services") {
     requireAdmin();
     return createService(body as Record<string, unknown>);

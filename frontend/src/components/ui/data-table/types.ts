@@ -17,6 +17,8 @@ declare module "@tanstack/vue-table" {
     nowrap?: boolean;
     /** Per-cell extra class. */
     cellClass?: string;
+    /** Render cell in monospace (numeric columns). */
+    mono?: boolean;
   }
 }
 

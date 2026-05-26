@@ -104,13 +104,19 @@
       </div>
     </div>
 
-    <Dialog :open="showEdit" @update:open="(v) => !v && closeEdit()">
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>Update your personal details</DialogDescription>
-        </DialogHeader>
-        <form class="space-y-4" @submit.prevent="saveChanges">
+    <component
+      v-if="showEdit"
+      :is="isDesktop ? Sheet : Drawer"
+      :open="true"
+      v-bind="isDesktop ? {} : { shouldScaleBackground: true }"
+      @update:open="(v: boolean) => !v && closeEdit()"
+    >
+      <component :is="isDesktop ? SheetContent : DrawerContent">
+        <DrawerHeader>
+          <DrawerTitle>Edit profile</DrawerTitle>
+          <DrawerDescription>Update your personal details</DrawerDescription>
+        </DrawerHeader>
+        <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4">
           <div class="space-y-2">
             <Label for="edit_name">Full name</Label>
             <Input id="edit_name" v-model="editForm.full_name" required />
@@ -123,13 +129,13 @@
             <Label for="edit_pincode">Pincode</Label>
             <Input id="edit_pincode" v-model="editForm.pincode" pattern="[0-9]{6}" />
           </div>
-          <DialogFooter>
-            <Button type="button" variant="secondary" @click="closeEdit">Cancel</Button>
-            <Button type="submit" :disabled="loading">Save changes</Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+        </div>
+        <DrawerFooter>
+          <Button type="button" variant="outline" @click="closeEdit">Cancel</Button>
+          <Button type="button" class="flex-1" :disabled="loading" @click="saveChanges">Save changes</Button>
+        </DrawerFooter>
+      </component>
+    </component>
   </div>
 </template>
 
@@ -137,20 +143,15 @@
 import { AlertCircle, CheckCircle, Edit2, Loader2, Lock, Trash2, Unlock, XCircle } from "lucide-vue-next";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useMediaQuery } from "@vueuse/core";
 
 import StatusPill from "@/components/StatusBadge.vue";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ApiError, api } from "@/lib/api";
@@ -176,6 +177,7 @@ interface UserData {
 const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
+const isDesktop = useMediaQuery("(min-width: 640px)");
 const toasts = useNotificationsStore();
 
 const userData = ref<UserData | null>(null);

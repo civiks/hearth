@@ -15,7 +15,7 @@ const users = ref<AdminUser[]>([]);
 export function useAdminData() {
   async function fetchServices() {
     try {
-      services.value = await api.get<AdminService[]>("/api/services");
+      services.value = await api.get<AdminService[]>("/api/services/all");
     } catch (err) {
       console.error("services fetch failed", err);
     }

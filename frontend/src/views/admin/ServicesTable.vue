@@ -5,162 +5,222 @@
     title="Services"
     description="Catalog of services available to customers."
     search-placeholder="Search services"
-    :global-filter-accessor="(s) => `${s.name} ${s.description ?? ''}`"
+    :global-filter-accessor="(s) => `${s.name} ${s.category ?? ''} ${s.description ?? ''}`"
     empty-message="No services match your filters."
   >
     <template #actions>
       <Button @click="openCreate">
         <Plus class="size-4" />
-        <span class="ml-1">Add</span>
+        <span class="ml-1 hidden sm:inline">Add service</span>
       </Button>
     </template>
   </DataTable>
 
-  <Dialog :open="modalOpen" @update:open="(v) => !v && closeModal()">
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>
-          {{ editingId === null ? "Create new service" : "Edit service" }}
-        </DialogTitle>
-      </DialogHeader>
-      <form class="space-y-4" @submit.prevent="submitService">
+  <component
+    v-if="modalOpen"
+    :is="isDesktop ? Sheet : Drawer"
+    :open="true"
+    v-bind="isDesktop ? {} : { shouldScaleBackground: true }"
+    @update:open="(v: boolean) => !v && closeModal()"
+  >
+    <component :is="isDesktop ? SheetContent : DrawerContent">
+      <DrawerHeader>
+        <DrawerTitle>{{ editingId === null ? "New service" : "Edit service" }}</DrawerTitle>
+        <DrawerDescription>
+          {{ editingId === null ? "Add a new service to the catalog." : "Update this service's details." }}
+        </DrawerDescription>
+      </DrawerHeader>
+
+      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-5">
         <div class="space-y-2">
           <Label for="svc_name">Service name</Label>
-          <Input id="svc_name" v-model="form.name" required />
+          <Input id="svc_name" v-model="form.name" placeholder="e.g. Kitchen Sink Repair" required />
         </div>
+
         <div class="space-y-2">
-          <Label for="svc_desc">Description</Label>
-          <Textarea id="svc_desc" v-model="descriptionStr" rows="2" />
+          <Label for="svc_category">Category</Label>
+          <Select v-model="form.category">
+            <SelectTrigger id="svc_category">
+              <SelectValue placeholder="Select a category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem v-for="cat in CATEGORIES" :key="cat" :value="cat">{{ cat }}</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <Label for="svc_desc">
+              Description
+              <span class="font-normal text-muted-foreground">(optional)</span>
+            </Label>
+            <div class="flex items-center gap-3">
+              <button
+                v-if="aiDescription"
+                type="button"
+                class="text-xs text-muted-foreground hover:text-foreground transition"
+                @click="aiDescription = false"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                class="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition disabled:opacity-40"
+                :disabled="!form.name || generating"
+                @click="onGenerate"
+              >
+                <AiMark class="size-3.5" />
+                {{ generating ? "Generating…" : "Generate" }}
+              </button>
+            </div>
+          </div>
+          <AiSurface v-if="aiDescription" class="px-3 py-2.5 text-sm leading-relaxed">
+            <span v-html="descriptionStr" />
+            <span
+              v-if="generating"
+              class="inline-block size-2 bg-muted-foreground/60 align-middle ml-1 animate-pulse"
+              aria-hidden="true"
+            />
+          </AiSurface>
+          <Textarea
+            v-else
+            id="svc_desc"
+            v-model="descriptionStr"
+            rows="3"
+            placeholder="Brief description of what's included…"
+          />
+        </div>
+
         <div class="grid grid-cols-2 gap-3">
           <div class="space-y-2">
             <Label for="svc_price">Base price (₹)</Label>
-            <Input
-              id="svc_price"
-              v-model.number="form.base_price"
-              type="number"
-              min="0"
-              required
-            />
+            <Input id="svc_price" v-model.number="form.base_price" type="number" min="1" required />
           </div>
           <div class="space-y-2">
-            <Label for="svc_time">Time required (min)</Label>
-            <Input
-              id="svc_time"
-              v-model.number="form.time_required"
-              type="number"
-              min="0"
-              required
-            />
+            <Label for="svc_time">Duration (min)</Label>
+            <Input id="svc_time" v-model.number="form.time_required" type="number" min="1" required />
           </div>
         </div>
+
+        <div v-if="editingId !== null" class="flex items-center justify-between rounded-lg border p-4">
+          <div class="space-y-0.5">
+            <Label class="text-sm font-medium">Active</Label>
+            <p class="text-xs text-muted-foreground">Visible to customers and available for booking.</p>
+          </div>
+          <Switch v-model:checked="form.is_active" />
+        </div>
+
         <Alert v-if="errorMessage" variant="destructive">
           <AlertCircle class="size-4" />
           <AlertDescription>{{ errorMessage }}</AlertDescription>
         </Alert>
-        <DialogFooter>
-          <Button type="button" variant="secondary" @click="closeModal">
-            Cancel
-          </Button>
-          <Button type="submit" :disabled="submitting">
-            {{ editingId === null ? "Create service" : "Update service" }}
-          </Button>
-        </DialogFooter>
-      </form>
-    </DialogContent>
-  </Dialog>
+      </div>
+
+      <DrawerFooter>
+        <Button type="button" variant="outline" @click="closeModal">Cancel</Button>
+        <Button type="button" class="flex-1" :disabled="submitting" @click="submitService">
+          {{ submitting ? "Saving…" : editingId === null ? "Create service" : "Save changes" }}
+        </Button>
+      </DrawerFooter>
+    </component>
+  </component>
 </template>
 
 <script lang="ts" setup>
-import {
-  AlertCircle,
-  Edit2,
-  MoreVertical,
-  Plus,
-  Trash2,
-} from "lucide-vue-next";
+import { AlertCircle, Edit2, Plus, Trash2 } from "lucide-vue-next";
 import { computed, h, reactive, ref } from "vue";
+import { useMediaQuery } from "@vueuse/core";
 import type { ColumnDef } from "@tanstack/vue-table";
 
+import AiMark from "@/components/AiMark.vue";
+import AiSurface from "@/components/AiSurface.vue";
+import RowActions from "@/components/RowActions.vue";
+import StatusBadge from "@/components/StatusBadge.vue";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
+import { CATEGORIES } from "@/lib/demo/fixtures";
+import { generateServiceDescription, type AgentEvent } from "@/lib/genai";
 
 export interface AdminService {
   id: number;
   name: string;
   description: string | null;
+  category: string | null;
   base_price: number;
   time_required: number;
+  is_active: boolean;
 }
 
 const props = defineProps<{ services: AdminService[] }>();
 const emit = defineEmits<{ delete: [id: number]; changed: [] }>();
 void props;
 
+const isDesktop = useMediaQuery("(min-width: 640px)");
 const modalOpen = ref(false);
 const editingId = ref<number | null>(null);
 const submitting = ref(false);
+const generating = ref(false);
+const aiDescription = ref(false);
 const errorMessage = ref("");
 
 const form = reactive({
   name: "",
   description: "" as string | null,
+  category: "" as string,
   base_price: 0,
   time_required: 0,
+  is_active: true,
 });
 
 const descriptionStr = computed<string>({
   get: () => form.description ?? "",
-  set: (v: string) => {
-    form.description = v;
-  },
+  set: (v: string) => { form.description = v; },
 });
 
 const columns: ColumnDef<AdminService>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Service",
     enableSorting: true,
-    meta: { label: "Name", cellClass: "font-medium" },
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-    enableSorting: false,
-    meta: { label: "Description", cellClass: "text-muted-foreground max-w-md" },
-    cell: ({ row }) => row.original.description ?? "—",
+    meta: { label: "Service" },
+    cell: ({ row }) => {
+      const s = row.original;
+      return h("div", { class: "space-y-0.5" }, [
+        h("div", { class: "font-medium" }, s.name),
+        s.category ? h("div", { class: "text-xs text-muted-foreground" }, s.category) : null,
+      ]);
+    },
   },
   {
     accessorKey: "base_price",
-    header: "Base price",
+    header: "Price",
     enableSorting: true,
-    meta: { label: "Base price", nowrap: true, align: "right" },
+    meta: { label: "Price", nowrap: true, align: "right", mono: true },
     cell: ({ row }) => `₹${row.original.base_price}`,
   },
   {
     accessorKey: "time_required",
-    header: "Time required",
+    header: "Duration",
     enableSorting: true,
-    meta: { label: "Time", nowrap: true, align: "right" },
+    meta: { label: "Duration", nowrap: true, align: "right", mono: true },
     cell: ({ row }) => `${row.original.time_required} min`,
+  },
+  {
+    accessorKey: "is_active",
+    header: "Status",
+    enableSorting: true,
+    meta: { label: "Status", nowrap: true },
+    cell: ({ row }) => h(StatusBadge, { status: row.original.is_active ? "active" : "inactive" }),
   },
   {
     id: "actions",
@@ -170,45 +230,10 @@ const columns: ColumnDef<AdminService>[] = [
     meta: { align: "right" },
     cell: ({ row }) => {
       const s = row.original;
-      return h(DropdownMenu, null, {
-        default: () => [
-          h(
-            DropdownMenuTrigger,
-            { asChild: true },
-            {
-              default: () =>
-                h(
-                  Button,
-                  {
-                    variant: "ghost",
-                    size: "icon",
-                    "aria-label": "Open menu",
-                  },
-                  { default: () => h(MoreVertical, { class: "size-4" }) },
-                ),
-            },
-          ),
-          h(DropdownMenuContent, { align: "end" }, {
-            default: () => [
-              h(
-                DropdownMenuItem,
-                { onClick: () => openEdit(s) },
-                {
-                  default: () => [h(Edit2, { class: "mr-2 size-4" }), "Edit"],
-                },
-              ),
-              h(
-                DropdownMenuItem,
-                {
-                  variant: "destructive",
-                  onClick: () => emit("delete", s.id),
-                },
-                {
-                  default: () => [h(Trash2, { class: "mr-2 size-4" }), "Delete"],
-                },
-              ),
-            ],
-          }),
+      return h(RowActions, {
+        actions: [
+          { label: "Edit", icon: Edit2, onClick: () => openEdit(s) },
+          { label: "Delete", icon: Trash2, variant: "destructive", onClick: () => emit("delete", s.id) },
         ],
       });
     },
@@ -217,12 +242,8 @@ const columns: ColumnDef<AdminService>[] = [
 
 function openCreate() {
   editingId.value = null;
-  Object.assign(form, {
-    name: "",
-    description: "",
-    base_price: 0,
-    time_required: 0,
-  });
+  Object.assign(form, { name: "", description: "", category: "", base_price: 0, time_required: 0, is_active: true });
+  aiDescription.value = false;
   errorMessage.value = "";
   modalOpen.value = true;
 }
@@ -232,9 +253,12 @@ function openEdit(service: AdminService) {
   Object.assign(form, {
     name: service.name,
     description: service.description ?? "",
+    category: service.category ?? "",
     base_price: service.base_price,
     time_required: service.time_required,
+    is_active: service.is_active,
   });
+  aiDescription.value = false;
   errorMessage.value = "";
   modalOpen.value = true;
 }
@@ -243,25 +267,50 @@ function closeModal() {
   modalOpen.value = false;
 }
 
+async function onGenerate() {
+  if (!form.name || generating.value) return;
+  generating.value = true;
+  aiDescription.value = true;
+  form.description = "";
+  const stream = generateServiceDescription(form.name, form.category || "General");
+  const reader = stream.getReader();
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if ((value as AgentEvent).type === "text") form.description = (form.description ?? "") + (value as { type: "text"; delta: string }).delta;
+    }
+  } finally {
+    generating.value = false;
+  }
+}
+
 async function submitService() {
   if (submitting.value) return;
   if (form.base_price <= 0 || form.time_required <= 0) {
-    errorMessage.value = "Base price and time required must be greater than 0.";
+    errorMessage.value = "Price and duration must be greater than 0.";
     return;
   }
   submitting.value = true;
   errorMessage.value = "";
   try {
+    const payload = {
+      name: form.name,
+      description: form.description || null,
+      category: form.category || null,
+      base_price: form.base_price,
+      time_required: form.time_required,
+      ...(editingId.value !== null && { is_active: form.is_active }),
+    };
     if (editingId.value === null) {
-      await api.post("/api/services", form);
+      await api.post("/api/services", payload);
     } else {
-      await api.put(`/api/services/${editingId.value}`, form);
+      await api.put(`/api/services/${editingId.value}`, payload);
     }
     emit("changed");
     closeModal();
   } catch (err) {
-    errorMessage.value =
-      err instanceof ApiError ? err.detail : "Failed to submit service.";
+    errorMessage.value = err instanceof ApiError ? err.detail : "Failed to save service.";
   } finally {
     submitting.value = false;
   }

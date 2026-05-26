@@ -912,6 +912,25 @@ const CATEGORY_KEYWORDS: Record<string, RegExp> = {
   Gardening: /\b(garden|lawn|hedge|plant|tree|mow|trim)\b/,
 };
 
+/**
+ * Streams a one-sentence service description for an admin creating/editing a service.
+ * Demo: returns a scripted string. Real: one-shot agent call with no history.
+ */
+export function generateServiceDescription(
+  name: string,
+  category: string,
+): ReadableStream<AgentEvent> {
+  if (DEMO) {
+    const text = `Professional ${category.toLowerCase()} service covering ${name}, handled by vetted technicians with quality guaranteed.`;
+    return streamScript(tokenize(text));
+  }
+  return runAgentSSE(
+    `Write a single concise sentence describing the home service "${name}" (category: ${category}). Output only the sentence, no preamble.`,
+    [],
+    "",
+  );
+}
+
 /** Maps free-form text to a structured booking draft (category, urgency, schedule). */
 export function parseRequestIntent(text: string): RequestIntent {
   const lower = text.toLowerCase();

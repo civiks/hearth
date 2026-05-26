@@ -1,17 +1,24 @@
 <template>
-  <Dialog :open="true" @update:open="(v) => !v && $emit('close')">
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Edit service request</DialogTitle>
-        <DialogDescription>{{ request.service_name }}</DialogDescription>
-      </DialogHeader>
-      <form class="space-y-4" @submit.prevent="onSubmit">
+  <component
+    :is="isDesktop ? Sheet : Drawer"
+    :open="true"
+    v-bind="isDesktop ? {} : { shouldScaleBackground: true }"
+    @update:open="(v: boolean) => !v && $emit('close')"
+  >
+    <component :is="isDesktop ? SheetContent : DrawerContent">
+      <DrawerHeader>
+        <DrawerTitle>Edit service request</DrawerTitle>
+        <DrawerDescription>{{ request.service_name }}</DrawerDescription>
+      </DrawerHeader>
+
+      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4">
         <div class="space-y-2">
           <Label for="edit_scheduled_time">Scheduled time</Label>
           <Input
             id="edit_scheduled_time"
             v-model="form.scheduled_time"
             type="datetime-local"
+            :min="nowLocal()"
             required
           />
         </div>
@@ -24,7 +31,10 @@
           <Input id="edit_pincode" v-model="form.pincode" required />
         </div>
         <div class="space-y-2">
-          <Label for="edit_remarks">Remarks</Label>
+          <Label for="edit_remarks">
+            Remarks
+            <span class="font-normal text-muted-foreground">(optional)</span>
+          </Label>
           <Textarea id="edit_remarks" v-model="form.remarks" />
         </div>
 
@@ -32,34 +42,29 @@
           <AlertCircle class="size-4" />
           <AlertDescription>{{ errorMessage }}</AlertDescription>
         </Alert>
+      </div>
 
-        <DialogFooter>
-          <Button type="button" variant="secondary" @click="$emit('close')">Cancel</Button>
-          <Button type="submit" :disabled="submitting">
-            {{ submitting ? "Updating…" : "Update" }}
-          </Button>
-        </DialogFooter>
-      </form>
-    </DialogContent>
-  </Dialog>
+      <DrawerFooter>
+        <Button type="button" variant="outline" @click="$emit('close')">Cancel</Button>
+        <Button type="button" class="flex-1" :disabled="submitting" @click="onSubmit">
+          {{ submitting ? "Updating…" : "Update" }}
+        </Button>
+      </DrawerFooter>
+    </component>
+  </component>
 </template>
 
 <script lang="ts" setup>
 import { AlertCircle } from "lucide-vue-next";
 import { reactive, ref } from "vue";
+import { useMediaQuery } from "@vueuse/core";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
 import type { CustomerRequest } from "./RequestCard.vue";
@@ -67,6 +72,7 @@ import type { CustomerRequest } from "./RequestCard.vue";
 const props = defineProps<{ request: CustomerRequest }>();
 const emit = defineEmits<{ close: []; updated: [] }>();
 
+const isDesktop = useMediaQuery("(min-width: 640px)");
 const submitting = ref(false);
 const errorMessage = ref("");
 
@@ -80,6 +86,11 @@ const form = reactive({
   pincode: props.request.pincode ?? "",
   remarks: props.request.remarks ?? "",
 });
+
+function nowLocal(): string {
+  const now = new Date();
+  return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+}
 
 async function onSubmit() {
   submitting.value = true;

@@ -1,57 +1,55 @@
 <template>
-  <Dialog :open="true" @update:open="(v) => !v && $emit('close')">
-    <DialogContent class="sm:max-w-lg">
-      <DialogHeader>
-        <DialogTitle class="flex items-center gap-2">
+  <component
+    :is="isDesktop ? Sheet : Drawer"
+    :open="true"
+    v-bind="isDesktop ? {} : { shouldScaleBackground: true }"
+    @update:open="(v: boolean) => !v && $emit('close')"
+  >
+    <component :is="isDesktop ? SheetContent : DrawerContent">
+      <DrawerHeader>
+        <DrawerTitle class="flex items-center gap-2">
           <AiMark class="size-4" />
           Tell us what you need
-        </DialogTitle>
-        <DialogDescription>
-          Describe it — we'll match a service and pre-fill the booking.
-        </DialogDescription>
-      </DialogHeader>
+        </DrawerTitle>
+        <DrawerDescription>
+          <template v-if="stage === 'compose'">Describe it — we'll match a service and pre-fill the booking.</template>
+          <template v-else-if="stage === 'review'">Reviewing your request…</template>
+          <template v-else>Fill in the booking details.</template>
+        </DrawerDescription>
+      </DrawerHeader>
 
-      <!-- Step 1: free-form prompt -->
-      <form
-        v-if="stage === 'compose'"
-        class="space-y-3"
-        @submit.prevent="onParse"
-      >
-        <Textarea
-          v-model="prompt"
-          rows="3"
-          autofocus
-          placeholder="e.g. my kitchen sink is leaking, urgent — tomorrow morning if possible"
-        />
-        <div class="flex flex-wrap gap-1.5">
-          <button
-            v-for="ex in EXAMPLES"
-            :key="ex"
-            type="button"
-            class="text-xs bg-muted hover:bg-muted/70 px-2 py-1 transition"
-            @click="prompt = ex"
-          >
-            {{ ex }}
-          </button>
-        </div>
-      </form>
-
-      <!-- Step 2: streaming narrative + parsed form -->
-      <div v-else class="space-y-4">
-        <AiSurface class="px-3 py-2 text-sm whitespace-pre-wrap">
-          <span
-            v-if="narrative || streaming"
-            v-html="renderMarkdownish(narrative)"
+      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4">
+        <form v-if="stage === 'compose'" class="space-y-3" @submit.prevent="onParse">
+          <Textarea
+            v-model="prompt"
+            rows="3"
+            autofocus
+            placeholder="e.g. my kitchen sink is leaking, urgent — tomorrow morning if possible"
           />
-          <span
-            v-if="streaming"
-            class="inline-block size-2 bg-muted-foreground/60 align-middle ml-1 animate-pulse"
-            aria-hidden="true"
-          />
-        </AiSurface>
+          <div class="flex flex-wrap gap-1.5">
+            <button
+              v-for="ex in EXAMPLES"
+              :key="ex"
+              type="button"
+              class="text-xs bg-muted hover:bg-muted/70 px-2 py-1 rounded transition"
+              @click="prompt = ex"
+            >
+              {{ ex }}
+            </button>
+          </div>
+        </form>
 
-        <div v-if="matchedService && !streaming" class="space-y-3 text-sm">
-          <AiSurface class="p-3 space-y-1.5">
+        <div v-else-if="stage === 'review'" class="space-y-4">
+          <AiSurface class="px-3 py-2 text-sm whitespace-pre-wrap">
+            <span v-if="narrative || streaming" v-html="renderMarkdownish(narrative)" />
+            <span
+              v-if="streaming"
+              class="inline-block size-2 bg-muted-foreground/60 align-middle ml-1 animate-pulse"
+              aria-hidden="true"
+            />
+          </AiSurface>
+
+          <AiSurface v-if="matchedService && !streaming" class="p-3 space-y-1.5 text-sm">
             <div class="flex items-center justify-between gap-2">
               <div class="flex items-center gap-2 min-w-0">
                 <AiMark class="size-3" />
@@ -65,17 +63,13 @@
               ₹{{ matchedService.base_price }} · ~{{ matchedService.time_required }} min · matched from your description
             </div>
           </AiSurface>
+        </div>
 
+        <div v-else class="space-y-4 text-sm">
           <div class="space-y-2">
             <Label for="nl-time">Preferred time</Label>
-            <Input
-              id="nl-time"
-              v-model="form.scheduled_time"
-              type="datetime-local"
-              required
-            />
+            <Input id="nl-time" v-model="form.scheduled_time" type="datetime-local" :min="nowLocal()" required />
           </div>
-
           <div class="space-y-2">
             <Label>Service location</Label>
             <div class="flex gap-2">
@@ -89,16 +83,13 @@
               />
             </div>
           </div>
-
           <div class="space-y-2">
-            <Label for="nl-remarks">Notes for the professional</Label>
-            <Textarea
-              id="nl-remarks"
-              v-model="form.remarks"
-              rows="2"
-            />
+            <Label for="nl-remarks">
+              Notes
+              <span class="font-normal text-muted-foreground">(optional)</span>
+            </Label>
+            <Textarea id="nl-remarks" v-model="form.remarks" rows="2" />
           </div>
-
           <Alert v-if="errorMessage" variant="destructive">
             <AlertCircle class="size-4" />
             <AlertDescription>{{ errorMessage }}</AlertDescription>
@@ -106,63 +97,47 @@
         </div>
       </div>
 
-      <DialogFooter>
-        <Button
-          v-if="stage === 'compose'"
-          type="button"
-          variant="secondary"
-          @click="$emit('close')"
-        >
-          Cancel
-        </Button>
-        <Button
-          v-if="stage === 'compose'"
-          type="button"
-          :disabled="!prompt.trim()"
-          @click="onParse"
-        >
-          Parse
-        </Button>
-        <Button
-          v-if="stage === 'review'"
-          type="button"
-          variant="ghost"
-          @click="restart"
-        >
-          Start over
-        </Button>
-        <Button
-          v-if="stage === 'review'"
-          type="button"
-          :disabled="streaming || !matchedService || submitting"
-          @click="onSubmit"
-        >
-          {{ submitting ? "Booking…" : "Confirm booking" }}
-        </Button>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
+      <DrawerFooter>
+        <template v-if="stage === 'compose'">
+          <Button type="button" variant="outline" @click="$emit('close')">Cancel</Button>
+          <Button type="button" class="flex-1" :disabled="!prompt.trim()" @click="onParse">
+            Parse
+          </Button>
+        </template>
+        <template v-else-if="stage === 'review'">
+          <Button type="button" variant="outline" @click="restart">Start over</Button>
+          <Button type="button" class="flex-1" :disabled="streaming || !matchedService" @click="stage = 'form'">
+            Looks good
+            <ChevronRight class="size-3.5 ml-1" />
+          </Button>
+        </template>
+        <template v-else>
+          <Button type="button" variant="primary-soft" size="icon" class="rounded-full" @click="stage = 'review'">
+            <ArrowLeft class="size-4" />
+          </Button>
+          <Button type="button" class="flex-1" :disabled="submitting" @click="onSubmit">
+            {{ submitting ? "Booking…" : "Confirm booking" }}
+          </Button>
+        </template>
+      </DrawerFooter>
+    </component>
+  </component>
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle } from "lucide-vue-next";
+import { AlertCircle, ArrowLeft, ChevronRight } from "lucide-vue-next";
 import { reactive, ref } from "vue";
+import { useMediaQuery } from "@vueuse/core";
 
 import AiMark from "@/components/AiMark.vue";
 import AiSurface from "@/components/AiSurface.vue";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
 import { parseRequestIntent, streamScript, tokenize, type AgentEvent } from "@/lib/genai";
@@ -186,8 +161,9 @@ const EXAMPLES = [
 ];
 
 const auth = useAuthStore();
+const isDesktop = useMediaQuery("(min-width: 640px)");
 
-const stage = ref<"compose" | "review">("compose");
+const stage = ref<"compose" | "review" | "form">("compose");
 const prompt = ref("");
 const narrative = ref("");
 const streaming = ref(false);
@@ -202,6 +178,11 @@ const form = reactive({
   remarks: "",
 });
 
+function nowLocal(): string {
+  const now = new Date();
+  return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+}
+
 async function onParse() {
   if (!prompt.value.trim()) return;
   stage.value = "review";
@@ -213,8 +194,6 @@ async function onParse() {
   form.scheduled_time = intent.scheduledTime;
   form.remarks = intent.summary;
 
-  // Look up services up front so we can compose the scripted narrative with
-  // real data (mirrors how the chatbot agent uses tool results).
   let services: ServiceLite[] = [];
   try {
     services = await api.get<ServiceLite[]>("/api/services");
@@ -237,13 +216,9 @@ async function onParse() {
     ...tokenize(` · ${intent.scheduledLabel}.`),
   ];
   if (chosen) {
-    script.push(
-      ...tokenize(`\n\nClosest service: **${chosen.name}** (₹${chosen.base_price}).`),
-    );
+    script.push(...tokenize(`\n\nClosest service: **${chosen.name}** (₹${chosen.base_price}).`));
   } else {
-    script.push(
-      ...tokenize("\n\nNo exact match — pick a category from the browse page."),
-    );
+    script.push(...tokenize("\n\nNo exact match — pick a category from the browse page."));
   }
   script.push(...tokenize("\n\nReview the details below and confirm."));
 

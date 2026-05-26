@@ -25,20 +25,19 @@
 
         <!-- Step 1: Pick a professional -->
         <div v-if="step === 'pro'" class="space-y-3">
-          <button
+          <AiSurface
+            as="button"
             type="button"
-            class="w-full text-left rounded-lg p-3 flex items-center gap-3 card-lift border"
-            :class="selectedProId === null ? 'border-primary/50 bg-primary/5' : 'border-border hover:bg-muted/50'"
+            class="w-full text-left p-3 flex items-center gap-3 transition"
+            :class="selectedProId === null ? 'bg-primary/5' : 'hover:bg-muted/50'"
             @click="selectedProId = null"
           >
-            <span class="size-12 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
-              <AiMark class="size-5" />
-            </span>
+            <AiMark class="size-12 shrink-0" />
             <div class="flex-1">
               <div class="text-sm font-medium">Any available professional</div>
               <p class="text-xs text-muted-foreground">We'll assign the best-rated pro near you.</p>
             </div>
-          </button>
+          </AiSurface>
           <ProfessionalPickCard
             v-for="pro in professionals"
             :key="pro.id"
@@ -77,7 +76,7 @@
           <!-- When -->
           <div class="space-y-2">
             <Label for="scheduled_time" class="text-sm font-semibold">When</Label>
-            <Input id="scheduled_time" v-model="form.scheduled_time" type="datetime-local" required />
+            <Input id="scheduled_time" v-model="form.scheduled_time" type="datetime-local" :min="nowLocal()" required />
           </div>
 
           <!-- Where -->
@@ -111,7 +110,7 @@
       </div>
 
       <DrawerFooter>
-        <Button v-if="step === 'schedule'" type="button" variant="outline" size="icon" @click="step = 'pro'">
+        <Button v-if="step === 'schedule'" type="button" variant="primary-soft" size="icon" class="rounded-full" @click="step = 'pro'">
           <ArrowLeft class="size-4" />
         </Button>
         <Button v-if="step === 'pro'" type="button" class="flex-1" @click="step = 'schedule'">
@@ -138,6 +137,7 @@ import { computed, reactive, ref } from "vue";
 import { useMediaQuery } from "@vueuse/core";
 
 import AiMark from "@/components/AiMark.vue";
+import AiSurface from "@/components/AiSurface.vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
@@ -181,6 +181,11 @@ const selectedProName = computed(() =>
 
 const submitting = ref(false);
 const errorMessage = ref("");
+
+function nowLocal(): string {
+  const now = new Date();
+  return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+}
 
 function defaultScheduledTime(): string {
   const t = new Date();
