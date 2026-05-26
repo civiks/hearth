@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'reka-ui'
+import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
+import { reactiveOmit } from '@vueuse/core'
 import { Check } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 
@@ -14,13 +15,16 @@ const props = defineProps<{
   name?: string
 }>()
 
-const emits = defineEmits<{ 'update:checked': [value: boolean] }>()
-const forwarded = useForwardPropsEmits(props, emits)
+const emits = defineEmits<{ 'update:checked': [value: boolean | 'indeterminate'] }>()
+
+const delegatedProps = reactiveOmit(props, 'class', 'checked', 'defaultChecked')
 </script>
 
 <template>
   <CheckboxRoot
-    v-bind="forwarded"
+    v-bind="delegatedProps"
+    :model-value="checked"
+    :default-value="defaultChecked"
     :class="cn(
       'peer size-3.5 shrink-0 rounded-sm border border-input bg-background ring-offset-background transition-colors',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2',
@@ -28,6 +32,7 @@ const forwarded = useForwardPropsEmits(props, emits)
       'data-[state=checked]:bg-primary data-[state=checked]:border-primary data-[state=checked]:text-primary-foreground',
       props.class
     )"
+    @update:model-value="emits('update:checked', $event)"
   >
     <CheckboxIndicator class="flex items-center justify-center text-current">
       <Check class="size-3" :stroke-width="3" />
