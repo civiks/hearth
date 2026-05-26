@@ -1,5 +1,5 @@
 <template>
-  <Drawer :open="true" @update:open="(v) => !v && $emit('close')">
+  <Drawer :open="true" :should-scale-background="true" @update:open="(v) => !v && $emit('close')">
     <DrawerContent>
       <DrawerHeader>
         <DrawerTitle>Book {{ service.name }}</DrawerTitle>
@@ -138,14 +138,15 @@
           v-if="step === 'schedule'"
           type="button"
           variant="outline"
+          size="icon"
           @click="step = 'pro'"
         >
-          Back
+          <ArrowLeft class="size-4" />
         </Button>
-        <Button type="button" variant="secondary" @click="$emit('close')">Cancel</Button>
         <Button
           v-if="step === 'pro'"
           type="button"
+          class="flex-1"
           @click="step = 'schedule'"
         >
           Continue
@@ -154,6 +155,7 @@
         <Button
           v-else
           type="button"
+          class="flex-1"
           :disabled="submitting || auth.is_blocked"
           @click="onSubmit"
         >
@@ -167,6 +169,7 @@
 <script lang="ts" setup>
 import {
   AlertCircle,
+  ArrowLeft,
   ChevronRight,
   Clock,
   IndianRupee,

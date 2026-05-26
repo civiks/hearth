@@ -5,8 +5,8 @@
 
 /* Tighten vaul-vue drawer animation (default is 0.5s) */
 [data-vaul-drawer], [data-vaul-overlay] {
-  animation-duration: 0.28s !important;
-  transition-duration: 0.28s !important;
+  animation-duration: 0.2s!important;
+  transition-duration: 0.2s !important;
 }
 
 /*
@@ -362,6 +362,16 @@
   --sidebar-accent-foreground: 0 0% 95.7%;
   --sidebar-border: 0 0% 30%;
   --sidebar-ring: 219 100% 64%;
+
+  /* Toast dark variants — deep tinted bg, mid-tone text */
+  --toast-success-bg: 145 60% 9%;
+  --toast-success-text: 137 49% 60%;
+  --toast-error-bg: 354 60% 10%;
+  --toast-error-text: 354 94% 70%;
+  --toast-warning-bg: 47 60% 10%;
+  --toast-warning-text: 47 89% 65%;
+  --toast-info-bg: 219 60% 11%;
+  --toast-info-text: 219 100% 72%;
 }
 
 @theme inline {
@@ -471,26 +481,10 @@
    * - No close button
    */
   [data-sonner-toast] {
-    border: 0 !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
     padding: 14px 16px !important;
     gap: 12px !important;
     font-family: var(--font-sans);
-  }
-  [data-rich-colors="true"][data-sonner-toast][data-type] {
-    border-left: 3px solid var(--bar-color, currentColor) !important;
-  }
-  [data-rich-colors="true"][data-sonner-toast][data-type="success"] {
-    --bar-color: hsl(var(--success-strong));
-  }
-  [data-rich-colors="true"][data-sonner-toast][data-type="error"] {
-    --bar-color: hsl(var(--destructive));
-  }
-  [data-rich-colors="true"][data-sonner-toast][data-type="warning"] {
-    --bar-color: hsl(var(--warning-strong));
-  }
-  [data-rich-colors="true"][data-sonner-toast][data-type="info"] {
-    --bar-color: hsl(var(--info-strong));
   }
   [data-sonner-toast] [data-content] {
     display: flex;
@@ -524,7 +518,7 @@
 @layer base {
   ::view-transition-old(root),
   ::view-transition-new(root) {
-    animation-duration: 260ms;
+    animation-duration: 160ms;
     animation-timing-function: cubic-bezier(0.2, 0, 0.38, 0.9);
   }
   ::view-transition-old(root) {
@@ -536,13 +530,13 @@
   @keyframes vt-fade-out {
     to {
       opacity: 0;
-      transform: translateY(-6px);
+      transform: translateY(-3px);
     }
   }
   @keyframes vt-fade-in {
     from {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(4px);
     }
   }
 
@@ -615,16 +609,16 @@
   .page-enter-active,
   .page-leave-active {
     transition:
-      opacity 120ms cubic-bezier(0.2, 0, 0.38, 0.9),
-      transform 120ms cubic-bezier(0.2, 0, 0.38, 0.9);
+      opacity 80ms cubic-bezier(0.2, 0, 0.38, 0.9),
+      transform 80ms cubic-bezier(0.2, 0, 0.38, 0.9);
   }
   .page-enter-from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(3px);
   }
   .page-leave-to {
     opacity: 0;
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
 
   @media (prefers-reduced-motion: reduce) {
