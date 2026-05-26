@@ -272,7 +272,10 @@
   <Teleport to="body">
     <nav
       v-if="!isDesktop"
-      class="vt-tabbar fixed bottom-0 left-0 right-0 z-40 flex border-t bg-card/95 backdrop-blur-md pb-safe"
+      :class="[
+        'vt-tabbar fixed bottom-0 left-0 right-0 z-40 flex border-t bg-card/95 backdrop-blur-md pb-safe',
+        auth.role === 'admin' ? 'max-[500px]:overflow-x-auto max-[500px]:scrollbar-hide max-[500px]:scroll-x-mask' : '',
+      ]"
       role="tablist"
     >
       <RouterLink
@@ -280,25 +283,31 @@
         :key="tab.to"
         :to="tab.to"
         role="tab"
-        class="flex flex-1 flex-col items-center justify-center gap-1 py-3 transition-colors"
-        :class="isTabActive(tab.to) ? 'text-primary' : 'text-muted-foreground'"
+        :class="[
+          'flex flex-col items-center justify-center gap-1 py-3 transition-colors',
+          auth.role === 'admin' ? 'flex-1 max-[500px]:flex-none max-[500px]:px-4' : 'flex-1',
+          isTabActive(tab.to) ? 'text-primary' : 'text-muted-foreground',
+        ]"
       >
         <component
           :is="tab.icon"
           class="size-5 transition-none"
           :stroke-width="isTabActive(tab.to) ? 2.5 : 1.75"
         />
-        <span :class="auth.role === 'admin' ? 'max-[500px]:hidden text-xs font-medium leading-none' : 'text-xs font-medium leading-none'">{{ tab.label }}</span>
+        <span class="text-xs font-medium leading-none">{{ tab.label }}</span>
       </RouterLink>
       <button
         type="button"
         role="tab"
-        class="flex flex-1 flex-col items-center justify-center gap-1 py-3 transition-colors"
-        :class="chat.open ? 'text-primary' : 'text-muted-foreground'"
+        :class="[
+          'flex flex-col items-center justify-center gap-1 py-3 transition-colors',
+          auth.role === 'admin' ? 'flex-1 max-[500px]:flex-none max-[500px]:px-4' : 'flex-1',
+          chat.open ? 'text-primary' : 'text-muted-foreground',
+        ]"
         @click="chat.toggle()"
       >
         <AiMark class="size-5" />
-        <span :class="auth.role === 'admin' ? 'max-[500px]:hidden text-xs font-medium leading-none' : 'text-xs font-medium leading-none'">Ask</span>
+        <span class="text-xs font-medium leading-none">Ask</span>
       </button>
     </nav>
   </Teleport>
