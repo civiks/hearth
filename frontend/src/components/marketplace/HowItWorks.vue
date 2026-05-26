@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { CalendarCheck, MousePointerClick, Sparkles } from "lucide-vue-next";
+import { BadgeCheck, CalendarCheck, MousePointerClick } from "lucide-vue-next";
 
 const steps = [
   {
@@ -39,7 +39,7 @@ const steps = [
     body: "Choose a pro, lock in your time slot, and add any specific notes for the job.",
   },
   {
-    icon: Sparkles,
+    icon: BadgeCheck,
     iconBg: "bg-emerald-500",
     title: "Sit back",
     body: "Your professional arrives on time with the right tools. Pay after the job is done.",

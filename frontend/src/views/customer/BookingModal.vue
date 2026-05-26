@@ -32,7 +32,7 @@
             @click="selectedProId = null"
           >
             <span class="size-12 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
-              <Sparkles class="size-5 text-primary" />
+              <AiMark class="size-5" />
             </span>
             <div class="flex-1">
               <div class="text-sm font-medium">Any available professional</div>
@@ -132,12 +132,12 @@ import {
   ArrowLeft,
   ChevronRight,
   Clock,
-  Sparkles,
   UserCheck,
 } from "lucide-vue-next";
 import { computed, reactive, ref } from "vue";
 import { useMediaQuery } from "@vueuse/core";
 
+import AiMark from "@/components/AiMark.vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";

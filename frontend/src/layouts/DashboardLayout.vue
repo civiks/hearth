@@ -269,11 +269,9 @@
   <!-- Teleported outside data-vaul-drawer-wrapper so CSS transform doesn't break position:fixed -->
   <Teleport to="body">
     <nav
+      ref="tabbarRef"
       v-if="!isDesktop"
-      :class="[
-        'vt-tabbar fixed bottom-0 left-0 right-0 z-40 flex border-t bg-card/95 backdrop-blur-md pb-safe',
-        auth.role === 'admin' ? 'max-[500px]:overflow-x-auto max-[500px]:scrollbar-hide max-[500px]:scroll-x-mask' : '',
-      ]"
+      class="vt-tabbar fixed bottom-0 left-0 right-0 z-40 flex overflow-x-auto scrollbar-hide border-t border-border bg-card pb-safe"
       role="tablist"
     >
       <RouterLink
@@ -282,41 +280,62 @@
         :to="tab.to"
         role="tab"
         :class="[
-          'flex flex-col items-center justify-center gap-1 py-3 transition-colors',
-          auth.role === 'admin' ? 'flex-1 max-[500px]:flex-none max-[500px]:px-4' : 'flex-1',
-          isTabActive(tab.to) ? 'text-primary' : 'text-muted-foreground',
+          'flex flex-1 min-w-[72px] flex-col items-center justify-center gap-1 py-3 transition-colors',
+          isTabActive(tab.to) ? 'text-foreground' : 'text-muted-foreground',
         ]"
       >
-        <component
-          :is="tab.icon"
-          class="size-5 transition-none"
-          :stroke-width="isTabActive(tab.to) ? 2.5 : 1.75"
-        />
-        <span class="text-xs font-medium leading-none">{{ tab.label }}</span>
+        <span
+          :class="[
+            'flex items-center justify-center rounded-full px-4 py-1 transition-colors',
+            isTabActive(tab.to) ? 'bg-primary/10 dark:bg-primary/30' : '',
+          ]"
+        >
+          <component :is="tab.icon" class="size-5 transition-none" :stroke-width="2" />
+        </span>
+        <span :class="['text-xs leading-none', isTabActive(tab.to) ? 'font-semibold' : 'font-medium']">{{ tab.label }}</span>
       </RouterLink>
       <button
         type="button"
         role="tab"
         :class="[
-          'flex flex-col items-center justify-center gap-1 py-3 transition-colors',
-          auth.role === 'admin' ? 'flex-1 max-[500px]:flex-none max-[500px]:px-4' : 'flex-1',
-          chat.open ? 'text-primary' : 'text-muted-foreground',
+          'flex flex-1 min-w-[72px] flex-col items-center justify-center gap-1 py-3 transition-colors',
+          chat.open ? 'text-foreground' : 'text-muted-foreground',
         ]"
         @click="chat.toggle()"
       >
-        <AiMark class="size-5" />
-        <span class="text-xs font-medium leading-none">Ask</span>
+        <span
+          :class="[
+            'flex items-center justify-center rounded-full px-4 py-1 transition-colors',
+            chat.open ? 'bg-primary/10' : '',
+          ]"
+        >
+          <AiMark class="size-5" />
+        </span>
+        <span :class="['text-xs leading-none', chat.open ? 'font-semibold' : 'font-medium']">Ask</span>
       </button>
+
+      <!-- Scroll-right arrow: shown when there's hidden content to the right -->
+      <div v-if="canScrollRight" class="pointer-events-none absolute inset-y-0 right-0 flex items-center">
+        <div class="absolute inset-y-0 right-0 w-14 bg-gradient-to-l from-card to-transparent" />
+        <button
+          type="button"
+          class="relative pointer-events-auto z-10 mr-2 flex size-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm"
+          @click="scrollTabbar"
+        >
+          <ChevronRight class="size-4" />
+        </button>
+      </div>
     </nav>
   </Teleport>
 </template>
 
 <script lang="ts" setup>
-import { useMediaQuery } from "@vueuse/core";
+import { useElementSize, useMediaQuery, useScroll } from "@vueuse/core";
 import {
   Briefcase,
   Check,
   ChevronDown,
+  ChevronRight,
   ClipboardList,
   Hammer,
   LayoutDashboard,
@@ -384,6 +403,18 @@ const { loginAs, resetDemoData } = useDemoLogin();
 
 const isDesktop = useMediaQuery("(min-width: 640px)");
 const menuOpen = ref(false);
+
+const tabbarRef = ref<HTMLElement | null>(null);
+const { width: tabbarWidth } = useElementSize(tabbarRef);
+const { arrivedState } = useScroll(tabbarRef);
+const canScrollRight = computed(() => {
+  const el = tabbarRef.value;
+  if (!el || tabbarWidth.value === 0) return false;
+  return el.scrollWidth > el.clientWidth && !arrivedState.right;
+});
+function scrollTabbar() {
+  tabbarRef.value?.scrollBy({ left: 120, behavior: "smooth" });
+}
 
 const TAB_MAP = {
   user: [
