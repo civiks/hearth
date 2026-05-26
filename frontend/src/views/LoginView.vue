@@ -56,8 +56,8 @@
             :aria-pressed="showPassword"
             @click="showPassword = !showPassword"
           >
-            <EyeOff v-if="showPassword" class="size-4" />
-            <Eye v-else class="size-4" />
+            <EyeOff v-if="showPassword" class="size-3.5" />
+            <Eye v-else class="size-3.5" />
           </button>
         </div>
       </div>

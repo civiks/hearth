@@ -8,7 +8,7 @@
     </CardHeader>
     <CardContent>
       <Button :disabled="busy" @click="run">
-        <Download class="mr-2 size-4" />
+        <Download class="mr-2 size-3.5" />
         {{ busy ? "Generating export…" : "Export service requests" }}
       </Button>
     </CardContent>

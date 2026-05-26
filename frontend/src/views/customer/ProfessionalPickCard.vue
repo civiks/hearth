@@ -13,7 +13,7 @@
       />
       <span
         v-if="selected"
-        class="absolute -bottom-1 -right-1 inline-flex size-4 items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-card"
+        class="absolute -bottom-1 -right-1 inline-flex size-3.5 items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-card"
       >
         <Check class="size-3" />
       </span>

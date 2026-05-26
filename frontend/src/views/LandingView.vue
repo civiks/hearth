@@ -50,7 +50,7 @@
                 <DropdownMenuTrigger as-child>
                   <Button size="lg">
                     Try the demo
-                    <ChevronDown class="ml-2 size-4" />
+                    <ChevronDown class="ml-2 size-3.5" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" class="w-64">
@@ -74,12 +74,12 @@
                     :class="auth.role === r.value ? 'bg-muted font-medium' : ''"
                     @click="loginAs(r.value)"
                   >
-                    <component :is="r.icon" class="mr-2 size-4" />
+                    <component :is="r.icon" class="mr-2 size-3.5" />
                     {{ r.label }}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem variant="destructive" @click="resetDemoData">
-                    <RotateCcw class="mr-2 size-4" />
+                    <RotateCcw class="mr-2 size-3.5" />
                     Reset demo data
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -87,7 +87,7 @@
               <template v-else>
                 <Button size="lg" @click="$router.push('/register')">
                   Get Started
-                  <ArrowRight class="ml-2 size-4" />
+                  <ArrowRight class="ml-2 size-3.5" />
                 </Button>
                 <Button
                   variant="outline"
@@ -101,15 +101,15 @@
             </div>
             <div class="flex flex-wrap items-center gap-x-5 gap-y-2 mt-8 sm:mt-10 text-xs text-surface-inverse-foreground/70">
               <div class="flex items-center gap-2">
-                <Star class="size-4 fill-amber-400 text-amber-400" />
+                <Star class="size-3.5 fill-amber-400 text-amber-400" />
                 <span>4.7 average rating</span>
               </div>
               <div class="flex items-center gap-2">
-                <ShieldCheck class="size-4 text-surface-inverse-foreground/90" />
+                <ShieldCheck class="size-3.5 text-surface-inverse-foreground/90" />
                 <span>Verified professionals</span>
               </div>
               <div class="hidden sm:flex items-center gap-2">
-                <Clock class="size-4 text-surface-inverse-foreground/90" />
+                <Clock class="size-3.5 text-surface-inverse-foreground/90" />
                 <span>Same-day service</span>
               </div>
             </div>
@@ -139,7 +139,7 @@
               <DropdownMenuTrigger as-child>
                 <Button size="lg">
                   Try the demo
-                  <ChevronDown class="ml-2 size-4" />
+                  <ChevronDown class="ml-2 size-3.5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" class="w-64">
@@ -163,19 +163,19 @@
                   :class="auth.role === r.value ? 'bg-muted font-medium' : ''"
                   @click="loginAs(r.value)"
                 >
-                  <component :is="r.icon" class="mr-2 size-4" />
+                  <component :is="r.icon" class="mr-2 size-3.5" />
                   {{ r.label }}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive" @click="resetDemoData">
-                  <RotateCcw class="mr-2 size-4" />
+                  <RotateCcw class="mr-2 size-3.5" />
                   Reset demo data
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Button v-else size="lg" @click="$router.push('/register')">
               Get started
-              <ArrowRight class="ml-2 size-4" />
+              <ArrowRight class="ml-2 size-3.5" />
             </Button>
           </div>
         </div>

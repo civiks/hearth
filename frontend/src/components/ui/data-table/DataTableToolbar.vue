@@ -13,7 +13,7 @@
     >
       <div v-if="searchable" class="relative flex-1 min-w-0">
         <Search
-          class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground"
+          class="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground"
           :stroke-width="2"
         />
         <Input

@@ -134,10 +134,10 @@ const columnFilters = ref<ColumnFiltersState>([]);
 const columnVisibility = ref<VisibilityState>({});
 const globalFilter = ref("");
 
+const data = computed(() => props.data);
+
 const table = useVueTable({
-  get data() {
-    return props.data;
-  },
+  data,
   get columns() {
     return props.columns;
   },

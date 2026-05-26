@@ -12,7 +12,7 @@
         ]"
       >
         <Filter
-          class="size-4"
+          class="size-3.5"
           :stroke-width="2"
           :fill="selectedCount > 0 ? 'currentColor' : 'none'"
         />

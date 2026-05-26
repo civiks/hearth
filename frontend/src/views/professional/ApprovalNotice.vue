@@ -1,6 +1,6 @@
 <template>
   <Alert :variant="kind === 'pending' ? 'default' : 'destructive'" class="border-l-4">
-    <component :is="iconFor" class="size-4" />
+    <component :is="iconFor" class="size-3.5" />
     <AlertTitle>{{ config.title }}</AlertTitle>
     <AlertDescription>
       <p class="mb-3">{{ config.lead }}</p>

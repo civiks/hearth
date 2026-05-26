@@ -177,7 +177,7 @@ const columns: ColumnDef<ProRequest>[] = [
             { onClick: () => emit("updateStatus", r.id, "accepted") },
             {
               default: () => [
-                h(CheckCircle, { class: "mr-2 size-4" }),
+                h(CheckCircle, { class: "mr-2 size-3.5" }),
                 "Accept request",
               ],
             },
@@ -190,7 +190,7 @@ const columns: ColumnDef<ProRequest>[] = [
             { onClick: () => emit("updateStatus", r.id, "in_progress") },
             {
               default: () => [
-                h(PlayCircle, { class: "mr-2 size-4" }),
+                h(PlayCircle, { class: "mr-2 size-3.5" }),
                 "Start work",
               ],
             },
@@ -203,7 +203,7 @@ const columns: ColumnDef<ProRequest>[] = [
             { onClick: () => emit("updateStatus", r.id, "completed") },
             {
               default: () => [
-                h(CheckCircle, { class: "mr-2 size-4" }),
+                h(CheckCircle, { class: "mr-2 size-3.5" }),
                 "Mark as complete",
               ],
             },
@@ -227,7 +227,7 @@ const columns: ColumnDef<ProRequest>[] = [
                     size: "icon",
                     "aria-label": "Open menu",
                   },
-                  { default: () => h(MoreVertical, { class: "size-4" }) },
+                  { default: () => h(MoreVertical, { class: "size-3.5" }) },
                 ),
             },
           ),

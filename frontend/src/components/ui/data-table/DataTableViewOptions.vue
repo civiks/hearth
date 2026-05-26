@@ -8,7 +8,7 @@
         title="Toggle columns"
         class="border border-border"
       >
-        <SlidersHorizontal class="size-4" :stroke-width="2" />
+        <SlidersHorizontal class="size-3.5" :stroke-width="2" />
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" class="w-44">

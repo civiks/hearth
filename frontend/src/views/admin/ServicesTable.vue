@@ -103,12 +103,12 @@
           </div>
         </div>
 
-        <div v-if="editingId !== null" class="flex items-center justify-between rounded-lg border p-4">
-          <div class="space-y-0.5">
-            <Label class="text-sm font-medium">Active</Label>
-            <p class="text-xs text-muted-foreground">Visible to customers and available for booking.</p>
+        <div v-if="editingId !== null" class="flex items-center justify-between gap-6 border-t pt-4">
+          <div class="min-w-0">
+            <Label>Active</Label>
+            <p class="text-xs text-muted-foreground mt-0.5">Visible to customers and available for booking.</p>
           </div>
-          <Switch v-model:checked="form.is_active" />
+          <Switch v-model="form.is_active" />
         </div>
 
         <Alert v-if="errorMessage" variant="destructive">

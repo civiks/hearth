@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <Alert v-if="auth.is_blocked" variant="destructive" class="mx-6 mt-6">
-      <AlertCircle class="size-4" />
+      <AlertCircle class="size-3.5" />
       <AlertTitle>Account blocked</AlertTitle>
       <AlertDescription>
         Your account has been blocked. Please contact support for assistance.

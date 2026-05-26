@@ -6,7 +6,9 @@ import { DEMO_ACCOUNT_IDS } from "./fixtures";
 const LATENCY_MS = 120;
 
 function delay<T>(value: T): Promise<T> {
-  return new Promise((resolve) => setTimeout(() => resolve(value), LATENCY_MS));
+  return new Promise((resolve) =>
+    setTimeout(() => resolve(value !== undefined ? (structuredClone(value) as T) : value), LATENCY_MS),
+  );
 }
 
 function fail(status: number, detail: string): never {

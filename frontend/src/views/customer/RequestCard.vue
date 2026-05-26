@@ -39,7 +39,7 @@
           <span v-else-if="!cancelled" class="truncate">Awaiting assignment</span>
         </div>
       </div>
-      <ChevronRight class="size-4 text-muted-foreground/40 shrink-0" />
+      <ChevronRight class="size-3.5 text-muted-foreground/40 shrink-0" />
     </div>
   </button>
 </template>

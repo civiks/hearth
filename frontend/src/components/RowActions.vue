@@ -27,7 +27,7 @@
     <Drawer :open="open" :should-scale-background="true" @update:open="(v) => !v && (open = false)">
       <DrawerContent class="p-0 gap-0">
         <DrawerTitle class="sr-only">Actions</DrawerTitle>
-        <div class="px-4 pt-3 pb-8 space-y-3">
+        <div class="px-4 pt-3 pb-4 space-y-3">
           <Button
             v-for="action in actions"
             :key="action.label"

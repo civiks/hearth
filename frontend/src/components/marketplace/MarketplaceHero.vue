@@ -21,7 +21,7 @@
           </p>
         </div>
         <div class="relative w-full sm:w-80">
-          <Search class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <Search class="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
           <Input
             :model-value="modelValue"
             placeholder="Search for plumbing, AC repair, cleaning…"
@@ -57,7 +57,7 @@
           />
         </div>
         <Alert v-if="error" variant="destructive">
-          <AlertCircle class="size-4" />
+          <AlertCircle class="size-3.5" />
           <AlertDescription>{{ error }}</AlertDescription>
         </Alert>
       </form>

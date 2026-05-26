@@ -9,6 +9,15 @@
   transition-duration: 0.2s !important;
 }
 
+/* Inside drawers, round all interactive controls to match the drawer shell */
+[data-vaul-drawer] {
+  & button:not([class*="rounded-full"]),
+  & input,
+  & [role="combobox"] {
+    border-radius: .75rem; /* rounded-xl */
+  }
+}
+
 /*
  * Hide the horizontal scrollbar on overflow containers while keeping the
  * scroll behavior. Applied to the tab navs so the macOS scrollbar (when

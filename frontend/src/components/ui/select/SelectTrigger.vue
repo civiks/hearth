@@ -30,14 +30,14 @@ const forwardedProps = useForwardProps(delegatedProps)
       'focus-visible:outline-none focus-visible:bg-muted focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30',
       'disabled:cursor-not-allowed disabled:opacity-50',
       'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive',
-      '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4',
+      '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-3.5',
       '*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5',
       props.class,
     )"
   >
     <slot />
     <SelectIcon as-child>
-      <ChevronDownIcon class="text-muted-foreground size-4 pointer-events-none" />
+      <ChevronDownIcon class="text-muted-foreground size-3.5 pointer-events-none" />
     </SelectIcon>
   </SelectTrigger>
 </template>

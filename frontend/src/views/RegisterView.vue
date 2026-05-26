@@ -36,7 +36,7 @@
           </div>
           <div
             :class="[
-              'size-4 rounded-full border-2 shrink-0 flex items-center justify-center',
+              'size-3.5 rounded-full border-2 shrink-0 flex items-center justify-center',
               role === 'user' ? 'border-primary' : 'border-muted-foreground/30',
             ]"
           >
@@ -58,7 +58,7 @@
           </div>
           <div
             :class="[
-              'size-4 rounded-full border-2 shrink-0 flex items-center justify-center',
+              'size-3.5 rounded-full border-2 shrink-0 flex items-center justify-center',
               role === 'professional' ? 'border-primary' : 'border-muted-foreground/30',
             ]"
           >
@@ -69,7 +69,7 @@
 
       <Button class="mt-6 w-full justify-between" @click="step = 'form'">
         Continue
-        <ArrowRight class="size-4" />
+        <ArrowRight class="size-3.5" />
       </Button>
 
     </template>
@@ -125,8 +125,8 @@
                 :aria-pressed="showPassword"
                 @click="showPassword = !showPassword"
               >
-                <EyeOff v-if="showPassword" class="size-4" />
-                <Eye v-else class="size-4" />
+                <EyeOff v-if="showPassword" class="size-3.5" />
+                <Eye v-else class="size-3.5" />
               </button>
             </div>
           </div>

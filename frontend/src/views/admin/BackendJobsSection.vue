@@ -13,7 +13,7 @@
           :disabled="loading.daily"
           @click="trigger('daily-reminders', 'daily', 'Daily reminders sent.')"
         >
-          <Bell class="mr-2 size-4" />
+          <Bell class="mr-2 size-3.5" />
           {{ loading.daily ? "Sending…" : "Daily reminders" }}
         </Button>
         <Button
@@ -21,7 +21,7 @@
           :disabled="loading.monthly"
           @click="trigger('monthly-reports', 'monthly', 'Monthly reports generated.')"
         >
-          <FileText class="mr-2 size-4" />
+          <FileText class="mr-2 size-3.5" />
           {{ loading.monthly ? "Generating…" : "Monthly reports" }}
         </Button>
         <Button
@@ -29,12 +29,12 @@
           :disabled="loading.activity"
           @click="trigger('activity-reports', 'activity', 'Activity reports generated.')"
         >
-          <Activity class="mr-2 size-4" />
+          <Activity class="mr-2 size-3.5" />
           {{ loading.activity ? "Generating…" : "Activity reports" }}
         </Button>
       </div>
       <Button variant="ghost" size="sm" @click="openMailHog">
-        <ExternalLink class="mr-2 size-4" />
+        <ExternalLink class="mr-2 size-3.5" />
         Open MailHog
       </Button>
     </CardContent>

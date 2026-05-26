@@ -13,7 +13,7 @@
           <Star
             v-for="i in 5"
             :key="i"
-            class="size-4 fill-amber-400 text-amber-400"
+            class="size-3.5 fill-amber-400 text-amber-400"
           />
         </div>
         <p class="text-sm leading-relaxed flex-1">

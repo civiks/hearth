@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto w-full max-w-[1440px] px-6 py-8 space-y-8">
     <Alert v-if="auth.is_blocked" variant="destructive">
-      <AlertCircle class="size-4" />
+      <AlertCircle class="size-3.5" />
       <AlertTitle>Account blocked</AlertTitle>
       <AlertDescription>
         Your account has been blocked. Please contact support for assistance.
@@ -21,7 +21,7 @@
             Describe it and we'll match the right service for you.
           </span>
         </span>
-        <ChevronRight class="size-4 text-muted-foreground group-hover:text-primary" />
+        <ChevronRight class="size-3.5 text-muted-foreground group-hover:text-primary" />
       </AiSurface>
 
       <section v-if="loading" class="space-y-4">

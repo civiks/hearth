@@ -18,7 +18,7 @@
             : 'text-muted-foreground hover:text-foreground border-b-2 border-transparent',
         ]"
       >
-        <component :is="tab.icon" class="size-4" />
+        <component :is="tab.icon" class="size-3.5" />
         {{ tab.label }}
       </RouterLink>
     </nav>

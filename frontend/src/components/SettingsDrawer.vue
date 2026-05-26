@@ -2,13 +2,12 @@
   <component
     :is="isDesktop ? Sheet : Drawer"
     :open="settings.open.value"
-    v-bind="isDesktop ? {} : { shouldScaleBackground: true }"
+    v-bind="{}"
     @update:open="(v: boolean) => (settings.open.value = v)"
   >
     <component :is="isDesktop ? SheetContent : DrawerContent" :class="isDesktop ? 'sm:max-w-sm' : 'p-0 gap-0'">
-      <DrawerHeader :class="isDesktop ? '' : 'px-4 pt-4 pb-2'">
+      <DrawerHeader :class="isDesktop ? '' : 'px-4 pt-5 pb-3'">
         <DrawerTitle>Settings</DrawerTitle>
-        <DrawerDescription>AI configuration.</DrawerDescription>
       </DrawerHeader>
 
       <div :class="isDesktop ? 'px-6' : 'px-4 pb-8'">
@@ -65,7 +64,7 @@ import { useMediaQuery } from "@vueuse/core";
 import AiKeyDialog from "@/components/AiKeyDialog.vue";
 import SettingsRow from "@/components/SettingsRow.vue";
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useSettingsDrawer } from "@/composables/useSettingsDrawer";
