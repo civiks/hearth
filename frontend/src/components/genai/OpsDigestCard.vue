@@ -12,39 +12,56 @@
       </span>
     </template>
     <template #action>
-      <button
-        type="button"
-        class="text-xs text-primary inline-flex items-center gap-1.5 hover:underline underline-offset-4 disabled:opacity-50"
-        :disabled="streaming"
-        @click="regenerate"
-      >
-        {{ streaming ? "Generating…" : "Regenerate" }}
-      </button>
+      <div class="flex items-center gap-2">
+        <button
+          v-show="!collapsed"
+          type="button"
+          class="text-xs text-primary inline-flex items-center gap-1.5 hover:underline underline-offset-4 disabled:opacity-50"
+          :disabled="streaming"
+          @click="regenerate"
+        >
+          {{ streaming ? "Generating…" : "Regenerate" }}
+        </button>
+        <button
+          type="button"
+          class="text-muted-foreground hover:text-foreground transition-colors"
+          :aria-label="collapsed ? 'Expand digest' : 'Collapse digest'"
+          @click="collapsed = !collapsed"
+        >
+          <ChevronUp v-if="!collapsed" class="size-3.5" />
+          <ChevronDown v-else class="size-3.5" />
+        </button>
+      </div>
     </template>
 
-    <div v-if="!narrative && !streaming" class="text-xs text-muted-foreground">
-      Waiting for analytics…
+    <div v-show="!collapsed">
+      <div v-if="!narrative && !streaming" class="text-xs text-muted-foreground">
+        Waiting for analytics…
+      </div>
+      <div
+        v-else
+        class="leading-relaxed"
+        v-html="renderMarkdownish(narrative)"
+      />
+      <span
+        v-if="streaming"
+        class="inline-block size-2 bg-muted-foreground/60 align-middle animate-pulse"
+        aria-hidden="true"
+      />
     </div>
-
-    <div
-      v-else
-      class="leading-relaxed"
-      v-html="renderMarkdownish(narrative)"
-    />
-    <span
-      v-if="streaming"
-      class="inline-block size-2 bg-muted-foreground/60 align-middle animate-pulse"
-      aria-hidden="true"
-    />
   </DashboardWidget>
 </template>
 
 <script lang="ts" setup>
 import { computed, type HTMLAttributes, ref, watch } from "vue";
+import { useLocalStorage } from "@vueuse/core";
+import { ChevronDown, ChevronUp } from "lucide-vue-next";
 
 import AiMark from "@/components/AiMark.vue";
 import { DashboardWidget } from "@/components/dashboard";
 import { streamScript, tokenize, type AgentEvent } from "@/lib/genai";
+
+const collapsed = useLocalStorage("hs.digest.ops.collapsed", false);
 
 interface TrendPoint { date: string; count: number }
 interface StatusSlice { status: string; count: number }

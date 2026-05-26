@@ -22,6 +22,18 @@
   display: none;
 }
 
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility pb-bottom-nav {
+  padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+}
+
+@utility above-bottom-nav {
+  bottom: calc(4rem + env(safe-area-inset-bottom));
+}
+
 /*
  * AI surface — subtle blue→violet wash from the bottom + blue
  * outline. Use `ai-surface ai-outline` together on any container that

@@ -1,7 +1,8 @@
 <template>
   <div class="flex h-full flex-col">
-    <!-- Horizontal tab bar (GitHub-style) — pinned right below the global top bar -->
+    <!-- Desktop: full horizontal tab strip -->
     <nav
+      v-if="isDesktop"
       class="vt-tabbar flex shrink-0 items-center gap-1 border-b bg-card px-6 overflow-x-auto scrollbar-hide"
       role="tablist"
     >
@@ -22,7 +23,6 @@
       </RouterLink>
     </nav>
 
-    <!-- Only this area transitions on tab change; the tab bar stays put -->
     <div class="flex-1 min-w-0 overflow-auto">
       <div class="mx-auto w-full max-w-[1440px]">
         <router-view v-slot="{ Component, route: r }">
@@ -36,6 +36,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useMediaQuery } from "@vueuse/core";
 import {
   Briefcase,
   ClipboardList,
@@ -47,14 +48,15 @@ import {
 import { RouterLink, useRoute } from "vue-router";
 
 const route = useRoute();
+const isDesktop = useMediaQuery("(min-width: 640px)");
 
 const tabs = [
-  { label: "Overview", to: "/admin/overview", icon: LayoutDashboard },
-  { label: "Services", to: "/admin/services", icon: Wrench },
-  { label: "Professionals", to: "/admin/professionals", icon: Briefcase },
-  { label: "Users", to: "/admin/users", icon: Users },
-  { label: "Requests", to: "/admin/requests", icon: ClipboardList },
-  { label: "Tools", to: "/admin/tools", icon: Hammer },
+  { label: "Overview",       to: "/admin/overview",      icon: LayoutDashboard },
+  { label: "Services",       to: "/admin/services",      icon: Wrench },
+  { label: "Professionals",  to: "/admin/professionals", icon: Briefcase },
+  { label: "Users",          to: "/admin/users",         icon: Users },
+  { label: "Requests",       to: "/admin/requests",      icon: ClipboardList },
+  { label: "Tools",          to: "/admin/tools",         icon: Hammer },
 ];
 
 function isActive(to: string): boolean {

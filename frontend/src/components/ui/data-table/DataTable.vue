@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-col gap-4 min-h-[640px] min-w-0">
+  <section class="flex flex-col gap-4 sm:min-h-[640px] min-w-0">
     <DataTableToolbar
       :table="table"
       :title="title"
@@ -72,7 +72,7 @@
       />
     </div>
 
-    <div v-if="totalRows" class="sticky bottom-0 border-t bg-background px-6 pt-3 pb-3">
+    <div v-if="totalRows" class="sm:sticky sm:bottom-0 border-t bg-background px-6 pt-3 pb-3">
       <DataTablePagination :table="table" />
     </div>
   </section>

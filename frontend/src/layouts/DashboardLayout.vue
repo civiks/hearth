@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen flex-col bg-background">
+  <div class="flex h-screen flex-col bg-background" data-vaul-drawer-wrapper>
     <!-- Dark global top bar — brand on the left, user menu on the right -->
     <header
       class="vt-topbar flex h-12 shrink-0 items-center justify-between bg-surface-inverse px-6 text-surface-inverse-foreground relative z-20"
@@ -13,14 +13,15 @@
         <button
           type="button"
           aria-label="Ask AI"
-          class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-inverse-foreground/10 hover:bg-surface-inverse-foreground/20 active:bg-surface-inverse-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse text-xs font-medium"
+          class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-inverse-foreground/10 hover:bg-surface-inverse-foreground/20 active:bg-surface-inverse-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse text-xs font-medium"
           @click="chat.toggle()"
         >
           <span>Ask</span>
           <AiMark class="size-3.5" />
         </button>
 
-        <DropdownMenu :modal="false">
+        <!-- Desktop: popover dropdown -->
+        <DropdownMenu v-if="isDesktop" :modal="false">
           <DropdownMenuTrigger as-child>
             <button
               type="button"
@@ -31,8 +32,7 @@
                   {{ initials(auth.full_name) }}
                 </AvatarFallback>
               </Avatar>
-              <span class="hidden sm:inline text-xs">{{ auth.email }}</span>
-              <span class="sm:hidden text-xs">{{ firstName }}</span>
+              <span class="text-xs">{{ auth.email }}</span>
               <ChevronDown class="size-3.5 opacity-70" />
             </button>
           </DropdownMenuTrigger>
@@ -99,22 +99,125 @@
               </DropdownMenuSubContent>
             </DropdownMenuSub>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              v-if="DEMO"
-              @click="resetDemoData"
-            >
+            <DropdownMenuItem v-if="DEMO" @click="resetDemoData">
               <RotateCcw class="mr-2 size-4" />
               Reset demo data
             </DropdownMenuItem>
-            <DropdownMenuItem
-              variant="destructive"
-              @click="handleLogout"
-            >
+            <DropdownMenuItem variant="destructive" @click="handleLogout">
               <LogOut class="mr-2 size-4" />
               Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <template v-else>
+          <button
+            type="button"
+            class="flex items-center gap-2 px-2 py-1 rounded-full transition hover:bg-surface-inverse-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse"
+            @click="menuOpen = true"
+          >
+            <Avatar class="size-6">
+              <AvatarFallback class="bg-primary text-primary-foreground text-[10px]">
+                {{ initials(auth.full_name) }}
+              </AvatarFallback>
+            </Avatar>
+            <span class="text-xs">{{ firstName }}</span>
+            <ChevronDown class="size-3.5 opacity-70" />
+          </button>
+
+          <Drawer v-model:open="menuOpen" should-scale-background>
+            <DrawerContent>
+              <!-- Identity + icon shortcuts in one row -->
+              <div class="flex items-center gap-2.5 px-4 pt-4 pb-3">
+                <Avatar class="size-8 shrink-0">
+                  <AvatarFallback class="bg-primary text-primary-foreground text-xs">
+                    {{ initials(auth.full_name) }}
+                  </AvatarFallback>
+                </Avatar>
+                <div class="flex flex-col leading-tight min-w-0 flex-1">
+                  <span class="text-sm font-medium truncate">{{ auth.full_name }}</span>
+                  <span class="text-xs text-muted-foreground truncate">{{ auth.email }}</span>
+                </div>
+                <div class="flex items-center gap-0.5 shrink-0">
+                  <button
+                    class="p-2 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                    aria-label="Account"
+                    @click="navigate('/account')"
+                  >
+                    <UserCircle class="size-5" />
+                  </button>
+                  <button
+                    class="p-2 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                    aria-label="Settings"
+                    @click="navigate('/settings')"
+                  >
+                    <Settings class="size-5" />
+                  </button>
+                  <button
+                    v-if="auth.role === 'admin'"
+                    class="p-2 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                    aria-label="Tools"
+                    @click="navigate('/admin/tools')"
+                  >
+                    <Hammer class="size-5" />
+                  </button>
+                </div>
+              </div>
+
+              <div class="overflow-y-auto p-1.5 pb-3">
+                <div class="h-px bg-border -mx-1.5 mb-1.5" />
+
+                <!-- Theme -->
+                <div class="text-muted-foreground px-3 pt-2 pb-1 text-xs font-medium">Theme</div>
+                <button
+                  v-for="t in themeOptions"
+                  :key="t.value"
+                  class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm hover:bg-accent transition-colors"
+                  :class="theme === t.value ? 'bg-accent/60 text-accent-foreground' : ''"
+                  @click="setTheme(t.value as Theme)"
+                >
+                  <component :is="t.icon" class="size-4" :class="theme === t.value ? '' : 'text-muted-foreground'" />
+                  {{ t.label }}
+                  <Check v-if="theme === t.value" class="ml-auto size-3.5 text-primary" />
+                </button>
+
+                <!-- Switch role (demo only) -->
+                <template v-if="DEMO">
+                  <div class="text-muted-foreground px-3 pt-3 pb-1 text-xs font-medium">Switch role</div>
+                  <button
+                    v-for="r in DEMO_ROLES"
+                    :key="r.value"
+                    class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm hover:bg-accent transition-colors"
+                    :class="auth.role === r.value ? 'bg-accent/60 text-accent-foreground' : ''"
+                    @click="menuOpen = false; loginAs(r.value as Role)"
+                  >
+                    <component :is="r.icon" class="size-4" :class="auth.role === r.value ? '' : 'text-muted-foreground'" />
+                    {{ r.label }}
+                    <Check v-if="auth.role === r.value" class="ml-auto size-3.5 text-primary" />
+                  </button>
+                </template>
+
+                <div class="h-px bg-border -mx-1.5 mt-1.5 mb-1.5" />
+
+                <button
+                  v-if="DEMO"
+                  class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm hover:bg-accent transition-colors"
+                  @click="resetDemoData"
+                >
+                  <RotateCcw class="size-4 text-muted-foreground" />
+                  Reset demo data
+                </button>
+                <button
+                  class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm text-destructive hover:bg-destructive/10 transition-colors"
+                  @click="handleLogout"
+                >
+                  <LogOut class="size-4" />
+                  Sign out
+                </button>
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </template>
       </div>
     </header>
 
@@ -158,38 +261,71 @@
         </SplitterPanel>
       </SplitterGroup>
     </div>
-    <main v-else ref="scrollMain" class="flex-1 min-h-0 overflow-y-auto">
+    <main v-else ref="scrollMain" class="flex-1 min-h-0 overflow-y-auto pb-bottom-nav">
       <slot />
     </main>
     <ChatWidget v-if="!isDesktop" mode="overlay" />
 
-    <!-- Floating "Ask" launcher — hidden while the panel is open. -->
-    <!-- <button
-      v-if="!chat.open"
-      type="button"
-      aria-label="Ask AI (Ctrl/Cmd+K)"
-      title="Ask AI · ⌘K"
-      class="fixed bottom-5 right-5 z-30 flex items-center gap-2.5 h-11 pl-5 pr-3.5 rounded-full bg-surface-inverse text-surface-inverse-foreground shadow-lg shadow-black/15 hover:bg-surface-inverse-hover active:bg-surface-inverse-active transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 dark:bg-card dark:text-foreground dark:ring-1 dark:ring-inset dark:ring-surface-inverse-foreground/10 dark:shadow-black/60 dark:hover:bg-surface-inverse-hover dark:active:bg-surface-inverse-active"
-      @click="chat.toggle()"
-    >
-      <span class="text-sm font-medium">Ask</span>
-      <AiMark class="size-5" />
-    </button> -->
   </div>
+
+  <!-- Teleported outside data-vaul-drawer-wrapper so CSS transform doesn't break position:fixed -->
+  <Teleport to="body">
+    <nav
+      v-if="!isDesktop"
+      class="vt-tabbar fixed bottom-0 left-0 right-0 z-40 flex border-t bg-card/95 backdrop-blur-md pb-safe"
+      role="tablist"
+    >
+      <RouterLink
+        v-for="tab in mobileTabs"
+        :key="tab.to"
+        :to="tab.to"
+        role="tab"
+        class="flex flex-1 flex-col items-center justify-center gap-1 py-3 transition-colors"
+        :class="isTabActive(tab.to) ? 'text-primary' : 'text-muted-foreground'"
+      >
+        <component
+          :is="tab.icon"
+          class="size-5 transition-none"
+          :stroke-width="isTabActive(tab.to) ? 2.5 : 1.75"
+        />
+        <span :class="auth.role === 'admin' ? 'max-[500px]:hidden text-xs font-medium leading-none' : 'text-xs font-medium leading-none'">{{ tab.label }}</span>
+      </RouterLink>
+      <button
+        type="button"
+        role="tab"
+        class="flex flex-1 flex-col items-center justify-center gap-1 py-3 transition-colors"
+        :class="chat.open ? 'text-primary' : 'text-muted-foreground'"
+        @click="chat.toggle()"
+      >
+        <AiMark class="size-5" />
+        <span :class="auth.role === 'admin' ? 'max-[500px]:hidden text-xs font-medium leading-none' : 'text-xs font-medium leading-none'">Ask</span>
+      </button>
+    </nav>
+  </Teleport>
 </template>
 
 <script lang="ts" setup>
 import { useMediaQuery } from "@vueuse/core";
 import {
+  Briefcase,
+  Check,
   ChevronDown,
+  ClipboardList,
+  Hammer,
+  LayoutDashboard,
+  LayoutGrid,
   LogOut,
   Monitor,
   Moon,
   Repeat,
   RotateCcw,
   Settings,
+  ShoppingBag,
   Sun,
+  TrendingUp,
   UserCircle,
+  Users,
+  Wrench,
 } from "lucide-vue-next";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { RouterLink, useRouter, useRoute } from "vue-router";
@@ -198,6 +334,7 @@ import AiMark from "@/components/AiMark.vue";
 import BrandMark from "@/components/BrandMark.vue";
 import ChatWidget from "@/components/ChatWidget.vue";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -239,6 +376,33 @@ const { theme, effectiveTheme, setTheme } = useTheme();
 const { loginAs, resetDemoData } = useDemoLogin();
 
 const isDesktop = useMediaQuery("(min-width: 640px)");
+const menuOpen = ref(false);
+
+const TAB_MAP = {
+  user: [
+    { label: "Browse",      to: "/home/browse",    icon: ShoppingBag },
+    { label: "Services",    to: "/home/services",  icon: LayoutGrid },
+    { label: "My requests", to: "/home/requests",  icon: ClipboardList },
+  ],
+  professional: [
+    { label: "Overview",  to: "/professional/overview",  icon: LayoutDashboard },
+    { label: "Requests",  to: "/professional/requests",  icon: ClipboardList },
+    { label: "Earnings",  to: "/professional/earnings",  icon: TrendingUp },
+  ],
+  admin: [
+    { label: "Overview",      to: "/admin/overview",      icon: LayoutDashboard },
+    { label: "Services",      to: "/admin/services",      icon: Wrench },
+    { label: "Professionals", to: "/admin/professionals", icon: Briefcase },
+    { label: "Users",         to: "/admin/users",         icon: Users },
+    { label: "Requests",      to: "/admin/requests",      icon: ClipboardList },
+  ],
+} as const;
+
+const mobileTabs = computed(() => TAB_MAP[auth.role as keyof typeof TAB_MAP] ?? []);
+
+function isTabActive(to: string) {
+  return route.path === to || route.path.startsWith(`${to}/`);
+}
 
 const chatPanelRef = ref<SplitterPanelHandle | null>(null);
 const scrollMain = ref<HTMLElement | null>(null);
@@ -264,9 +428,6 @@ async function syncChatPanel(open: boolean) {
 
 watch(() => chat.open, syncChatPanel);
 watch(isDesktop, (desktop) => {
-  // Crossing back to desktop: re-apply the chat-open state to the
-  // freshly mounted splitter panel. Both branches matter — closed must
-  // explicitly collapse or reka's saved layout leaves a ghost panel.
   if (desktop) void syncChatPanel(chat.open);
 });
 
@@ -277,7 +438,19 @@ const themeIcon = computed(() => {
   return effectiveTheme.value === "dark" ? Moon : Sun;
 });
 
+const themeOptions = [
+  { value: "light", label: "Light", icon: Sun },
+  { value: "dark",  label: "Dark",  icon: Moon },
+  { value: "system", label: "System", icon: Monitor },
+] as const;
+
+function navigate(path: string) {
+  menuOpen.value = false;
+  router.push(path);
+}
+
 async function handleLogout() {
+  menuOpen.value = false;
   await auth.logout();
   router.push("/");
 }
@@ -295,18 +468,12 @@ function onGlobalKey(e: KeyboardEvent) {
 }
 onMounted(() => {
   window.addEventListener("keydown", onGlobalKey);
-  // Sync chat-open state into the splitter on initial mount AND across
-  // HMR/relogin. Reka persists the panel layout via `autoSaveId`, so on
-  // mount it may restore the user's last width (e.g. 28%) even though the
-  // store's `chat.open` is false — leaving a ghost empty panel. Always
-  // call syncChatPanel so the closed case explicitly collapses.
   if (isDesktop.value) void syncChatPanel(chat.open);
 });
 onBeforeUnmount(() => window.removeEventListener("keydown", onGlobalKey));
 </script>
 
 <style scoped>
-
 .chat-panel {
   transition: flex 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }

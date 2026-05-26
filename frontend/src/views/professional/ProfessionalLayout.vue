@@ -1,6 +1,8 @@
 <template>
   <div class="flex h-full flex-col">
+    <!-- Desktop: horizontal tab strip under the topbar -->
     <nav
+      v-if="isDesktop"
       class="vt-tabbar flex shrink-0 items-center gap-1 border-b bg-card px-6 overflow-x-auto scrollbar-hide"
       role="tablist"
     >
@@ -34,10 +36,12 @@
 </template>
 
 <script lang="ts" setup>
+import { useMediaQuery } from "@vueuse/core";
 import { ClipboardList, LayoutDashboard, TrendingUp } from "lucide-vue-next";
 import { RouterLink, useRoute } from "vue-router";
 
 const route = useRoute();
+const isDesktop = useMediaQuery("(min-width: 640px)");
 
 const tabs = [
   { label: "Overview", to: "/professional/overview", icon: LayoutDashboard },

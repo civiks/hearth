@@ -32,7 +32,7 @@
         :class="[
           'flex flex-col bg-background ai-surface ai-outline',
           mode === 'overlay'
-            ? 'fixed inset-0 z-50 shadow-2xl'
+            ? 'fixed inset-y-0 right-0 z-50 w-[calc(100vw-3rem)] shadow-2xl'
             : 'h-full',
         ]"
         :role="mode === 'overlay' ? 'dialog' : 'complementary'"
