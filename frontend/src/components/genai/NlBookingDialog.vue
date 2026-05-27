@@ -197,8 +197,8 @@ async function onParse() {
   let services: ServiceLite[] = [];
   try {
     services = await api.get<ServiceLite[]>("/api/services");
-  } catch (err) {
-    if (import.meta.env.DEV) console.warn("services lookup failed", err);
+  } catch {
+    // non-fatal: AI flow continues without service matching
   }
 
   const candidates = services.filter(

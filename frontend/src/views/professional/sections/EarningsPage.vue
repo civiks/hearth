@@ -36,9 +36,11 @@ const auth = useAuthStore();
 const toasts = useNotificationsStore();
 
 const earnings = ref<EarningRow[]>([]);
+const loading = ref(false);
 
 onMounted(async () => {
   if (auth.approval_status !== "approved") return;
+  loading.value = true;
   try {
     const [reqs, svcs] = await Promise.all([
       api.get<ProRequestRaw[]>("/api/requests"),
@@ -61,6 +63,8 @@ onMounted(async () => {
       .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
   } catch (err) {
     toasts.error(err instanceof ApiError ? err.detail : "Failed to load earnings");
+  } finally {
+    loading.value = false;
   }
 });
 
@@ -109,7 +113,7 @@ const columns: ColumnDef<EarningRow>[] = [
 </script>
 
 <template>
-  <div class="px-6 py-8 space-y-6">
+  <div class="px-4 py-4 sm:px-6 sm:py-8 space-y-6">
     <ApprovalNotice
       v-if="auth.approval_status === 'pending' || auth.approval_status === 'rejected'"
       :kind="auth.approval_status as 'pending' | 'rejected'"
@@ -119,6 +123,7 @@ const columns: ColumnDef<EarningRow>[] = [
       <DataTable
         :columns="columns"
         :data="earnings"
+        :loading="loading"
         title="Payouts"
         description="One row per completed booking, most recent first."
         search-placeholder="Search by customer or service"

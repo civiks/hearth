@@ -57,6 +57,7 @@ import { computed, onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
 
 import { Button } from "@/components/ui/button";
+import { useConfirm } from "@/composables/useConfirm";
 import { ApiError, api } from "@/lib/api";
 import { useNotificationsStore } from "@/stores/notifications";
 import EditRequestModal from "@/views/customer/EditRequestModal.vue";
@@ -68,6 +69,7 @@ import RequestCard, {
 } from "@/views/customer/RequestCard.vue";
 
 const toasts = useNotificationsStore();
+const { confirm } = useConfirm();
 
 const loading = ref(true);
 const history = ref<CustomerRequest[]>([]);
@@ -89,16 +91,16 @@ onMounted(async () => {
 async function fetchHistory() {
   try {
     history.value = await api.get<CustomerRequest[]>("/api/requests");
-  } catch (err) {
-    console.error("history fetch failed", err);
+  } catch {
+    toasts.error("Failed to load requests");
   }
 }
 
 async function fetchServices() {
   try {
     services.value = await api.get<RelatedService[]>("/api/services");
-  } catch (err) {
-    console.error("services fetch failed", err);
+  } catch {
+    toasts.error("Failed to load services");
   }
 }
 
@@ -131,7 +133,12 @@ async function onEdited() {
 }
 
 async function cancelRequest(id: number) {
-  if (!confirm("Cancel this service request?")) return;
+  if (!await confirm({
+    title: "Cancel this booking?",
+    description: "The professional will be notified and won't show up for this appointment. You can always book the same service again at a later time.",
+    confirmLabel: "Cancel booking",
+    cancelLabel: "Keep booking",
+  })) return;
   try {
     await api.put(`/api/requests/${id}`, { service_status: "cancelled" });
     toasts.success("Request cancelled");

@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 py-8">
+  <div class="px-4 py-4 sm:px-6 sm:py-8">
     <ApprovalNotice
       v-if="auth.approval_status === 'pending' || auth.approval_status === 'rejected'"
       :kind="auth.approval_status as 'pending' | 'rejected'"
@@ -7,6 +7,7 @@
     <RequestsTable
       v-else
       :requests="requests"
+      :loading="loading"
       @update-status="updateRequestStatus"
     />
   </div>
@@ -25,16 +26,20 @@ const auth = useAuthStore();
 const toasts = useNotificationsStore();
 
 const requests = ref<ProRequest[]>([]);
+const loading = ref(false);
 
 onMounted(fetchData);
 
 async function fetchData() {
   if (auth.approval_status !== "approved") return;
+  loading.value = true;
   try {
     const all = await api.get<ProRequest[]>("/api/requests");
     requests.value = all.filter((r) => r.service_id === auth.service_id);
   } catch (err) {
     toasts.error(err instanceof ApiError ? err.detail : "Failed to load data");
+  } finally {
+    loading.value = false;
   }
 }
 

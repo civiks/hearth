@@ -2,6 +2,7 @@
   <DataTable
     :columns="columns"
     :data="requests"
+    :loading="loading"
     title="Service requests"
     description="Active and historical bookings assigned to you."
     search-placeholder="Search requests"
@@ -47,7 +48,7 @@ export interface ProRequest {
   base_price?: number | null;
 }
 
-const props = defineProps<{ requests: ProRequest[] }>();
+const props = defineProps<{ requests: ProRequest[]; loading?: boolean }>();
 const emit = defineEmits<{ updateStatus: [id: number, status: string] }>();
 void props;
 

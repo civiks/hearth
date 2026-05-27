@@ -30,9 +30,8 @@ onMounted(async () => {
   await refreshAll();
   try {
     analytics.value = await api.get<AdminAnalyticsApi>("/api/analytics/admin");
-  } catch (err) {
-    console.error("analytics fetch failed", err);
-    toasts.error("Failed to fetch analytics data");
+  } catch {
+    toasts.error("Failed to load analytics");
   } finally {
     analyticsLoaded.value = true;
   }

@@ -146,6 +146,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useMediaQuery } from "@vueuse/core";
 
 import StatusPill from "@/components/StatusBadge.vue";
+import { useConfirm } from "@/composables/useConfirm";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -179,6 +180,7 @@ const router = useRouter();
 const auth = useAuthStore();
 const isDesktop = useMediaQuery("(min-width: 640px)");
 const toasts = useNotificationsStore();
+const { confirm } = useConfirm();
 
 const userData = ref<UserData | null>(null);
 const loading = ref(true);
@@ -266,7 +268,12 @@ async function saveChanges() {
 }
 
 async function confirmDelete() {
-  if (!confirm("Delete your account? This cannot be undone.")) return;
+  if (!await confirm({
+    title: "Delete your account?",
+    description: "All your bookings, saved addresses, and personal details will be permanently erased. You'll be signed out immediately and this account can't be recovered.",
+    variant: "destructive",
+    confirmLabel: "Delete my account",
+  })) return;
   try {
     await api.delete("/api/users/me");
     await auth.logout();
@@ -279,7 +286,13 @@ async function confirmDelete() {
 async function toggleBlock() {
   if (!userData.value) return;
   const next = !userData.value.is_blocked;
-  if (!confirm(`${next ? "Block" : "Unblock"} this user?`)) return;
+  if (!await confirm({
+    title: next ? "Block this user?" : "Unblock this user?",
+    description: next
+      ? "They'll be signed out immediately and won't be able to log in, place new requests, or contact professionals until you unblock them. Existing requests are preserved."
+      : "They'll regain full access to the platform and can sign in and place bookings right away.",
+    confirmLabel: next ? "Block user" : "Unblock user",
+  })) return;
   try {
     await api.put(`/api/users/${userId.value}`, { is_blocked: next });
     await fetchUser();
@@ -290,7 +303,13 @@ async function toggleBlock() {
 }
 
 async function updateApproval(status: string) {
-  if (!confirm(`${status} this professional?`)) return;
+  if (!await confirm({
+    title: status === "approved" ? "Approve this professional?" : "Reject this professional?",
+    description: status === "approved"
+      ? "They'll be able to accept service requests and start appearing in customer search results right away. You can revoke approval later if needed."
+      : "They won't be able to accept requests on the platform. They'll keep their account but stay invisible to customers. You can revisit this decision from their profile.",
+    confirmLabel: status === "approved" ? "Approve" : "Reject",
+  })) return;
   try {
     await api.put(`/api/users/${userId.value}`, { approval_status: status });
     await fetchUser();
@@ -301,7 +320,12 @@ async function updateApproval(status: string) {
 }
 
 async function deleteUserAccount() {
-  if (!confirm("Delete this user? This cannot be undone.")) return;
+  if (!await confirm({
+    title: "Delete this user?",
+    description: "Their account, booking history, saved addresses, and any associated records will be permanently erased. This can't be undone.",
+    variant: "destructive",
+    confirmLabel: "Delete user",
+  })) return;
   try {
     await api.delete(`/api/users/${userId.value}`);
     router.push("/admin/users");

@@ -1,9 +1,7 @@
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 
-// SN Pro — Latin subset only, served from npm.
-// Weights 300 / 400 / 600 are declared inline in index.html and preloaded.
-import "@fontsource/sn-pro/latin-500.css";
+import "@fontsource-variable/inter";
 
 import App from "./App.vue";
 import "./assets/tailwind.css";

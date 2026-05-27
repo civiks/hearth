@@ -3,9 +3,10 @@
     <!-- Desktop: horizontal tab strip under the topbar -->
     <nav
       v-if="isDesktop"
-      class="vt-tabbar flex shrink-0 items-center gap-1 border-b bg-card px-6 overflow-x-auto scrollbar-hide"
+      class="vt-tabbar shrink-0 border-b bg-card overflow-x-auto scrollbar-hide"
       role="tablist"
     >
+      <div class="mx-auto w-full max-w-[1440px] flex items-center gap-1 px-6">
       <RouterLink
         v-for="tab in tabs"
         :key="tab.to"
@@ -21,6 +22,7 @@
         <component :is="tab.icon" class="size-3.5" />
         {{ tab.label }}
       </RouterLink>
+      </div>
     </nav>
 
     <div class="flex-1 min-w-0 overflow-auto">

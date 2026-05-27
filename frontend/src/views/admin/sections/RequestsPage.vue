@@ -1,10 +1,10 @@
 <template>
-  <div class="px-6 py-8 min-w-0">
+  <div class="px-4 py-4 sm:px-6 sm:py-8 min-w-0">
+    <PageHeader title="Service requests" description="View every request on the platform." />
     <DataTable
       :columns="columns"
       :data="requests"
-      title="All service requests"
-      description="View every request on the platform."
+      :loading="loading"
       search-placeholder="Search requests"
       :global-filter-accessor="
         (r) => `${r.service_name ?? ''} ${r.customer_name ?? ''} ${r.pincode}`
@@ -18,10 +18,12 @@
 import { h, onMounted, ref } from "vue";
 import type { ColumnDef } from "@tanstack/vue-table";
 
+import PageHeader from "@/components/PageHeader.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
 import { DataTable } from "@/components/ui/data-table";
 import { api } from "@/lib/api";
 import { formatDateTime } from "@/lib/format";
+import { useNotificationsStore } from "@/stores/notifications";
 
 interface AdminRequest {
   id: number;
@@ -35,12 +37,17 @@ interface AdminRequest {
 }
 
 const requests = ref<AdminRequest[]>([]);
+const loading = ref(false);
+const toasts = useNotificationsStore();
 
 onMounted(async () => {
+  loading.value = true;
   try {
     requests.value = await api.get<AdminRequest[]>("/api/requests");
-  } catch (err) {
-    console.error("requests fetch failed", err);
+  } catch {
+    toasts.error("Failed to load requests");
+  } finally {
+    loading.value = false;
   }
 });
 

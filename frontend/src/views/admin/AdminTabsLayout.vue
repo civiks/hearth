@@ -3,24 +3,26 @@
     <!-- Desktop: full horizontal tab strip -->
     <nav
       v-if="isDesktop"
-      class="vt-tabbar flex shrink-0 items-center gap-1 border-b bg-card px-6 overflow-x-auto scrollbar-hide"
+      class="vt-tabbar shrink-0 border-b bg-card overflow-x-auto scrollbar-hide"
       role="tablist"
     >
-      <RouterLink
-        v-for="tab in tabs"
-        :key="tab.to"
-        :to="tab.to"
-        role="tab"
-        :class="[
-          'relative -mb-px flex items-center gap-2 px-3 py-3 text-sm whitespace-nowrap transition-colors',
-          isActive(tab.to)
-            ? 'text-foreground border-b-2 border-primary font-medium'
-            : 'text-muted-foreground hover:text-foreground border-b-2 border-transparent',
-        ]"
-      >
-        <component :is="tab.icon" class="size-3.5" />
-        {{ tab.label }}
-      </RouterLink>
+      <div class="mx-auto w-full max-w-[1440px] flex items-center gap-1 px-6">
+        <RouterLink
+          v-for="tab in tabs"
+          :key="tab.to"
+          :to="tab.to"
+          role="tab"
+          :class="[
+            'relative -mb-px flex items-center gap-2 px-3 py-3 text-sm whitespace-nowrap transition-colors',
+            isActive(tab.to)
+              ? 'text-foreground border-b-2 border-primary font-medium'
+              : 'text-muted-foreground hover:text-foreground border-b-2 border-transparent',
+          ]"
+        >
+          <component :is="tab.icon" class="size-3.5" />
+          {{ tab.label }}
+        </RouterLink>
+      </div>
     </nav>
 
     <div class="flex-1 min-w-0 overflow-auto">

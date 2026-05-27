@@ -1,7 +1,9 @@
 <template>
-  <div class="px-6 py-8">
+  <div class="px-4 py-4 sm:px-6 sm:py-8">
+    <PageHeader title="Professionals" description="Service providers registered on the platform." />
     <ProfessionalsTable
       :professionals="professionals"
+      :loading="professionalsLoading"
       @approve="(id) => updateApproval(id, 'approved')"
       @reject="(id) => updateApproval(id, 'rejected')"
       @delete="deleteUser"
@@ -12,13 +14,16 @@
 <script lang="ts" setup>
 import { onMounted } from "vue";
 
+import PageHeader from "@/components/PageHeader.vue";
 import { useAdminData } from "@/composables/useAdminData";
+import { useConfirm } from "@/composables/useConfirm";
 import { ApiError, api } from "@/lib/api";
 import { useNotificationsStore } from "@/stores/notifications";
 import ProfessionalsTable from "@/views/admin/ProfessionalsTable.vue";
 
-const { professionals, fetchProfessionals } = useAdminData();
+const { professionals, fetchProfessionals, professionalsLoading } = useAdminData();
 const toasts = useNotificationsStore();
+const { confirm } = useConfirm();
 
 onMounted(fetchProfessionals);
 
@@ -34,7 +39,12 @@ async function updateApproval(userId: number, status: string) {
 }
 
 async function deleteUser(userId: number) {
-  if (!confirm("Delete this user?")) return;
+  if (!await confirm({
+    title: "Remove this professional?",
+    description: "Their account, service history, and approval record will be permanently erased. Any open requests assigned to them will need to be reassigned. This can't be undone.",
+    variant: "destructive",
+    confirmLabel: "Remove professional",
+  })) return;
   try {
     await api.delete(`/api/users/${userId}`);
     professionals.value = professionals.value.filter((u) => u.id !== userId);

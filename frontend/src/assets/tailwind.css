@@ -269,7 +269,7 @@
 
 /*
  *  Design System theme for shadcn-vue.
- * SN Pro + #0f62fe blue + rounded radius + soft elevation.
+ * Inter + #0f62fe blue + rounded radius + soft elevation.
  * HSL values chosen so they convert cleanly back to the source hex.
  */
 :root {
@@ -442,8 +442,8 @@
 
 @theme inline {
   --font-sans:
-    "SN Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
+    "Inter Variable", "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-serif:
     ui-serif, Georgia, "Times New Roman", serif;
   --font-mono:
@@ -530,7 +530,9 @@
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    font-feature-settings: "cv11" 1, "ss01" 1, "calt" 1;
   }
 
   /* headings: light weight, tight tracking */

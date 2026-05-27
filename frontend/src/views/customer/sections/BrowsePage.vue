@@ -158,8 +158,8 @@ onMounted(async () => {
 async function fetchServices() {
   try {
     services.value = await api.get<Service[]>("/api/services");
-  } catch (err) {
-    console.error("services fetch failed", err);
+  } catch {
+    toasts.error("Failed to load services");
   }
 }
 
@@ -168,10 +168,7 @@ async function fetchProfessionals() {
     professionals.value = await api.get<ProfessionalOption[]>(
       "/api/users?role=professional",
     );
-  } catch (err) {
-    if (import.meta.env.DEV) {
-      console.warn("professionals list unavailable to customers", err);
-    }
+  } catch {
     professionals.value = [];
   }
 }

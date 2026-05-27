@@ -2,8 +2,7 @@
   <DataTable
     :columns="columns"
     :data="users"
-    title="Users"
-    description="Registered customers on the platform."
+    :loading="loading"
     search-placeholder="Search users"
     :global-filter-accessor="
       (u) => `${u.full_name} ${u.email} ${u.pincode ?? ''}`
@@ -24,7 +23,7 @@ import StatusBadge from "@/components/StatusBadge.vue";
 import { DataTable } from "@/components/ui/data-table";
 import type { AdminUser } from "./ProfessionalsTable.vue";
 
-const props = defineProps<{ users: AdminUser[] }>();
+const props = defineProps<{ users: AdminUser[]; loading?: boolean }>();
 const emit = defineEmits<{
   toggleBlock: [user: AdminUser];
   delete: [id: number];

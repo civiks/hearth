@@ -2,8 +2,9 @@
   <div class="flex h-screen flex-col bg-background" data-vaul-drawer-wrapper>
     <!-- Dark global top bar — brand on the left, user menu on the right -->
     <header
-      class="vt-topbar flex h-12 shrink-0 items-center justify-between bg-surface-inverse px-6 text-surface-inverse-foreground relative z-20"
+      class="vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground relative z-20"
     >
+      <div class="mx-auto w-full max-w-[1440px] flex h-12 items-center justify-between px-6">
       <RouterLink to="/" class="vt-brand flex items-center gap-2 shrink-0">
         <BrandMark class="h-4 w-auto" />
         <span class="font-semibold text-base tracking-tight">hearth</span>
@@ -216,6 +217,7 @@
             </DrawerContent>
           </Drawer>
         </template>
+      </div>
       </div>
     </header>
 

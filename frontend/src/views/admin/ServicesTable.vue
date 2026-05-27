@@ -2,8 +2,7 @@
   <DataTable
     :columns="columns"
     :data="services"
-    title="Services"
-    description="Catalog of services available to customers."
+    :loading="loading"
     search-placeholder="Search services"
     :global-filter-accessor="(s) => `${s.name} ${s.category ?? ''} ${s.description ?? ''}`"
     empty-message="No services match your filters."
@@ -161,7 +160,7 @@ export interface AdminService {
   is_active: boolean;
 }
 
-const props = defineProps<{ services: AdminService[] }>();
+const props = defineProps<{ services: AdminService[]; loading?: boolean }>();
 const emit = defineEmits<{ delete: [id: number]; changed: [] }>();
 void props;
 

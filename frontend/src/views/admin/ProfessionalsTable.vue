@@ -2,8 +2,7 @@
   <DataTable
     :columns="columns"
     :data="professionals"
-    title="Professionals"
-    description="Service providers registered on the platform."
+    :loading="loading"
     search-placeholder="Search professionals"
     :global-filter-accessor="
       (p) => `${p.full_name} ${p.email} ${p.pincode ?? ''}`
@@ -37,7 +36,7 @@ export interface AdminUser {
   service_name?: string | null;
 }
 
-const props = defineProps<{ professionals: AdminUser[] }>();
+const props = defineProps<{ professionals: AdminUser[]; loading?: boolean }>();
 const emit = defineEmits<{
   approve: [id: number];
   reject: [id: number];

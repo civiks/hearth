@@ -4,12 +4,14 @@
     <router-view />
   </component>
   <Toaster position="top-right" rich-colors />
+  <ConfirmDialog />
 </template>
 
 <script lang="ts" setup>
 import { computed, defineComponent, h, onMounted, watch } from "vue";
 import { useRoute, useRouter, type RouteRecordRaw } from "vue-router";
 
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
 import { Toaster } from "@/components/ui/sonner";
 import { useTheme } from "@/composables/useTheme";

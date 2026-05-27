@@ -69,7 +69,7 @@
     </Table>
 
       <DataTableEmpty
-        v-if="!totalRows"
+        v-if="!loading && !totalRows"
         :message="emptyMessage ?? 'No matching results'"
       />
     </div>
@@ -122,6 +122,7 @@ const props = withDefaults(
     globalFilterAccessor?: (row: TData) => string;
     pageSize?: number;
     emptyMessage?: string;
+    loading?: boolean;
   }>(),
   {
     searchable: true,
@@ -134,10 +135,10 @@ const columnFilters = ref<ColumnFiltersState>([]);
 const columnVisibility = ref<VisibilityState>({});
 const globalFilter = ref("");
 
-const data = computed(() => props.data);
-
 const table = useVueTable({
-  data,
+  get data() {
+    return props.data;
+  },
   get columns() {
     return props.columns;
   },

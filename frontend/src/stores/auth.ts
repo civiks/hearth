@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-import { ApiError, api, type User } from "@/lib/api";
+import { api, type User } from "@/lib/api";
 
 interface State {
   user: User | null;
@@ -37,10 +37,7 @@ export const useAuthStore = defineStore("auth", {
       try {
         const me = await api.get<User>("/api/auth/me");
         this.user = me;
-      } catch (err) {
-        if (!(err instanceof ApiError) || err.status !== 401) {
-          console.error("auth hydrate failed", err);
-        }
+      } catch {
         this.user = null;
       } finally {
         this.loaded = true;
@@ -49,9 +46,8 @@ export const useAuthStore = defineStore("auth", {
     async logout() {
       try {
         await api.post<void>("/api/auth/logout");
-      } catch (err) {
+      } catch {
         // server already cleared the cookie or never had one; safe to ignore
-        console.warn("logout call failed", err);
       }
       this.user = null;
     },
