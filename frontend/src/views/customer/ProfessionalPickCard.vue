@@ -20,17 +20,17 @@
     </span>
     <div class="flex-1 min-w-0">
       <div class="flex items-center justify-between gap-2">
-        <span class="text-sm font-medium truncate">{{ professional.full_name }}</span>
-        <span v-if="professional.rating != null" class="flex items-center gap-1 text-xs">
+        <span class="text-sm font-medium tracking-tight truncate">{{ professional.full_name }}</span>
+        <span v-if="professional.rating != null" class="flex items-center gap-1 text-xs tabular-nums">
           <Star class="size-3 fill-amber-400 text-amber-400" />
-          <span class="font-medium">{{ professional.rating.toFixed(1) }}</span>
+          <span class="font-medium tracking-tight">{{ professional.rating.toFixed(1) }}</span>
           <span class="text-muted-foreground">({{ professional.review_count ?? 0 }})</span>
         </span>
       </div>
-      <p v-if="professional.description" class="text-xs text-muted-foreground line-clamp-1">
+      <p v-if="professional.description" class="text-xs text-muted-foreground tracking-tight leading-relaxed line-clamp-1">
         {{ professional.description }}
       </p>
-      <p class="text-[11px] text-muted-foreground mt-0.5">
+      <p class="text-[11px] font-medium tracking-tight tabular-nums text-muted-foreground mt-0.5">
         {{ professional.experience ?? 0 }} years experience
       </p>
     </div>

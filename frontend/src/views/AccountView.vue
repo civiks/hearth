@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 py-8 max-w-5xl mx-auto">
+  <div class="px-6 py-8 max-w-2xl mx-auto">
     <div v-if="loading" class="flex justify-center py-16">
       <Loader2 class="size-6 animate-spin text-muted-foreground" />
     </div>
@@ -9,61 +9,48 @@
       <AlertDescription>{{ error }}</AlertDescription>
     </Alert>
 
-    <div v-else-if="userData" class="space-y-6">
-      <header class="flex items-center gap-4">
-        <Avatar class="size-12">
-          <AvatarFallback :class="avatarFallbackClass">
+    <div v-else-if="userData" class="space-y-8">
+      <!-- Hero -->
+      <header class="flex items-center gap-5">
+        <Avatar class="size-16 shrink-0">
+          <AvatarFallback :class="avatarFallbackClass" class="text-xl font-medium">
             {{ initials(userData.full_name) }}
           </AvatarFallback>
         </Avatar>
-        <div>
-          <h1 class="text-2xl font-light tracking-tight">
-            {{ isOwnProfile ? "My Profile" : `${userData.full_name}'s Profile` }}
-          </h1>
-          <p class="text-sm text-muted-foreground">
-            {{ userData.email }}
+        <div class="min-w-0">
+          <h1 class="text-2xl font-semibold tracking-tight truncate">{{ userData.full_name }}</h1>
+          <p class="text-sm tracking-tight text-muted-foreground mt-1 flex items-center gap-2 flex-wrap">
+            <span class="capitalize">{{ userData.role }}</span>
+            <span class="text-muted-foreground/30">·</span>
+            <StatusPill :status="accountStatus" />
           </p>
         </div>
       </header>
 
-      <Card>
-        <CardHeader>
-          <CardTitle class="text-base font-medium">Basic information</CardTitle>
-        </CardHeader>
-        <CardContent class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
-          <Field label="Full name" :value="userData.full_name" />
+      <!-- Contact -->
+      <section class="border-t pt-6 space-y-5">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Contact</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
           <Field label="Email" :value="userData.email" />
-          <Field label="Role" :value="userData.role" class="capitalize" />
-          <Field label="Account status">
-            <StatusPill :status="accountStatus" />
-          </Field>
-        </CardContent>
-      </Card>
+          <Field label="Address" :value="userData.address || '—'" />
+          <Field label="Pincode" :value="userData.pincode || '—'" />
+        </div>
+      </section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle class="text-base font-medium">Contact</CardTitle>
-        </CardHeader>
-        <CardContent class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
-          <Field label="Address" :value="userData.address || 'Not provided'" />
-          <Field label="Pincode" :value="userData.pincode || 'Not provided'" />
-        </CardContent>
-      </Card>
-
-      <Card v-if="userData.role === 'professional'">
-        <CardHeader>
-          <CardTitle class="text-base font-medium">Professional details</CardTitle>
-        </CardHeader>
-        <CardContent class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
-          <Field label="Service" :value="userData.service_name ?? ''" />
-          <Field label="Experience" :value="`${userData.experience ?? 0} years`" />
+      <!-- Professional details -->
+      <section v-if="userData.role === 'professional'" class="border-t pt-6 space-y-5">
+        <p class="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Professional</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
+          <Field label="Service" :value="userData.service_name || '—'" />
+          <Field label="Experience" :value="userData.experience ? `${userData.experience} yrs` : '—'" />
           <Field label="Approval status">
             <StatusPill :status="userData.approval_status ?? 'pending'" />
           </Field>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
 
-      <div v-if="isOwnProfile && !isAdmin" class="flex flex-wrap gap-2">
+      <!-- Own profile actions -->
+      <div v-if="isOwnProfile && !isAdmin" class="border-t pt-6 flex flex-wrap gap-2">
         <Button @click="openEdit">
           <Edit2 class="mr-2 size-4" />
           Edit details
@@ -74,20 +61,13 @@
         </Button>
       </div>
 
-      <div
-        v-if="auth.role === 'admin' && !isOwnProfile"
-        class="flex flex-wrap gap-2"
-      >
-        <Button
-          :variant="userData.is_blocked ? 'default' : 'destructive'"
-          @click="toggleBlock"
-        >
+      <!-- Admin actions -->
+      <div v-if="auth.role === 'admin' && !isOwnProfile" class="border-t pt-6 flex flex-wrap gap-2">
+        <Button :variant="userData.is_blocked ? 'default' : 'destructive'" @click="toggleBlock">
           <component :is="userData.is_blocked ? Unlock : Lock" class="mr-2 size-4" />
           {{ userData.is_blocked ? "Unblock" : "Block" }} user
         </Button>
-        <template
-          v-if="userData.role === 'professional' && userData.approval_status === 'pending'"
-        >
+        <template v-if="userData.role === 'professional' && userData.approval_status === 'pending'">
           <Button @click="updateApproval('approved')">
             <CheckCircle class="mr-2 size-4" />
             Approve
@@ -104,6 +84,7 @@
       </div>
     </div>
 
+    <!-- Edit drawer -->
     <component
       v-if="showEdit"
       :is="isDesktop ? Sheet : Drawer"
@@ -113,21 +94,21 @@
     >
       <component :is="isDesktop ? SheetContent : DrawerContent">
         <DrawerHeader>
-          <DrawerTitle>Edit profile</DrawerTitle>
-          <DrawerDescription>Update your personal details</DrawerDescription>
+          <DrawerTitle class="tracking-tight">Edit profile</DrawerTitle>
+          <DrawerDescription class="tracking-tight">Update your personal details</DrawerDescription>
         </DrawerHeader>
-        <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4">
+        <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4" data-vaul-no-drag>
           <div class="space-y-2">
-            <Label for="edit_name">Full name</Label>
+            <Label for="edit_name" class="text-sm font-semibold tracking-tight">Full name</Label>
             <Input id="edit_name" v-model="editForm.full_name" required />
           </div>
           <div class="space-y-2">
-            <Label for="edit_address">Address</Label>
+            <Label for="edit_address" class="text-sm font-semibold tracking-tight">Address</Label>
             <Input id="edit_address" v-model="editForm.address" />
           </div>
           <div class="space-y-2">
-            <Label for="edit_pincode">Pincode</Label>
-            <Input id="edit_pincode" v-model="editForm.pincode" pattern="[0-9]{6}" />
+            <Label for="edit_pincode" class="text-sm font-semibold tracking-tight">Pincode</Label>
+            <Input id="edit_pincode" v-model="editForm.pincode" pattern="[0-9]{6}" class="tabular-nums" />
           </div>
         </div>
         <DrawerFooter>
@@ -150,7 +131,6 @@ import { useConfirm } from "@/composables/useConfirm";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";

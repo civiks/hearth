@@ -9,14 +9,14 @@
       :is="isDesktop ? SheetContent : DrawerContent"
     >
       <DrawerHeader>
-        <DrawerTitle>Book {{ service.name }}</DrawerTitle>
-        <DrawerDescription>
+        <DrawerTitle class="tracking-tight">Book {{ service.name }}</DrawerTitle>
+        <DrawerDescription class="tracking-tight">
           <span v-if="step === 'pro'">Choose a professional for this job.</span>
           <span v-else>{{ service.description }}</span>
         </DrawerDescription>
       </DrawerHeader>
 
-      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4">
+      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4" data-vaul-no-drag>
         <Alert v-if="auth.is_blocked" variant="destructive">
           <AlertCircle class="size-4" />
           <AlertTitle>Account blocked</AlertTitle>
@@ -34,8 +34,8 @@
           >
             <AiMark class="size-12 shrink-0" />
             <div class="flex-1">
-              <div class="text-sm font-medium">Any available professional</div>
-              <p class="text-xs text-muted-foreground">We'll assign the best-rated pro near you.</p>
+              <div class="text-sm font-medium tracking-tight">Any available professional</div>
+              <p class="text-xs tracking-tight text-muted-foreground">We'll assign the best-rated pro near you.</p>
             </div>
           </AiSurface>
           <ProfessionalPickCard
@@ -45,7 +45,7 @@
             :selected="selectedProId === pro.id"
             @select="selectedProId = pro.id"
           />
-          <div v-if="professionals.length === 0" class="text-xs text-muted-foreground text-center py-4">
+          <div v-if="professionals.length === 0" class="text-xs tracking-tight text-muted-foreground text-center py-4">
             No specific pros listed — we'll match you with the best available.
           </div>
         </div>
@@ -53,13 +53,13 @@
         <!-- Step 2: schedule + address -->
         <form v-else class="space-y-6" @submit.prevent="onSubmit">
           <!-- Summary strip -->
-          <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm pb-4 border-b">
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm tracking-tight pb-4 border-b">
             <span class="flex items-center gap-1 text-muted-foreground">
               <Clock class="size-3" />
-              <span class="text-foreground font-medium">{{ service.time_required }} min</span>
+              <span class="text-foreground font-medium tabular-nums">{{ service.time_required }} min</span>
             </span>
             <span class="text-muted-foreground/30">·</span>
-            <span class="inline-flex items-end gap-0.5 font-medium">
+            <span class="inline-flex items-end gap-0.5 font-medium tabular-nums">
               <span class="text-[11px] font-normal leading-none text-muted-foreground mb-px">Rs</span>
               <span class="leading-none">{{ service.base_price }}</span>
             </span>
@@ -68,36 +68,36 @@
               <span class="flex items-center gap-1.5">
                 <UserCheck class="size-3.5 text-primary" />
                 <span>{{ selectedProName }}</span>
-                <button type="button" class="text-xs text-primary underline underline-offset-2" @click="step = 'pro'">change</button>
+                <button type="button" class="text-xs tracking-tight text-primary underline underline-offset-2" @click="step = 'pro'">change</button>
               </span>
             </template>
           </div>
 
           <!-- When -->
           <div class="space-y-2">
-            <Label for="scheduled_time" class="text-sm font-semibold">When</Label>
+            <Label for="scheduled_time" class="text-sm font-semibold tracking-tight">When</Label>
             <Input id="scheduled_time" v-model="form.scheduled_time" type="datetime-local" :min="nowLocal()" required />
           </div>
 
           <!-- Where -->
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <Label class="text-sm font-semibold">Where</Label>
-              <Button v-if="hasDefault" type="button" variant="link" size="sm" class="h-auto px-0 text-xs" @click="useDefault">
+              <Label class="text-sm font-semibold tracking-tight">Where</Label>
+              <Button v-if="hasDefault" type="button" variant="link" size="sm" class="h-auto px-0 text-xs tracking-tight" @click="useDefault">
                 Use saved address
               </Button>
             </div>
             <Input v-model="form.address" placeholder="Street address" required />
             <div class="flex gap-2 mt-2">
-              <Input v-model="form.pincode" placeholder="Pincode" pattern="[0-9]{6}" required class="w-32" />
+              <Input v-model="form.pincode" placeholder="Pincode" pattern="[0-9]{6}" required class="w-32 tabular-nums" />
             </div>
           </div>
 
           <!-- Notes -->
           <div class="space-y-2">
-            <Label for="remarks" class="text-sm font-semibold">
+            <Label for="remarks" class="text-sm font-semibold tracking-tight">
               Notes
-              <span class="font-normal text-muted-foreground">(optional)</span>
+              <span class="font-normal tracking-tight text-muted-foreground">(optional)</span>
             </Label>
             <Textarea id="remarks" v-model="form.remarks" rows="3" placeholder="Any specific requirements…" />
           </div>

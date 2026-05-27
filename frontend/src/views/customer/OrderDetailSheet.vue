@@ -20,19 +20,21 @@
           <X class="size-4" />
           <span class="sr-only">Close</span>
         </SheetClose>
-        <p class="text-2xl font-semibold tracking-tight">
+        <p class="text-2xl font-semibold tracking-tight tabular-nums">
           {{ request.scheduled_time ? formatSmartDateTime(request.scheduled_time) : `Order #${request.id}` }}
         </p>
-        <component :is="isDesktop ? SheetTitle : DrawerTitle" class="text-sm! font-medium! mt-1">
-          {{ request.service_name }}
-        </component>
-        <component :is="isDesktop ? SheetDescription : DrawerDescription" class="text-xs!">
-          {{ service?.category ?? `Order #${request.id}` }}
+        <component :is="isDesktop ? SheetTitle : DrawerTitle" class="text-sm font-medium tracking-tight mt-1">
+          {{ request.service_name }}<template v-if="service?.category"><span class="font-normal text-muted-foreground"> · {{ service.category }}</span></template>
         </component>
       </component>
 
       <!-- Body -->
-      <div class="flex-1 overflow-y-auto min-h-0 px-5 py-5 space-y-6">
+      <div
+        ref="bodyRef"
+        class="flex-1 overflow-y-auto min-h-0 px-5 py-5 space-y-6"
+        data-vaul-no-drag
+        :style="maskStyle"
+      >
 
         <!-- Status -->
         <StatusTimeline :status="request.service_status" />
@@ -46,8 +48,8 @@
               class="size-9 shrink-0"
             />
             <div class="min-w-0">
-              <p class="text-sm font-medium">{{ professional.full_name }}</p>
-              <p class="text-xs text-muted-foreground mt-0.5">
+              <p class="text-sm font-medium tracking-tight">{{ professional.full_name }}</p>
+              <p class="text-xs tracking-tight tabular-nums text-muted-foreground mt-0.5">
                 <template v-if="professional.rating != null">
                   <Star class="size-3 fill-amber-400 text-amber-400 inline-block -mt-px" />
                   {{ professional.rating.toFixed(1) }}
@@ -67,15 +69,15 @@
         </div>
 
         <!-- Details -->
-        <div class="border-t pt-5 space-y-3 text-sm">
+        <div class="border-t pt-5 space-y-3 text-sm tracking-tight">
           <div class="flex items-start gap-2.5">
             <MapPin class="size-4 shrink-0 mt-0.5 text-muted-foreground" />
-            <span>{{ request.address }}, {{ request.pincode }}</span>
+            <span>{{ request.address }}, <span class="tabular-nums">{{ request.pincode }}</span></span>
           </div>
           <div v-if="service?.base_price != null || service?.time_required != null" class="flex items-center gap-2.5">
             <Tag class="size-4 shrink-0 text-muted-foreground" />
-            <span class="flex items-baseline gap-1.5">
-              <span v-if="service?.base_price != null" class="inline-flex items-end gap-0.5">
+            <span class="flex items-baseline gap-1.5 tabular-nums">
+              <span v-if="service?.base_price != null" class="inline-flex items-end gap-0.5 font-medium">
                 <span class="text-[11px] leading-none text-muted-foreground mb-px">Rs</span>
                 <span class="leading-none">{{ service!.base_price }}</span>
               </span>
@@ -83,15 +85,15 @@
               <span v-if="service?.time_required != null">{{ service!.time_required }} min</span>
             </span>
           </div>
-          <p v-if="request.date_of_request" class="text-xs text-muted-foreground pl-[26px]">
+          <p v-if="request.date_of_request" class="text-xs tracking-tight tabular-nums text-muted-foreground pl-[26px]">
             Ordered {{ formatSmartDate(request.date_of_request) }}
           </p>
         </div>
 
         <!-- Notes -->
         <div v-if="request.remarks" class="border-t pt-5">
-          <p class="text-xs text-muted-foreground mb-1.5">Notes</p>
-          <p class="text-sm leading-relaxed">{{ request.remarks }}</p>
+          <p class="text-[11px] font-medium uppercase tracking-wide text-muted-foreground mb-2">Notes</p>
+          <p class="text-sm tracking-tight leading-relaxed">{{ request.remarks }}</p>
         </div>
       </div>
 
@@ -101,11 +103,11 @@
           v-if="request.service_status === 'requested'"
           variant="outline"
           class="flex-1"
-          @click="$emit('edit')"
+          @click="onEdit"
         >
           Edit booking
         </Button>
-        <Button variant="destructive-soft" class="flex-1" @click="$emit('cancel')">
+        <Button variant="destructive-soft" class="flex-1" @click="onCancel">
           Cancel request
         </Button>
       </div>
@@ -115,8 +117,8 @@
 
 <script lang="ts" setup>
 import { MapPin, Star, Tag, X } from "lucide-vue-next";
-import { computed } from "vue";
-import { useMediaQuery } from "@vueuse/core";
+import { computed, ref } from "vue";
+import { useMediaQuery, useScroll } from "@vueuse/core";
 
 import ProfessionalAvatar from "@/components/marketplace/ProfessionalAvatar.vue";
 import StatusTimeline from "@/components/marketplace/StatusTimeline.vue";
@@ -124,7 +126,6 @@ import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
@@ -132,7 +133,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -145,12 +145,42 @@ const props = defineProps<{
   professional?: RelatedProfessional | null;
 }>();
 
-defineEmits<{ close: []; edit: []; cancel: [] }>();
+const emit = defineEmits<{ close: []; edit: []; cancel: [] }>();
 
 const isDesktop = useMediaQuery("(min-width: 640px)");
+
+const bodyRef = ref<HTMLElement | null>(null);
+const { arrivedState } = useScroll(bodyRef);
+
+const FADE = "1.5rem";
+const maskStyle = computed(() => {
+  const top = arrivedState.top;
+  const bottom = arrivedState.bottom;
+  if (top && bottom) return {};
+  const stops = [
+    top ? "black 0" : "transparent 0",
+    top ? null : `black ${FADE}`,
+    bottom ? null : `black calc(100% - ${FADE})`,
+    bottom ? "black 100%" : "transparent 100%",
+  ]
+    .filter(Boolean)
+    .join(", ");
+  const gradient = `linear-gradient(to bottom, ${stops})`;
+  return { maskImage: gradient, WebkitMaskImage: gradient };
+});
 
 const cancelled = computed(() => props.request.service_status === "cancelled");
 const isActionable = computed(() =>
   ["requested", "accepted"].includes(props.request.service_status),
 );
+
+function onEdit() {
+  emit("edit");
+  emit("close");
+}
+
+function onCancel() {
+  emit("cancel");
+  emit("close");
+}
 </script>

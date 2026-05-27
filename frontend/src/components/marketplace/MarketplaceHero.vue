@@ -3,7 +3,7 @@
     <div class="mx-auto w-full max-w-[1440px] px-6 py-6 space-y-3">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <div class="flex items-center gap-1.5 text-xs tracking-tight tabular-nums text-muted-foreground">
             <MapPin class="size-3.5" />
             {{ locationLabel }}
             <button
@@ -13,10 +13,10 @@
               {{ auth.pincode ? "change" : "set location" }}
             </button>
           </div>
-          <h1 class="text-2xl font-light tracking-tight mt-1">
+          <h1 class="text-2xl font-semibold tracking-tight mt-1">
             Trusted home services on demand
           </h1>
-          <p class="text-xs text-muted-foreground mt-0.5">
+          <p class="text-xs tracking-tight tabular-nums text-muted-foreground mt-0.5">
             {{ bookedToday }} services booked in your area this week.
           </p>
         </div>

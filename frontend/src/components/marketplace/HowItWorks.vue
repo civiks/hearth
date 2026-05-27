@@ -1,6 +1,8 @@
 <template>
   <section class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
-    <h2 class="text-2xl font-medium tracking-tight mb-8 sm:mb-10">How it works</h2>
+    <h2 class="text-2xl sm:text-3xl font-semibold tracking-[-0.02em] text-balance mb-8 sm:mb-10">
+      How it works
+    </h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
       <div
         v-for="step in steps"
@@ -13,8 +15,8 @@
         >
           <component :is="step.icon" class="size-5" :stroke-width="2" />
         </div>
-        <h3 class="text-base font-semibold">{{ step.title }}</h3>
-        <p class="text-sm text-muted-foreground leading-relaxed">
+        <h3 class="text-base font-semibold tracking-tight">{{ step.title }}</h3>
+        <p class="text-sm tracking-tight leading-relaxed text-muted-foreground">
           {{ step.body }}
         </p>
       </div>

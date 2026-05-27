@@ -2,7 +2,7 @@
   <div class="flex h-screen flex-col bg-background" data-vaul-drawer-wrapper>
     <!-- Dark global top bar — brand on the left, user menu on the right -->
     <header
-      class="vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground relative z-20"
+      class="vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground border-b border-surface-inverse-foreground/10 sm:border-b-0 relative z-20"
     >
       <div class="mx-auto w-full max-w-[1440px] flex h-12 items-center justify-between px-6">
       <RouterLink to="/" class="vt-brand flex items-center gap-2 shrink-0">
@@ -128,15 +128,17 @@
             <DrawerContent>
               <!-- Identity + icon shortcuts in one row -->
               <div class="flex items-center gap-2.5 px-4 pt-4 pb-3">
-                <Avatar class="size-8 shrink-0">
-                  <AvatarFallback class="bg-primary text-primary-foreground text-xs">
-                    {{ initials(auth.full_name) }}
-                  </AvatarFallback>
-                </Avatar>
-                <div class="flex flex-col leading-tight min-w-0 flex-1">
-                  <span class="text-sm font-medium truncate">{{ auth.full_name }}</span>
-                  <span class="text-xs text-muted-foreground truncate">{{ auth.email }}</span>
-                </div>
+                <button class="flex items-center gap-2.5 min-w-0 flex-1 text-left" @click="navigate('/account')">
+                  <Avatar class="size-8 shrink-0">
+                    <AvatarFallback class="bg-primary text-primary-foreground text-xs">
+                      {{ initials(auth.full_name) }}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div class="flex flex-col leading-tight min-w-0">
+                    <span class="text-sm font-medium truncate">{{ auth.full_name }}</span>
+                    <span class="text-xs text-muted-foreground truncate">{{ auth.email }}</span>
+                  </div>
+                </button>
                 <div class="flex items-center gap-0.5 shrink-0">
                   <button
                     class="p-2 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"

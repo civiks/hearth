@@ -18,7 +18,7 @@
         </DrawerDescription>
       </DrawerHeader>
 
-      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4">
+      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4" data-vaul-no-drag>
         <form v-if="stage === 'compose'" class="space-y-3" @submit.prevent="onParse">
           <Textarea
             v-model="prompt"

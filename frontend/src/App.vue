@@ -3,13 +3,14 @@
   <component :is="layoutComponent">
     <router-view />
   </component>
-  <Toaster position="top-right" rich-colors />
+  <Toaster :position="isDesktop ? 'top-right' : 'bottom-center'" rich-colors />
   <ConfirmDialog />
 </template>
 
 <script lang="ts" setup>
 import { computed, defineComponent, h, onMounted, watch } from "vue";
 import { useRoute, useRouter, type RouteRecordRaw } from "vue-router";
+import { useMediaQuery } from "@vueuse/core";
 
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
@@ -22,6 +23,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useChatStore } from "@/stores/chat";
 
 useTheme();
+const isDesktop = useMediaQuery("(min-width: 640px)");
 const route = useRoute();
 const router = useRouter();
 

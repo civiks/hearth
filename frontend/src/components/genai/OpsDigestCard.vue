@@ -12,7 +12,7 @@
       </span>
     </template>
     <template #action>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-4">
         <button
           v-show="!collapsed"
           type="button"
@@ -24,10 +24,11 @@
         </button>
         <button
           type="button"
-          class="text-muted-foreground hover:text-foreground transition-colors"
+          class="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
           :aria-label="collapsed ? 'Expand digest' : 'Collapse digest'"
           @click="collapsed = !collapsed"
         >
+          <span v-if="collapsed" class="text-xs tracking-tight">Show</span>
           <ChevronUp v-if="!collapsed" class="size-3.5" />
           <ChevronDown v-else class="size-3.5" />
         </button>
@@ -61,7 +62,7 @@ import AiMark from "@/components/AiMark.vue";
 import { DashboardWidget } from "@/components/dashboard";
 import { streamScript, tokenize, type AgentEvent } from "@/lib/genai";
 
-const collapsed = useLocalStorage("hs.digest.ops.collapsed", false);
+const collapsed = useLocalStorage("hs.digest.ops.collapsed", true);
 
 interface TrendPoint { date: string; count: number }
 interface StatusSlice { status: string; count: number }

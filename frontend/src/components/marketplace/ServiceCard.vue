@@ -27,17 +27,17 @@
       <Badge
         v-if="service.category"
         variant="secondary"
-        class="absolute top-2 left-2 bg-background/90 text-foreground border-0 backdrop-blur text-[11px] px-1.5 py-0"
+        class="absolute top-2 left-2 bg-background/90 text-foreground border-0 backdrop-blur text-[11px] font-medium tracking-tight px-1.5 py-0"
       >
         {{ service.category }}
       </Badge>
       <!-- Price overlaid on the image bottom — primary at-a-glance info -->
       <div class="absolute bottom-2 left-3 right-3 flex items-end justify-between text-white">
-        <span class="inline-flex items-end gap-0.5 text-lg font-semibold">
+        <span class="inline-flex items-end gap-0.5 text-lg font-semibold tracking-[-0.02em] tabular-nums">
           <span class="text-[11px] font-normal leading-none opacity-80 mb-px">Rs</span>
           <span class="leading-none">{{ service.base_price }}</span>
         </span>
-        <span class="inline-flex items-center gap-1 text-[11px] opacity-70">
+        <span class="inline-flex items-center gap-1 text-[11px] font-medium tracking-tight tabular-nums opacity-70">
           <Clock class="size-2.5" />
           {{ service.time_required }} min
         </span>
@@ -46,20 +46,20 @@
 
     <div class="p-3 space-y-1">
       <div class="flex items-start justify-between gap-2">
-        <h3 class="text-sm font-medium line-clamp-1 flex-1">{{ service.name }}</h3>
+        <h3 class="text-sm font-medium tracking-tight line-clamp-1 flex-1">{{ service.name }}</h3>
         <span
           v-if="service.rating != null"
-          class="inline-flex items-center gap-1 text-xs shrink-0"
+          class="inline-flex items-center gap-1 text-xs tabular-nums shrink-0"
         >
           <Star class="size-3 fill-amber-400 text-amber-400" />
-          <span class="font-medium">{{ service.rating.toFixed(1) }}</span>
+          <span class="font-medium tracking-tight">{{ service.rating.toFixed(1) }}</span>
           <span v-if="service.review_count != null" class="text-muted-foreground">
             ({{ service.review_count }})
           </span>
         </span>
       </div>
 
-      <p class="text-xs text-muted-foreground line-clamp-2 min-h-8">
+      <p class="text-xs text-muted-foreground tracking-tight leading-relaxed line-clamp-2 min-h-8">
         {{ service.description ?? "" }}
       </p>
     </div>

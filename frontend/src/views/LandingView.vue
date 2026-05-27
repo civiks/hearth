@@ -35,14 +35,14 @@
         />
         <div class="relative px-6 py-20 sm:py-24 lg:py-32">
           <div class="max-w-xl">
-            <div class="inline-flex items-center gap-1.5 rounded-full border border-surface-inverse-foreground/20 bg-surface-inverse-foreground/5 px-3 py-1 mb-5 sm:mb-6 text-xs text-surface-inverse-foreground/80 backdrop-blur">
+            <div class="inline-flex items-center gap-1.5 rounded-full border border-surface-inverse-foreground/20 bg-surface-inverse-foreground/5 px-3 py-1 mb-5 sm:mb-6 text-xs font-medium tracking-tight text-surface-inverse-foreground/80 backdrop-blur">
               <MapPin class="size-3" />
               Now in Bangalore
             </div>
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight mb-5 sm:mb-6 leading-tight">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.04em] mb-5 sm:mb-6 leading-[1.05] text-balance">
               Home services, done right.
             </h1>
-            <p class="text-base sm:text-lg text-surface-inverse-foreground/80 font-light mb-7 sm:mb-8 max-w-lg">
+            <p class="text-base sm:text-lg text-surface-inverse-foreground/70 mb-7 sm:mb-8 max-w-lg leading-relaxed tracking-[-0.01em]">
               Verified plumbers, electricians, cleaners and more. At your doorstep within hours, with honest pricing and real reviews.
             </p>
             <div class="flex flex-wrap gap-3">
@@ -99,7 +99,7 @@
                 </Button>
               </template>
             </div>
-            <div class="flex flex-wrap items-center gap-x-5 gap-y-2 mt-8 sm:mt-10 text-xs text-surface-inverse-foreground/70">
+            <div class="flex flex-wrap items-center gap-x-5 gap-y-2 mt-8 sm:mt-10 text-xs font-medium tracking-tight text-surface-inverse-foreground/70">
               <div class="flex items-center gap-2">
                 <Star class="size-3.5 fill-amber-400 text-amber-400" />
                 <span>4.7 average rating</span>
@@ -127,10 +127,10 @@
     <section class="ai-surface">
         <div class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
           <div class="max-w-2xl">
-            <h2 class="text-2xl sm:text-3xl font-medium tracking-tight mb-4">
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] mb-4 leading-[1.1] text-balance">
               Ready to book your first service?
             </h2>
-            <p class="text-sm sm:text-base text-muted-foreground mb-8 leading-relaxed max-w-xl">
+            <p class="text-base text-muted-foreground mb-8 leading-relaxed max-w-xl tracking-[-0.01em]">
               {{ DEMO
                 ? "Pick a role to walk through the full booking flow. See how customers request work, how professionals accept jobs, and how admins keep the platform running."
                 : "Browse verified professionals across 15+ services. Pay only after the job is done, with honest pricing and real reviews." }}

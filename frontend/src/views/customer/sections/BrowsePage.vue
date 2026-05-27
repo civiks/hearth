@@ -16,8 +16,8 @@
       >
         <AiMark class="size-7" />
         <span class="flex-1 min-w-0">
-          <span class="block text-sm font-medium">Tell us what you need</span>
-          <span class="block text-xs text-muted-foreground">
+          <span class="block text-sm font-medium tracking-tight">Tell us what you need</span>
+          <span class="block text-xs tracking-tight text-muted-foreground">
             Describe it and we'll match the right service for you.
           </span>
         </span>

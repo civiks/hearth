@@ -1,6 +1,6 @@
 <template>
   <section class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
-    <h2 class="text-2xl font-medium tracking-tight mb-8 sm:mb-10">
+    <h2 class="text-2xl sm:text-3xl font-semibold tracking-[-0.02em] text-balance mb-8 sm:mb-10">
       What our customers say
     </h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -16,7 +16,7 @@
             class="size-3.5 fill-amber-400 text-amber-400"
           />
         </div>
-        <p class="text-sm leading-relaxed flex-1">
+        <p class="text-sm tracking-tight leading-relaxed flex-1">
           "<template v-for="(part, i) in t.parts" :key="i"
             ><span v-if="part.highlight" class="font-semibold">{{
               part.text
@@ -27,8 +27,8 @@
         <div class="flex items-center gap-3 pt-2 border-t">
           <ProfessionalAvatar :name="t.name" class="size-9" />
           <div>
-            <div class="text-sm font-medium">{{ t.name }}</div>
-            <div class="text-xs text-muted-foreground">{{ t.role }}</div>
+            <div class="text-sm font-medium tracking-tight">{{ t.name }}</div>
+            <div class="text-xs tracking-tight text-muted-foreground">{{ t.role }}</div>
           </div>
         </div>
       </article>

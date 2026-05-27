@@ -18,7 +18,7 @@
         <Image class="size-5 text-muted-foreground/40" />
       </div>
       <div
-        class="absolute bottom-0 inset-x-0 py-1 text-center text-[9px] font-semibold uppercase tracking-tight"
+        class="absolute bottom-0 inset-x-0 py-1 text-center text-[9px] font-semibold uppercase tracking-wider"
         :class="statusStripClass"
       >{{ statusLabel }}</div>
     </div>
@@ -27,13 +27,13 @@
     <div class="flex-1 px-4 py-3 min-w-0 flex items-center gap-3">
       <div class="flex-1 min-w-0">
         <div class="flex items-center gap-2">
-          <p class="text-sm font-medium truncate">{{ request.service_name }}</p>
+          <p class="text-sm font-medium tracking-tight truncate">{{ request.service_name }}</p>
         </div>
-        <div v-if="request.scheduled_time" class="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
+        <div v-if="request.scheduled_time" class="flex items-center gap-1 mt-1 text-xs tracking-tight tabular-nums text-muted-foreground">
           <CalendarClock class="size-3 shrink-0" />
           <span>{{ formatSmartDateTime(request.scheduled_time) }}</span>
         </div>
-        <div class="flex items-center gap-1 mt-0.5 text-xs text-muted-foreground truncate">
+        <div class="flex items-center gap-1 mt-0.5 text-xs tracking-tight text-muted-foreground truncate">
           <UserRound class="size-3 shrink-0" />
           <span v-if="professional" class="truncate">{{ professional.full_name }}</span>
           <span v-else-if="!cancelled" class="truncate">Awaiting assignment</span>

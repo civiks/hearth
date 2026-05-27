@@ -11,7 +11,7 @@
         <DrawerDescription>{{ request.service_name }}</DrawerDescription>
       </DrawerHeader>
 
-      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4">
+      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4" data-vaul-no-drag>
         <div class="space-y-2">
           <Label for="edit_scheduled_time">Scheduled time</Label>
           <Input

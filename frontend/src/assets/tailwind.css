@@ -63,11 +63,11 @@
   background:
     linear-gradient(
       0deg,
-      rgb(99 155 255 / 0.14) 0%,
-      rgb(167 139 250 / 0.06) 35%,
-      transparent 60%
+      rgb(99 155 255 / 0.18) 0%,
+      rgb(167 139 250 / 0.08) 40%,
+      transparent 65%
     ),
-    hsl(var(--background));
+    hsl(var(--card));
 }
 @utility ai-surface-soft {
   background: linear-gradient(
@@ -765,4 +765,11 @@
   .chart .vis-grouped-bar:hover .vis-grouped-bar-bar:hover {
     opacity: 1;
   }
+
+}
+
+/* Vaul injects an unlayered stylesheet — override must also be unlayered to win */
+.dark [data-vaul-handle] {
+  background: rgb(255 255 255 / 0.18) !important;
+  opacity: 1 !important;
 }
