@@ -85,38 +85,31 @@
     </div>
 
     <!-- Edit drawer -->
-    <component
+    <ResponsiveSheet
       v-if="showEdit"
-      :is="isDesktop ? Sheet : Drawer"
       :open="true"
-      v-bind="isDesktop ? {} : { shouldScaleBackground: true }"
-      @update:open="(v: boolean) => !v && closeEdit()"
+      title="Edit profile"
+      description="Update your personal details"
+      @close="closeEdit"
     >
-      <component :is="isDesktop ? SheetContent : DrawerContent">
-        <DrawerHeader>
-          <DrawerTitle class="tracking-tight">Edit profile</DrawerTitle>
-          <DrawerDescription class="tracking-tight">Update your personal details</DrawerDescription>
-        </DrawerHeader>
-        <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4" data-vaul-no-drag>
-          <div class="space-y-2">
-            <Label for="edit_name" class="text-sm font-semibold tracking-tight">Full name</Label>
-            <Input id="edit_name" v-model="editForm.full_name" required />
-          </div>
-          <div class="space-y-2">
-            <Label for="edit_address" class="text-sm font-semibold tracking-tight">Address</Label>
-            <Input id="edit_address" v-model="editForm.address" />
-          </div>
-          <div class="space-y-2">
-            <Label for="edit_pincode" class="text-sm font-semibold tracking-tight">Pincode</Label>
-            <Input id="edit_pincode" v-model="editForm.pincode" pattern="[0-9]{6}" class="tabular-nums" />
-          </div>
-        </div>
-        <DrawerFooter>
-          <Button type="button" variant="outline" @click="closeEdit">Cancel</Button>
-          <Button type="button" class="flex-1" :disabled="loading" @click="saveChanges">Save changes</Button>
-        </DrawerFooter>
-      </component>
-    </component>
+      <div class="space-y-2">
+        <Label for="edit_name" class="text-sm font-semibold tracking-tight">Full name</Label>
+        <Input id="edit_name" v-model="editForm.full_name" required />
+      </div>
+      <div class="space-y-2">
+        <Label for="edit_address" class="text-sm font-semibold tracking-tight">Address</Label>
+        <Input id="edit_address" v-model="editForm.address" />
+      </div>
+      <div class="space-y-2">
+        <Label for="edit_pincode" class="text-sm font-semibold tracking-tight">Pincode</Label>
+        <Input id="edit_pincode" v-model="editForm.pincode" pattern="[0-9]{6}" class="tabular-nums" />
+      </div>
+
+      <template #footer>
+        <Button type="button" variant="outline" @click="closeEdit">Cancel</Button>
+        <Button type="button" class="flex-1" :disabled="loading" @click="saveChanges">Save changes</Button>
+      </template>
+    </ResponsiveSheet>
   </div>
 </template>
 
@@ -124,17 +117,14 @@
 import { AlertCircle, CheckCircle, Edit2, Loader2, Lock, Trash2, Unlock, XCircle } from "lucide-vue-next";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useMediaQuery } from "@vueuse/core";
-
 import StatusPill from "@/components/StatusBadge.vue";
 import { useConfirm } from "@/composables/useConfirm";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import ResponsiveSheet from "@/components/ui/ResponsiveSheet.vue";
 import { ApiError, api } from "@/lib/api";
 import { initials } from "@/lib/format";
 import { useAuthStore } from "@/stores/auth";
@@ -158,7 +148,6 @@ interface UserData {
 const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
-const isDesktop = useMediaQuery("(min-width: 640px)");
 const toasts = useNotificationsStore();
 const { confirm } = useConfirm();
 

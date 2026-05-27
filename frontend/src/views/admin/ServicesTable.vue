@@ -15,121 +15,110 @@
     </template>
   </DataTable>
 
-  <component
+  <ResponsiveSheet
     v-if="modalOpen"
-    :is="isDesktop ? Sheet : Drawer"
     :open="true"
-    v-bind="isDesktop ? {} : { shouldScaleBackground: true }"
-    @update:open="(v: boolean) => !v && closeModal()"
+    :title="editingId === null ? 'New service' : 'Edit service'"
+    :description="editingId === null ? 'Add a new service to the catalog.' : `Update this service's details.`"
+    body-class="space-y-5"
+    @close="closeModal"
   >
-    <component :is="isDesktop ? SheetContent : DrawerContent">
-      <DrawerHeader>
-        <DrawerTitle>{{ editingId === null ? "New service" : "Edit service" }}</DrawerTitle>
-        <DrawerDescription>
-          {{ editingId === null ? "Add a new service to the catalog." : "Update this service's details." }}
-        </DrawerDescription>
-      </DrawerHeader>
+    <div class="space-y-2">
+      <Label for="svc_name">Service name</Label>
+      <Input id="svc_name" v-model="form.name" placeholder="e.g. Kitchen Sink Repair" required />
+    </div>
 
-      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-5">
-        <div class="space-y-2">
-          <Label for="svc_name">Service name</Label>
-          <Input id="svc_name" v-model="form.name" placeholder="e.g. Kitchen Sink Repair" required />
+    <div class="space-y-2">
+      <Label for="svc_category">Category</Label>
+      <Select v-model="form.category">
+        <SelectTrigger id="svc_category">
+          <SelectValue placeholder="Select a category" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem v-for="cat in CATEGORIES" :key="cat" :value="cat">{{ cat }}</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+
+    <div class="space-y-2">
+      <div class="flex items-center justify-between">
+        <Label for="svc_desc">
+          Description
+          <span class="font-normal text-muted-foreground">(optional)</span>
+        </Label>
+        <div class="flex items-center gap-3">
+          <button
+            v-if="aiDescription"
+            type="button"
+            class="text-xs text-muted-foreground hover:text-foreground transition"
+            @click="aiDescription = false"
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            class="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition disabled:opacity-40"
+            :disabled="!form.name || generating"
+            @click="onGenerate"
+          >
+            <AiMark class="size-3.5" />
+            {{ generating ? "Generating…" : "Generate" }}
+          </button>
         </div>
-
-        <div class="space-y-2">
-          <Label for="svc_category">Category</Label>
-          <Select v-model="form.category">
-            <SelectTrigger id="svc_category">
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem v-for="cat in CATEGORIES" :key="cat" :value="cat">{{ cat }}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <Label for="svc_desc">
-              Description
-              <span class="font-normal text-muted-foreground">(optional)</span>
-            </Label>
-            <div class="flex items-center gap-3">
-              <button
-                v-if="aiDescription"
-                type="button"
-                class="text-xs text-muted-foreground hover:text-foreground transition"
-                @click="aiDescription = false"
-              >
-                Edit
-              </button>
-              <button
-                type="button"
-                class="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition disabled:opacity-40"
-                :disabled="!form.name || generating"
-                @click="onGenerate"
-              >
-                <AiMark class="size-3.5" />
-                {{ generating ? "Generating…" : "Generate" }}
-              </button>
-            </div>
-          </div>
-          <AiSurface v-if="aiDescription" class="px-3 py-2.5 text-sm leading-relaxed">
-            <span v-html="descriptionStr" />
-            <span
-              v-if="generating"
-              class="inline-block size-2 bg-muted-foreground/60 align-middle ml-1 animate-pulse"
-              aria-hidden="true"
-            />
-          </AiSurface>
-          <Textarea
-            v-else
-            id="svc_desc"
-            v-model="descriptionStr"
-            rows="3"
-            placeholder="Brief description of what's included…"
-          />
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div class="space-y-2">
-            <Label for="svc_price">Base price (₹)</Label>
-            <Input id="svc_price" v-model.number="form.base_price" type="number" min="1" required />
-          </div>
-          <div class="space-y-2">
-            <Label for="svc_time">Duration (min)</Label>
-            <Input id="svc_time" v-model.number="form.time_required" type="number" min="1" required />
-          </div>
-        </div>
-
-        <div v-if="editingId !== null" class="flex items-center justify-between gap-6 border-t pt-4">
-          <div class="min-w-0">
-            <Label>Active</Label>
-            <p class="text-xs text-muted-foreground mt-0.5">Visible to customers and available for booking.</p>
-          </div>
-          <Switch v-model="form.is_active" />
-        </div>
-
-        <Alert v-if="errorMessage" variant="destructive">
-          <AlertCircle class="size-4" />
-          <AlertDescription>{{ errorMessage }}</AlertDescription>
-        </Alert>
       </div>
+      <AiSurface v-if="aiDescription" class="px-3 py-2.5 text-sm leading-relaxed">
+        <span v-html="descriptionStr" />
+        <span
+          v-if="generating"
+          class="inline-block size-2 bg-muted-foreground/60 align-middle ml-1 animate-pulse"
+          aria-hidden="true"
+        />
+      </AiSurface>
+      <Textarea
+        v-else
+        id="svc_desc"
+        v-model="descriptionStr"
+        rows="3"
+        placeholder="Brief description of what's included…"
+      />
+    </div>
 
-      <DrawerFooter>
-        <Button type="button" variant="outline" @click="closeModal">Cancel</Button>
-        <Button type="button" class="flex-1" :disabled="submitting" @click="submitService">
-          {{ submitting ? "Saving…" : editingId === null ? "Create service" : "Save changes" }}
-        </Button>
-      </DrawerFooter>
-    </component>
-  </component>
+    <div class="grid grid-cols-2 gap-3">
+      <div class="space-y-2">
+        <Label for="svc_price">Base price (₹)</Label>
+        <Input id="svc_price" v-model.number="form.base_price" type="number" min="1" required />
+      </div>
+      <div class="space-y-2">
+        <Label for="svc_time">Duration (min)</Label>
+        <Input id="svc_time" v-model.number="form.time_required" type="number" min="1" required />
+      </div>
+    </div>
+
+    <div v-if="editingId !== null" class="flex items-center justify-between gap-6 border-t pt-4">
+      <div class="min-w-0">
+        <Label>Active</Label>
+        <p class="text-xs text-muted-foreground mt-0.5">Visible to customers and available for booking.</p>
+      </div>
+      <Switch v-model="form.is_active" />
+    </div>
+
+    <Alert v-if="errorMessage" variant="destructive">
+      <AlertCircle class="size-4" />
+      <AlertDescription>{{ errorMessage }}</AlertDescription>
+    </Alert>
+
+    <template #footer>
+      <Button type="button" variant="outline" @click="closeModal">Cancel</Button>
+      <Button type="button" class="flex-1" :disabled="submitting" @click="submitService">
+        {{ submitting ? "Saving…" : editingId === null ? "Create service" : "Save changes" }}
+      </Button>
+    </template>
+  </ResponsiveSheet>
 </template>
 
 <script lang="ts" setup>
 import { AlertCircle, Edit2, Plus, Trash2 } from "lucide-vue-next";
 import { computed, h, reactive, ref } from "vue";
-import { useMediaQuery } from "@vueuse/core";
 import type { ColumnDef } from "@tanstack/vue-table";
 
 import AiMark from "@/components/AiMark.vue";
@@ -139,11 +128,10 @@ import StatusBadge from "@/components/StatusBadge.vue";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import ResponsiveSheet from "@/components/ui/ResponsiveSheet.vue";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
@@ -164,7 +152,6 @@ const props = defineProps<{ services: AdminService[]; loading?: boolean }>();
 const emit = defineEmits<{ delete: [id: number]; changed: [] }>();
 void props;
 
-const isDesktop = useMediaQuery("(min-width: 640px)");
 const modalOpen = ref(false);
 const editingId = ref<number | null>(null);
 const submitting = ref(false);

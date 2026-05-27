@@ -1,143 +1,132 @@
 <template>
-  <component
-    :is="isDesktop ? Sheet : Drawer"
-    :open="true"
-    v-bind="isDesktop ? {} : { shouldScaleBackground: true }"
-    @update:open="(v: boolean) => !v && $emit('close')"
-  >
-    <component :is="isDesktop ? SheetContent : DrawerContent">
-      <DrawerHeader>
-        <DrawerTitle class="flex items-center gap-2">
-          <AiMark class="size-4" />
-          Tell us what you need
-        </DrawerTitle>
-        <DrawerDescription>
-          <template v-if="stage === 'compose'">Describe it — we'll match a service and pre-fill the booking.</template>
-          <template v-else-if="stage === 'review'">Reviewing your request…</template>
-          <template v-else>Fill in the booking details.</template>
-        </DrawerDescription>
-      </DrawerHeader>
+  <ResponsiveSheet :open="true" @close="$emit('close')">
+    <template #title>
+      <span class="flex items-center gap-2">
+        <AiMark class="size-4" />
+        Tell us what you need
+      </span>
+    </template>
+    <template #description>
+      <template v-if="stage === 'compose'">Describe it — we'll match a service and pre-fill the booking.</template>
+      <template v-else-if="stage === 'review'">Reviewing your request…</template>
+      <template v-else>Fill in the booking details.</template>
+    </template>
 
-      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-4" data-vaul-no-drag>
-        <form v-if="stage === 'compose'" class="space-y-3" @submit.prevent="onParse">
-          <Textarea
-            v-model="prompt"
-            rows="3"
-            autofocus
-            placeholder="e.g. my kitchen sink is leaking, urgent — tomorrow morning if possible"
-          />
-          <div class="flex flex-wrap gap-1.5">
-            <button
-              v-for="ex in EXAMPLES"
-              :key="ex"
-              type="button"
-              class="text-xs bg-muted hover:bg-muted/70 px-2 py-1 rounded transition"
-              @click="prompt = ex"
-            >
-              {{ ex }}
-            </button>
+    <form v-if="stage === 'compose'" class="space-y-3" @submit.prevent="onParse">
+      <Textarea
+        v-model="prompt"
+        rows="3"
+        autofocus
+        placeholder="e.g. my kitchen sink is leaking, urgent — tomorrow morning if possible"
+      />
+      <div class="flex flex-wrap gap-1.5">
+        <button
+          v-for="ex in EXAMPLES"
+          :key="ex"
+          type="button"
+          class="text-xs bg-muted hover:bg-muted/70 px-2 py-1 rounded transition"
+          @click="prompt = ex"
+        >
+          {{ ex }}
+        </button>
+      </div>
+    </form>
+
+    <div v-else-if="stage === 'review'" class="space-y-4">
+      <AiSurface class="px-3 py-2 text-sm whitespace-pre-wrap">
+        <span v-if="narrative || streaming" v-html="renderMarkdownish(narrative)" />
+        <span
+          v-if="streaming"
+          class="inline-block size-2 bg-muted-foreground/60 align-middle ml-1 animate-pulse"
+          aria-hidden="true"
+        />
+      </AiSurface>
+
+      <AiSurface v-if="matchedService && !streaming" class="p-3 space-y-1.5 text-sm">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2 min-w-0">
+            <AiMark class="size-3" />
+            <span class="font-medium truncate">{{ matchedService.name }}</span>
           </div>
-        </form>
-
-        <div v-else-if="stage === 'review'" class="space-y-4">
-          <AiSurface class="px-3 py-2 text-sm whitespace-pre-wrap">
-            <span v-if="narrative || streaming" v-html="renderMarkdownish(narrative)" />
-            <span
-              v-if="streaming"
-              class="inline-block size-2 bg-muted-foreground/60 align-middle ml-1 animate-pulse"
-              aria-hidden="true"
-            />
-          </AiSurface>
-
-          <AiSurface v-if="matchedService && !streaming" class="p-3 space-y-1.5 text-sm">
-            <div class="flex items-center justify-between gap-2">
-              <div class="flex items-center gap-2 min-w-0">
-                <AiMark class="size-3" />
-                <span class="font-medium truncate">{{ matchedService.name }}</span>
-              </div>
-              <Badge variant="secondary" class="text-[10px]">
-                {{ matchedService.category }}
-              </Badge>
-            </div>
-            <div class="text-xs text-muted-foreground">
-              ₹{{ matchedService.base_price }} · ~{{ matchedService.time_required }} min · matched from your description
-            </div>
-          </AiSurface>
+          <Badge variant="secondary" class="text-[10px]">
+            {{ matchedService.category }}
+          </Badge>
         </div>
+        <div class="text-xs text-muted-foreground">
+          ₹{{ matchedService.base_price }} · ~{{ matchedService.time_required }} min · matched from your description
+        </div>
+      </AiSurface>
+    </div>
 
-        <div v-else class="space-y-4 text-sm">
-          <div class="space-y-2">
-            <Label for="nl-time">Preferred time</Label>
-            <Input id="nl-time" v-model="form.scheduled_time" type="datetime-local" :min="nowLocal()" required />
-          </div>
-          <div class="space-y-2">
-            <Label>Service location</Label>
-            <div class="flex gap-2">
-              <Input v-model="form.address" placeholder="Address" required />
-              <Input
-                v-model="form.pincode"
-                placeholder="Pincode"
-                pattern="[0-9]{6}"
-                class="max-w-[140px]"
-                required
-              />
-            </div>
-          </div>
-          <div class="space-y-2">
-            <Label for="nl-remarks">
-              Notes
-              <span class="font-normal text-muted-foreground">(optional)</span>
-            </Label>
-            <Textarea id="nl-remarks" v-model="form.remarks" rows="2" />
-          </div>
-          <Alert v-if="errorMessage" variant="destructive">
-            <AlertCircle class="size-4" />
-            <AlertDescription>{{ errorMessage }}</AlertDescription>
-          </Alert>
+    <div v-else class="space-y-4 text-sm">
+      <div class="space-y-2">
+        <Label for="nl-time">Preferred time</Label>
+        <Input id="nl-time" v-model="form.scheduled_time" type="datetime-local" :min="nowLocal()" required />
+      </div>
+      <div class="space-y-2">
+        <Label>Service location</Label>
+        <div class="flex gap-2">
+          <Input v-model="form.address" placeholder="Address" required />
+          <Input
+            v-model="form.pincode"
+            placeholder="Pincode"
+            pattern="[0-9]{6}"
+            class="max-w-[140px]"
+            required
+          />
         </div>
       </div>
+      <div class="space-y-2">
+        <Label for="nl-remarks">
+          Notes
+          <span class="font-normal text-muted-foreground">(optional)</span>
+        </Label>
+        <Textarea id="nl-remarks" v-model="form.remarks" rows="2" />
+      </div>
+      <Alert v-if="errorMessage" variant="destructive">
+        <AlertCircle class="size-4" />
+        <AlertDescription>{{ errorMessage }}</AlertDescription>
+      </Alert>
+    </div>
 
-      <DrawerFooter>
-        <template v-if="stage === 'compose'">
-          <Button type="button" variant="outline" @click="$emit('close')">Cancel</Button>
-          <Button type="button" class="flex-1" :disabled="!prompt.trim()" @click="onParse">
-            Parse
-          </Button>
-        </template>
-        <template v-else-if="stage === 'review'">
-          <Button type="button" variant="outline" @click="restart">Start over</Button>
-          <Button type="button" class="flex-1" :disabled="streaming || !matchedService" @click="stage = 'form'">
-            Looks good
-            <ChevronRight class="size-3.5 ml-1" />
-          </Button>
-        </template>
-        <template v-else>
-          <Button type="button" variant="primary-soft" size="icon" class="rounded-full" @click="stage = 'review'">
-            <ArrowLeft class="size-4" />
-          </Button>
-          <Button type="button" class="flex-1" :disabled="submitting" @click="onSubmit">
-            {{ submitting ? "Booking…" : "Confirm booking" }}
-          </Button>
-        </template>
-      </DrawerFooter>
-    </component>
-  </component>
+    <template #footer>
+      <template v-if="stage === 'compose'">
+        <Button type="button" variant="outline" @click="$emit('close')">Cancel</Button>
+        <Button type="button" class="flex-1" :disabled="!prompt.trim()" @click="onParse">
+          Parse
+        </Button>
+      </template>
+      <template v-else-if="stage === 'review'">
+        <Button type="button" variant="outline" @click="restart">Start over</Button>
+        <Button type="button" class="flex-1" :disabled="streaming || !matchedService" @click="stage = 'form'">
+          Looks good
+          <ChevronRight class="size-3.5 ml-1" />
+        </Button>
+      </template>
+      <template v-else>
+        <Button type="button" variant="primary-soft" size="icon" class="rounded-full" @click="stage = 'review'">
+          <ArrowLeft class="size-4" />
+        </Button>
+        <Button type="button" class="flex-1" :disabled="submitting" @click="onSubmit">
+          {{ submitting ? "Booking…" : "Confirm booking" }}
+        </Button>
+      </template>
+    </template>
+  </ResponsiveSheet>
 </template>
 
 <script lang="ts" setup>
 import { AlertCircle, ArrowLeft, ChevronRight } from "lucide-vue-next";
 import { reactive, ref } from "vue";
-import { useMediaQuery } from "@vueuse/core";
 
 import AiMark from "@/components/AiMark.vue";
 import AiSurface from "@/components/AiSurface.vue";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import ResponsiveSheet from "@/components/ui/ResponsiveSheet.vue";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
 import { parseRequestIntent, streamScript, tokenize, type AgentEvent } from "@/lib/genai";
@@ -161,7 +150,6 @@ const EXAMPLES = [
 ];
 
 const auth = useAuthStore();
-const isDesktop = useMediaQuery("(min-width: 640px)");
 
 const stage = ref<"compose" | "review" | "form">("compose");
 const prompt = ref("");

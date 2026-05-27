@@ -135,8 +135,8 @@
                     </AvatarFallback>
                   </Avatar>
                   <div class="flex flex-col leading-tight min-w-0">
-                    <span class="text-sm font-medium truncate">{{ auth.full_name }}</span>
-                    <span class="text-xs text-muted-foreground truncate">{{ auth.email }}</span>
+                    <span class="text-sm font-semibold tracking-tight truncate">{{ auth.full_name }}</span>
+                    <span class="text-xs tracking-tight text-muted-foreground truncate">{{ auth.email }}</span>
                   </div>
                 </button>
                 <div class="flex items-center gap-0.5 shrink-0">
@@ -169,11 +169,11 @@
                 <div class="h-px bg-border -mx-1.5 mb-1.5" />
 
                 <!-- Theme -->
-                <div class="text-muted-foreground px-3 pt-2 pb-1 text-xs font-medium">Theme</div>
+                <div class="text-muted-foreground px-3 pt-2 pb-1.5 text-[11px] font-medium uppercase tracking-wider">Theme</div>
                 <button
                   v-for="t in themeOptions"
                   :key="t.value"
-                  class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm hover:bg-accent transition-colors"
+                  class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium tracking-tight hover:bg-accent transition-colors"
                   :class="theme === t.value ? 'bg-accent/60 text-accent-foreground' : ''"
                   @click="setTheme(t.value as Theme)"
                 >
@@ -184,11 +184,11 @@
 
                 <!-- Switch role (demo only) -->
                 <template v-if="DEMO">
-                  <div class="text-muted-foreground px-3 pt-3 pb-1 text-xs font-medium">Switch role</div>
+                  <div class="text-muted-foreground px-3 pt-3 pb-1.5 text-[11px] font-medium uppercase tracking-wider">Switch role</div>
                   <button
                     v-for="r in DEMO_ROLES"
                     :key="r.value"
-                    class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm hover:bg-accent transition-colors"
+                    class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium tracking-tight hover:bg-accent transition-colors"
                     :class="auth.role === r.value ? 'bg-accent/60 text-accent-foreground' : ''"
                     @click="menuOpen = false; loginAs(r.value as Role)"
                   >
@@ -202,14 +202,14 @@
 
                 <button
                   v-if="DEMO"
-                  class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm hover:bg-accent transition-colors"
+                  class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium tracking-tight hover:bg-accent transition-colors"
                   @click="resetDemoData"
                 >
                   <RotateCcw class="size-4 text-muted-foreground" />
                   Reset demo data
                 </button>
                 <button
-                  class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm text-destructive hover:bg-destructive/10 transition-colors"
+                  class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium tracking-tight text-destructive hover:bg-destructive/10 transition-colors"
                   @click="handleLogout"
                 >
                   <LogOut class="size-4" />
