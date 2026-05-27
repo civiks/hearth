@@ -5,7 +5,7 @@
 
 import { api, API_BASE_URL } from "@/lib/api";
 import { DEMO } from "@/lib/demo/flag";
-import { CATEGORIES } from "@/lib/demo/fixtures";
+import { CATEGORY_NAMES as CATEGORIES } from "@/lib/categories";
 
 // ──────────────────────────────────────────────── Event protocol
 

@@ -1,8 +1,8 @@
 <template>
   <button
     type="button"
-    class="w-full text-left rounded-lg p-3 flex items-center gap-3 card-lift border"
-    :class="selected ? 'border-primary/50 bg-primary/5' : 'border-border hover:bg-muted/50'"
+    class="w-full text-left rounded-lg p-3 flex items-center gap-3 bg-card card-lift transition-shadow"
+    :class="selected ? 'soft-card-selected' : 'soft-card hover:soft-card-hover'"
     @click="$emit('select')"
   >
     <span class="relative">

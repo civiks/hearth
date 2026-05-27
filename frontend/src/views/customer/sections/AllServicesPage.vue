@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6">
+  <div>
     <Alert v-if="auth.is_blocked" variant="destructive" class="mx-6 mt-6">
       <AlertCircle class="size-3.5" />
       <AlertTitle>Account blocked</AlertTitle>
@@ -9,15 +9,14 @@
     </Alert>
 
     <template v-else>
-      <MarketplaceHero v-model="search" />
-      <CategoryChips v-if="!loading" v-model="category" :services="services" />
+      <MarketplaceHero
+        v-model:search="search"
+        v-model:category="category"
+        :services="services"
+      />
 
-      <div class="mx-auto w-full max-w-[1440px] px-6 pb-10 space-y-6">
+      <div class="mx-auto w-full max-w-[1440px] px-6 pt-4 sm:pt-6 pb-10">
         <section v-if="loading" class="space-y-4">
-          <header>
-            <div class="h-5 w-40 bg-muted animate-pulse" />
-            <div class="h-3 w-56 bg-muted animate-pulse mt-2" />
-          </header>
           <div class="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]">
             <ServiceCardSkeleton v-for="i in 8" :key="i" />
           </div>
@@ -48,7 +47,6 @@ import { AlertCircle } from "lucide-vue-next";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import CategoryChips from "@/components/marketplace/CategoryChips.vue";
 import MarketplaceHero from "@/components/marketplace/MarketplaceHero.vue";
 import ServiceCardSkeleton from "@/components/marketplace/ServiceCardSkeleton.vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

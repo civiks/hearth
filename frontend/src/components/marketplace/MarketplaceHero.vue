@@ -1,35 +1,66 @@
 <template>
   <section class="border-b bg-card">
-    <div class="mx-auto w-full max-w-[1440px] px-6 py-6 space-y-3">
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <div class="flex items-center gap-1.5 text-xs tracking-tight tabular-nums text-muted-foreground">
-            <MapPin class="size-3.5" />
-            {{ locationLabel }}
-            <button
-              class="underline underline-offset-2 hover:text-foreground ml-1"
-              @click="openPicker"
-            >
-              {{ auth.pincode ? "change" : "set location" }}
-            </button>
-          </div>
-          <h1 class="text-2xl font-semibold tracking-tight mt-1">
-            Trusted home services on demand
-          </h1>
-          <p class="text-xs tracking-tight tabular-nums text-muted-foreground mt-0.5">
-            {{ bookedToday }} services booked in your area this week.
-          </p>
-        </div>
-        <div class="relative w-full sm:w-80">
+    <div class="mx-auto w-full max-w-[1440px] px-6 py-3 sm:py-5 space-y-3">
+      <button
+        type="button"
+        class="inline-flex items-center gap-1.5 text-xs tracking-tight tabular-nums text-muted-foreground hover:text-foreground transition-colors"
+        @click="openPicker"
+      >
+        <MapPin class="size-3.5" />
+        {{ locationLabel }}
+        <ChevronDown class="size-3.5" />
+      </button>
+
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+        <div class="relative w-full sm:w-72 shrink-0">
           <Search class="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
           <Input
-            :model-value="modelValue"
-            placeholder="Search for plumbing, AC repair, cleaning…"
+            :model-value="search"
+            placeholder="Search for services"
             class="pl-9 h-10"
-            @update:model-value="$emit('update:modelValue', String($event))"
-            @keyup.enter="$emit('submit', modelValue)"
+            @update:model-value="$emit('update:search', String($event))"
+            @keyup.enter="$emit('submit', search)"
           />
         </div>
+
+        <ul
+          v-if="categories.length"
+          class="flex gap-2 overflow-x-auto scrollbar-hide scroll-x-mask sm:flex-1 min-w-0"
+        >
+          <li>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors whitespace-nowrap"
+              :class="category === null ? activeChip : inactiveChip"
+              @click="$emit('update:category', null)"
+            >
+              All
+              <span
+                v-if="totalCount"
+                class="inline-flex items-center justify-center min-w-[18px] rounded-full px-1 text-[10px] font-medium tabular-nums"
+                :class="category === null ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'"
+              >
+                {{ totalCount }}
+              </span>
+            </button>
+          </li>
+          <li v-for="entry in categories" :key="entry.name">
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors whitespace-nowrap"
+              :class="category === entry.name ? activeChip : inactiveChip"
+              @click="$emit('update:category', entry.name)"
+            >
+              {{ entry.name }}
+              <span
+                class="inline-flex items-center justify-center min-w-[18px] rounded-full px-1 text-[10px] font-medium tabular-nums"
+                :class="category === entry.name ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'"
+              >
+                {{ entry.count }}
+              </span>
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
   </section>
@@ -72,7 +103,12 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, MapPin, Search } from "lucide-vue-next";
+import {
+  AlertCircle,
+  ChevronDown,
+  MapPin,
+  Search,
+} from "lucide-vue-next";
 import { computed, reactive, ref } from "vue";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -90,21 +126,44 @@ import { Label } from "@/components/ui/label";
 import { ApiError, api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 
-const props = defineProps<{ modelValue: string; bookingsThisWeek?: number }>();
+interface ServiceLike {
+  category?: string | null;
+}
+
+const props = defineProps<{
+  search: string;
+  category: string | null;
+  services: ServiceLike[];
+}>();
+
 defineEmits<{
-  "update:modelValue": [value: string];
+  "update:search": [value: string];
+  "update:category": [value: string | null];
   submit: [value: string];
 }>();
 
 const auth = useAuthStore();
 
 const locationLabel = computed(() => {
-  if (auth.pincode) return `Bangalore — ${auth.pincode}`;
+  if (auth.pincode) return auth.pincode;
   if (auth.address) return auth.address;
-  return "Bangalore";
+  return "Set location";
 });
 
-const bookedToday = computed(() => props.bookingsThisWeek ?? 147);
+const activeChip = "bg-primary text-primary-foreground border-primary";
+const inactiveChip = "bg-card text-foreground border-border hover:bg-muted";
+
+const categories = computed(() => {
+  const map = new Map<string, number>();
+  for (const s of props.services) {
+    if (!s.category) continue;
+    map.set(s.category, (map.get(s.category) ?? 0) + 1);
+  }
+  return [...map.entries()]
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+});
+const totalCount = computed(() => props.services.length);
 
 const dialogOpen = ref(false);
 const saving = ref(false);

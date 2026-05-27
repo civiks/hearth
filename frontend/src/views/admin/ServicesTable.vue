@@ -135,7 +135,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
-import { CATEGORIES } from "@/lib/demo/fixtures";
+import { CATEGORY_NAMES as CATEGORIES } from "@/lib/categories";
 import { generateServiceDescription, type AgentEvent } from "@/lib/genai";
 
 export interface AdminService {

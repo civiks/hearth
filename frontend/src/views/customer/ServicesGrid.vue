@@ -1,24 +1,6 @@
 <template>
   <section class="space-y-4">
-    <header class="flex items-end justify-between flex-wrap gap-2">
-      <div>
-        <h2 class="text-lg font-medium tracking-tight">
-          {{ category ? category : "Services" }}
-        </h2>
-        <p class="text-xs text-muted-foreground mt-0.5">
-          {{ filtered.length }} {{ filtered.length === 1 ? "service" : "services" }}
-        </p>
-      </div>
-      <button
-        v-if="hasMultiplePages"
-        type="button"
-        class="inline-flex items-center gap-1 text-xs text-primary hover:underline shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-        @click="showAll = !showAll"
-      >
-        {{ showAll ? "Show less" : "View all" }}
-        <ArrowRight class="size-3.5" />
-      </button>
-    </header>
+    <h2 v-if="category" class="text-lg font-medium tracking-tight">{{ category }}</h2>
 
     <div
       ref="gridEl"
@@ -36,22 +18,14 @@
       No services match your search
     </div>
 
-    <Pagination
-      v-if="!showAll"
-      :page="page"
-      :page-size="pageSize"
-      :total="filtered.length"
-      @update:page="page = $event"
-    />
+    <div v-if="hasMore" ref="sentinelEl" class="h-1" aria-hidden="true" />
   </section>
 </template>
 
 <script lang="ts" setup>
-import { useElementSize } from "@vueuse/core";
-import { ArrowRight } from "lucide-vue-next";
+import { useElementSize, useIntersectionObserver } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 
-import Pagination from "@/components/Pagination.vue";
 import ServiceCard from "@/components/marketplace/ServiceCard.vue";
 
 export interface Service {
@@ -74,11 +48,9 @@ const props = defineProps<{
 }>();
 defineEmits<{ select: [service: Service] }>();
 
-const page = ref(1);
-const showAll = ref(false);
-
 // Dynamic page size: measure the grid's actual width and derive how many full
-// rows of cards fit at the current viewport.
+// rows of cards fit at the current viewport. This drives both the initial
+// reveal and each "load more" increment.
 const gridEl = ref<HTMLElement | null>(null);
 const { width: gridWidth } = useElementSize(gridEl);
 const MIN_CARD = 220;
@@ -107,29 +79,33 @@ const filtered = computed(() => {
   return list;
 });
 
-const pageItems = computed(() => {
-  if (showAll.value) return filtered.value;
-  const start = (page.value - 1) * pageSize.value;
-  return filtered.value.slice(start, start + pageSize.value);
-});
+const visibleCount = ref(pageSize.value);
+const pageItems = computed(() => filtered.value.slice(0, visibleCount.value));
+const hasMore = computed(() => visibleCount.value < filtered.value.length);
 
-// Whether the natural pageSize would split the list across multiple pages
-const hasMultiplePages = computed(
-  () => Math.ceil(filtered.value.length / pageSize.value) > 1 || showAll.value,
-);
-
-// Reset to page 1 and exit "show all" mode whenever the filter changes
+// Reset reveal whenever the filter changes.
 watch(
   () => [props.category, props.search],
-  () => {
-    page.value = 1;
-    showAll.value = false;
-  },
+  () => { visibleCount.value = pageSize.value; },
 );
 
-// Clamp the current page if a viewport resize shrinks the total page count.
-watch(pageSize, () => {
-  const maxPage = Math.max(1, Math.ceil(filtered.value.length / pageSize.value));
-  if (page.value > maxPage) page.value = maxPage;
+// On viewport resize, never shrink the reveal — only grow it so the first
+// "page" stays at least one full grid-worth.
+watch(pageSize, (s) => {
+  if (visibleCount.value < s) visibleCount.value = s;
 });
+
+const sentinelEl = ref<HTMLElement | null>(null);
+useIntersectionObserver(
+  sentinelEl,
+  ([entry]) => {
+    if (entry?.isIntersecting && hasMore.value) {
+      visibleCount.value = Math.min(
+        filtered.value.length,
+        visibleCount.value + pageSize.value,
+      );
+    }
+  },
+  { rootMargin: "400px" },
+);
 </script>

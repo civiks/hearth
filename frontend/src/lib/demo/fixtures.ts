@@ -4,18 +4,7 @@
  * so the same seed reloads to the same state.
  */
 
-export const CATEGORIES = [
-  "Plumbing",
-  "Electrical",
-  "Carpentry",
-  "Cleaning",
-  "Painting",
-  "AC & Appliance",
-  "Pest Control",
-  "Gardening",
-] as const;
-
-export type Category = (typeof CATEGORIES)[number];
+import { type CategoryName as Category } from "@/lib/categories";
 
 export interface DemoService {
   id: number;

@@ -16,8 +16,8 @@
       <AiSurface
         as="button"
         type="button"
-        class="w-full text-left p-3 flex items-center gap-3 transition"
-        :class="selectedProId === null ? 'bg-primary/5' : 'hover:bg-muted/50'"
+        class="w-full text-left p-3 flex items-center gap-3 transition-shadow"
+        :class="selectedProId === null ? 'ring-2 ring-inset ring-primary/60 dark:ring-primary/70' : 'hover:soft-card-hover'"
         @click="selectedProId = null"
       >
         <AiMark class="size-12 shrink-0" />

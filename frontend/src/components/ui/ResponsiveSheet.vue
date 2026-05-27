@@ -70,7 +70,7 @@ const hasDescription = computed(() => !!(props.description || slots.description)
 const headerClasses = computed(() =>
   isDesktop.value
     ? "flex flex-col gap-1 px-5 pt-5 pb-4 border-b"
-    : "flex flex-col gap-1 px-5 pt-3 pb-4",
+    : "flex flex-col gap-1 px-5 pt-3",
 );
 
 const titleClasses = computed(() =>
