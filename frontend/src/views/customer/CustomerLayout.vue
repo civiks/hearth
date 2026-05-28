@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full flex-col">
+  <div class="flex sm:h-full flex-col">
     <!-- Desktop: horizontal tab strip under the topbar -->
     <nav
       v-if="isDesktop"
@@ -25,7 +25,7 @@
       </div>
     </nav>
 
-    <div class="flex-1 min-w-0 overflow-auto">
+    <div class="min-w-0 sm:flex-1 sm:overflow-auto">
       <router-view v-slot="{ Component, route: r }">
         <Transition name="page" mode="out-in" :appear="false">
           <component :is="Component" :key="r.path" />

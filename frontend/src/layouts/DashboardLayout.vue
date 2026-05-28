@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen flex-col bg-background" data-vaul-drawer-wrapper>
+  <div class="flex min-h-dvh sm:h-dvh flex-col bg-background" data-vaul-drawer-wrapper>
     <!-- Dark global top bar — brand on the left, user menu on the right -->
     <header
       class="vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground border-b border-surface-inverse-foreground/10 sm:border-b-0 relative z-20"
@@ -263,7 +263,7 @@
         </SplitterPanel>
       </SplitterGroup>
     </div>
-    <main v-else ref="scrollMain" class="flex-1 min-h-0 overflow-y-auto pb-bottom-nav">
+    <main v-else ref="scrollMain" class="flex-1 pb-bottom-nav">
       <slot />
     </main>
     <ChatWidget v-if="!isDesktop" mode="overlay" />

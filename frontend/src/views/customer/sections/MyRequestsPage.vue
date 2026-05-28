@@ -1,8 +1,9 @@
 <template>
-  <div class="mx-auto w-full max-w-[1440px] px-6 py-8 space-y-6">
-    <p class="text-xs text-muted-foreground">
-      {{ history.length }} {{ history.length === 1 ? "request" : "requests" }} on your account
-    </p>
+  <div class="mx-auto w-full max-w-[1440px] px-6 py-4 sm:py-8 space-y-6">
+    <PageHeader
+      title="My requests"
+      :description="`${history.length} ${history.length === 1 ? 'request' : 'requests'} on your account`"
+    />
 
     <div
       v-if="!loading && !history.length"
@@ -56,6 +57,7 @@
 import { computed, onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
 
+import PageHeader from "@/components/PageHeader.vue";
 import { Button } from "@/components/ui/button";
 import { useConfirm } from "@/composables/useConfirm";
 import { ApiError, api } from "@/lib/api";

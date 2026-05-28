@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto w-full max-w-[1440px] px-6 py-8 space-y-8">
+  <div class="mx-auto w-full max-w-[1440px] px-6 pt-4 sm:pt-8 pb-4 sm:pb-8 space-y-8">
     <Alert v-if="auth.is_blocked" variant="destructive">
       <AlertCircle class="size-3.5" />
       <AlertTitle>Account blocked</AlertTitle>

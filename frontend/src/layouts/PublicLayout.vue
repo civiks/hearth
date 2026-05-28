@@ -1,7 +1,10 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-background">
+  <div class="min-h-dvh flex flex-col bg-background">
     <header
-      class="vt-topbar text-surface-inverse-foreground fixed top-0 left-0 right-0 z-30"
+      :class="[
+        'vt-topbar text-surface-inverse-foreground top-0 left-0 right-0 z-30',
+        isLanding ? 'fixed' : 'relative sm:fixed',
+      ]"
     >
 
       <div
@@ -47,7 +50,7 @@
         </nav>
       </div>
     </header>
-    <main :class="['flex-1', !overlayHeader && 'pt-12']">
+    <main :class="['flex-1', !overlayHeader && 'sm:pt-12']">
       <slot />
     </main>
 

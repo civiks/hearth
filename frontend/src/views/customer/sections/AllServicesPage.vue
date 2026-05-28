@@ -9,13 +9,19 @@
     </Alert>
 
     <template v-else>
+      <div class="mx-auto w-full max-w-[1440px] px-6 pt-4 sm:pt-8 [&_header]:mb-0">
+        <PageHeader title="Services">
+          <LocationPicker />
+        </PageHeader>
+      </div>
+
       <MarketplaceHero
         v-model:search="search"
         v-model:category="category"
         :services="services"
       />
 
-      <div class="mx-auto w-full max-w-[1440px] px-6 pt-4 sm:pt-6 pb-10">
+      <div class="mx-auto w-full max-w-[1440px] px-6 pt-3 sm:pt-4 pb-10">
         <section v-if="loading" class="space-y-4">
           <div class="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]">
             <ServiceCardSkeleton v-for="i in 8" :key="i" />
@@ -47,6 +53,8 @@ import { AlertCircle } from "lucide-vue-next";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import PageHeader from "@/components/PageHeader.vue";
+import LocationPicker from "@/components/marketplace/LocationPicker.vue";
 import MarketplaceHero from "@/components/marketplace/MarketplaceHero.vue";
 import ServiceCardSkeleton from "@/components/marketplace/ServiceCardSkeleton.vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

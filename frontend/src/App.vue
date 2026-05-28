@@ -45,7 +45,7 @@ watch(
 const NoChromeLayout = defineComponent({
   name: "NoChromeLayout",
   setup(_, { slots }) {
-    return () => h("div", { class: "min-h-screen bg-background" }, slots.default?.());
+    return () => h("div", { class: "min-h-dvh bg-background" }, slots.default?.());
   },
 });
 
