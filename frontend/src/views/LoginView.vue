@@ -11,7 +11,7 @@
     <h1 class="text-2xl font-light tracking-tight">
       Welcome back to <span class="font-medium">hearth</span>
     </h1>
-    <p class="mt-1 text-sm text-muted-foreground">
+    <p class="mt-2 text-xs text-muted-foreground">
       Don't have an account?
       <RouterLink to="/register" class="text-primary hover:underline">
         Sign up

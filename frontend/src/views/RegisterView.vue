@@ -13,7 +13,7 @@
       <h1 class="text-2xl font-light tracking-tight">
         Join <span class="font-medium">hearth</span>
       </h1>
-      <p class="mt-1 text-sm text-muted-foreground">
+      <p class="mt-2 text-xs text-muted-foreground">
         Already have an account?
         <RouterLink to="/login" class="text-primary hover:underline">
           Sign in
@@ -87,7 +87,7 @@
       <h1 class="text-2xl font-light tracking-tight">
         {{ role === "user" ? "Sign up as Customer" : "Sign up as Professional" }}
       </h1>
-      <p class="mt-1 text-sm text-muted-foreground">
+      <p class="mt-2 text-xs text-muted-foreground">
         {{
           role === "user"
             ? "A few details and you're set"

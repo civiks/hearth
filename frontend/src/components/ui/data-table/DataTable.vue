@@ -59,7 +59,7 @@
               cell.column.columnDef.meta?.align === 'right' ? 'text-right' : '',
               cell.column.columnDef.meta?.align === 'center' ? 'text-center' : '',
               cell.column.columnDef.meta?.cellClass ?? '',
-              cell.column.columnDef.meta?.mono ? 'font-mono tabular-nums' : '',
+              cell.column.columnDef.meta?.mono ? 'tabular-nums' : '',
               cell.column.id === 'actions' ? 'max-sm:sticky max-sm:right-0 max-sm:z-10 max-sm:bg-background max-sm:px-0 max-sm:[mask-image:linear-gradient(to_right,transparent_0,black_0.75rem)]' : '',
             ]"
           >

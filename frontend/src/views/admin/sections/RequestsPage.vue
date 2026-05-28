@@ -96,7 +96,7 @@ const columns: ColumnDef<AdminRequest>[] = [
     accessorKey: "pincode",
     header: "Pincode",
     enableSorting: true,
-    meta: { label: "Pincode", nowrap: true },
+    meta: { label: "Pincode", nowrap: true, mono: true },
   },
 ];
 </script>

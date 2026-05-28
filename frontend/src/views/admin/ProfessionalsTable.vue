@@ -94,14 +94,14 @@ const columns: ColumnDef<AdminUser>[] = [
     accessorKey: "experience",
     header: "Experience",
     enableSorting: true,
-    meta: { label: "Experience", nowrap: true, align: "right" },
+    meta: { label: "Experience", nowrap: true, align: "right", mono: true },
     cell: ({ row }) => `${row.original.experience ?? 0} yrs`,
   },
   {
     accessorKey: "pincode",
     header: "Pincode",
     enableSorting: true,
-    meta: { label: "Pincode", nowrap: true },
+    meta: { label: "Pincode", nowrap: true, mono: true },
     cell: ({ row }) => row.original.pincode ?? "—",
   },
   {

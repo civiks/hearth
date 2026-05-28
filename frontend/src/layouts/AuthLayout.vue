@@ -1,6 +1,6 @@
 <template>
   <main
-    class="relative min-h-svh bg-background flex items-center justify-center px-6 py-10"
+    class="relative min-h-svh bg-background flex items-center justify-center px-8 py-12 sm:px-12"
   >
     <slot />
 
