@@ -1,6 +1,7 @@
 from pathlib import Path
+from typing import Annotated
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -8,9 +9,14 @@ from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
+from backend.api.middleware import RequestLoggingMiddleware
 from backend.api.routers import agent, analytics, auth, exports, requests, services, users
 from backend.core.config import get_settings
+from backend.core.db import get_session
+from backend.core.logging import configure_logging
 
 settings = get_settings()
 
@@ -18,6 +24,8 @@ limiter = Limiter(key_func=get_remote_address, storage_uri=settings.slowapi_stor
 
 
 def create_app() -> FastAPI:
+    configure_logging(settings.debug)
+
     app = FastAPI(
         title="hearth API",
         version="0.2.0",
@@ -34,10 +42,17 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    app.add_middleware(RequestLoggingMiddleware)
 
     @app.get("/healthz", tags=["meta"])
-    def healthz() -> dict[str, str]:
-        return {"status": "ok"}
+    def healthz(session: Annotated[Session, Depends(get_session)]) -> dict[str, str]:
+        try:
+            session.execute(text("SELECT 1"))
+            db_status = "ok"
+        except Exception:
+            db_status = "error"
+        overall = "ok" if db_status == "ok" else "degraded"
+        return {"status": overall, "db": db_status}
 
     app.include_router(auth.router)
     app.include_router(users.router)

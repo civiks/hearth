@@ -30,4 +30,6 @@ def test_list_services_returns_active_only(client: TestClient, session: Session)
 def test_healthz(client: TestClient):
     response = client.get("/healthz")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    body = response.json()
+    assert body["status"] == "ok"
+    assert body["db"] == "ok"

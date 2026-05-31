@@ -3,7 +3,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from backend.core.db import get_session
 from backend.core.security import CurrentUser
@@ -64,16 +64,29 @@ def _visible_to(user, req: ServiceRequest, session: Session) -> bool:
     return False
 
 
+_REQUEST_OPTS = (
+    selectinload(ServiceRequest.service),
+    selectinload(ServiceRequest.customer),
+)
+
+
 @router.get("", response_model=list[ServiceRequestRead])
 def list_requests(
-    user: CurrentUser, session: Annotated[Session, Depends(get_session)]
+    user: CurrentUser,
+    session: Annotated[Session, Depends(get_session)],
+    skip: int = 0,
+    limit: int = 100,
 ):
+    limit = min(limit, 200)
     role = _user_role(user)
+    base = select(ServiceRequest).options(*_REQUEST_OPTS).order_by(
+        ServiceRequest.date_of_request.desc()
+    )
     if role == "admin":
-        rows = session.scalars(select(ServiceRequest)).all()
+        rows = session.scalars(base.offset(skip).limit(limit)).all()
     elif role == "user":
         rows = session.scalars(
-            select(ServiceRequest).where(ServiceRequest.customer_id == user.id)
+            base.where(ServiceRequest.customer_id == user.id).offset(skip).limit(limit)
         ).all()
     elif role == "professional":
         pro = session.scalars(
@@ -82,7 +95,7 @@ def list_requests(
         if pro is None:
             return []
         rows = session.scalars(
-            select(ServiceRequest).where(ServiceRequest.service_id == pro.service_id)
+            base.where(ServiceRequest.service_id == pro.service_id).offset(skip).limit(limit)
         ).all()
     else:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="invalid role")

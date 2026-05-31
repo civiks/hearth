@@ -13,13 +13,28 @@ router = APIRouter(prefix="/api/services", tags=["services"])
 
 
 @router.get("", response_model=list[ServiceRead])
-def list_services(session: Annotated[Session, Depends(get_session)]):
-    return list(session.scalars(select(Service).where(Service.is_active.is_(True))).all())
+def list_services(
+    session: Annotated[Session, Depends(get_session)],
+    skip: int = 0,
+    limit: int = 100,
+):
+    limit = min(limit, 200)
+    return list(
+        session.scalars(
+            select(Service).where(Service.is_active.is_(True)).offset(skip).limit(limit)
+        ).all()
+    )
 
 
 @router.get("/all", response_model=list[ServiceRead])
-def list_all_services(_admin: AdminUser, session: Annotated[Session, Depends(get_session)]):
-    return list(session.scalars(select(Service)).all())
+def list_all_services(
+    _admin: AdminUser,
+    session: Annotated[Session, Depends(get_session)],
+    skip: int = 0,
+    limit: int = 100,
+):
+    limit = min(limit, 200)
+    return list(session.scalars(select(Service).offset(skip).limit(limit)).all())
 
 
 @router.get("/{service_id}", response_model=ServiceRead)

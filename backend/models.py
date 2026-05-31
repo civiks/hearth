@@ -85,8 +85,8 @@ class ServiceProfessional(Base):
     __tablename__ = "service_professional"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-    service_id: Mapped[int] = mapped_column(ForeignKey("service.id"), nullable=False)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False, index=True)
+    service_id: Mapped[int] = mapped_column(ForeignKey("service.id"), nullable=False, index=True)
     experience: Mapped[int | None] = mapped_column(Integer, nullable=True)  # years
     approval_status: Mapped[str] = mapped_column(
         String(20), nullable=False, default=ApprovalStatus.PENDING.value
@@ -102,15 +102,15 @@ class ServiceRequest(Base):
     __tablename__ = "service_request"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    service_id: Mapped[int] = mapped_column(ForeignKey("service.id"), nullable=False)
-    customer_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
+    service_id: Mapped[int] = mapped_column(ForeignKey("service.id"), nullable=False, index=True)
+    customer_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False, index=True)
     professional_id: Mapped[int | None] = mapped_column(
         ForeignKey("service_professional.id"), nullable=True
     )
-    date_of_request: Mapped[date] = mapped_column(Date, default=datetime.now)
+    date_of_request: Mapped[date] = mapped_column(Date, default=datetime.now, index=True)
     date_of_completion: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     service_status: Mapped[str] = mapped_column(
-        String(20), nullable=False, default=ServiceStatus.REQUESTED.value
+        String(20), nullable=False, default=ServiceStatus.REQUESTED.value, index=True
     )
     scheduled_time: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     address: Mapped[str] = mapped_column(String(255), nullable=False)

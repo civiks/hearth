@@ -7,11 +7,11 @@ import bcrypt
 import jwt
 from fastapi import Cookie, Depends, HTTPException, status
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from backend.core.config import get_settings
 from backend.core.db import get_session
-from backend.models import User
+from backend.models import ServiceProfessional, User
 
 JWT_ALGORITHM = "HS256"
 COOKIE_NAME = "auth_token"
@@ -61,7 +61,14 @@ def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="not authenticated"
         )
     user_id = decode_access_token(auth_token)
-    user = session.get(User, user_id)
+    user = session.scalars(
+        select(User)
+        .options(
+            selectinload(User.roles),
+            selectinload(User.professionals).selectinload(ServiceProfessional.service),
+        )
+        .where(User.id == user_id)
+    ).first()
     if user is None or not user.active or user.is_blocked:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="user inactive or blocked"

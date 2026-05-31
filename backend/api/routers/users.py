@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from backend.core import crypto
 from backend.core.db import get_session
@@ -99,11 +99,17 @@ def list_users(
     _admin: AdminUser,
     session: Annotated[Session, Depends(get_session)],
     role: str | None = None,
+    skip: int = 0,
+    limit: int = 100,
 ):
-    query = select(User)
+    limit = min(limit, 200)
+    query = select(User).options(
+        selectinload(User.roles),
+        selectinload(User.professionals).selectinload(ServiceProfessional.service),
+    )
     if role:
         query = query.join(User.roles).where(Role.name == role)
-    users = session.scalars(query).all()
+    users = session.scalars(query.offset(skip).limit(limit)).all()
     return [serialize_user(u) for u in users]
 
 

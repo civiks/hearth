@@ -17,11 +17,6 @@ def send_email(to: str, subject: str, content: str) -> bool:
     is_html = stripped.startswith("<!DOCTYPE html>") or stripped.startswith("<html>")
     message.attach(MIMEText(content, "html" if is_html else "plain"))
 
-    try:
-        with smtplib.SMTP(host=settings.smtp_host, port=settings.smtp_port) as server:
-            server.send_message(message)
-            print(f"Email sent successfully to {to}")
-            return True
-    except Exception as e:
-        print(f"Failed to send email: {e}")
-        return False
+    with smtplib.SMTP(host=settings.smtp_host, port=settings.smtp_port) as server:
+        server.send_message(message)
+    return True
