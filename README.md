@@ -2,6 +2,10 @@
 
 # hearth
 
+[![ci](https://img.shields.io/github/actions/workflow/status/civiks/hearth/ci.yml?branch=main&label=ci&style=flat-square)](https://github.com/civiks/hearth/actions/workflows/ci.yml)
+[![docker](https://img.shields.io/github/actions/workflow/status/civiks/hearth/docker.yml?label=docker&style=flat-square)](https://github.com/civiks/hearth/actions/workflows/docker.yml)
+[![license](https://img.shields.io/github/license/civiks/hearth?style=flat-square)](LICENSE)
+
 [demo](https://civiks.github.io/hearth/) · [docker](#docker) · [setup](#setup) · [todo](TODO.md)
 
 > GenAI-backed marketplace for home services.

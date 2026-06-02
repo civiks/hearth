@@ -34,8 +34,9 @@
           mode === 'overlay'
             ? 'fixed right-0 z-50 w-[calc(100vw-3rem)] shadow-2xl'
             : 'h-full',
+          mode === 'overlay' && !keyboardOpen && 'inset-y-0',
         ]"
-        :style="mode === 'overlay'
+        :style="mode === 'overlay' && keyboardOpen
           ? { top: vvOffsetTop + 'px', height: vvHeight + 'px' }
           : undefined"
         :role="mode === 'overlay' ? 'dialog' : 'complementary'"
@@ -310,7 +311,12 @@
 
         <!-- Composer -->
         <form
-          class="px-3 py-2 bg-background/80 backdrop-blur"
+          :class="[
+            'px-3 pt-2 bg-background/80 backdrop-blur',
+            mode === 'overlay' && !keyboardOpen
+              ? 'pb-[max(0.5rem,env(safe-area-inset-bottom))]'
+              : 'pb-2',
+          ]"
           @submit.prevent="() => onSubmit()"
         >
           <div class="flex items-end gap-1 px-1 py-1">
@@ -439,14 +445,14 @@ watchEffect(() => {
   bodyScrollLocked.value = props.mode === "overlay" && chat.open;
 });
 
-// Track the visual viewport so the panel shrinks to fit the visible area when
-// the virtual keyboard opens, keeping the composer above the keyboard instead
-// of letting the browser scroll the fixed panel up to reveal it.
+// Visual viewport tracking — used only while the virtual keyboard is open.
 const vvHeight = ref(window.visualViewport?.height ?? window.innerHeight);
 const vvOffsetTop = ref(window.visualViewport?.offsetTop ?? 0);
+const keyboardOpen = ref(false);
 function syncVV() {
   vvHeight.value = window.visualViewport?.height ?? window.innerHeight;
   vvOffsetTop.value = window.visualViewport?.offsetTop ?? 0;
+  keyboardOpen.value = window.innerHeight - vvHeight.value > 50;
 }
 useEventListener(window.visualViewport, "resize", syncVV);
 useEventListener(window.visualViewport, "scroll", syncVV);
