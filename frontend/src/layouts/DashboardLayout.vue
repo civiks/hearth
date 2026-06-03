@@ -1,6 +1,5 @@
 <template>
   <div class="flex min-h-dvh sm:h-dvh flex-col bg-background" data-vaul-drawer-wrapper>
-    <!-- Dark global top bar — brand on the left, user menu on the right -->
     <header
       class="vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground border-b border-surface-inverse-foreground/10 sm:border-b-0 [box-shadow:0_2px_12px_rgb(0_0_0_/_0.35)] sm:[box-shadow:none] relative z-20"
     >
@@ -21,7 +20,6 @@
           <AiMark class="size-3.5" />
         </button>
 
-        <!-- Desktop: popover dropdown -->
         <DropdownMenu v-if="isDesktop" :modal="false">
           <DropdownMenuTrigger as-child>
             <button
@@ -36,7 +34,7 @@
               <ChevronDown class="size-3.5 opacity-70" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" class="w-56 z-[60]">
+          <DropdownMenuContent align="end" class="w-56">
             <DropdownMenuLabel>
               <div class="flex flex-col leading-tight">
                 <span class="text-sm font-medium">{{ auth.full_name }}</span>
@@ -107,6 +105,12 @@
               <LogOut class="mr-2 size-4" />
               Sign out
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <div class="flex items-center gap-1.5 px-2 py-1.5 text-[11px] text-muted-foreground">
+              <button class="hover:text-foreground transition-colors" @click="$router.push('/privacy')">Privacy policy</button>
+              <span>·</span>
+              <button class="hover:text-foreground transition-colors" @click="$router.push('/terms')">Terms of service</button>
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -126,7 +130,6 @@
 
           <Drawer v-model:open="menuOpen" should-scale-background>
             <DrawerContent>
-              <!-- Identity + icon shortcuts in one row -->
               <div class="flex items-center gap-2.5 px-4 pt-4 pb-3">
                 <button class="flex items-center gap-2.5 min-w-0 flex-1 text-left" @click="navigate('/account')">
                   <Avatar class="size-8 shrink-0">
@@ -168,7 +171,6 @@
               <div class="overflow-y-auto p-1.5 pb-3">
                 <div class="h-px bg-border -mx-1.5 mb-1.5" />
 
-                <!-- Theme -->
                 <div class="text-muted-foreground px-3 pt-2 pb-1.5 text-[11px] font-medium uppercase tracking-wider">Theme</div>
                 <button
                   v-for="t in themeOptions"
@@ -182,7 +184,6 @@
                   <Check v-if="theme === t.value" class="ml-auto size-3.5 text-primary" />
                 </button>
 
-                <!-- Switch role (demo only) -->
                 <template v-if="DEMO">
                   <div class="text-muted-foreground px-3 pt-3 pb-1.5 text-[11px] font-medium uppercase tracking-wider">Switch role</div>
                   <button
@@ -215,6 +216,14 @@
                   <LogOut class="size-4" />
                   Sign out
                 </button>
+
+                <div class="h-px bg-border -mx-1.5 mt-1.5 mb-1.5" />
+
+                <div class="flex items-center gap-1.5 px-3 py-2 text-xs text-muted-foreground">
+                  <button class="hover:text-foreground transition-colors" @click="navigate('/privacy')">Privacy policy</button>
+                  <span>·</span>
+                  <button class="hover:text-foreground transition-colors" @click="navigate('/terms')">Terms of service</button>
+                </div>
               </div>
             </DrawerContent>
           </Drawer>
@@ -320,7 +329,6 @@
         <span :class="['text-xs leading-none', chat.open ? 'font-semibold' : 'font-medium']">Ask</span>
       </button>
 
-      <!-- Scroll-right arrow: shown when there's hidden content to the right -->
       <div v-if="canScrollRight" class="pointer-events-none absolute inset-y-0 right-0 flex items-center">
         <div class="absolute inset-y-0 right-0 w-14 bg-gradient-to-l from-card to-transparent" />
         <button

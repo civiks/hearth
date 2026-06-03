@@ -1,6 +1,5 @@
 <template>
   <div class="flex sm:h-full flex-col">
-    <!-- Desktop: full horizontal tab strip -->
     <nav
       v-if="isDesktop"
       class="vt-tabbar shrink-0 bg-surface-inverse border-b border-surface-inverse-foreground/10 overflow-x-auto scrollbar-hide"
