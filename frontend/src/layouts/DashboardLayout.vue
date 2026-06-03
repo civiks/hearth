@@ -2,7 +2,7 @@
   <div class="flex min-h-dvh sm:h-dvh flex-col bg-background" data-vaul-drawer-wrapper>
     <!-- Dark global top bar — brand on the left, user menu on the right -->
     <header
-      class="vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground border-b border-surface-inverse-foreground/10 sm:border-b-0 relative z-20"
+      class="vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground border-b border-surface-inverse-foreground/10 sm:border-b-0 [box-shadow:0_2px_12px_rgb(0_0_0_/_0.35)] sm:[box-shadow:none] relative z-20"
     >
       <div class="mx-auto w-full max-w-[1440px] flex h-12 items-center justify-between px-6">
       <RouterLink to="/" class="vt-brand flex items-center gap-2 shrink-0">
