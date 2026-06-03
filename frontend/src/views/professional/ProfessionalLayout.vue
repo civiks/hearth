@@ -3,7 +3,7 @@
     <!-- Desktop: horizontal tab strip under the topbar -->
     <nav
       v-if="isDesktop"
-      class="vt-tabbar shrink-0 border-b bg-card overflow-x-auto scrollbar-hide"
+      class="vt-tabbar shrink-0 bg-surface-inverse border-b border-surface-inverse-foreground/10 overflow-x-auto scrollbar-hide"
       role="tablist"
     >
       <div class="mx-auto w-full max-w-[1440px] flex items-center gap-1 px-6">
@@ -13,10 +13,10 @@
         :to="tab.to"
         role="tab"
         :class="[
-          'relative -mb-px flex items-center gap-2 px-3 py-3 text-sm whitespace-nowrap transition-colors',
+          'flex items-center gap-2 px-2.5 py-1.5 my-1.5 rounded-md text-sm whitespace-nowrap transition-colors',
           isActive(tab.to)
-            ? 'text-foreground border-b-2 border-primary font-medium'
-            : 'text-muted-foreground hover:text-foreground border-b-2 border-transparent',
+            ? 'bg-surface-inverse-foreground/15 text-surface-inverse-foreground font-medium'
+            : 'text-surface-inverse-foreground/50 hover:bg-surface-inverse-foreground/8 hover:text-surface-inverse-foreground',
         ]"
       >
         <component :is="tab.icon" class="size-3.5" />
