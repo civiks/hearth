@@ -3,6 +3,18 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@font-face {
+  font-family: "SNPro";
+  src: url("/fonts/sn-pro-brand.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: block;
+  unicode-range: U+0068, U+0065, U+0061, U+0072, U+0074; /* h e a r t */
+}
+
+.vt-brand span {
+  font-family: "SNPro", ui-sans-serif, system-ui, sans-serif;
+}
+
 /* Tighten vaul-vue drawer animation (default is 0.5s) */
 [data-vaul-drawer], [data-vaul-overlay] {
   animation-duration: 0.2s!important;
