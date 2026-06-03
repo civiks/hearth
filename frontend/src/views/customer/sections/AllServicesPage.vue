@@ -9,7 +9,7 @@
     </Alert>
 
     <template v-else>
-      <div class="mx-auto w-full max-w-[1440px] px-6 pt-4 sm:pt-8 [&_header]:mb-0">
+      <div class="mx-auto w-full max-w-[1440px] px-6 pt-4 sm:pt-5 [&_header]:mb-0">
         <PageHeader title="Services">
           <LocationPicker />
         </PageHeader>

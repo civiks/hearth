@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 py-4 sm:px-6 sm:py-8">
+  <div class="px-4 py-4 sm:px-6 sm:py-5">
     <PageHeader title="Professionals" description="Service providers registered on the platform." />
     <ProfessionalsTable
       :professionals="professionals"

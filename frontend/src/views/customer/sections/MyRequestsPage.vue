@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto w-full max-w-[1440px] px-6 py-4 sm:py-8 space-y-6">
+  <div class="mx-auto w-full max-w-[1440px] px-6 py-4 sm:py-5 space-y-6">
     <PageHeader
       title="My requests"
       :description="`${history.length} ${history.length === 1 ? 'request' : 'requests'} on your account`"

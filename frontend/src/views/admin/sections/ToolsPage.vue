@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 py-4 sm:px-6 sm:py-8 max-w-3xl mx-auto space-y-6">
+  <div class="px-4 py-4 sm:px-6 sm:py-5 max-w-3xl mx-auto space-y-6">
     <PageHeader
       title="Tools"
       description="CSV exports and Celery job triggers for testing the backend pipelines."

@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 py-4 sm:px-6 sm:py-8">
+  <div class="px-4 py-4 sm:px-6 sm:py-5">
     <PageHeader title="Users" description="Registered customers on the platform." />
     <UsersTable :users="users" :loading="usersLoading" @toggle-block="toggleBlock" @delete="deleteUser" />
   </div>

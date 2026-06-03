@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 py-4 sm:px-6 sm:py-8">
+  <div class="px-4 py-4 sm:px-6 sm:py-5">
     <PageHeader title="Services" description="Catalog of services available to customers." />
     <ServicesTable
       :services="services"

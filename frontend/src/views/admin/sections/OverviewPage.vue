@@ -87,7 +87,7 @@ function capitalize(s: string) {
 </script>
 
 <template>
-  <div class="px-4 py-4 sm:px-6 sm:py-8">
+  <div class="px-4 py-4 sm:px-6 sm:py-5">
     <PageHeader title="Overview" description="Platform health at a glance." />
     <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-stretch">
       <OpsDigestCard class="sm:col-span-12" :analytics="analytics" :loaded="analyticsLoaded" />
