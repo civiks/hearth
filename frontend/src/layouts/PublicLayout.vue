@@ -55,7 +55,7 @@
     </main>
 
     <footer v-if="isLanding" class="bg-surface-inverse text-surface-inverse-foreground">
-      <div class="mx-auto max-w-7xl px-6 py-10">
+      <div class="mx-auto max-w-7xl px-6 py-12 sm:py-16">
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-8">
           <div class="col-span-2 sm:col-span-1">
             <div class="flex items-center gap-2">
@@ -89,7 +89,7 @@
           </div>
         </div>
         <div
-          class="mt-8 pt-6 border-t border-surface-inverse-foreground/10 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-xs text-surface-inverse-foreground/60"
+          class="mt-10 sm:mt-12 pt-6 border-t border-surface-inverse-foreground/10 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-xs text-surface-inverse-foreground/60"
         >
           <span>© 2026 hearth</span>
           <div class="flex gap-x-6">
