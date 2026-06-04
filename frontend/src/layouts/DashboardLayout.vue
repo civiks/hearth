@@ -9,7 +9,7 @@
     >
       <div class="mx-auto w-full max-w-[1440px] flex h-12 items-center justify-between px-6">
       <RouterLink to="/" class="vt-brand flex items-center gap-2 shrink-0">
-        <BrandMark class="h-4 w-auto" />
+        <BrandMark class="h-3.5 w-auto" />
         <span class="brand-wordmark font-semibold text-base tracking-tight">hearth</span>
       </RouterLink>
 

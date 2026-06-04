@@ -18,7 +18,7 @@
         class="relative mx-auto w-full max-w-7xl h-12 flex items-center justify-between px-6"
       >
         <RouterLink to="/" class="vt-brand flex items-center gap-2">
-          <BrandMark class="h-4 w-auto" />
+          <BrandMark class="h-3.5 w-auto" />
           <span class="brand-wordmark font-semibold text-base tracking-tight">hearth</span>
         </RouterLink>
         <nav class="flex items-center gap-1">
@@ -59,7 +59,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-8">
           <div class="col-span-2 sm:col-span-1">
             <div class="flex items-center gap-2">
-              <BrandMark class="h-5 w-auto" />
+              <BrandMark class="h-3.5 w-auto" />
               <span class="brand-wordmark font-semibold text-base tracking-tight leading-none">hearth</span>
             </div>
           </div>
@@ -106,7 +106,7 @@
         class="mx-auto max-w-7xl px-6 py-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-xs"
       >
         <div class="flex items-center gap-2">
-          <BrandMark class="h-4 w-auto" />
+          <BrandMark class="h-3 w-auto" />
           <span class="brand-wordmark font-semibold tracking-tight leading-none">hearth</span>
           <span class="text-surface-inverse-foreground/60 ml-3">© 2026</span>
         </div>
