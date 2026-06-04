@@ -23,6 +23,7 @@ from backend.core.db import session_scope
 from backend.core.security import hash_password
 from backend.models import (
     ApprovalStatus,
+    Review,
     Role,
     Service,
     ServiceProfessional,
@@ -139,6 +140,19 @@ BIOS = [
     "Background in commercial maintenance; brings industrial-grade precision to homes.",
     "Honest pricing, no upselling. Prefers to fix rather than replace when possible.",
     "Repeat customers across HSR Layout and Indiranagar; rated highly for follow-ups.",
+]
+
+REVIEW_TEXTS = [
+    "Showed up on time and finished quickly. Very professional and tidy.",
+    "Great work, fair price. Explained everything before starting.",
+    "Polite and skilled. Cleaned up afterwards, left no mess.",
+    "Solved a problem two others couldn't. Highly recommend.",
+    "Good service overall, though arrived a little later than scheduled.",
+    "Friendly and knowledgeable. Will definitely book again.",
+    "Excellent attention to detail. Worth every rupee.",
+    "Quick response and quality work. Five stars.",
+    "Decent job, but had to call back for a minor touch-up.",
+    "Courteous, careful, and efficient. Couldn't ask for more.",
 ]
 
 AREAS = [
@@ -559,6 +573,31 @@ def seed(session: Session) -> None:
                 )
             )
 
+        session.commit()
+
+    # Reviews — one per completed request, authored by the customer who booked
+    # it. Idempotent: only seeds when the table is empty.
+    existing_review = session.scalars(select(Review)).first()
+    if existing_review is None:
+        completed = session.scalars(
+            select(ServiceRequest).where(
+                ServiceRequest.service_status == ServiceStatus.COMPLETED.value
+            )
+        ).all()
+        for i, req in enumerate(completed):
+            rating = round(3.5 + ((i * 13) % 16) * 0.1, 1)  # 3.5–5.0
+            days_ago = 2 + ((i * 7) % 70)
+            session.add(
+                Review(
+                    service_id=req.service_id,
+                    author_id=req.customer_id,
+                    professional_id=req.professional_id,
+                    request_id=req.id,
+                    rating=rating,
+                    comment=REVIEW_TEXTS[(req.id * 7) % len(REVIEW_TEXTS)],
+                    date_created=datetime.now() - timedelta(days=days_ago),
+                )
+            )
         session.commit()
 
     # Touch the rng so linters don't flag it as unused (used only for future randomization).

@@ -23,7 +23,7 @@
 
       <div class="mx-auto w-full max-w-[1440px] px-6 pt-3 sm:pt-4 pb-10">
         <section v-if="loading" class="space-y-4">
-          <div class="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]">
+          <div class="grid gap-x-3 gap-y-6 [grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]">
             <ServiceCardSkeleton v-for="i in 8" :key="i" />
           </div>
         </section>
@@ -33,16 +33,15 @@
           :services="services"
           :category="category"
           :search="search"
-          @select="openBooking"
+          @select="openDetail"
         />
       </div>
     </template>
 
-    <BookingModal
-      v-if="bookingFor"
-      :service="bookingFor"
-      :professionals="professionalsForService"
-      @close="bookingFor = null"
+    <ServiceDetailSheet
+      v-if="detailFor"
+      :service="detailFor"
+      @close="detailFor = null"
       @booked="onBooked"
     />
   </div>
@@ -50,7 +49,7 @@
 
 <script lang="ts" setup>
 import { AlertCircle } from "lucide-vue-next";
-import { computed, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import PageHeader from "@/components/PageHeader.vue";
@@ -61,9 +60,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 import { useNotificationsStore } from "@/stores/notifications";
-import BookingModal, {
-  type ProfessionalOption,
-} from "@/views/customer/BookingModal.vue";
+import ServiceDetailSheet from "@/views/customer/ServiceDetailSheet.vue";
 import ServicesGrid, { type Service } from "@/views/customer/ServicesGrid.vue";
 
 const auth = useAuthStore();
@@ -72,24 +69,12 @@ const route = useRoute();
 const router = useRouter();
 
 const services = ref<Service[]>([]);
-const professionals = ref<ProfessionalOption[]>([]);
-const bookingFor = ref<Service | null>(null);
+const detailFor = ref<Service | null>(null);
 const search = ref(String(route.query.search ?? ""));
 const category = ref<string | null>(
   typeof route.query.category === "string" ? route.query.category : null,
 );
 const loading = ref(true);
-
-const professionalsForService = computed(() =>
-  bookingFor.value
-    ? professionals.value.filter(
-        (p) =>
-          p.service_id === bookingFor.value!.id &&
-          p.approval_status === "approved" &&
-          !p.is_blocked,
-      )
-    : [],
-);
 
 // Keep the URL query in sync so the page is deep-linkable / shareable.
 watch([search, category], ([s, c]) => {
@@ -113,7 +98,7 @@ watch(
 onMounted(async () => {
   loading.value = true;
   try {
-    await Promise.all([fetchServices(), fetchProfessionals()]);
+    await fetchServices();
   } finally {
     loading.value = false;
   }
@@ -127,26 +112,16 @@ async function fetchServices() {
   }
 }
 
-async function fetchProfessionals() {
-  try {
-    professionals.value = await api.get<ProfessionalOption[]>(
-      "/api/users?role=professional",
-    );
-  } catch {
-    professionals.value = [];
-  }
-}
-
-function openBooking(service: Service) {
+function openDetail(service: Service) {
   if (auth.is_blocked) {
     toasts.error("Account is blocked. Contact support to book services.");
     return;
   }
-  bookingFor.value = service;
+  detailFor.value = service;
 }
 
 function onBooked() {
-  bookingFor.value = null;
+  detailFor.value = null;
   toasts.success("Service booked — track it under My Requests");
 }
 </script>

@@ -4,7 +4,7 @@
 
     <div
       ref="gridEl"
-      class="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]"
+      class="grid gap-x-3 gap-y-6 [grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]"
     >
       <ServiceCard
         v-for="service in pageItems"

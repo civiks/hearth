@@ -1,15 +1,11 @@
 <template>
-  <div class="bg-card overflow-hidden rounded-lg soft-card">
-    <Skeleton class="aspect-[16/9] w-full rounded-none" />
-    <div class="p-3 space-y-2">
-      <div class="flex items-center justify-between gap-2">
-        <Skeleton class="h-3.5 w-2/3" />
-        <Skeleton class="h-3 w-10" />
-      </div>
-      <Skeleton class="h-3 w-full" />
-      <div class="flex items-center justify-between pt-1.5">
-        <Skeleton class="h-3 w-10" />
-        <Skeleton class="h-3 w-14" />
+  <div>
+    <Skeleton class="aspect-[16/9] w-full rounded-xl" />
+    <div class="mt-2 space-y-2">
+      <Skeleton class="h-3.5 w-3/4" />
+      <div class="flex items-center justify-between">
+        <Skeleton class="h-4 w-12" />
+        <Skeleton class="h-3 w-8" />
       </div>
     </div>
   </div>

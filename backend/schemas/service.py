@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, ConfigDict
 
 
@@ -37,3 +39,27 @@ class ServiceUpdate(BaseModel):
     image_url: str | None = None
     rating: float | None = None
     review_count: int | None = None
+
+
+class ServiceProfessionalRead(BaseModel):
+    """A professional offering a given service, for the customer-facing detail view."""
+
+    id: int
+    full_name: str
+    service_id: int
+    avatar_url: str | None = None
+    rating: float | None = None
+    review_count: int | None = None
+    experience: int | None = None
+    description: str | None = None
+
+
+class ReviewRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    author_name: str | None = None
+    author_avatar_url: str | None = None
+    rating: float
+    comment: str | None = None
+    date_created: datetime

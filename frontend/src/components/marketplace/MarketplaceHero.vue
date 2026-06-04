@@ -1,5 +1,5 @@
 <template>
-  <section class="border-b">
+  <section>
     <div
       class="mx-auto w-full max-w-[1440px] px-6 py-2 sm:py-3 flex flex-col sm:flex-row sm:items-center gap-4"
     >

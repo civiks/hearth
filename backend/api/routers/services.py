@@ -1,13 +1,19 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy import desc, select
+from sqlalchemy.orm import Session, selectinload
 
 from backend.core.db import get_session
-from backend.core.security import AdminUser
-from backend.models import Service
-from backend.schemas.service import ServiceCreate, ServiceRead, ServiceUpdate
+from backend.core.security import AdminUser, CurrentUser
+from backend.models import ApprovalStatus, Review, Service, ServiceProfessional
+from backend.schemas.service import (
+    ReviewRead,
+    ServiceCreate,
+    ServiceProfessionalRead,
+    ServiceRead,
+    ServiceUpdate,
+)
 
 router = APIRouter(prefix="/api/services", tags=["services"])
 
@@ -43,6 +49,57 @@ def get_service(service_id: int, session: Annotated[Session, Depends(get_session
     if service is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="service not found")
     return service
+
+
+@router.get("/{service_id}/professionals", response_model=list[ServiceProfessionalRead])
+def list_service_professionals(
+    service_id: int,
+    _user: CurrentUser,
+    session: Annotated[Session, Depends(get_session)],
+):
+    """Approved, unblocked professionals offering this service (for the booking detail view)."""
+    pros = session.scalars(
+        select(ServiceProfessional)
+        .options(selectinload(ServiceProfessional.user))
+        .where(
+            ServiceProfessional.service_id == service_id,
+            ServiceProfessional.approval_status == ApprovalStatus.APPROVED.value,
+        )
+    ).all()
+    return [
+        ServiceProfessionalRead(
+            id=p.id,
+            full_name=p.user.full_name,
+            service_id=p.service_id,
+            avatar_url=p.user.avatar_url,
+            rating=p.user.rating,
+            review_count=p.user.review_count,
+            experience=p.experience,
+            description=p.description,
+        )
+        for p in pros
+        if p.user and not p.user.is_blocked
+    ]
+
+
+@router.get("/{service_id}/reviews", response_model=list[ReviewRead])
+def list_service_reviews(
+    service_id: int,
+    _user: CurrentUser,
+    session: Annotated[Session, Depends(get_session)],
+    limit: int = 20,
+):
+    """Most recent customer reviews for a service."""
+    limit = min(limit, 50)
+    return list(
+        session.scalars(
+            select(Review)
+            .options(selectinload(Review.author))
+            .where(Review.service_id == service_id)
+            .order_by(desc(Review.date_created))
+            .limit(limit)
+        ).all()
+    )
 
 
 @router.post("", response_model=ServiceRead, status_code=status.HTTP_201_CREATED)

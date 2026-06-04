@@ -128,3 +128,30 @@ class ServiceRequest(Base):
     @property
     def service_name(self) -> str | None:
         return self.service.name if self.service else None
+
+
+class Review(Base):
+    __tablename__ = "review"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    service_id: Mapped[int] = mapped_column(ForeignKey("service.id"), nullable=False, index=True)
+    author_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False, index=True)
+    professional_id: Mapped[int | None] = mapped_column(
+        ForeignKey("service_professional.id"), nullable=True, index=True
+    )
+    request_id: Mapped[int | None] = mapped_column(
+        ForeignKey("service_request.id"), nullable=True
+    )
+    rating: Mapped[float] = mapped_column(Float, nullable=False)
+    comment: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    date_created: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, index=True)
+
+    author: Mapped[User] = relationship("User", foreign_keys=[author_id], lazy="select")
+
+    @property
+    def author_name(self) -> str | None:
+        return self.author.full_name if self.author else None
+
+    @property
+    def author_avatar_url(self) -> str | None:
+        return self.author.avatar_url if self.author else None

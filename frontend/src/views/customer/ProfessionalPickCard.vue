@@ -46,7 +46,7 @@ defineProps<{
   professional: {
     id: number;
     full_name: string;
-    avatar_url?: string;
+    avatar_url?: string | null;
     rating?: number | null;
     review_count?: number | null;
     experience?: number | null;

@@ -1,10 +1,10 @@
 <template>
   <button
     type="button"
-    class="group block w-full text-left bg-card overflow-hidden rounded-lg soft-card hover:soft-card-hover card-lift focus-visible:outline-2 focus-visible:outline-primary"
+    class="group block w-full text-left rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     @click="$emit('select')"
   >
-    <div class="relative aspect-[16/9] overflow-hidden bg-muted">
+    <div class="relative aspect-[16/9] overflow-hidden rounded-xl bg-muted">
       <img
         v-if="service.image_url"
         :src="service.image_url"
@@ -12,65 +12,37 @@
         :sizes="imageSrcset ? '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px' : undefined"
         :alt="service.name"
         loading="lazy"
-        class="size-full object-cover"
+        class="size-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
       />
-      <!-- Permanent dark scrim spanning the full image — anchors the price/category overlays and lifts text legibility against any photo. -->
       <div
-        class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10"
+        class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"
         aria-hidden="true"
       />
-      <!-- Hover overlay -->
-      <div
-        class="pointer-events-none absolute inset-0 bg-black/20 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
-        aria-hidden="true"
-      />
-      <Badge
-        v-if="service.category"
-        variant="secondary"
-        class="absolute top-2 left-2 bg-background/90 text-foreground border-0 backdrop-blur text-[11px] font-medium tracking-tight px-1.5 py-0"
-      >
-        {{ service.category }}
-      </Badge>
-      <!-- Price overlaid on the image bottom — primary at-a-glance info -->
-      <div class="absolute bottom-2 left-3 right-3 flex items-end justify-between text-white">
-        <span class="inline-flex items-end gap-0.5 text-lg font-semibold tracking-[-0.02em] tabular-nums">
-          <span class="text-[11px] font-normal leading-none opacity-80 mb-px">Rs</span>
-          <span class="leading-none">{{ service.base_price }}</span>
-        </span>
-        <span class="inline-flex items-center gap-1 text-[11px] font-medium tracking-tight tabular-nums opacity-70">
-          <Clock class="size-2.5" />
-          {{ service.time_required }} min
-        </span>
-      </div>
     </div>
 
-    <div class="p-3 space-y-1">
-      <div class="flex items-start justify-between gap-2">
-        <h3 class="text-sm font-medium tracking-tight line-clamp-1 flex-1">{{ service.name }}</h3>
+    <div class="mt-2">
+      <h3 class="text-sm font-medium tracking-tight leading-snug line-clamp-2">{{ service.name }}</h3>
+
+      <div class="mt-1 flex items-center justify-between gap-2">
+        <span class="inline-flex items-end gap-0.5 text-base font-semibold tabular-nums">
+          <span class="text-[11px] font-normal leading-none text-muted-foreground mb-px">Rs</span>
+          <span class="leading-none">{{ service.base_price }}</span>
+        </span>
         <span
           v-if="service.rating != null"
           class="inline-flex items-center gap-1 text-xs tabular-nums shrink-0"
         >
           <Star class="size-3 fill-amber-400 text-amber-400" />
-          <span class="font-medium tracking-tight">{{ service.rating.toFixed(1) }}</span>
-          <span v-if="service.review_count != null" class="text-muted-foreground">
-            ({{ service.review_count }})
-          </span>
+          <span class="font-medium">{{ service.rating.toFixed(1) }}</span>
         </span>
       </div>
-
-      <p class="text-xs text-muted-foreground tracking-tight leading-relaxed line-clamp-2 min-h-8">
-        {{ service.description ?? "" }}
-      </p>
     </div>
   </button>
 </template>
 
 <script lang="ts" setup>
-import { Clock, Star } from "lucide-vue-next";
+import { Star } from "lucide-vue-next";
 import { computed } from "vue";
-
-import { Badge } from "@/components/ui/badge";
 
 const props = defineProps<{
   service: {

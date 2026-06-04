@@ -159,6 +159,49 @@ function handle(
     requireAdmin();
     return createService(body as Record<string, unknown>);
   }
+  const serviceProsMatch = path.match(/^\/api\/services\/(\d+)\/professionals$/);
+  if (serviceProsMatch && method === "GET") {
+    requireAuth();
+    const id = Number(serviceProsMatch[1]);
+    return getState()
+      .users.filter(
+        (u) =>
+          u.role === "professional" &&
+          u.service_id === id &&
+          u.approval_status === "approved" &&
+          !u.is_blocked,
+      )
+      .map((u) => ({
+        id: u.id,
+        full_name: u.full_name,
+        service_id: u.service_id ?? id,
+        avatar_url: u.avatar_url,
+        rating: u.rating ?? null,
+        review_count: u.review_count ?? null,
+        experience: u.experience ?? null,
+        description: u.description ?? null,
+      }));
+  }
+
+  const serviceReviewsMatch = path.match(/^\/api\/services\/(\d+)\/reviews$/);
+  if (serviceReviewsMatch && method === "GET") {
+    requireAuth();
+    const id = Number(serviceReviewsMatch[1]);
+    const users = getState().users;
+    return getState()
+      .reviews.filter((r) => r.service_id === id)
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, 20)
+      .map((r) => ({
+        id: r.id,
+        author_name: r.author_name,
+        author_avatar_url: users.find((u) => u.id === r.author_id)?.avatar_url ?? null,
+        rating: r.rating,
+        comment: r.comment,
+        date_created: r.date,
+      }));
+  }
+
   const serviceIdMatch = path.match(/^\/api\/services\/(\d+)$/);
   if (serviceIdMatch) {
     const id = Number(serviceIdMatch[1]);

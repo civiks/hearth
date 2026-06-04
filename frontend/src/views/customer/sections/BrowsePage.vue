@@ -44,7 +44,7 @@
           sort-by="as-is"
           :limit="3"
           view-all-to="/home/requests"
-          @select="openBooking"
+          @select="openDetail"
         />
 
         <FeaturedRow
@@ -55,7 +55,7 @@
           sort-by="popular"
           :limit="3"
           view-all-to="/home/services"
-          @select="openBooking"
+          @select="openDetail"
         />
 
         <FeaturedRow
@@ -67,16 +67,15 @@
           sort-by="top-rated"
           :limit="3"
           view-all-to="/home/services"
-          @select="openBooking"
+          @select="openDetail"
         />
       </template>
     </template>
 
-    <BookingModal
-      v-if="bookingFor"
-      :service="bookingFor"
-      :professionals="professionalsForService"
-      @close="bookingFor = null"
+    <ServiceDetailSheet
+      v-if="detailFor"
+      :service="detailFor"
+      @close="detailFor = null"
       @booked="onBooked"
     />
 
@@ -101,32 +100,18 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 import { useNotificationsStore } from "@/stores/notifications";
-import BookingModal, {
-  type ProfessionalOption,
-} from "@/views/customer/BookingModal.vue";
 import { type CustomerRequest } from "@/views/customer/RequestCard.vue";
+import ServiceDetailSheet from "@/views/customer/ServiceDetailSheet.vue";
 import { type Service } from "@/views/customer/ServicesGrid.vue";
 
 const auth = useAuthStore();
 const toasts = useNotificationsStore();
 
 const services = ref<Service[]>([]);
-const professionals = ref<ProfessionalOption[]>([]);
 const requests = ref<CustomerRequest[]>([]);
-const bookingFor = ref<Service | null>(null);
+const detailFor = ref<Service | null>(null);
 const nlOpen = ref(false);
 const loading = ref(true);
-
-const professionalsForService = computed(() =>
-  bookingFor.value
-    ? professionals.value.filter(
-        (p) =>
-          p.service_id === bookingFor.value!.id &&
-          p.approval_status === "approved" &&
-          !p.is_blocked,
-      )
-    : [],
-);
 
 // "Order again" — unique services the customer has booked before, most recent
 // first. Dedupes by service_id; assumes /api/requests row ids are monotonically
@@ -149,7 +134,7 @@ const reorderServices = computed<Service[]>(() => {
 onMounted(async () => {
   loading.value = true;
   try {
-    await Promise.all([fetchServices(), fetchProfessionals(), fetchRequests()]);
+    await Promise.all([fetchServices(), fetchRequests()]);
   } finally {
     loading.value = false;
   }
@@ -163,16 +148,6 @@ async function fetchServices() {
   }
 }
 
-async function fetchProfessionals() {
-  try {
-    professionals.value = await api.get<ProfessionalOption[]>(
-      "/api/users?role=professional",
-    );
-  } catch {
-    professionals.value = [];
-  }
-}
-
 async function fetchRequests() {
   try {
     requests.value = await api.get<CustomerRequest[]>("/api/requests");
@@ -181,16 +156,16 @@ async function fetchRequests() {
   }
 }
 
-function openBooking(service: Service) {
+function openDetail(service: Service) {
   if (auth.is_blocked) {
     toasts.error("Account is blocked. Contact support to book services.");
     return;
   }
-  bookingFor.value = service;
+  detailFor.value = service;
 }
 
 function onBooked() {
-  bookingFor.value = null;
+  detailFor.value = null;
   toasts.success("Service booked — track it under My Requests");
 }
 
