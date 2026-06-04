@@ -24,11 +24,11 @@ const modelValue = useVModel(props, 'modelValue', emits, {
     v-model="modelValue"
     data-slot="input"
     :class="cn(
-      'h-10 w-full min-w-0 dark:bg-secondary bg-muted px-3 text-sm text-foreground transition-colors',
+      'h-10 w-full min-w-0 bg-muted dark:bg-black/25 px-3 text-sm text-foreground transition-colors',
       'border border-input rounded-md',
       'placeholder:text-muted-foreground',
-      'hover:bg-secondary/60',
-      'focus-visible:outline-none focus-visible:bg-muted focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30',
+      'hover:bg-secondary/60 dark:hover:bg-black/35',
+      'focus-visible:outline-none focus-visible:bg-muted dark:focus-visible:bg-black/30 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30',
       'disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none',
       'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive',
       'file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:text-foreground',

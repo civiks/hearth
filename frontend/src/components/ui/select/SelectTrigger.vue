@@ -22,12 +22,12 @@ const forwardedProps = useForwardProps(delegatedProps)
     :data-size="size"
     v-bind="forwardedProps"
     :class="cn(
-      'flex w-full items-center justify-between gap-2 whitespace-nowrap bg-muted px-3 text-sm text-foreground select-none transition-colors',
+      'flex w-full items-center justify-between gap-2 whitespace-nowrap bg-muted dark:bg-black/25 px-3 text-sm text-foreground select-none transition-colors',
       'border border-input rounded-md',
       'data-[size=default]:h-10 data-[size=sm]:h-8',
       'data-placeholder:text-muted-foreground',
-      'hover:bg-secondary/60',
-      'focus-visible:outline-none focus-visible:bg-muted focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30',
+      'hover:bg-secondary/60 dark:hover:bg-black/35',
+      'focus-visible:outline-none focus-visible:bg-muted dark:focus-visible:bg-black/30 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30',
       'disabled:cursor-not-allowed disabled:opacity-50',
       'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive',
       '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-3.5',

@@ -18,6 +18,7 @@ export const useAuthStore = defineStore("auth", {
     user_id: (s) => s.user?.id ?? null,
     email: (s) => s.user?.email ?? null,
     full_name: (s) => s.user?.full_name ?? null,
+    avatar_url: (s) => s.user?.avatar_url ?? null,
     address: (s) => s.user?.address ?? null,
     pincode: (s) => s.user?.pincode ?? null,
     service_id: (s) => s.user?.service_id ?? null,

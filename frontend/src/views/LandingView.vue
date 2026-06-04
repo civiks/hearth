@@ -130,7 +130,7 @@
 
     <Testimonials />
 
-    <section class="ai-surface">
+    <section class="ai-surface-band">
         <div class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
           <div class="mx-auto max-w-2xl text-center">
             <h2 class="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] mb-4 leading-[1.1] text-balance">

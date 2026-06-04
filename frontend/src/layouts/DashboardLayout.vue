@@ -1,12 +1,16 @@
 <template>
   <div class="flex min-h-dvh sm:h-dvh flex-col bg-background" data-vaul-drawer-wrapper>
     <header
-      class="vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground border-b border-surface-inverse-foreground/10 sm:border-b-0 [box-shadow:0_2px_12px_rgb(0_0_0_/_0.35)] sm:[box-shadow:none] relative z-20"
+      :class="[
+        'vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground border-b border-surface-inverse-foreground/10 sm:border-b-0 [box-shadow:0_2px_12px_rgb(0_0_0_/_0.35)] sm:[box-shadow:none] z-30',
+        isDesktop ? 'relative' : 'sticky top-0 transition-transform duration-300 ease-out will-change-transform',
+        !isDesktop && headerHidden && '-translate-y-full',
+      ]"
     >
       <div class="mx-auto w-full max-w-[1440px] flex h-12 items-center justify-between px-6">
       <RouterLink to="/" class="vt-brand flex items-center gap-2 shrink-0">
         <BrandMark class="h-4 w-auto" />
-        <span class="font-semibold text-base tracking-tight">hearth</span>
+        <span class="brand-wordmark font-semibold text-base tracking-tight">hearth</span>
       </RouterLink>
 
       <div class="flex items-center gap-2">
@@ -27,6 +31,7 @@
               class="flex items-center gap-2 px-2 py-1 rounded-full transition hover:bg-surface-inverse-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse"
             >
               <Avatar class="size-6">
+                <AvatarImage v-if="auth.avatar_url" :src="auth.avatar_url" :alt="auth.full_name ?? ''" />
                 <AvatarFallback class="bg-primary text-primary-foreground text-[10px]">
                   {{ initials(auth.full_name) }}
                 </AvatarFallback>
@@ -121,6 +126,7 @@
             @click="menuOpen = true"
           >
             <Avatar class="size-6">
+              <AvatarImage v-if="auth.avatar_url" :src="auth.avatar_url" :alt="auth.full_name ?? ''" />
               <AvatarFallback class="bg-primary text-primary-foreground text-[10px]">
                 {{ initials(auth.full_name) }}
               </AvatarFallback>
@@ -133,6 +139,7 @@
               <div class="flex items-center gap-2.5 px-4 pt-4 pb-3">
                 <button class="flex items-center gap-2.5 min-w-0 flex-1 text-left" @click="navigate('/account')">
                   <Avatar class="size-8 shrink-0">
+                    <AvatarImage v-if="auth.avatar_url" :src="auth.avatar_url" :alt="auth.full_name ?? ''" />
                     <AvatarFallback class="bg-primary text-primary-foreground text-xs">
                       {{ initials(auth.full_name) }}
                     </AvatarFallback>
@@ -374,7 +381,7 @@ import AiMark from "@/components/AiMark.vue";
 import BrandMark from "@/components/BrandMark.vue";
 import ChatWidget from "@/components/ChatWidget.vue";
 import SettingsDrawer from "@/components/SettingsDrawer.vue";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import {
   DropdownMenu,
@@ -462,9 +469,28 @@ function isTabActive(to: string) {
 const chatPanelRef = ref<SplitterPanelHandle | null>(null);
 const scrollMain = ref<HTMLElement | null>(null);
 
+const { y: windowY } = useScroll(window, { throttle: 80 });
+const headerHidden = ref(false);
+let lastScrollY = 0;
+watch(windowY, (y) => {
+  if (isDesktop.value || y < 64) {
+    headerHidden.value = false;
+    lastScrollY = y;
+    return;
+  }
+  const delta = y - lastScrollY;
+  if (Math.abs(delta) < 6) return;
+  headerHidden.value = delta > 0;
+  lastScrollY = y;
+});
+
 watch(
   () => route.path,
-  () => { scrollMain.value?.scrollTo({ top: 0, behavior: "instant" }); },
+  () => {
+    scrollMain.value?.scrollTo({ top: 0, behavior: "instant" });
+    headerHidden.value = false;
+    lastScrollY = 0;
+  },
 );
 
 async function syncChatPanel(open: boolean) {

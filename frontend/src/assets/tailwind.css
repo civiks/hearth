@@ -11,7 +11,7 @@
   unicode-range: U+0068, U+0065, U+0061, U+0072, U+0074; /* h e a r t */
 }
 
-.vt-brand span {
+.brand-wordmark {
   font-family: "SNPro", ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -79,6 +79,26 @@
       transparent 65%
     ),
     hsl(var(--card));
+}
+@utility ai-surface-band {
+  background:
+    linear-gradient(
+      0deg,
+      rgb(78 135 255 / 0.13) 0%,
+      rgb(139 92 246 / 0.05) 35%,
+      transparent 60%
+    ),
+    hsl(var(--background));
+}
+.dark .ai-surface-band {
+  background:
+    linear-gradient(
+      0deg,
+      rgb(99 155 255 / 0.18) 0%,
+      rgb(167 139 250 / 0.08) 40%,
+      transparent 65%
+    ),
+    hsl(var(--background));
 }
 @utility ai-surface-soft {
   background: linear-gradient(
@@ -402,10 +422,10 @@
   --card-foreground: 0 0% 95.7%;
   --popover: 0 0% 18%;               /* #2d2d2d — elevated above card */
   --popover-foreground: 0 0% 95.7%;
-  --primary: 219 100% 58%;           /* #2e7bff */
+  --primary: 219 100% 66%;           /* #5089ff — brighter so links/accents read vividly on the dark surfaces */
   --primary-foreground: 0 0% 100%;
-  --primary-hover: 219 99% 53%;      /* #0f62fe blue-60 */
-  --primary-active: 219 97% 46%;     /* #0353e9 blue-70 */
+  --primary-hover: 219 100% 72%;     /* #6699ff — lighten on hover (dark direction) */
+  --primary-active: 219 100% 78%;    /* #84acff */
 
   /* Neutrals — secondary direction flips: dark theme lightens on hover */
   --secondary: 0 0% 22.4%;           /* #393939 gray-80 */

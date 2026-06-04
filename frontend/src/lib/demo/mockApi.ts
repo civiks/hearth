@@ -26,6 +26,7 @@ function toLoginResponse(u: DemoUser) {
     is_blocked: u.is_blocked,
     service_id: u.service_id ?? null,
     approval_status: u.approval_status ?? null,
+    avatar_url: u.avatar_url,
   };
 }
 

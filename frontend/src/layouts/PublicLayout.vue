@@ -19,7 +19,7 @@
       >
         <RouterLink to="/" class="vt-brand flex items-center gap-2">
           <BrandMark class="h-4 w-auto" />
-          <span class="font-semibold text-base tracking-tight">hearth</span>
+          <span class="brand-wordmark font-semibold text-base tracking-tight">hearth</span>
         </RouterLink>
         <nav class="flex items-center gap-1">
           <Button
@@ -60,7 +60,7 @@
           <div class="col-span-2 sm:col-span-1">
             <div class="flex items-center gap-2">
               <BrandMark class="h-5 w-auto" />
-              <span class="font-semibold text-base tracking-tight leading-none">hearth</span>
+              <span class="brand-wordmark font-semibold text-base tracking-tight leading-none">hearth</span>
             </div>
           </div>
           <div>
@@ -107,7 +107,7 @@
       >
         <div class="flex items-center gap-2">
           <BrandMark class="h-4 w-auto" />
-          <span class="font-semibold tracking-tight leading-none">hearth</span>
+          <span class="brand-wordmark font-semibold tracking-tight leading-none">hearth</span>
           <span class="text-surface-inverse-foreground/60 ml-3">© 2026</span>
         </div>
         <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-surface-inverse-foreground/70">
