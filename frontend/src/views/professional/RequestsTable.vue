@@ -14,25 +14,15 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  CheckCircle,
-  MoreVertical,
-  PlayCircle,
-} from "lucide-vue-next";
+import { CheckCircle, PlayCircle } from "lucide-vue-next";
 import { h } from "vue";
 import type { ColumnDef } from "@tanstack/vue-table";
 
 import UserAvatar, { type AvatarVariant } from "@/components/Avatar.vue";
+import RowActions, { type RowAction } from "@/components/RowActions.vue";
 import SmartReplyChip from "@/components/genai/SmartReplyChip.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { formatDateTime } from "@/lib/format";
 import { useNotificationsStore } from "@/stores/notifications";
 
@@ -169,72 +159,31 @@ const columns: ColumnDef<ProRequest>[] = [
     meta: { align: "right" },
     cell: ({ row }) => {
       const r = row.original;
-      const items: ReturnType<typeof h>[] = [];
+      const actions: RowAction[] = [];
 
       if (r.service_status === "requested") {
-        items.push(
-          h(
-            DropdownMenuItem,
-            { onClick: () => emit("updateStatus", r.id, "accepted") },
-            {
-              default: () => [
-                h(CheckCircle, { class: "mr-2 size-3.5" }),
-                "Accept request",
-              ],
-            },
-          ),
-        );
+        actions.push({
+          label: "Accept request",
+          icon: CheckCircle,
+          onClick: () => emit("updateStatus", r.id, "accepted"),
+        });
       } else if (r.service_status === "accepted") {
-        items.push(
-          h(
-            DropdownMenuItem,
-            { onClick: () => emit("updateStatus", r.id, "in_progress") },
-            {
-              default: () => [
-                h(PlayCircle, { class: "mr-2 size-3.5" }),
-                "Start work",
-              ],
-            },
-          ),
-        );
+        actions.push({
+          label: "Start work",
+          icon: PlayCircle,
+          onClick: () => emit("updateStatus", r.id, "in_progress"),
+        });
       } else if (r.service_status === "in_progress") {
-        items.push(
-          h(
-            DropdownMenuItem,
-            { onClick: () => emit("updateStatus", r.id, "completed") },
-            {
-              default: () => [
-                h(CheckCircle, { class: "mr-2 size-3.5" }),
-                "Mark as complete",
-              ],
-            },
-          ),
-        );
+        actions.push({
+          label: "Mark as complete",
+          icon: CheckCircle,
+          onClick: () => emit("updateStatus", r.id, "completed"),
+        });
       }
 
-      if (items.length === 0) return null;
+      if (actions.length === 0) return null;
 
-      return h(DropdownMenu, null, {
-        default: () => [
-          h(
-            DropdownMenuTrigger,
-            { asChild: true },
-            {
-              default: () =>
-                h(
-                  Button,
-                  {
-                    variant: "ghost",
-                    size: "icon",
-                    "aria-label": "Open menu",
-                  },
-                  { default: () => h(MoreVertical, { class: "size-3.5" }) },
-                ),
-            },
-          ),
-          h(DropdownMenuContent, { align: "end" }, { default: () => items }),
-        ],
-      });
+      return h(RowActions, { actions });
     },
   },
 ];

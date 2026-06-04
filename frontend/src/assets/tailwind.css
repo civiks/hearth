@@ -158,6 +158,19 @@
 }
 
 
+.vt-topbar { view-transition-name: topbar; }
+.vt-brand  { view-transition-name: brand;  }
+.vt-tabbar { view-transition-name: tabbar; }
+
+::view-transition-old(topbar),
+::view-transition-new(topbar),
+::view-transition-old(brand),
+::view-transition-new(brand),
+::view-transition-old(tabbar),
+::view-transition-new(tabbar) {
+  animation: none;
+}
+
 @utility btn-glow {
   background-image: linear-gradient(
     to bottom,

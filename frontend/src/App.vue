@@ -1,8 +1,10 @@
 <template>
   <LoadingIndicator />
-  <component :is="layoutComponent">
-    <router-view />
-  </component>
+  <TooltipProvider :delay-duration="300">
+    <component :is="layoutComponent">
+      <router-view />
+    </component>
+  </TooltipProvider>
   <Toaster :position="isDesktop ? 'top-right' : 'bottom-center'" rich-colors />
   <ConfirmDialog />
 </template>
@@ -15,6 +17,7 @@ import { useMediaQuery } from "@vueuse/core";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import LoadingIndicator from "@/components/LoadingIndicator.vue";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { useTheme } from "@/composables/useTheme";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";

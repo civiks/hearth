@@ -11,7 +11,7 @@
     class="flex items-center justify-center sm:justify-between gap-2 pt-2"
     @update:page="onPage"
   >
-    <span class="hidden sm:inline text-xs text-muted-foreground shrink-0">{{ rangeLabel }}</span>
+    <span class="hidden sm:inline text-xs text-muted-foreground shrink-0 tabular-nums">{{ rangeLabel }}</span>
 
     <PaginationList
       v-slot="{ items }"
@@ -29,7 +29,7 @@
         <PaginationListItem
           v-if="item.type === 'page'"
           :value="item.value"
-          class="size-7 text-xs rounded-md inline-flex items-center justify-center cursor-pointer transition-colors shrink-0 hover:bg-muted data-[selected]:bg-primary data-[selected]:text-primary-foreground data-[selected]:hover:bg-primary"
+          class="size-7 text-xs rounded-md inline-flex items-center justify-center cursor-pointer transition-colors shrink-0 tabular-nums hover:bg-muted data-[selected]:bg-primary data-[selected]:text-primary-foreground data-[selected]:hover:bg-primary"
         >
           {{ item.value }}
         </PaginationListItem>

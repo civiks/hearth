@@ -3,6 +3,7 @@ import { ArrowDown, ArrowUp } from "lucide-vue-next";
 import { computed } from "vue";
 import type { RouteLocationRaw } from "vue-router";
 
+import { useCountUp } from "@/composables/useCountUp";
 import DashboardWidget from "./DashboardWidget.vue";
 import Sparkline from "./Sparkline.vue";
 
@@ -33,6 +34,10 @@ const deltaColor = computed(() => {
 });
 
 const hasTrend = computed(() => Boolean(props.trend && props.trend.length));
+
+const numericValue = computed(() => typeof props.value === 'number' ? props.value : NaN)
+const animatedCount = useCountUp(() => isNaN(numericValue.value) ? 0 : numericValue.value)
+const displayValue = computed(() => isNaN(numericValue.value) ? props.value : animatedCount.value)
 </script>
 
 <template>
@@ -45,7 +50,7 @@ const hasTrend = computed(() => Boolean(props.trend && props.trend.length));
       <div class="min-w-0 space-y-1.5">
         <p v-if="unit" class="text-xs text-muted-foreground leading-none">{{ unit }}</p>
         <div class="flex items-baseline gap-2 min-w-0">
-          <span class="text-2xl sm:text-3xl font-light leading-none tabular-nums">{{ value }}</span>
+          <span class="text-2xl sm:text-3xl font-light leading-none tabular-nums">{{ displayValue }}</span>
           <span
             v-if="deltaText"
             class="inline-flex items-baseline gap-0.5 text-xs font-medium"

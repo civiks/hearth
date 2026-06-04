@@ -1,11 +1,16 @@
 <template>
   <!-- Desktop: compact dropdown -->
   <DropdownMenu v-if="isDesktop">
-    <DropdownMenuTrigger as-child>
-      <Button variant="ghost" size="icon" aria-label="Open menu">
-        <MoreVertical class="size-4" />
-      </Button>
-    </DropdownMenuTrigger>
+    <Tooltip>
+      <TooltipTrigger as-child>
+        <DropdownMenuTrigger as-child>
+          <Button variant="ghost" size="icon" aria-label="Open menu">
+            <MoreVertical class="size-4" />
+          </Button>
+        </DropdownMenuTrigger>
+      </TooltipTrigger>
+      <TooltipContent side="left">Actions</TooltipContent>
+    </Tooltip>
     <DropdownMenuContent align="end">
       <DropdownMenuItem
         v-for="action in actions"
@@ -52,6 +57,7 @@ import { useMediaQuery } from "@vueuse/core";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export interface RowAction {
   label: string;
