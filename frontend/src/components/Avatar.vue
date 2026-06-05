@@ -1,20 +1,28 @@
 <template>
   <Avatar :class="size">
-    <AvatarFallback :class="variantClass">{{ initialsText }}</AvatarFallback>
+    <AvatarImage v-if="src" :src="src" :alt="name" />
+    <AvatarFallback :class="cn(variantClass, fallbackClass)">{{ initialsText }}</AvatarFallback>
   </Avatar>
 </template>
 
 <script lang="ts" setup>
 import { computed } from "vue";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { initials } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 export type AvatarVariant = "primary" | "success" | "warning" | "danger" | "info";
 
 const props = withDefaults(
-  defineProps<{ name?: string; variant?: AvatarVariant; size?: string }>(),
-  { name: "", variant: "primary", size: "size-9" },
+  defineProps<{
+    name?: string;
+    src?: string | null;
+    variant?: AvatarVariant;
+    size?: string;
+    fallbackClass?: string;
+  }>(),
+  { name: "", src: null, variant: "primary", size: "size-9", fallbackClass: "" },
 );
 
 const initialsText = computed(() => initials(props.name));

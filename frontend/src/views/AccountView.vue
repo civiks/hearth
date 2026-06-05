@@ -22,7 +22,7 @@
           <p class="text-sm tracking-tight text-muted-foreground mt-1 flex items-center gap-2 flex-wrap">
             <span class="capitalize">{{ userData.role }}</span>
             <span class="text-muted-foreground/30">·</span>
-            <StatusPill :status="accountStatus" />
+            <StatusBadge :status="accountStatus" />
           </p>
         </div>
       </header>
@@ -44,7 +44,7 @@
           <Field label="Service" :value="userData.service_name || '—'" />
           <Field label="Experience" :value="userData.experience ? `${userData.experience} yrs` : '—'" />
           <Field label="Approval status">
-            <StatusPill :status="userData.approval_status ?? 'pending'" />
+            <StatusBadge :status="userData.approval_status ?? 'pending'" />
           </Field>
         </div>
       </section>
@@ -117,7 +117,7 @@
 import { AlertCircle, CheckCircle, Edit2, Loader2, Lock, Trash2, Unlock, XCircle } from "lucide-vue-next";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import StatusPill from "@/components/StatusBadge.vue";
+import StatusBadge from "@/components/StatusBadge.vue";
 import { useConfirm } from "@/composables/useConfirm";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
