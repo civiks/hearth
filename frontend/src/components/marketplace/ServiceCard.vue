@@ -1,10 +1,10 @@
 <template>
   <button
     type="button"
-    class="group block w-full text-left rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+    class="group relative block w-full text-left rounded-xl overflow-hidden bg-card soft-card hover:soft-card-hover transition-shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     @click="$emit('select')"
   >
-    <div class="relative aspect-[16/9] overflow-hidden rounded-xl bg-muted">
+    <div class="relative aspect-[16/9] overflow-hidden bg-muted">
       <img
         v-if="service.image_url"
         :src="service.image_url"
@@ -20,7 +20,9 @@
       />
     </div>
 
-    <div class="mt-2">
+    <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-border z-10" aria-hidden="true" />
+
+    <div class="px-3 pb-3 mt-2">
       <h3 class="text-sm font-medium tracking-tight leading-snug truncate">{{ service.name }}</h3>
 
       <div class="mt-1 flex items-center justify-between gap-2">

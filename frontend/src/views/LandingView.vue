@@ -54,32 +54,32 @@
                       <ChevronDown class="ml-2 size-3.5" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" class="w-64">
-                    <DropdownMenuLabel>
-                      <div class="flex flex-col leading-tight">
-                        <span class="text-sm font-medium">Demo mode</span>
-                        <span class="text-xs text-muted-foreground">
-                          State persists in your browser only.
-                        </span>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuLabel
-                      class="text-[11px] uppercase tracking-wide text-muted-foreground font-normal"
-                    >
+                  <DropdownMenuContent align="start" class="w-72 p-1.5">
+                    <div class="px-2 py-1.5 mb-1">
+                      <p class="text-sm font-medium">Demo mode</p>
+                      <p class="text-xs text-muted-foreground">State persists in your browser only.</p>
+                    </div>
+                    <DropdownMenuSeparator class="-mx-1.5 mb-1" />
+                    <DropdownMenuLabel class="text-[10px] uppercase tracking-widest text-muted-foreground font-medium px-2 mb-0.5">
                       Sign in as
                     </DropdownMenuLabel>
                     <DropdownMenuItem
                       v-for="r in DEMO_ROLES"
                       :key="r.value"
-                      :class="auth.role === r.value ? 'bg-muted font-medium' : ''"
+                      class="gap-3 py-2 rounded-lg"
+                      :class="auth.role === r.value ? 'bg-muted' : ''"
                       @click="loginAs(r.value)"
                     >
-                      <component :is="r.icon" class="mr-2 size-3.5" />
-                      {{ r.label }}
+                      <div :class="['inline-flex size-8 items-center justify-center rounded-full shrink-0 text-white', ROLE_COLORS[r.value]]">
+                        <component :is="r.icon" class="size-4" />
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium tracking-tight">{{ r.label }}</p>
+                        <p class="text-xs text-muted-foreground tracking-tight">{{ ROLE_DESCRIPTIONS[r.value] }}</p>
+                      </div>
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive" @click="resetDemoData">
+                    <DropdownMenuSeparator class="-mx-1.5 mt-1 mb-1" />
+                    <DropdownMenuItem variant="destructive" class="rounded-lg" @click="resetDemoData">
                       <RotateCcw class="mr-2 size-3.5" />
                       Reset demo data
                     </DropdownMenuItem>
@@ -150,32 +150,32 @@
                       <ChevronDown class="ml-2 size-3.5" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="center" class="w-64">
-                    <DropdownMenuLabel>
-                      <div class="flex flex-col leading-tight">
-                        <span class="text-sm font-medium">Demo mode</span>
-                        <span class="text-xs text-muted-foreground">
-                          State persists in your browser only.
-                        </span>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuLabel
-                      class="text-[11px] uppercase tracking-wide text-muted-foreground font-normal"
-                    >
+                  <DropdownMenuContent align="center" class="w-72 p-1.5">
+                    <div class="px-2 py-1.5 mb-1">
+                      <p class="text-sm font-medium">Demo mode</p>
+                      <p class="text-xs text-muted-foreground">State persists in your browser only.</p>
+                    </div>
+                    <DropdownMenuSeparator class="-mx-1.5 mb-1" />
+                    <DropdownMenuLabel class="text-[10px] uppercase tracking-widest text-muted-foreground font-medium px-2 mb-0.5">
                       Sign in as
                     </DropdownMenuLabel>
                     <DropdownMenuItem
                       v-for="r in DEMO_ROLES"
                       :key="r.value"
-                      :class="auth.role === r.value ? 'bg-muted font-medium' : ''"
+                      class="gap-3 py-2 rounded-lg"
+                      :class="auth.role === r.value ? 'bg-muted' : ''"
                       @click="loginAs(r.value)"
                     >
-                      <component :is="r.icon" class="mr-2 size-3.5" />
-                      {{ r.label }}
+                      <div :class="['inline-flex size-8 items-center justify-center rounded-full shrink-0 text-white', ROLE_COLORS[r.value]]">
+                        <component :is="r.icon" class="size-4" />
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium tracking-tight">{{ r.label }}</p>
+                        <p class="text-xs text-muted-foreground tracking-tight">{{ ROLE_DESCRIPTIONS[r.value] }}</p>
+                      </div>
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive" @click="resetDemoData">
+                    <DropdownMenuSeparator class="-mx-1.5 mt-1 mb-1" />
+                    <DropdownMenuItem variant="destructive" class="rounded-lg" @click="resetDemoData">
                       <RotateCcw class="mr-2 size-3.5" />
                       Reset demo data
                     </DropdownMenuItem>
@@ -207,8 +207,8 @@
       <button
         v-for="r in DEMO_ROLES"
         :key="r.value"
-        class="w-full flex items-center gap-3 p-3 rounded-lg text-left transition-shadow"
-        :class="auth.role === r.value ? 'soft-card-selected' : 'bg-muted/50 hover:bg-muted'"
+        class="w-full flex items-center gap-3 p-3 rounded-lg text-left transition-shadow bg-card"
+        :class="auth.role === r.value ? 'soft-card-selected' : 'soft-card hover:soft-card-hover'"
         @click="loginAs(r.value); drawerOpen = false"
       >
         <div :class="['inline-flex size-10 items-center justify-center rounded-full shrink-0 text-white', ROLE_COLORS[r.value]]">
