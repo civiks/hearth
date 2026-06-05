@@ -1,7 +1,7 @@
 <template>
   <header
     :class="[
-      'vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground border-b border-surface-inverse-foreground/10 sm:border-b-0 [box-shadow:0_2px_12px_rgb(0_0_0_/_0.35)] sm:[box-shadow:none] z-30',
+      'vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground border-b border-surface-inverse-foreground/10 sm:border-b-0 z-30',
       isDesktop ? 'relative' : 'sticky top-0 transition-transform duration-300 ease-out will-change-transform',
       !isDesktop && headerHidden && '-translate-y-full',
     ]"

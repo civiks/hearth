@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto max-w-2xl px-6 py-16">
-    <h1 class="text-3xl font-light tracking-tight">Terms of Service</h1>
+    <h1 class="font-display text-3xl font-light tracking-tight">Terms of Service</h1>
     <p class="mt-2 text-sm text-muted-foreground">Last updated 21 May 2026</p>
 
     <div class="mt-10 space-y-6 text-sm leading-relaxed text-foreground">

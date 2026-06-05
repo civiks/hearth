@@ -52,10 +52,13 @@ import {
 } from "lucide-vue-next";
 import { RouterLink, useRoute } from "vue-router";
 
+import { useScrollReset } from "@/composables/useScrollReset";
+
 const route = useRoute();
 const isDesktop = useMediaQuery("(min-width: 640px)");
 const contentRef = ref<HTMLElement | null>(null);
 const { arrivedState } = useScroll(contentRef);
+useScrollReset(contentRef);
 
 const tabs = [
   { label: "Overview",       to: "/admin/overview",      icon: LayoutDashboard },

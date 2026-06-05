@@ -1,7 +1,7 @@
 <template>
   <section class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
     <div class="max-w-2xl mb-10 sm:mb-12">
-      <h2 class="text-2xl sm:text-3xl font-semibold tracking-[-0.02em] text-balance">
+      <h2 class="font-display text-2xl sm:text-3xl font-semibold tracking-[-0.02em] text-balance">
         What our customers say
       </h2>
     </div>

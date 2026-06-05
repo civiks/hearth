@@ -39,7 +39,7 @@
               <MapPin class="size-3" />
               Now in Bangalore
             </div>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.04em] mb-5 sm:mb-6 leading-[1.05] text-balance">
+            <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.03em] mb-5 sm:mb-6 leading-[1.05] text-balance">
               Home services, done right.
             </h1>
             <p class="text-base sm:text-lg text-surface-inverse-foreground/70 mb-7 sm:mb-8 max-w-lg leading-relaxed tracking-[-0.01em]">
@@ -133,7 +133,7 @@
     <section class="ai-surface-band">
         <div class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
           <div class="mx-auto max-w-2xl text-center">
-            <h2 class="text-3xl sm:text-4xl font-semibold tracking-[-0.03em] mb-4 leading-[1.1] text-balance">
+            <h2 class="font-display text-3xl sm:text-4xl font-semibold tracking-[-0.03em] mb-4 leading-[1.1] text-balance">
               Ready to book your first service?
             </h2>
             <p class="text-base text-muted-foreground mb-8 leading-relaxed mx-auto max-w-xl tracking-[-0.01em]">

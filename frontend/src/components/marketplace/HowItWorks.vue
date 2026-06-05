@@ -1,6 +1,6 @@
 <template>
   <section class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
-    <h2 class="text-2xl sm:text-3xl font-semibold tracking-[-0.02em] text-balance mb-8 sm:mb-10">
+    <h2 class="font-display text-2xl sm:text-3xl font-semibold tracking-[-0.02em] text-balance mb-8 sm:mb-10">
       How it works
     </h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">

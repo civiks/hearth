@@ -4,7 +4,7 @@
       {{ code }}
     </span>
 
-    <h1 class="text-2xl font-semibold text-foreground mb-2">{{ title }}</h1>
+    <h1 class="font-display text-2xl font-semibold text-foreground mb-2">{{ title }}</h1>
     <p class="text-sm text-muted-foreground text-center max-w-xs mb-8">{{ message }}</p>
 
     <Button @click="goHome">

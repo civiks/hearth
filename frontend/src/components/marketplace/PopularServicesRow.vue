@@ -5,7 +5,7 @@
   >
     <div class="flex flex-wrap items-end justify-between gap-2 mb-6 sm:mb-8">
       <div class="min-w-0">
-        <h2 class="text-2xl sm:text-3xl font-semibold tracking-[-0.02em] text-balance">
+        <h2 class="font-display text-2xl sm:text-3xl font-semibold tracking-[-0.02em] text-balance">
           Popular services
         </h2>
         <p class="text-sm tracking-tight text-muted-foreground mt-1">

@@ -18,7 +18,7 @@
           </AvatarFallback>
         </Avatar>
         <div class="min-w-0">
-          <h1 class="text-2xl font-semibold tracking-tight truncate">{{ userData.full_name }}</h1>
+          <h1 class="font-display text-2xl font-semibold tracking-tight truncate">{{ userData.full_name }}</h1>
           <p class="text-sm tracking-tight text-muted-foreground mt-1 flex items-center gap-2 flex-wrap">
             <span class="capitalize">{{ userData.role }}</span>
             <span class="text-muted-foreground/30">·</span>
