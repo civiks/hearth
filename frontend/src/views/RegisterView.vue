@@ -11,7 +11,7 @@
     <!-- Step 1: pick role -->
     <template v-if="step === 'role'">
       <h1 class="text-center text-2xl font-light tracking-tight">
-        Join <span class="font-medium">hearth</span>
+        Join <span class="brand-wordmark font-medium">hearth</span>
       </h1>
       <p class="mt-2 text-center text-xs text-muted-foreground">
         Already have an account?
