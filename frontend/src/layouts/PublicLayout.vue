@@ -11,21 +11,22 @@
         aria-hidden="true"
         :class="[
           'pointer-events-none absolute inset-x-0 top-0',
-          overlayHeader ? 'h-32 topbar-mask-gradient' : 'h-12 bg-surface-inverse',
+          overlayHeader ? 'h-32 topbar-mask-gradient' : 'h-14 bg-surface-inverse',
         ]"
       />
       <div
-        class="relative mx-auto w-full max-w-7xl h-12 flex items-center justify-between px-6"
+        class="relative mx-auto w-full max-w-7xl h-14 flex items-center justify-between px-6"
       >
-        <RouterLink to="/" class="vt-brand flex items-center gap-2">
-          <BrandMark class="h-3.5 w-auto" />
-          <span class="brand-wordmark font-semibold text-base tracking-tight">hearth</span>
+        <RouterLink to="/" class="vt-brand flex items-center gap-2.5">
+          <BrandMark class="h-5 w-auto" />
+          <span class="brand-wordmark font-semibold text-lg tracking-tight">hearth</span>
         </RouterLink>
-        <nav class="flex items-center gap-1">
+
+        <!-- Desktop nav -->
+        <nav class="hidden sm:flex items-center gap-1">
           <Button
             v-if="!auth.logged_in"
             variant="ghost"
-            size="sm"
             class="text-surface-inverse-foreground hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground"
             @click="$router.push('/login')"
           >
@@ -33,7 +34,6 @@
           </Button>
           <Button
             v-if="!auth.logged_in"
-            size="sm"
             @click="$router.push('/register')"
           >
             Get started
@@ -41,16 +41,40 @@
           <Button
             v-else
             variant="ghost"
-            size="sm"
             class="text-surface-inverse-foreground hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground"
             @click="$router.push(home)"
           >
             Go to dashboard
           </Button>
         </nav>
+
+        <!-- Mobile menu -->
+        <DropdownMenu class="sm:hidden">
+          <DropdownMenuTrigger as-child>
+            <Button
+              variant="ghost"
+              size="icon"
+              class="sm:hidden text-surface-inverse-foreground hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground"
+              aria-label="Menu"
+            >
+              <Menu class="size-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" class="w-44">
+            <DropdownMenuItem v-if="!auth.logged_in" @click="router.push('/login')">
+              Sign in
+            </DropdownMenuItem>
+            <DropdownMenuItem v-if="!auth.logged_in" @click="router.push('/register')">
+              Get started
+            </DropdownMenuItem>
+            <DropdownMenuItem v-else @click="router.push(home)">
+              Go to dashboard
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
-    <main :class="['flex-1', !overlayHeader && 'sm:pt-12']">
+    <main :class="['flex-1', !overlayHeader && 'sm:pt-14']">
       <slot />
     </main>
 
@@ -58,9 +82,9 @@
       <div class="mx-auto max-w-7xl px-6 py-12 sm:py-16">
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-8">
           <div class="col-span-2 sm:col-span-1">
-            <div class="flex items-center gap-2">
-              <BrandMark class="h-3.5 w-auto" />
-              <span class="brand-wordmark font-semibold text-base tracking-tight leading-none">hearth</span>
+            <div class="flex items-center gap-2.5">
+              <BrandMark class="h-5 w-auto" />
+              <span class="brand-wordmark font-semibold text-lg tracking-tight leading-none">hearth</span>
             </div>
           </div>
           <div>
@@ -120,16 +144,24 @@
 </template>
 
 <script lang="ts" setup>
+import { Menu } from "lucide-vue-next";
 import { computed } from "vue";
-import { RouterLink, useRoute } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 
 import BrandMark from "@/components/BrandMark.vue";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { homePathForRole } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 
 const auth = useAuthStore();
 const route = useRoute();
+const router = useRouter();
 const home = computed(() => homePathForRole(auth.role));
 
 // On the homepage (/) the hero has its own full-bleed background image, so

@@ -6,10 +6,10 @@
       !isDesktop && headerHidden && '-translate-y-full',
     ]"
   >
-    <div class="mx-auto w-full max-w-[1440px] flex h-12 items-center justify-between px-6">
-    <RouterLink to="/" class="vt-brand flex items-center gap-2 shrink-0">
-      <BrandMark class="h-3.5 w-auto" />
-      <span class="brand-wordmark font-semibold text-base tracking-tight">hearth</span>
+    <div class="mx-auto w-full max-w-[1440px] flex h-14 items-center justify-between px-6">
+    <RouterLink to="/" class="vt-brand flex items-center gap-2.5 shrink-0">
+      <BrandMark class="h-5 w-auto" />
+      <span class="brand-wordmark font-semibold text-lg tracking-tight">hearth</span>
     </RouterLink>
 
     <div class="flex items-center gap-2">

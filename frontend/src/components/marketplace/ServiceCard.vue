@@ -21,7 +21,7 @@
     </div>
 
     <div class="mt-2">
-      <h3 class="text-sm font-medium tracking-tight leading-snug line-clamp-2">{{ service.name }}</h3>
+      <h3 class="text-sm font-medium tracking-tight leading-snug truncate">{{ service.name }}</h3>
 
       <div class="mt-1 flex items-center justify-between gap-2">
         <span class="inline-flex items-end gap-0.5 text-base font-semibold tabular-nums">
