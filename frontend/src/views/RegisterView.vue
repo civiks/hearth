@@ -2,7 +2,7 @@
   <div class="w-full max-w-md flex flex-col">
     <RouterLink
       to="/"
-      class="self-start mb-8 hover:opacity-80 transition-opacity"
+      class="self-center mb-8 hover:opacity-80 transition-opacity"
       aria-label="hearth — back to home"
     >
       <BrandMark class="h-8 w-auto" />
@@ -10,12 +10,12 @@
 
     <!-- Step 1: pick role -->
     <template v-if="step === 'role'">
-      <h1 class="text-2xl font-light tracking-tight">
+      <h1 class="text-center text-2xl font-light tracking-tight">
         Join <span class="font-medium">hearth</span>
       </h1>
-      <p class="mt-2 text-xs text-muted-foreground">
+      <p class="mt-2 text-center text-xs text-muted-foreground">
         Already have an account?
-        <RouterLink to="/login" class="text-primary hover:underline">
+        <RouterLink to="/login" class="text-primary underline underline-offset-2">
           Sign in
         </RouterLink>
       </p>
@@ -67,7 +67,7 @@
         </button>
       </div>
 
-      <Button class="mt-6 w-full justify-between" @click="step = 'form'">
+      <Button class="mt-6 w-full justify-center" @click="step = 'form'">
         Continue
         <ArrowRight class="size-3.5" />
       </Button>
@@ -84,10 +84,10 @@
         <ArrowLeft class="size-3.5" /> Back
       </button>
 
-      <h1 class="text-2xl font-light tracking-tight">
+      <h1 class="text-center text-2xl font-light tracking-tight">
         {{ role === "user" ? "Sign up as Customer" : "Sign up as Professional" }}
       </h1>
-      <p class="mt-2 text-xs text-muted-foreground">
+      <p class="mt-2 text-center text-xs text-muted-foreground">
         {{
           role === "user"
             ? "A few details and you're set"
@@ -200,19 +200,16 @@
           <Checkbox id="tos" v-model:checked="agreedToTos" class="mt-0.5" />
           <label for="tos" class="text-xs leading-relaxed text-muted-foreground cursor-pointer">
             I agree to hearth's
-            <RouterLink to="/terms" target="_blank" class="text-primary hover:underline">Terms of Service</RouterLink>
+            <RouterLink to="/terms" target="_blank" class="text-primary underline underline-offset-2">Terms of Service</RouterLink>
             and
-            <RouterLink to="/privacy" target="_blank" class="text-primary hover:underline">Privacy Policy</RouterLink>.
+            <RouterLink to="/privacy" target="_blank" class="text-primary underline underline-offset-2">Privacy Policy</RouterLink>.
             <span v-if="role === 'professional'">Professional profiles are reviewed before going live.</span>
           </label>
         </div>
 
-        <div class="flex items-center gap-2 pt-2">
-          <Button type="submit" :disabled="loading || !agreedToTos">
+        <div class="pt-2">
+          <Button type="submit" class="w-full" :disabled="loading || !agreedToTos">
             {{ loading ? "Creating…" : "Create account" }}
-          </Button>
-          <Button type="button" variant="outline" @click="step = 'role'">
-            Back
           </Button>
         </div>
       </form>

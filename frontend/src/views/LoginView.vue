@@ -2,18 +2,18 @@
   <div class="w-full max-w-md flex flex-col">
     <RouterLink
       to="/"
-      class="self-start mb-8 hover:opacity-80 transition-opacity"
+      class="self-center mb-8 hover:opacity-80 transition-opacity"
       aria-label="hearth — back to home"
     >
       <BrandMark class="h-8 w-auto" />
     </RouterLink>
 
-    <h1 class="text-2xl font-light tracking-tight">
+    <h1 class="text-center text-2xl font-light tracking-tight">
       Welcome back to <span class="font-medium">hearth</span>
     </h1>
-    <p class="mt-2 text-xs text-muted-foreground">
+    <p class="mt-2 text-center text-xs text-muted-foreground">
       Don't have an account?
-      <RouterLink to="/register" class="text-primary hover:underline">
+      <RouterLink to="/register" class="text-primary underline underline-offset-2">
         Sign up
       </RouterLink>
     </p>
@@ -63,7 +63,7 @@
       </div>
 
       <div class="pt-2">
-        <Button type="submit" :disabled="loading">
+        <Button type="submit" class="w-full" :disabled="loading">
           {{ loading ? "Signing in…" : "Sign in" }}
         </Button>
       </div>
@@ -73,7 +73,7 @@
         <RouterLink
           to="/terms"
           target="_blank"
-          class="text-primary hover:underline"
+          class="text-primary underline underline-offset-2"
         >
           Terms of Service
         </RouterLink>
@@ -81,7 +81,7 @@
         <RouterLink
           to="/privacy"
           target="_blank"
-          class="text-primary hover:underline"
+          class="text-primary underline underline-offset-2"
         >
           Privacy Policy</RouterLink>.
       </p>
