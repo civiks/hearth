@@ -55,7 +55,7 @@
     <nav
       ref="tabbarRef"
       v-if="!isDesktop"
-      class="vt-tabbar fixed bottom-0 left-0 right-0 z-40 flex overflow-x-auto scrollbar-hide border-t border-border bg-card pb-safe"
+      class="vt-tabbar fixed bottom-0 left-0 right-0 z-40 flex overflow-x-auto scrollbar-hide border-t border-border/50 bg-card/80 backdrop-blur-xl pb-safe"
       role="tablist"
     >
       <RouterLink
@@ -71,10 +71,10 @@
         <span
           :class="[
             'flex items-center justify-center rounded-full px-4 py-1 transition-colors',
-            isTabActive(tab.to) ? 'bg-primary/10 dark:bg-primary/30' : '',
+            isTabActive(tab.to) ? 'bg-foreground/10' : '',
           ]"
         >
-          <component :is="tab.icon" class="size-5 transition-none" :stroke-width="2" />
+          <component :is="tab.icon" class="size-5 transition-none" :stroke-width="isTabActive(tab.to) ? 2.5 : 1.75" />
         </span>
         <span :class="['text-xs leading-none', isTabActive(tab.to) ? 'font-semibold' : 'font-medium']">{{ tab.label }}</span>
       </RouterLink>
@@ -90,7 +90,7 @@
         <span
           :class="[
             'flex items-center justify-center rounded-full px-4 py-1 transition-colors',
-            chat.open ? 'bg-primary/10' : '',
+            chat.open ? 'bg-foreground/10' : '',
           ]"
         >
           <AiMark class="size-5" />
@@ -99,7 +99,7 @@
       </button>
 
       <div v-if="canScrollRight" class="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-        <div class="absolute inset-y-0 right-0 w-14 bg-gradient-to-l from-card to-transparent" />
+        <div class="absolute inset-y-0 right-0 w-14 bg-gradient-to-l from-card/80 to-transparent" />
         <button
           type="button"
           class="relative pointer-events-auto z-10 mr-2 flex size-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm"
