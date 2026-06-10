@@ -1,5 +1,5 @@
 [project]
-name = "household-services"
+name = "hearth"
 version = "0.2.0"
 description = "Household Services marketplace — FastAPI + SQLAlchemy 2 + Celery"
 readme = "README.md"

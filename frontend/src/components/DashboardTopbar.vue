@@ -47,7 +47,7 @@
           </DropdownMenuItem>
           <DropdownMenuItem @click="settingsDrawer.show()">
             <PhGear class="mr-2 size-4" />
-            PhGear
+            Settings
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>

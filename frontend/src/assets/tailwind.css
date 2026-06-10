@@ -372,7 +372,7 @@
   --info: 219 100% 64%;
   --info-strong: 219 100% 64%;
   --border: 0 0% 20%;                /* #333333 — subtler than gray-70 */
-  --input: 0 0% 26%;
+  --input: 0 0% 15%;        /* #262626 */
   --ring: 219 100% 64%;              /* lighter focus ring on dark */
 
   /* Sequential blue ramp — shifted one notch lighter for dark surfaces */
@@ -512,15 +512,6 @@
     letter-spacing: 0;
   }
 
-  input::placeholder,
-  textarea::placeholder {
-    color: hsl(var(--muted-foreground) / 0.6);
-  }
-
-  .dark input::placeholder,
-  .dark textarea::placeholder {
-    color: hsl(var(--muted-foreground));
-  }
 
   /*
    * inline notifications (toasts).

@@ -39,10 +39,10 @@
               <PhMapPin class="size-3" />
               Now in Bangalore
             </div>
-            <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.03em] mb-5 sm:mb-6 leading-[1.05] text-balance">
+            <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.03em] mb-5 sm:mb-6 leading-[1.05] text-balance text-surface-inverse-foreground/90">
               Home services, done right.
             </h1>
-            <p class="text-base sm:text-lg text-surface-inverse-foreground/70 mb-7 sm:mb-8 max-w-lg leading-relaxed tracking-[-0.01em]">
+            <p class="text-base sm:text-lg text-surface-inverse-foreground/65 mb-7 sm:mb-8 max-w-lg leading-relaxed tracking-[-0.01em]">
               Verified plumbers, electricians, cleaners and more. At your doorstep within hours, with honest pricing and real reviews.
             </p>
             <div class="flex flex-wrap gap-3">

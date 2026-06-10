@@ -14,6 +14,7 @@ async function bootstrap() {
   const app = createApp(App);
   const pinia = createPinia();
   app.use(pinia);
+  app.provide("weight", "bold");
 
   // Hydrate auth from the httpOnly cookie before first render so the router
   // guards see the correct logged_in/role.
