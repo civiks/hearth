@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertTriangle, XCircle } from "lucide-vue-next";
+import { AlertTriangle, XCircle } from "@lucide/vue";
 import { computed } from "vue";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

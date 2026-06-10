@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup generic="TData">
-import { Search } from "lucide-vue-next";
+import { Search } from "@lucide/vue";
 import { computed } from "vue";
 import type { Column, Table } from "@tanstack/vue-table";
 

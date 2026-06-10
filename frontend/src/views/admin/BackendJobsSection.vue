@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Activity, Bell, ExternalLink, FileText } from "lucide-vue-next";
+import { Activity, Bell, ExternalLink, FileText } from "@lucide/vue";
 import { reactive } from "vue";
 
 import { Button } from "@/components/ui/button";

@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Search } from "lucide-vue-next";
+import { Search } from "@lucide/vue";
 import { computed } from "vue";
 
 import { Input } from "@/components/ui/input";

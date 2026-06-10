@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle } from "lucide-vue-next";
+import { AlertCircle } from "@lucide/vue";
 import { reactive, ref } from "vue";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";

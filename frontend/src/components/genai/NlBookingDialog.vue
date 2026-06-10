@@ -116,7 +116,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, ArrowLeft, ChevronRight } from "lucide-vue-next";
+import { AlertCircle, ArrowLeft, ChevronRight } from "@lucide/vue";
 import { reactive, ref } from "vue";
 
 import AiMark from "@/components/AiMark.vue";

@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from 'vue'
 import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
 import { reactiveOmit } from '@vueuse/core'
-import { Check } from 'lucide-vue-next'
+import { Check } from '@lucide/vue'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<{

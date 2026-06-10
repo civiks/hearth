@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, ChevronRight, History, Star, TrendingUp } from "lucide-vue-next";
+import { AlertCircle, ChevronRight, History, Star, TrendingUp } from "@lucide/vue";
 import { computed, onMounted, ref } from "vue";
 
 import AiMark from "@/components/AiMark.vue";

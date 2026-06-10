@@ -1,26 +1,25 @@
 <template>
-  <div class="w-full max-w-md flex flex-col">
+  <div class="w-full max-w-sm flex flex-col">
     <RouterLink
       to="/"
       class="self-center mb-8 hover:opacity-80 transition-opacity"
       aria-label="hearth — back to home"
     >
-      <BrandMark class="h-8 w-auto" />
+      <BrandMark class="h-10 w-auto" />
     </RouterLink>
 
-    <!-- Step 1: pick role -->
     <template v-if="step === 'role'">
-      <h1 class="text-center text-2xl font-light tracking-tight">
-        Join <span class="brand-wordmark font-medium">hearth</span>
+      <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-2">
+        Join hearth
       </h1>
-      <p class="mt-2 text-center text-xs text-muted-foreground">
+      <p class="mb-8 text-center text-sm text-muted-foreground">
         Already have an account?
-        <RouterLink to="/login" class="text-primary underline underline-offset-2">
+        <RouterLink to="/login" class="text-primary font-semibold hover:underline underline-offset-2">
           Sign in
         </RouterLink>
       </p>
 
-      <div class="mt-8 flex flex-col gap-2">
+      <div class="flex flex-col gap-2">
         <button
           type="button"
           :class="[
@@ -47,7 +46,7 @@
           type="button"
           :class="[
             'flex items-center justify-between gap-4 rounded-lg bg-card px-4 py-3.5 text-left cursor-pointer card-lift',
-            role === 'professional' ? 'shadow-[inset_0_0_0_2px_hsl(var(--primary)/0.5)] bg-[image:linear-gradient(hsl(var(--primary)/0.05),hsl(var(--primary)/0.05))]' : 'soft-card hover:soft-card-hover',
+            role === 'professional' ? 'soft-card-selected' : 'soft-card hover:soft-card-hover',
           ]"
           :aria-pressed="role === 'professional'"
           @click="role = 'professional'"
@@ -67,27 +66,25 @@
         </button>
       </div>
 
-      <Button class="mt-6 w-full justify-center" @click="step = 'form'">
+      <Button class="mt-6 w-full rounded-full h-12 font-semibold justify-center" @click="step = 'form'">
         Continue
-        <ArrowRight class="size-3.5" />
+        <ArrowRight class="size-4" />
       </Button>
-
     </template>
 
-    <!-- Step 2: form -->
     <template v-else>
       <button
         type="button"
-        class="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4 cursor-pointer"
+        class="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 cursor-pointer self-start"
         @click="step = 'role'"
       >
         <ArrowLeft class="size-3.5" /> Back
       </button>
 
-      <h1 class="text-center text-2xl font-light tracking-tight">
-        {{ role === "user" ? "Sign up as Customer" : "Sign up as Professional" }}
+      <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-2">
+        {{ role === "user" ? "Create account" : "Sign up as Pro" }}
       </h1>
-      <p class="mt-2 text-center text-xs text-muted-foreground">
+      <p class="mb-8 text-center text-sm text-muted-foreground">
         {{
           role === "user"
             ? "A few details and you're set"
@@ -95,110 +92,97 @@
         }}
       </p>
 
-      <form class="space-y-5 mt-8" @submit.prevent="submit">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="space-y-1.5">
-            <Label for="email">Email</Label>
-            <Input
-              id="email"
-              v-model="email"
-              type="email"
-              autocomplete="email"
-              required
-            />
-          </div>
-          <div class="space-y-1.5">
-            <Label for="password">Password</Label>
-            <div class="relative">
-              <Input
-                id="password"
-                v-model="password"
-                :type="showPassword ? 'text' : 'password'"
-                autocomplete="new-password"
-                class="pr-10"
-                required
-              />
-              <button
-                type="button"
-                class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
-                :aria-label="showPassword ? 'Hide password' : 'Show password'"
-                :aria-pressed="showPassword"
-                @click="showPassword = !showPassword"
+      <form class="space-y-3" @submit.prevent="submit">
+        <Input
+          v-model="email"
+          type="email"
+          placeholder="Email address"
+          autocomplete="email"
+          required
+          class="bg-muted border-transparent h-12 px-5"
+        />
+
+        <div class="relative">
+          <Input
+            v-model="password"
+            :type="showPassword ? 'text' : 'password'"
+            placeholder="Password"
+            autocomplete="new-password"
+            class="bg-muted border-transparent h-12 px-5 pr-12"
+            required
+          />
+          <button
+            type="button"
+            class="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none"
+            :aria-label="showPassword ? 'Hide password' : 'Show password'"
+            :aria-pressed="showPassword"
+            @click="showPassword = !showPassword"
+          >
+            <EyeOff v-if="showPassword" class="size-4" />
+            <Eye v-else class="size-4" />
+          </button>
+        </div>
+
+        <Input
+          v-model="full_name"
+          placeholder="Full name"
+          autocomplete="name"
+          required
+          class="bg-muted border-transparent h-12 px-5"
+        />
+
+        <Input
+          v-model="address"
+          placeholder="Address"
+          autocomplete="street-address"
+          required
+          class="bg-muted border-transparent h-12 px-5"
+        />
+
+        <Input
+          v-model="pincode"
+          placeholder="Pincode"
+          autocomplete="postal-code"
+          required
+          class="bg-muted border-transparent h-12 px-5"
+        />
+
+        <div v-if="role === 'professional'" class="space-y-3 pt-1">
+          <Select v-model="serviceId">
+            <SelectTrigger class="bg-muted border-transparent h-12 px-5">
+              <SelectValue placeholder="Service category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem
+                v-for="s in services"
+                :key="s.id"
+                :value="String(s.id)"
               >
-                <EyeOff v-if="showPassword" class="size-3.5" />
-                <Eye v-else class="size-3.5" />
-              </button>
-            </div>
-          </div>
-        </div>
+                {{ s.name }}
+              </SelectItem>
+            </SelectContent>
+          </Select>
 
-        <div class="space-y-1.5">
-          <Label for="full_name">Full name</Label>
           <Input
-            id="full_name"
-            v-model="full_name"
-            autocomplete="name"
-            required
+            v-model="experienceStr"
+            type="number"
+            min="0"
+            max="60"
+            placeholder="Years of experience"
+            class="bg-muted border-transparent h-12 px-5"
           />
-        </div>
 
-        <div class="space-y-1.5">
-          <Label for="address">Address</Label>
-          <Input
-            id="address"
-            v-model="address"
-            autocomplete="street-address"
-            required
+          <Textarea
+            v-model="description"
+            placeholder="Professional description"
+            rows="3"
+            class="bg-muted border-transparent px-5 py-3 resize-none"
           />
-        </div>
-
-        <div class="space-y-1.5">
-          <Label for="pincode">Pincode</Label>
-          <Input
-            id="pincode"
-            v-model="pincode"
-            autocomplete="postal-code"
-            required
-          />
-        </div>
-
-        <div v-if="role === 'professional'" class="space-y-4 border-t pt-5">
-          <div class="space-y-1.5">
-            <Label for="service">Service category</Label>
-            <Select v-model="serviceId">
-              <SelectTrigger id="service">
-                <SelectValue placeholder="Choose a service" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem
-                  v-for="s in services"
-                  :key="s.id"
-                  :value="String(s.id)"
-                >
-                  {{ s.name }}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div class="space-y-1.5">
-            <Label for="experience">Years of experience</Label>
-            <Input
-              id="experience"
-              v-model="experienceStr"
-              type="number"
-              min="0"
-              max="60"
-            />
-          </div>
-          <div class="space-y-1.5">
-            <Label for="description">Professional description</Label>
-            <Textarea id="description" v-model="description" rows="3" />
-          </div>
         </div>
 
         <div class="flex items-start gap-2.5 pt-2">
           <Checkbox id="tos" v-model:checked="agreedToTos" class="mt-0.5" />
-          <label for="tos" class="text-xs leading-relaxed text-muted-foreground cursor-pointer">
+          <label for="tos" class="text-[11px] leading-relaxed text-muted-foreground cursor-pointer">
             I agree to hearth's
             <RouterLink to="/terms" target="_blank" class="text-primary underline underline-offset-2">Terms of Service</RouterLink>
             and
@@ -207,8 +191,8 @@
           </label>
         </div>
 
-        <div class="pt-2">
-          <Button type="submit" class="w-full" :disabled="loading || !agreedToTos">
+        <div class="pt-1">
+          <Button type="submit" class="w-full rounded-full h-12 font-semibold" :disabled="loading || !agreedToTos">
             {{ loading ? "Creating…" : "Create account" }}
           </Button>
         </div>
@@ -218,7 +202,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ArrowLeft, ArrowRight, Eye, EyeOff } from "lucide-vue-next";
+import { ArrowLeft, ArrowRight, Eye, EyeOff } from "@lucide/vue";
 import { computed, ref, watch } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
@@ -226,7 +210,6 @@ import BrandMark from "@/components/BrandMark.vue";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -271,7 +254,6 @@ const agreedToTos = ref(false);
 const services = ref<Service[]>([]);
 const loading = ref(false);
 
-// Only fetch services when the professional form is actually about to render.
 watch(
   [step, role],
   ([s, r]) => {

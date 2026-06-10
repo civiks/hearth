@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Ban, CalendarCheck, CheckCheck, Hourglass, Wrench } from "lucide-vue-next";
+import { Ban, CalendarCheck, CheckCheck, Hourglass, Wrench } from "@lucide/vue";
 import { computed } from "vue";
 
 const props = defineProps<{ status: string }>();

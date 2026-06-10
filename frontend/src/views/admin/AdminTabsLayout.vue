@@ -49,7 +49,7 @@ import {
   LayoutDashboard,
   Users,
   Wrench,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import { RouterLink, useRoute } from "vue-router";
 
 import { useScrollReset } from "@/composables/useScrollReset";

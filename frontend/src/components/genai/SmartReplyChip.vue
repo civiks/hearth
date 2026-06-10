@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Send } from "lucide-vue-next";
+import { Send } from "@lucide/vue";
 import { computed } from "vue";
 
 import AiMark from "@/components/AiMark.vue";

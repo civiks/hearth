@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Lock, Trash2, Unlock } from "lucide-vue-next";
+import { Lock, Trash2, Unlock } from "@lucide/vue";
 import { h } from "vue";
 import { RouterLink } from "vue-router";
 import type { ColumnDef } from "@tanstack/vue-table";

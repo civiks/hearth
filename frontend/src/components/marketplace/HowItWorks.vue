@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { BadgeCheck, CalendarCheck, MousePointerClick } from "lucide-vue-next";
+import { BadgeCheck, CalendarCheck, MousePointerClick } from "@lucide/vue";
 
 const steps = [
   {

@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ArrowRight, TrendingUp, type LucideIcon } from "lucide-vue-next";
+import { ArrowRight, TrendingUp, type LucideIcon } from "@lucide/vue";
 import { computed } from "vue";
 import { RouterLink, type RouteLocationRaw } from "vue-router";
 

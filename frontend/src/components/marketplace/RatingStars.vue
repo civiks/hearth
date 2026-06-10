@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Star } from "lucide-vue-next";
+import { Star } from "@lucide/vue";
 import { computed } from "vue";
 
 const props = defineProps<{ rating: number }>();

@@ -116,7 +116,7 @@
 </template>
 
 <script lang="ts" setup>
-import { MapPin, Star, Tag, X } from "lucide-vue-next";
+import { MapPin, Star, Tag, X } from "@lucide/vue";
 import { computed, ref } from "vue";
 import { useMediaQuery, useScroll } from "@vueuse/core";
 

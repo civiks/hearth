@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup generic="TData">
-import { Filter } from "lucide-vue-next";
+import { Filter } from "@lucide/vue";
 import { computed } from "vue";
 import type { Column } from "@tanstack/vue-table";
 

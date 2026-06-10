@@ -75,8 +75,8 @@ const headerClasses = computed(() =>
 
 const titleClasses = computed(() =>
   isDesktop.value
-    ? "text-base font-medium leading-none"
-    : "text-xl font-semibold tracking-tight leading-tight",
+    ? "font-display text-base font-medium leading-none"
+    : "font-display text-xl font-semibold tracking-tight leading-tight",
 );
 
 const descriptionClasses = computed(() =>

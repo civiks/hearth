@@ -20,8 +20,6 @@
       />
     </div>
 
-    <div class="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-transparent dark:ring-border z-10" aria-hidden="true" />
-
     <div class="px-3 pb-3 mt-2">
       <h3 class="text-sm font-medium tracking-tight leading-snug truncate">{{ service.name }}</h3>
 
@@ -43,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Star } from "lucide-vue-next";
+import { Star } from "@lucide/vue";
 import { computed } from "vue";
 
 const props = defineProps<{

@@ -189,7 +189,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, ArrowLeft, Clock, Star, UserCheck } from "lucide-vue-next";
+import { AlertCircle, ArrowLeft, Clock, Star, UserCheck } from "@lucide/vue";
 import { computed, onMounted, reactive, ref } from "vue";
 
 import AiMark from "@/components/AiMark.vue";

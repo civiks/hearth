@@ -385,7 +385,7 @@ import {
   ThumbsUp,
   Trash2,
   X,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import { useEventListener, useScrollLock } from "@vueuse/core";
 import { computed, nextTick, ref, watch, watchEffect } from "vue";
 import AiKeyDialog from "@/components/AiKeyDialog.vue";

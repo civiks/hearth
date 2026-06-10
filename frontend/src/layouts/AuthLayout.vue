@@ -1,13 +1,12 @@
 <template>
   <main
-    class="relative min-h-svh bg-background flex items-center justify-center px-8 py-12 sm:px-12"
+    class="relative min-h-svh bg-white dark:bg-background flex items-center justify-center px-8 py-12 sm:px-12"
   >
     <slot />
 
     <footer
       class="pointer-events-none absolute bottom-4 left-0 right-0 text-center text-xs text-muted-foreground"
     >
-      <!-- © 2026 hearth · Delhi, India -->
-    </footer>
+</footer>
   </main>
 </template>

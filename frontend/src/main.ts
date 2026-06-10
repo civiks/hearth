@@ -2,7 +2,7 @@ import { createPinia } from "pinia";
 import { createApp } from "vue";
 
 import "@fontsource-variable/inter";
-import "@fontsource-variable/inter-tight";
+import "@fontsource-variable/commissioner";
 
 import App from "./App.vue";
 import "./assets/tailwind.css";

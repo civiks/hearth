@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Check, Star } from "lucide-vue-next";
+import { Check, Star } from "@lucide/vue";
 
 import ProfessionalAvatar from "@/components/marketplace/ProfessionalAvatar.vue";
 

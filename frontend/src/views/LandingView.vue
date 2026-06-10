@@ -231,7 +231,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ArrowRight, ChevronDown, Clock, MapPin, RotateCcw, ShieldCheck, Star } from "lucide-vue-next";
+import { ArrowRight, ChevronDown, Clock, MapPin, RotateCcw, ShieldCheck, Star } from "@lucide/vue";
 import { onMounted, ref } from "vue";
 import { useMediaQuery } from "@vueuse/core";
 

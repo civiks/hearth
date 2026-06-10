@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup generic="TData">
-import { ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-vue-next";
+import { ChevronDown, ChevronsUpDown, ChevronUp } from "@lucide/vue";
 import { computed } from "vue";
 import type { Column } from "@tanstack/vue-table";
 

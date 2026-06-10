@@ -3,7 +3,7 @@ import {
   ShieldCheck,
   UserCircle,
   type LucideIcon,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import { useRouter } from "vue-router";
 
 import { ApiError, api, homePathForRole, type Role, type User } from "@/lib/api";

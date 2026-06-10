@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { CheckCircle, Trash2, XCircle } from "lucide-vue-next";
+import { CheckCircle, Trash2, XCircle } from "@lucide/vue";
 import { h } from "vue";
 import { RouterLink } from "vue-router";
 import type { ColumnDef } from "@tanstack/vue-table";

@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertTriangle } from "lucide-vue-next";
+import { AlertTriangle } from "@lucide/vue";
 import { computed } from "vue";
 
 import AiMark from "@/components/AiMark.vue";

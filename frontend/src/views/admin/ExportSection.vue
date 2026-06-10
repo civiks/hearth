@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Download } from "lucide-vue-next";
+import { Download } from "@lucide/vue";
 import { onBeforeUnmount, ref } from "vue";
 
 import { Button } from "@/components/ui/button";

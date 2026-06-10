@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRight } from "lucide-vue-next";
+import { ArrowRight } from "@lucide/vue";
 import { RouterLink, type RouteLocationRaw } from "vue-router";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";

@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { CalendarClock, ChevronRight, Image, UserRound } from "lucide-vue-next";
+import { CalendarClock, ChevronRight, Image, UserRound } from "@lucide/vue";
 import { computed } from "vue";
 
 import { formatSmartDateTime } from "@/lib/format";

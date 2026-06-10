@@ -19,7 +19,7 @@
       >
         <RouterLink to="/" class="vt-brand flex items-center gap-2.5">
           <BrandMark class="h-5 w-auto" />
-          <span class="brand-wordmark font-semibold text-lg tracking-tight">hearth</span>
+          <span class="font-display font-semibold text-lg tracking-tight">hearth</span>
         </RouterLink>
 
         <!-- Desktop nav -->
@@ -84,7 +84,7 @@
           <div class="col-span-2 sm:col-span-1">
             <div class="flex items-center gap-2.5">
               <BrandMark class="h-5 w-auto" />
-              <span class="brand-wordmark font-semibold text-lg tracking-tight leading-none">hearth</span>
+              <span class="font-display font-semibold text-lg tracking-tight leading-none">hearth</span>
             </div>
           </div>
           <div>
@@ -131,7 +131,7 @@
       >
         <div class="flex items-center gap-2">
           <BrandMark class="h-3 w-auto" />
-          <span class="brand-wordmark font-semibold tracking-tight leading-none">hearth</span>
+          <span class="font-display font-semibold tracking-tight leading-none">hearth</span>
           <span class="text-surface-inverse-foreground/60 ml-3">© 2026</span>
         </div>
         <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-surface-inverse-foreground/70">
@@ -144,7 +144,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Menu } from "lucide-vue-next";
+import { Menu } from "@lucide/vue";
 import { computed } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 

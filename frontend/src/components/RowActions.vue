@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { MoreVertical } from "lucide-vue-next";
+import { MoreVertical } from "@lucide/vue";
 import { ref, type Component } from "vue";
 import { useMediaQuery } from "@vueuse/core";
 

@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, ChevronDown, MapPin } from "lucide-vue-next";
+import { AlertCircle, ChevronDown, MapPin } from "@lucide/vue";
 import { computed, reactive, ref } from "vue";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";

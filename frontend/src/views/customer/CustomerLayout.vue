@@ -40,7 +40,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useMediaQuery, useScroll } from "@vueuse/core";
-import { ClipboardList, LayoutGrid, ShoppingBag } from "lucide-vue-next";
+import { ClipboardList, LayoutGrid, ShoppingBag } from "@lucide/vue";
 import { RouterLink, useRoute } from "vue-router";
 
 import { useScrollReset } from "@/composables/useScrollReset";

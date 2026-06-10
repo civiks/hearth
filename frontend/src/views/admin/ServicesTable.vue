@@ -117,7 +117,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, Edit2, Plus, Trash2 } from "lucide-vue-next";
+import { AlertCircle, Edit2, Plus, Trash2 } from "@lucide/vue";
 import { computed, h, reactive, ref } from "vue";
 import type { ColumnDef } from "@tanstack/vue-table";
 

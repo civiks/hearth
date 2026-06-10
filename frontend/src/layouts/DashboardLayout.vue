@@ -124,7 +124,7 @@ import {
   TrendingUp,
   Users,
   Wrench,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 

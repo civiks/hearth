@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-vue-next";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "@lucide/vue";
 import {
   PaginationEllipsis,
   PaginationList,

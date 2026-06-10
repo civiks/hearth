@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { CheckCircle, PlayCircle } from "lucide-vue-next";
+import { CheckCircle, PlayCircle } from "@lucide/vue";
 import { h } from "vue";
 import type { ColumnDef } from "@tanstack/vue-table";
 

@@ -3,17 +3,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@font-face {
-  font-family: "SNPro";
-  src: url("/fonts/sn-pro-brand.woff2") format("woff2");
-  font-weight: 100 900;
-  font-display: block;
-  unicode-range: U+0068, U+0065, U+0061, U+0072, U+0074; /* h e a r t */
-}
-
-.brand-wordmark {
-  font-family: "SNPro", ui-sans-serif, system-ui, sans-serif;
-}
 
 /* Tighten vaul-vue drawer animation (default is 0.5s) */
 [data-vaul-drawer], [data-vaul-overlay] {
@@ -144,7 +133,6 @@
 }
 .dark .soft-card {
   box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.06),
     0 2px 4px 0 rgb(0 0 0 / 0.35),
     0 12px 24px -6px rgb(0 0 0 / 0.45);
 }
@@ -426,7 +414,7 @@
     "Inter Variable", "Inter", system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-display:
-    "Inter Tight Variable", "Inter Variable", system-ui, sans-serif;
+    "Commissioner Variable", "Commissioner", system-ui, sans-serif;
   --font-serif:
     ui-serif, Georgia, "Times New Roman", serif;
   --font-mono:
@@ -522,6 +510,16 @@
   h1, h2, h3, h4, h5, h6 {
     font-weight: 400;
     letter-spacing: 0;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: hsl(var(--muted-foreground) / 0.6);
+  }
+
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: hsl(var(--muted-foreground));
   }
 
   /*

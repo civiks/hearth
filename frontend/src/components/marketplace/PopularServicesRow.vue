@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ArrowRight } from "lucide-vue-next";
+import { ArrowRight } from "@lucide/vue";
 import { RouterLink } from "vue-router";
 
 import ServiceCard from "@/components/marketplace/ServiceCard.vue";

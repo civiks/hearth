@@ -9,7 +9,7 @@
     <div class="mx-auto w-full max-w-[1440px] flex h-14 items-center justify-between px-6">
     <RouterLink to="/" class="vt-brand flex items-center gap-2.5 shrink-0">
       <BrandMark class="h-5 w-auto" />
-      <span class="brand-wordmark font-semibold text-lg tracking-tight">hearth</span>
+      <span class="font-display font-semibold text-lg tracking-tight">hearth</span>
     </RouterLink>
 
     <div class="flex items-center gap-2">
@@ -238,7 +238,7 @@ import {
   Settings,
   Sun,
   UserCircle,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import { computed, ref, watch } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 

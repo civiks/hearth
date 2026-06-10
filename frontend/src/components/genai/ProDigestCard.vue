@@ -56,7 +56,7 @@
 <script lang="ts" setup>
 import { computed, type HTMLAttributes, ref, watch } from "vue";
 import { useLocalStorage } from "@vueuse/core";
-import { ChevronDown, ChevronUp } from "lucide-vue-next";
+import { ChevronDown, ChevronUp } from "@lucide/vue";
 
 import AiMark from "@/components/AiMark.vue";
 import { DashboardWidget } from "@/components/dashboard";

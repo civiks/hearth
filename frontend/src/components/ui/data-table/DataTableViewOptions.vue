@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup generic="TData">
-import { SlidersHorizontal } from "lucide-vue-next";
+import { SlidersHorizontal } from "@lucide/vue";
 import { computed } from "vue";
 import type { Column, Table } from "@tanstack/vue-table";
 

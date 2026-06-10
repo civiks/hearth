@@ -1,103 +1,85 @@
 <template>
-  <div class="w-full max-w-md flex flex-col">
+  <div class="w-full max-w-sm flex flex-col">
     <RouterLink
       to="/"
       class="self-center mb-8 hover:opacity-80 transition-opacity"
       aria-label="hearth — back to home"
     >
-      <BrandMark class="h-8 w-auto" />
+      <BrandMark class="h-10 w-auto" />
     </RouterLink>
 
-    <h1 class="text-center text-2xl font-light tracking-tight">
-      Welcome back to <span class="brand-wordmark font-medium">hearth</span>
+    <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-2">
+      Welcome back
     </h1>
-    <p class="mt-2 text-center text-xs text-muted-foreground">
+    <p class="mb-8 text-center text-sm text-muted-foreground">
       Don't have an account?
-      <RouterLink to="/register" class="text-primary underline underline-offset-2">
-        Sign up
-      </RouterLink>
+      <RouterLink to="/register" class="text-primary font-semibold hover:underline underline-offset-2">Sign up</RouterLink>
     </p>
 
-    <form class="space-y-6 mt-8" @submit.prevent="submit">
+    <form class="space-y-3" @submit.prevent="submit">
+      <Input
+        v-model="email"
+        type="email"
+        placeholder="Email address"
+        autocomplete="email"
+        required
+        class="bg-muted border-transparent h-12 px-5"
+      />
+
       <div class="space-y-1.5">
-        <Label for="email">Email</Label>
-        <Input
-          id="email"
-          v-model="email"
-          type="email"
-          autocomplete="email"
-          required
-        />
-      </div>
-      <div class="space-y-1.5">
-        <div class="flex items-baseline justify-between">
-          <Label for="password">Password</Label>
+        <div class="relative">
+          <Input
+            v-model="password"
+            :type="showPassword ? 'text' : 'password'"
+            placeholder="Password"
+            autocomplete="current-password"
+            class="bg-muted border-transparent h-12 px-5 pr-12"
+            required
+          />
           <button
             type="button"
-            class="text-xs text-primary hover:underline cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            class="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none"
+            :aria-label="showPassword ? 'Hide password' : 'Show password'"
+            :aria-pressed="showPassword"
+            @click="showPassword = !showPassword"
+          >
+            <EyeOff v-if="showPassword" class="size-4" />
+            <Eye v-else class="size-4" />
+          </button>
+        </div>
+        <div class="flex justify-end px-1">
+          <button
+            type="button"
+            class="text-xs text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             @click="onForgotPassword"
           >
             Forgot password?
           </button>
         </div>
-        <div class="relative">
-          <Input
-            id="password"
-            v-model="password"
-            :type="showPassword ? 'text' : 'password'"
-            autocomplete="current-password"
-            class="pr-10"
-            required
-          />
-          <button
-            type="button"
-            class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
-            :aria-label="showPassword ? 'Hide password' : 'Show password'"
-            :aria-pressed="showPassword"
-            @click="showPassword = !showPassword"
-          >
-            <EyeOff v-if="showPassword" class="size-3.5" />
-            <Eye v-else class="size-3.5" />
-          </button>
-        </div>
       </div>
 
-      <div class="pt-2">
-        <Button type="submit" class="w-full" :disabled="loading">
-          {{ loading ? "Signing in…" : "Sign in" }}
-        </Button>
-      </div>
-
-      <p class="pt-2 text-xs leading-relaxed text-muted-foreground">
-        By signing in you agree to hearth's
-        <RouterLink
-          to="/terms"
-          target="_blank"
-          class="text-primary underline underline-offset-2"
-        >
-          Terms of Service
-        </RouterLink>
-        and
-        <RouterLink
-          to="/privacy"
-          target="_blank"
-          class="text-primary underline underline-offset-2"
-        >
-          Privacy Policy</RouterLink>.
-      </p>
+      <Button type="submit" class="w-full rounded-full h-12 font-semibold" :disabled="loading">
+        {{ loading ? "Signing in…" : "Sign in" }}
+      </Button>
     </form>
+
+    <p class="mt-6 text-[11px] text-center text-muted-foreground">
+      By signing in you agree to hearth's
+      <RouterLink to="/terms" target="_blank" class="text-primary underline underline-offset-2">Terms of Service</RouterLink>
+      and
+      <RouterLink to="/privacy" target="_blank" class="text-primary underline underline-offset-2">Privacy Policy</RouterLink>.
+    </p>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Eye, EyeOff } from "lucide-vue-next";
+import { Eye, EyeOff } from "@lucide/vue";
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import BrandMark from "@/components/BrandMark.vue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ApiError, api, homePathForRole, type User } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 import { useNotificationsStore } from "@/stores/notifications";
