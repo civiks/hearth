@@ -49,6 +49,7 @@ export function useDemoLogin() {
 
   async function resetDemoData(): Promise<void> {
     resetState();
+    window.localStorage.removeItem("theme");
     await auth.logout();
     router.push("/");
     setTimeout(() => location.reload(), 100);
