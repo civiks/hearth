@@ -1,7 +1,7 @@
 <template>
   <div>
     <Alert v-if="auth.is_blocked" variant="destructive" class="mx-6 mt-6">
-      <AlertCircle class="size-3.5" />
+      <PhWarningCircle class="size-3.5" />
       <AlertTitle>Account blocked</AlertTitle>
       <AlertDescription>
         Your account has been blocked. Please contact support for assistance.
@@ -48,7 +48,9 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle } from "@lucide/vue";
+import {
+  PhWarningCircle,
+} from '@phosphor-icons/vue';
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 

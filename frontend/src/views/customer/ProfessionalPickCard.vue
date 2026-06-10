@@ -15,14 +15,14 @@
         v-if="selected"
         class="absolute -bottom-1 -right-1 inline-flex size-3.5 items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-card"
       >
-        <Check class="size-3" />
+        <PhCheck class="size-3" />
       </span>
     </span>
     <div class="flex-1 min-w-0">
       <div class="flex items-center justify-between gap-2">
         <span class="text-sm font-medium tracking-tight truncate">{{ professional.full_name }}</span>
         <span v-if="professional.rating != null" class="flex items-center gap-1 text-xs tabular-nums">
-          <Star class="size-3 fill-amber-400 text-amber-400" />
+          <PhStar weight="fill" class="size-3 text-amber-400" />
           <span class="font-medium tracking-tight">{{ professional.rating.toFixed(1) }}</span>
           <span class="text-muted-foreground">({{ professional.review_count ?? 0 }})</span>
         </span>
@@ -38,7 +38,10 @@
 </template>
 
 <script lang="ts" setup>
-import { Check, Star } from "@lucide/vue";
+import {
+  PhCheck,
+  PhStar,
+} from '@phosphor-icons/vue';
 
 import ProfessionalAvatar from "@/components/marketplace/ProfessionalAvatar.vue";
 

@@ -1,6 +1,6 @@
 <template>
   <div v-if="cancelled" class="flex items-center gap-2 text-xs text-destructive">
-    <Ban class="size-3.5" />
+    <PhProhibit class="size-3.5" />
     <span class="font-medium">Cancelled</span>
   </div>
   <ol v-else>
@@ -36,16 +36,22 @@
 </template>
 
 <script lang="ts" setup>
-import { Ban, CalendarCheck, CheckCheck, Hourglass, Wrench } from "@lucide/vue";
+import {
+  PhProhibit,
+  PhCalendarCheck,
+  PhChecks,
+  PhHourglass,
+  PhWrench,
+} from '@phosphor-icons/vue';
 import { computed } from "vue";
 
 const props = defineProps<{ status: string }>();
 
 const steps = [
-  { key: "requested", label: "Requested", icon: Hourglass },
-  { key: "accepted", label: "Accepted", icon: CalendarCheck },
-  { key: "in_progress", label: "In progress", icon: Wrench },
-  { key: "completed", label: "Completed", icon: CheckCheck },
+  { key: "requested", label: "Requested", icon: PhHourglass },
+  { key: "accepted", label: "Accepted", icon: PhCalendarCheck },
+  { key: "in_progress", label: "In progress", icon: PhWrench },
+  { key: "completed", label: "Completed", icon: PhChecks },
 ];
 
 const cancelled = computed(() => props.status === "cancelled");

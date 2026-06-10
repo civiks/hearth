@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { GripVertical } from "@lucide/vue";
+import {
+  PhDotsSixVertical,
+} from '@phosphor-icons/vue';
 import { SplitterResizeHandle, type SplitterResizeHandleProps } from "reka-ui";
 import { computed, type HTMLAttributes } from "vue";
 
@@ -34,7 +36,7 @@ const delegated = computed(() => {
     <div
       class="relative z-10 flex h-8 w-3 items-center justify-center rounded-sm border bg-background transition-colors group-data-[resize-handle-state=hover]/handle:border-primary group-data-[resize-handle-state=hover]/handle:text-primary group-data-[resize-handle-state=drag]/handle:border-primary group-data-[resize-handle-state=drag]/handle:bg-primary/10 group-data-[resize-handle-state=drag]/handle:text-primary"
     >
-      <GripVertical class="size-3 text-muted-foreground transition-colors group-data-[resize-handle-state=hover]/handle:text-primary group-data-[resize-handle-state=drag]/handle:text-primary" />
+      <PhDotsSixVertical class="size-3 text-muted-foreground transition-colors group-data-[resize-handle-state=hover]/handle:text-primary group-data-[resize-handle-state=drag]/handle:text-primary" />
     </div>
 
     <slot />

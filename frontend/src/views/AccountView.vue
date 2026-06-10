@@ -1,11 +1,11 @@
 <template>
   <div class="px-6 py-8 max-w-2xl mx-auto">
     <div v-if="loading" class="flex justify-center py-16">
-      <Loader2 class="size-6 animate-spin text-muted-foreground" />
+      <PhCircleNotch class="size-6 animate-spin text-muted-foreground" />
     </div>
 
     <Alert v-else-if="error" variant="destructive">
-      <AlertCircle class="size-4" />
+      <PhWarningCircle class="size-4" />
       <AlertDescription>{{ error }}</AlertDescription>
     </Alert>
 
@@ -52,11 +52,11 @@
       <!-- Own profile actions -->
       <div v-if="isOwnProfile && !isAdmin" class="border-t pt-6 flex flex-wrap gap-2">
         <Button @click="openEdit">
-          <Edit2 class="mr-2 size-4" />
+          <PhPencilSimple class="mr-2 size-4" />
           Edit details
         </Button>
         <Button variant="destructive" @click="confirmDelete">
-          <Trash2 class="mr-2 size-4" />
+          <PhTrash class="mr-2 size-4" />
           Delete account
         </Button>
       </div>
@@ -64,21 +64,21 @@
       <!-- Admin actions -->
       <div v-if="auth.role === 'admin' && !isOwnProfile" class="border-t pt-6 flex flex-wrap gap-2">
         <Button :variant="userData.is_blocked ? 'default' : 'destructive'" @click="toggleBlock">
-          <component :is="userData.is_blocked ? Unlock : Lock" class="mr-2 size-4" />
+          <component :is="userData.is_blocked ? PhLockOpen : PhLock" class="mr-2 size-4" />
           {{ userData.is_blocked ? "Unblock" : "Block" }} user
         </Button>
         <template v-if="userData.role === 'professional' && userData.approval_status === 'pending'">
           <Button @click="updateApproval('approved')">
-            <CheckCircle class="mr-2 size-4" />
+            <PhCheckCircle class="mr-2 size-4" />
             Approve
           </Button>
           <Button variant="secondary" @click="updateApproval('rejected')">
-            <XCircle class="mr-2 size-4" />
+            <PhXCircle class="mr-2 size-4" />
             Reject
           </Button>
         </template>
         <Button variant="destructive" @click="deleteUserAccount">
-          <Trash2 class="mr-2 size-4" />
+          <PhTrash class="mr-2 size-4" />
           Delete user
         </Button>
       </div>
@@ -114,7 +114,16 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, CheckCircle, Edit2, Loader2, Lock, Trash2, Unlock, XCircle } from "@lucide/vue";
+import {
+  PhWarningCircle,
+  PhCheckCircle,
+  PhPencilSimple,
+  PhCircleNotch,
+  PhLock,
+  PhTrash,
+  PhLockOpen,
+  PhXCircle,
+} from '@phosphor-icons/vue';
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import StatusBadge from "@/components/StatusBadge.vue";

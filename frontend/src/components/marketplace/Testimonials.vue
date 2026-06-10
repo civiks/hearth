@@ -12,10 +12,10 @@
         class="bg-card rounded-xl soft-card hover:soft-card-hover transition-shadow p-7 sm:p-8 flex flex-col gap-6"
       >
         <div class="flex items-center gap-0.5">
-          <Star
+          <PhStar
             v-for="i in 5"
-            :key="i"
-            class="size-3 fill-amber-400 text-amber-400"
+            :key="i" weight="fill"
+            class="size-3 text-amber-400"
           />
         </div>
         <p class="text-lg leading-[1.7] tracking-tight text-muted-foreground flex-1">
@@ -39,7 +39,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Star } from "@lucide/vue";
+import {
+  PhStar,
+} from '@phosphor-icons/vue';
 
 import ProfessionalAvatar from "@/components/marketplace/ProfessionalAvatar.vue";
 

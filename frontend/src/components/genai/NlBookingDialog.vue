@@ -84,7 +84,7 @@
         <Textarea id="nl-remarks" v-model="form.remarks" rows="2" />
       </div>
       <Alert v-if="errorMessage" variant="destructive">
-        <AlertCircle class="size-4" />
+        <PhWarningCircle class="size-4" />
         <AlertDescription>{{ errorMessage }}</AlertDescription>
       </Alert>
     </div>
@@ -100,12 +100,12 @@
         <Button type="button" variant="outline" @click="restart">Start over</Button>
         <Button type="button" class="flex-1" :disabled="streaming || !matchedService" @click="stage = 'form'">
           Looks good
-          <ChevronRight class="size-3.5 ml-1" />
+          <PhCaretRight class="size-3.5 ml-1" />
         </Button>
       </template>
       <template v-else>
         <Button type="button" variant="primary-soft" size="icon" class="rounded-full" @click="stage = 'review'">
-          <ArrowLeft class="size-4" />
+          <PhArrowLeft class="size-4" />
         </Button>
         <Button type="button" class="flex-1" :disabled="submitting" @click="onSubmit">
           {{ submitting ? "Booking…" : "Confirm booking" }}
@@ -116,7 +116,11 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, ArrowLeft, ChevronRight } from "@lucide/vue";
+import {
+  PhWarningCircle,
+  PhArrowLeft,
+  PhCaretRight,
+} from '@phosphor-icons/vue';
 import { reactive, ref } from "vue";
 
 import AiMark from "@/components/AiMark.vue";

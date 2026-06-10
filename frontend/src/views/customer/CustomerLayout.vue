@@ -40,7 +40,11 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useMediaQuery, useScroll } from "@vueuse/core";
-import { ClipboardList, LayoutGrid, ShoppingBag } from "@lucide/vue";
+import {
+  PhClipboardText,
+  PhGridFour,
+  PhShoppingBag,
+} from '@phosphor-icons/vue';
 import { RouterLink, useRoute } from "vue-router";
 
 import { useScrollReset } from "@/composables/useScrollReset";
@@ -52,9 +56,9 @@ const { arrivedState } = useScroll(contentRef);
 useScrollReset(contentRef);
 
 const tabs = [
-  { label: "Browse", to: "/home/browse", icon: ShoppingBag },
-  { label: "Services", to: "/home/services", icon: LayoutGrid },
-  { label: "My requests", to: "/home/requests", icon: ClipboardList },
+  { label: "Browse", to: "/home/browse", icon: PhShoppingBag },
+  { label: "Services", to: "/home/services", icon: PhGridFour },
+  { label: "My requests", to: "/home/requests", icon: PhClipboardText },
 ];
 
 function isActive(to: string): boolean {

@@ -57,7 +57,7 @@
               class="sm:hidden text-surface-inverse-foreground hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground"
               aria-label="Menu"
             >
-              <Menu class="size-5" />
+              <PhEquals class="size-5" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" class="w-44">
@@ -144,7 +144,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Menu } from "@lucide/vue";
+import {
+  PhEquals,
+} from '@phosphor-icons/vue';
 import { computed } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 

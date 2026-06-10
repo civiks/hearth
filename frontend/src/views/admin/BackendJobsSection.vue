@@ -13,7 +13,7 @@
           :disabled="loading.daily"
           @click="trigger('daily-reminders', 'daily', 'Daily reminders sent.')"
         >
-          <Bell class="mr-2 size-3.5" />
+          <PhBell class="mr-2 size-3.5" />
           {{ loading.daily ? "Sending…" : "Daily reminders" }}
         </Button>
         <Button
@@ -21,7 +21,7 @@
           :disabled="loading.monthly"
           @click="trigger('monthly-reports', 'monthly', 'Monthly reports generated.')"
         >
-          <FileText class="mr-2 size-3.5" />
+          <PhFileText class="mr-2 size-3.5" />
           {{ loading.monthly ? "Generating…" : "Monthly reports" }}
         </Button>
         <Button
@@ -29,12 +29,12 @@
           :disabled="loading.activity"
           @click="trigger('activity-reports', 'activity', 'Activity reports generated.')"
         >
-          <Activity class="mr-2 size-3.5" />
+          <PhActivity class="mr-2 size-3.5" />
           {{ loading.activity ? "Generating…" : "Activity reports" }}
         </Button>
       </div>
       <Button variant="ghost" size="sm" @click="openMailHog">
-        <ExternalLink class="mr-2 size-3.5" />
+        <PhArrowSquareOut class="mr-2 size-3.5" />
         Open MailHog
       </Button>
     </CardContent>
@@ -42,7 +42,12 @@
 </template>
 
 <script lang="ts" setup>
-import { Activity, Bell, ExternalLink, FileText } from "@lucide/vue";
+import {
+  PhActivity,
+  PhBell,
+  PhArrowSquareOut,
+  PhFileText,
+} from '@phosphor-icons/vue';
 import { reactive } from "vue";
 
 import { Button } from "@/components/ui/button";
@@ -72,7 +77,7 @@ async function trigger(path: JobPath, key: JobKey, successMsg: string) {
   loading[key] = true;
   try {
     await api.post(`/api/trigger-${path}`);
-    toasts.success(`${successMsg} Check MailHog.`);
+    toasts.success(`${successMsg} PhCheck MailHog.`);
   } catch (err) {
     toasts.error(err instanceof ApiError ? err.detail : `Failed to trigger ${path}`);
   } finally {

@@ -32,7 +32,7 @@
     </div>
 
     <Alert v-if="errorMessage" variant="destructive">
-      <AlertCircle class="size-4" />
+      <PhWarningCircle class="size-4" />
       <AlertDescription>{{ errorMessage }}</AlertDescription>
     </Alert>
 
@@ -46,7 +46,9 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle } from "@lucide/vue";
+import {
+  PhWarningCircle,
+} from '@phosphor-icons/vue';
 import { reactive, ref } from "vue";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";

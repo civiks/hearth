@@ -17,7 +17,7 @@
           v-if="isDesktop"
           class="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-primary transition-opacity"
         >
-          <X class="size-4" />
+          <PhX class="size-4" />
           <span class="sr-only">Close</span>
         </SheetClose>
         <p class="text-2xl font-semibold tracking-tight tabular-nums">
@@ -51,7 +51,7 @@
               <p class="text-sm font-medium tracking-tight">{{ professional.full_name }}</p>
               <p class="text-xs tracking-tight tabular-nums text-muted-foreground mt-0.5">
                 <template v-if="professional.rating != null">
-                  <Star class="size-3 fill-amber-400 text-amber-400 inline-block -mt-px" />
+                  <PhStar weight="fill" class="size-3 text-amber-400 inline-block -mt-px" />
                   {{ professional.rating.toFixed(1) }}
                   <template v-if="professional.review_count"> ({{ professional.review_count }})</template>
                 </template>
@@ -71,11 +71,11 @@
         <!-- Details -->
         <div class="border-t pt-5 space-y-3 text-sm tracking-tight">
           <div class="flex items-start gap-2.5">
-            <MapPin class="size-4 shrink-0 mt-0.5 text-muted-foreground" />
+            <PhMapPin class="size-4 shrink-0 mt-0.5 text-muted-foreground" />
             <span>{{ request.address }}, <span class="tabular-nums">{{ request.pincode }}</span></span>
           </div>
           <div v-if="service?.base_price != null || service?.time_required != null" class="flex items-center gap-2.5">
-            <Tag class="size-4 shrink-0 text-muted-foreground" />
+            <PhTag class="size-4 shrink-0 text-muted-foreground" />
             <span class="flex items-baseline gap-1.5 tabular-nums">
               <span v-if="service?.base_price != null" class="inline-flex items-end gap-0.5 font-medium">
                 <span class="text-[11px] leading-none text-muted-foreground mb-px">Rs</span>
@@ -116,7 +116,12 @@
 </template>
 
 <script lang="ts" setup>
-import { MapPin, Star, Tag, X } from "@lucide/vue";
+import {
+  PhMapPin,
+  PhStar,
+  PhTag,
+  PhX,
+} from '@phosphor-icons/vue';
 import { computed, ref } from "vue";
 import { useMediaQuery, useScroll } from "@vueuse/core";
 

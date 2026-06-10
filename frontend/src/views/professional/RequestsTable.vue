@@ -14,7 +14,10 @@
 </template>
 
 <script lang="ts" setup>
-import { CheckCircle, PlayCircle } from "@lucide/vue";
+import {
+  PhCheckCircle,
+  PhPlayCircle,
+} from '@phosphor-icons/vue';
 import { h } from "vue";
 import type { ColumnDef } from "@tanstack/vue-table";
 
@@ -164,19 +167,19 @@ const columns: ColumnDef<ProRequest>[] = [
       if (r.service_status === "requested") {
         actions.push({
           label: "Accept request",
-          icon: CheckCircle,
+          icon: PhCheckCircle,
           onClick: () => emit("updateStatus", r.id, "accepted"),
         });
       } else if (r.service_status === "accepted") {
         actions.push({
           label: "Start work",
-          icon: PlayCircle,
+          icon: PhPlayCircle,
           onClick: () => emit("updateStatus", r.id, "in_progress"),
         });
       } else if (r.service_status === "in_progress") {
         actions.push({
           label: "Mark as complete",
-          icon: CheckCircle,
+          icon: PhCheckCircle,
           onClick: () => emit("updateStatus", r.id, "completed"),
         });
       }

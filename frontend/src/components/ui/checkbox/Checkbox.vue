@@ -2,7 +2,9 @@
 import type { HTMLAttributes } from 'vue'
 import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
 import { reactiveOmit } from '@vueuse/core'
-import { Check } from '@lucide/vue'
+import {
+  PhCheck,
+} from '@phosphor-icons/vue'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<{
@@ -35,7 +37,7 @@ const delegatedProps = reactiveOmit(props, 'class', 'checked', 'defaultChecked')
     @update:model-value="emits('update:checked', $event)"
   >
     <CheckboxIndicator class="flex items-center justify-center text-current">
-      <Check class="size-3" :stroke-width="3" />
+      <PhCheck class="size-3" weight="bold" />
     </CheckboxIndicator>
   </CheckboxRoot>
 </template>

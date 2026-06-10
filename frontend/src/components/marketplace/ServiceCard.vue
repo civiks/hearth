@@ -32,7 +32,7 @@
           v-if="service.rating != null"
           class="inline-flex items-center gap-1 text-xs tabular-nums shrink-0"
         >
-          <Star class="size-3 fill-amber-400 text-amber-400" />
+          <PhStar weight="fill" class="size-3 text-amber-400" />
           <span class="font-medium">{{ service.rating.toFixed(1) }}</span>
         </span>
       </div>
@@ -41,7 +41,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Star } from "@lucide/vue";
+import {
+  PhStar,
+} from '@phosphor-icons/vue';
 import { computed } from "vue";
 
 const props = defineProps<{

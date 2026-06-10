@@ -3,7 +3,9 @@ import type { DialogContentEmits, DialogContentProps } from 'reka-ui'
 
 import type { HTMLAttributes } from 'vue'
 import { reactiveOmit } from '@vueuse/core'
-import { XIcon } from '@lucide/vue'
+import {
+  PhX,
+} from '@phosphor-icons/vue'
 import {
   DialogClose,
   DialogContent,
@@ -44,7 +46,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
         as-child
       >
         <Button variant="ghost" class="absolute top-2 right-2" size="icon-sm">
-          <XIcon />
+          <PhX />
           <span class="sr-only">Close</span>
         </Button>
       </DialogClose>

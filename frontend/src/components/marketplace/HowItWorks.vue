@@ -13,7 +13,7 @@
           class="inline-flex size-10 items-center justify-center rounded-full text-white"
           :class="step.iconBg"
         >
-          <component :is="step.icon" class="size-5" :stroke-width="2" />
+          <component :is="step.icon" class="size-5" />
         </div>
         <h3 class="text-base font-semibold tracking-tight">{{ step.title }}</h3>
         <p class="text-sm tracking-tight leading-relaxed text-muted-foreground">
@@ -25,23 +25,27 @@
 </template>
 
 <script lang="ts" setup>
-import { BadgeCheck, CalendarCheck, MousePointerClick } from "@lucide/vue";
+import {
+  PhSealCheck,
+  PhCalendarCheck,
+  PhCursorClick,
+} from '@phosphor-icons/vue';
 
 const steps = [
   {
-    icon: MousePointerClick,
+    icon: PhCursorClick,
     iconBg: "bg-blue-500",
     title: "Choose a service",
     body: "Browse 18+ verified household services and pick one that fits your need.",
   },
   {
-    icon: CalendarCheck,
+    icon: PhCalendarCheck,
     iconBg: "bg-violet-500",
     title: "Book in seconds",
     body: "Choose a pro, lock in your time slot, and add any specific notes for the job.",
   },
   {
-    icon: BadgeCheck,
+    icon: PhSealCheck,
     iconBg: "bg-emerald-500",
     title: "Sit back",
     body: "Your professional arrives on time with the right tools. Pay after the job is done.",

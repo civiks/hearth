@@ -74,7 +74,7 @@
             isTabActive(tab.to) ? 'bg-foreground/10' : '',
           ]"
         >
-          <component :is="tab.icon" class="size-5 transition-none" :stroke-width="isTabActive(tab.to) ? 2.5 : 1.75" />
+          <component :is="tab.icon" class="size-5 transition-none" :weight="isTabActive(tab.to) ? 'fill' : 'regular'" />
         </span>
         <span :class="['text-xs leading-none', isTabActive(tab.to) ? 'font-semibold' : 'font-medium']">{{ tab.label }}</span>
       </RouterLink>
@@ -105,7 +105,7 @@
           class="relative pointer-events-auto z-10 mr-2 flex size-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm"
           @click="scrollTabbar"
         >
-          <ChevronRight class="size-4" />
+          <PhCaretRight class="size-4" />
         </button>
       </div>
     </nav>
@@ -115,16 +115,16 @@
 <script lang="ts" setup>
 import { useElementSize, useMediaQuery, useScroll } from "@vueuse/core";
 import {
-  Briefcase,
-  ChevronRight,
-  ClipboardList,
-  LayoutDashboard,
-  LayoutGrid,
-  ShoppingBag,
-  TrendingUp,
-  Users,
-  Wrench,
-} from "@lucide/vue";
+  PhBriefcase,
+  PhCaretRight,
+  PhClipboardText,
+  PhSquaresFour,
+  PhGridFour,
+  PhShoppingBag,
+  PhTrendUp,
+  PhUsers,
+  PhWrench,
+} from '@phosphor-icons/vue';
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 
@@ -167,21 +167,21 @@ function scrollTabbar() {
 
 const TAB_MAP = {
   user: [
-    { label: "Browse",      to: "/home/browse",    icon: ShoppingBag },
-    { label: "Services",    to: "/home/services",  icon: LayoutGrid },
-    { label: "My requests", to: "/home/requests",  icon: ClipboardList },
+    { label: "Browse",      to: "/home/browse",    icon: PhShoppingBag },
+    { label: "Services",    to: "/home/services",  icon: PhGridFour },
+    { label: "My requests", to: "/home/requests",  icon: PhClipboardText },
   ],
   professional: [
-    { label: "Overview",  to: "/professional/overview",  icon: LayoutDashboard },
-    { label: "Requests",  to: "/professional/requests",  icon: ClipboardList },
-    { label: "Earnings",  to: "/professional/earnings",  icon: TrendingUp },
+    { label: "Overview",  to: "/professional/overview",  icon: PhSquaresFour },
+    { label: "Requests",  to: "/professional/requests",  icon: PhClipboardText },
+    { label: "Earnings",  to: "/professional/earnings",  icon: PhTrendUp },
   ],
   admin: [
-    { label: "Overview",      to: "/admin/overview",      icon: LayoutDashboard },
-    { label: "Services",      to: "/admin/services",      icon: Wrench },
-    { label: "Professionals", to: "/admin/professionals", icon: Briefcase },
-    { label: "Users",         to: "/admin/users",         icon: Users },
-    { label: "Requests",      to: "/admin/requests",      icon: ClipboardList },
+    { label: "Overview",      to: "/admin/overview",      icon: PhSquaresFour },
+    { label: "Services",      to: "/admin/services",      icon: PhWrench },
+    { label: "Professionals", to: "/admin/professionals", icon: PhBriefcase },
+    { label: "Users",           to: "/admin/users",         icon: PhUsers },
+    { label: "Requests",      to: "/admin/requests",      icon: PhClipboardText },
   ],
 } as const;
 

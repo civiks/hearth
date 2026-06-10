@@ -3,7 +3,7 @@
   <DropdownMenu v-if="isDesktop">
     <DropdownMenuTrigger as-child>
       <Button variant="ghost" size="icon" aria-label="Open menu">
-        <MoreVertical class="size-4" />
+        <PhDotsThreeVertical class="size-4" />
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
@@ -22,7 +22,7 @@
   <!-- Mobile: bottom drawer with large tap targets -->
   <template v-else>
     <Button variant="ghost" size="icon" aria-label="Open menu" @click="open = true">
-      <MoreVertical class="size-4" />
+      <PhDotsThreeVertical class="size-4" />
     </Button>
     <Drawer :open="open" :should-scale-background="true" @update:open="(v) => !v && (open = false)">
       <DrawerContent class="p-0 gap-0">
@@ -45,7 +45,9 @@
 </template>
 
 <script lang="ts" setup>
-import { MoreVertical } from "@lucide/vue";
+import {
+  PhDotsThreeVertical,
+} from '@phosphor-icons/vue';
 import { ref, type Component } from "vue";
 import { useMediaQuery } from "@vueuse/core";
 

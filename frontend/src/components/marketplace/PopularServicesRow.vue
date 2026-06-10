@@ -17,7 +17,7 @@
         class="text-sm text-primary hover:underline underline-offset-4 inline-flex items-center gap-1 shrink-0"
       >
         See all
-        <ArrowRight class="size-3.5" />
+        <PhArrowRight class="size-3.5" />
       </RouterLink>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -37,7 +37,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ArrowRight } from "@lucide/vue";
+import {
+  PhArrowRight,
+} from '@phosphor-icons/vue';
 import { RouterLink } from "vue-router";
 
 import ServiceCard from "@/components/marketplace/ServiceCard.vue";

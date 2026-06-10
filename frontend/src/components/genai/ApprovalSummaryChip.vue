@@ -29,7 +29,7 @@
             :variant="f.severity === 'high' ? 'destructive' : 'secondary'"
             class="text-[10px] font-normal"
           >
-            <AlertTriangle v-if="f.severity === 'high'" class="size-3 mr-1" />
+            <PhWarning v-if="f.severity === 'high'" class="size-3 mr-1" />
             {{ f.label }}
           </Badge>
         </div>
@@ -46,7 +46,9 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertTriangle } from "@lucide/vue";
+import {
+  PhWarning,
+} from '@phosphor-icons/vue';
 import { computed } from "vue";
 
 import AiMark from "@/components/AiMark.vue";

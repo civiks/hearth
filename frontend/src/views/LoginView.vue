@@ -43,8 +43,8 @@
             :aria-pressed="showPassword"
             @click="showPassword = !showPassword"
           >
-            <EyeOff v-if="showPassword" class="size-4" />
-            <Eye v-else class="size-4" />
+            <PhEyeSlash v-if="showPassword" class="size-4" />
+            <PhEye v-else class="size-4" />
           </button>
         </div>
         <div class="flex justify-end px-1">
@@ -73,7 +73,10 @@
 </template>
 
 <script lang="ts" setup>
-import { Eye, EyeOff } from "@lucide/vue";
+import {
+  PhEye,
+  PhEyeSlash,
+} from '@phosphor-icons/vue';
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 

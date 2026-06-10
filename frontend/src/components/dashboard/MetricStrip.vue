@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ArrowRight } from "@lucide/vue";
+import {
+  PhArrowRight,
+} from '@phosphor-icons/vue';
 import { RouterLink, type RouteLocationRaw } from "vue-router";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -39,7 +41,7 @@ defineProps<{
           class="mt-1.5 inline-flex items-center gap-1 text-xs text-primary hover:underline underline-offset-4 focus-visible:outline-none focus-visible:underline"
         >
           {{ tile.viewAllLabel ?? "View all" }}
-          <ArrowRight class="size-3.5" :stroke-width="2" />
+          <PhArrowRight class="size-3.5" />
         </RouterLink>
       </div>
     </CardContent>

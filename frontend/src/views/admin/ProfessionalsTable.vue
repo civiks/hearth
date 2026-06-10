@@ -12,7 +12,11 @@
 </template>
 
 <script lang="ts" setup>
-import { CheckCircle, Trash2, XCircle } from "@lucide/vue";
+import {
+  PhCheckCircle,
+  PhTrash,
+  PhXCircle,
+} from '@phosphor-icons/vue';
 import { h } from "vue";
 import { RouterLink } from "vue-router";
 import type { ColumnDef } from "@tanstack/vue-table";
@@ -147,10 +151,10 @@ const columns: ColumnDef<AdminUser>[] = [
       const u = row.original;
       const actions = [];
       if (u.approval_status === "pending") {
-        actions.push({ label: "Approve", icon: CheckCircle, onClick: () => emit("approve", u.id) });
-        actions.push({ label: "Reject", icon: XCircle, onClick: () => emit("reject", u.id) });
+        actions.push({ label: "Approve", icon: PhCheckCircle, onClick: () => emit("approve", u.id) });
+        actions.push({ label: "Reject", icon: PhXCircle, onClick: () => emit("reject", u.id) });
       }
-      actions.push({ label: "Delete", icon: Trash2, variant: "destructive" as const, onClick: () => emit("delete", u.id) });
+      actions.push({ label: "Delete", icon: PhTrash, variant: "destructive" as const, onClick: () => emit("delete", u.id) });
       return h(RowActions, { actions });
     },
   },

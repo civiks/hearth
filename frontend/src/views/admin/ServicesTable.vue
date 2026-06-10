@@ -9,7 +9,7 @@
   >
     <template #actions>
       <Button @click="openCreate">
-        <Plus class="size-4" />
+        <PhPlus class="size-4" />
         <span class="ml-1 hidden sm:inline">Add service</span>
       </Button>
     </template>
@@ -103,7 +103,7 @@
     </div>
 
     <Alert v-if="errorMessage" variant="destructive">
-      <AlertCircle class="size-4" />
+      <PhWarningCircle class="size-4" />
       <AlertDescription>{{ errorMessage }}</AlertDescription>
     </Alert>
 
@@ -117,7 +117,12 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, Edit2, Plus, Trash2 } from "@lucide/vue";
+import {
+  PhWarningCircle,
+  PhPencilSimple,
+  PhPlus,
+  PhTrash,
+} from '@phosphor-icons/vue';
 import { computed, h, reactive, ref } from "vue";
 import type { ColumnDef } from "@tanstack/vue-table";
 
@@ -218,8 +223,8 @@ const columns: ColumnDef<AdminService>[] = [
       const s = row.original;
       return h(RowActions, {
         actions: [
-          { label: "Edit", icon: Edit2, onClick: () => openEdit(s) },
-          { label: "Delete", icon: Trash2, variant: "destructive", onClick: () => emit("delete", s.id) },
+          { label: "Edit", icon: PhPencilSimple, onClick: () => openEdit(s) },
+          { label: "Delete", icon: PhTrash, variant: "destructive", onClick: () => emit("delete", s.id) },
         ],
       });
     },

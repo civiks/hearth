@@ -7,7 +7,7 @@
     @close="$emit('close')"
   >
     <Alert v-if="auth.is_blocked" variant="destructive">
-      <AlertCircle class="size-4" />
+      <PhWarningCircle class="size-4" />
       <AlertTitle>Account blocked</AlertTitle>
       <AlertDescription>Please contact support to resolve this.</AlertDescription>
     </Alert>
@@ -22,12 +22,12 @@
         </span>
         <span class="text-muted-foreground/30">·</span>
         <span class="inline-flex items-center gap-1 text-muted-foreground tabular-nums">
-          <Clock class="size-3.5" />
+          <PhClock class="size-3.5" />
           {{ service.time_required }} min
         </span>
         <span v-if="service.rating != null" class="text-muted-foreground/30">·</span>
         <span v-if="service.rating != null" class="inline-flex items-center gap-1 tabular-nums">
-          <Star class="size-3.5 fill-amber-400 text-amber-400" />
+          <PhStar weight="fill" class="size-3.5 text-amber-400" />
           <span class="font-medium">{{ service.rating.toFixed(1) }}</span>
           <span v-if="service.review_count != null" class="text-muted-foreground">
             ({{ service.review_count }} reviews)
@@ -95,11 +95,12 @@
                 </span>
               </div>
               <div class="flex items-center gap-0.5">
-                <Star
+                <PhStar
                   v-for="n in 5"
                   :key="n"
                   class="size-3"
-                  :class="n <= Math.round(review.rating) ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/30'"
+                  :weight="n <= Math.round(review.rating) ? 'fill' : 'regular'"
+                  :class="n <= Math.round(review.rating) ? 'text-amber-400' : 'text-muted-foreground/30'"
                 />
               </div>
               <p v-if="review.comment" class="text-sm tracking-tight leading-relaxed text-muted-foreground">
@@ -119,7 +120,7 @@
       <!-- Summary strip -->
       <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm tracking-tight pb-4 border-b">
         <span class="flex items-center gap-1 text-muted-foreground">
-          <Clock class="size-3" />
+          <PhClock class="size-3" />
           <span class="text-foreground font-medium tabular-nums">{{ service.time_required }} min</span>
         </span>
         <span class="text-muted-foreground/30">·</span>
@@ -129,7 +130,7 @@
         </span>
         <span class="text-muted-foreground/30">·</span>
         <span class="flex items-center gap-1.5">
-          <UserCheck class="size-3.5 text-primary" />
+          <PhUserCheck class="size-3.5 text-primary" />
           <span>{{ selectedProName ?? "Any available pro" }}</span>
           <button type="button" class="text-xs tracking-tight text-primary underline underline-offset-2" @click="step = 'details'">change</button>
         </span>
@@ -165,7 +166,7 @@
       </div>
 
       <Alert v-if="errorMessage" variant="destructive">
-        <AlertCircle class="size-4" />
+        <PhWarningCircle class="size-4" />
         <AlertDescription>{{ errorMessage }}</AlertDescription>
       </Alert>
     </form>
@@ -178,7 +179,7 @@
       </template>
       <template v-else>
         <Button type="button" variant="primary-soft" size="icon" class="rounded-full" @click="step = 'details'">
-          <ArrowLeft class="size-4" />
+          <PhArrowLeft class="size-4" />
         </Button>
         <Button type="button" class="flex-1" :disabled="submitting || auth.is_blocked" @click="onSubmit">
           {{ submitting ? "Booking…" : "Confirm booking" }}
@@ -189,7 +190,13 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, ArrowLeft, Clock, Star, UserCheck } from "@lucide/vue";
+import {
+  PhWarningCircle,
+  PhArrowLeft,
+  PhClock,
+  PhStar,
+  PhUserCheck,
+} from '@phosphor-icons/vue';
 import { computed, onMounted, reactive, ref } from "vue";
 
 import AiMark from "@/components/AiMark.vue";

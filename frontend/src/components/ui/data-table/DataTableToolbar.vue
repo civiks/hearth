@@ -12,9 +12,8 @@
       class="flex items-center gap-2"
     >
       <div v-if="searchable" class="relative flex-1 min-w-0">
-        <Search
+        <PhMagnifyingGlass
           class="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground"
-          :stroke-width="2"
         />
         <Input
           :model-value="globalFilter ?? ''"
@@ -42,7 +41,9 @@
 </template>
 
 <script lang="ts" setup generic="TData">
-import { Search } from "@lucide/vue";
+import {
+  PhMagnifyingGlass,
+} from '@phosphor-icons/vue';
 import { computed } from "vue";
 import type { Column, Table } from "@tanstack/vue-table";
 

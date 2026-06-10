@@ -29,8 +29,8 @@
           @click="collapsed = !collapsed"
         >
           <span v-if="collapsed" class="text-xs tracking-tight">Show</span>
-          <ChevronUp v-if="!collapsed" class="size-3.5" />
-          <ChevronDown v-else class="size-3.5" />
+          <PhCaretUp v-if="!collapsed" class="size-3.5" />
+          <PhCaretDown v-else class="size-3.5" />
         </button>
       </div>
     </template>
@@ -56,7 +56,10 @@
 <script lang="ts" setup>
 import { computed, type HTMLAttributes, ref, watch } from "vue";
 import { useLocalStorage } from "@vueuse/core";
-import { ChevronDown, ChevronUp } from "@lucide/vue";
+import {
+  PhCaretDown,
+  PhCaretUp,
+} from '@phosphor-icons/vue';
 
 import AiMark from "@/components/AiMark.vue";
 import { DashboardWidget } from "@/components/dashboard";
@@ -165,7 +168,7 @@ function buildLines(): string[] {
       );
     } else {
       lines.push(
-        `Activity is steady — **${f.recentCompleted}** completed in the last 30 days, in line with the prior month.`,
+        `PhActivity is steady — **${f.recentCompleted}** completed in the last 30 days, in line with the prior month.`,
       );
     }
   } else if (f.recentCompleted > 0) {

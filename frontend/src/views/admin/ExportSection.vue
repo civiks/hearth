@@ -8,7 +8,7 @@
     </CardHeader>
     <CardContent>
       <Button :disabled="busy" @click="run">
-        <Download class="mr-2 size-3.5" />
+        <PhDownloadSimple class="mr-2 size-3.5" />
         {{ busy ? "Generating export…" : "Export service requests" }}
       </Button>
     </CardContent>
@@ -16,7 +16,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Download } from "@lucide/vue";
+import {
+  PhDownloadSimple,
+} from '@phosphor-icons/vue';
 import { onBeforeUnmount, ref } from "vue";
 
 import { Button } from "@/components/ui/button";

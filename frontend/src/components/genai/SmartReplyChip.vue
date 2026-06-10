@@ -21,7 +21,7 @@
         class="text-xs whitespace-normal items-start gap-2 cursor-pointer"
         @click="onPick(s)"
       >
-        <Send class="size-3 shrink-0 mt-0.5 text-primary" />
+        <PhPaperPlaneRight class="size-3 shrink-0 mt-0.5 text-primary" />
         <span>{{ s }}</span>
       </DropdownMenuItem>
     </DropdownMenuContent>
@@ -29,7 +29,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Send } from "@lucide/vue";
+import {
+  PhPaperPlaneRight,
+} from '@phosphor-icons/vue';
 import { computed } from "vue";
 
 import AiMark from "@/components/AiMark.vue";

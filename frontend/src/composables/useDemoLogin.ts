@@ -1,9 +1,9 @@
+import type { Component } from 'vue';
 import {
-  Briefcase,
-  ShieldCheck,
-  UserCircle,
-  type LucideIcon,
-} from "@lucide/vue";
+  PhBriefcase,
+  PhShieldCheck,
+  PhUserCircle,
+} from '@phosphor-icons/vue';
 import { useRouter } from "vue-router";
 
 import { ApiError, api, homePathForRole, type Role, type User } from "@/lib/api";
@@ -15,13 +15,13 @@ export interface DemoRole {
   label: string;
   value: Role;
   email: string;
-  icon: LucideIcon;
+  icon: Component;
 }
 
 export const DEMO_ROLES: DemoRole[] = [
-  { label: "Customer", value: "user", email: "customer@demo.local", icon: UserCircle },
-  { label: "Professional", value: "professional", email: "pro@demo.local", icon: Briefcase },
-  { label: "Admin", value: "admin", email: "admin@demo.local", icon: ShieldCheck },
+  { label: "Customer", value: "user", email: "customer@demo.local", icon: PhUserCircle },
+  { label: "Professional", value: "professional", email: "pro@demo.local", icon: PhBriefcase },
+  { label: "Admin", value: "admin", email: "admin@demo.local", icon: PhShieldCheck },
 ];
 
 export function useDemoLogin() {

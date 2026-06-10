@@ -21,7 +21,7 @@
         aria-label="Previous page"
         class="inline-flex items-center gap-1 px-2 h-7 text-xs rounded-md hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors shrink-0"
       >
-        <ChevronLeft class="size-3.5" />
+        <PhCaretLeft class="size-3.5" />
         <span class="hidden sm:inline">Previous</span>
       </PaginationPrev>
 
@@ -37,7 +37,7 @@
           v-else
           class="size-7 inline-flex items-center justify-center text-muted-foreground shrink-0"
         >
-          <MoreHorizontal class="size-3.5" />
+          <PhDotsThree class="size-3.5" />
         </PaginationEllipsis>
       </template>
 
@@ -46,14 +46,18 @@
         class="inline-flex items-center gap-1 px-2 h-7 text-xs rounded-md hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors shrink-0"
       >
         <span class="hidden sm:inline">Next</span>
-        <ChevronRight class="size-3.5" />
+        <PhCaretRight class="size-3.5" />
       </PaginationNext>
     </PaginationList>
   </PaginationRoot>
 </template>
 
 <script lang="ts" setup>
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "@lucide/vue";
+import {
+  PhCaretLeft,
+  PhCaretRight,
+  PhDotsThree,
+} from '@phosphor-icons/vue';
 import {
   PaginationEllipsis,
   PaginationList,

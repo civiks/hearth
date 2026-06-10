@@ -52,7 +52,7 @@
                 :title="`Model: ${chat.currentModel.name}`"
               >
                 hearth AI
-                <ChevronDown class="size-3.5 opacity-60" />
+                <PhCaretDown class="size-3.5 opacity-60" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" class="w-64">
@@ -94,7 +94,7 @@
                   class="size-8"
                   aria-label="Conversation history"
                 >
-                  <History class="size-4" />
+                  <PhClockCounterClockwise class="size-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" class="w-72 max-h-80 overflow-y-auto">
@@ -126,7 +126,7 @@
                     aria-label="Delete conversation"
                     @click.stop="chat.deleteConversation(c.id)"
                   >
-                    <Trash2 class="size-3.5" />
+                    <PhTrash class="size-3.5" />
                   </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -140,7 +140,7 @@
               :disabled="!chat.hasMessages && !chat.streaming"
               @click="chat.startNew()"
             >
-              <Plus class="size-4" />
+              <PhPlus class="size-4" />
             </Button>
             <Button
               variant="ghost"
@@ -149,7 +149,7 @@
               aria-label="Close"
               @click="chat.close()"
             >
-              <X class="size-4" />
+              <PhX class="size-4" />
             </Button>
           </div>
         </header>
@@ -176,7 +176,6 @@
                 I'm hearth AI. {{ roleIntro }} Ask me anything below.
               </p>
             </div>
-
 
             <div class="space-y-3">
               <p class="text-sm text-muted-foreground">Or try one of these</p>
@@ -224,7 +223,7 @@
                   v-if="m.state"
                   class="ml-auto inline-flex items-center gap-1.5 text-muted-foreground"
                 >
-                  <Loader2 class="size-3 animate-spin" />
+                  <PhCircleNotch class="size-3 animate-spin" />
                   {{ m.state }}…
                 </span>
               </div>
@@ -238,15 +237,15 @@
                   <summary
                     class="cursor-pointer px-2.5 py-1.5 flex items-center gap-2 select-none"
                   >
-                    <Loader2
+                    <PhCircleNotch
                       v-if="tc.status === 'running'"
                       class="size-3 shrink-0 animate-spin text-muted-foreground"
                     />
-                    <CheckCircle2
+                    <PhCheckCircle
                       v-else-if="tc.status === 'ok'"
                       class="size-3 shrink-0 text-success"
                     />
-                    <AlertCircle
+                    <PhWarningCircle
                       v-else
                       class="size-3 shrink-0 text-destructive"
                     />
@@ -283,7 +282,7 @@
                     aria-label="Helpful"
                     @click="chat.setFeedback(m.id, 'up')"
                   >
-                    <ThumbsUp class="size-3.5" />
+                    <PhThumbsUp class="size-3.5" />
                   </button>
                   <button
                     type="button"
@@ -292,7 +291,7 @@
                     aria-label="Not helpful"
                     @click="chat.setFeedback(m.id, 'down')"
                   >
-                    <ThumbsDown class="size-3.5" />
+                    <PhThumbsDown class="size-3.5" />
                   </button>
                   <button
                     type="button"
@@ -301,7 +300,7 @@
                     :disabled="chat.streaming"
                     @click="onRegenerate(m.id)"
                   >
-                    <RotateCw class="size-3.5" />
+                    <PhArrowClockwise class="size-3.5" />
                   </button>
                 </div>
               </div>
@@ -327,7 +326,7 @@
               tabindex="-1"
               disabled
             >
-              <Menu class="size-4" />
+              <PhEquals class="size-4" />
             </button>
             <textarea
               v-model="composer"
@@ -347,7 +346,7 @@
               tabindex="-1"
               disabled
             >
-              <Mic class="size-4" />
+              <PhMicrophone class="size-4" />
             </button>
             <button
               type="submit"
@@ -355,8 +354,8 @@
               class="text-primary hover:text-primary/80 disabled:text-muted-foreground/60 p-1 transition"
               aria-label="Send"
             >
-              <Loader2 v-if="chat.streaming" class="size-4 animate-spin" />
-              <SendHorizontal v-else class="size-4" />
+              <PhCircleNotch v-if="chat.streaming" class="size-4 animate-spin" />
+              <PhPaperPlaneRight v-else class="size-4" />
             </button>
           </div>
         </form>
@@ -371,21 +370,21 @@
 
 <script lang="ts" setup>
 import {
-  AlertCircle,
-  CheckCircle2,
-  ChevronDown,
-  History,
-  Loader2,
-  Menu,
-  Mic,
-  Plus,
-  RotateCw,
-  SendHorizontal,
-  ThumbsDown,
-  ThumbsUp,
-  Trash2,
-  X,
-} from "@lucide/vue";
+  PhWarningCircle,
+  PhCheckCircle,
+  PhCaretDown,
+  PhClockCounterClockwise,
+  PhCircleNotch,
+  PhEquals,
+  PhMicrophone,
+  PhPlus,
+  PhArrowClockwise,
+  PhPaperPlaneRight,
+  PhThumbsDown,
+  PhThumbsUp,
+  PhTrash,
+  PhX,
+} from '@phosphor-icons/vue';
 import { useEventListener, useScrollLock } from "@vueuse/core";
 import { computed, nextTick, ref, watch, watchEffect } from "vue";
 import AiKeyDialog from "@/components/AiKeyDialog.vue";
@@ -439,7 +438,7 @@ const textareaEl = ref<HTMLTextAreaElement | null>(null);
 // true). Overlay mode toggles via chat.open + transition.
 const visible = computed(() => props.mode === "inline" || chat.open);
 
-// Lock body scroll when overlay is open.
+// PhLock body scroll when overlay is open.
 const bodyScrollLocked = useScrollLock(document.body);
 watchEffect(() => {
   bodyScrollLocked.value = props.mode === "overlay" && chat.open;

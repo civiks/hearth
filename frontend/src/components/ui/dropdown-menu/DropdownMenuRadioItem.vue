@@ -3,7 +3,9 @@ import type { DropdownMenuRadioItemEmits, DropdownMenuRadioItemProps } from 'rek
 
 import type { HTMLAttributes } from 'vue'
 import { reactiveOmit } from '@vueuse/core'
-import { CheckIcon } from '@lucide/vue'
+import {
+  PhCheck,
+} from '@phosphor-icons/vue'
 import {
   DropdownMenuItemIndicator,
   DropdownMenuRadioItem,
@@ -35,7 +37,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
     >
       <DropdownMenuItemIndicator>
         <slot name="indicator-icon">
-          <CheckIcon class="text-primary size-3.5" />
+          <PhCheck class="text-primary size-3.5" />
         </slot>
       </DropdownMenuItemIndicator>
     </span>

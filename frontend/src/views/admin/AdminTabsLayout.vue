@@ -43,13 +43,13 @@
 import { ref } from "vue";
 import { useMediaQuery, useScroll } from "@vueuse/core";
 import {
-  Briefcase,
-  ClipboardList,
-  Hammer,
-  LayoutDashboard,
-  Users,
-  Wrench,
-} from "@lucide/vue";
+  PhBriefcase,
+  PhClipboardText,
+  PhHammer,
+  PhSquaresFour,
+  PhUsers,
+  PhWrench,
+} from '@phosphor-icons/vue';
 import { RouterLink, useRoute } from "vue-router";
 
 import { useScrollReset } from "@/composables/useScrollReset";
@@ -61,12 +61,12 @@ const { arrivedState } = useScroll(contentRef);
 useScrollReset(contentRef);
 
 const tabs = [
-  { label: "Overview",       to: "/admin/overview",      icon: LayoutDashboard },
-  { label: "Services",       to: "/admin/services",      icon: Wrench },
-  { label: "Professionals",  to: "/admin/professionals", icon: Briefcase },
-  { label: "Users",          to: "/admin/users",         icon: Users },
-  { label: "Requests",       to: "/admin/requests",      icon: ClipboardList },
-  { label: "Tools",          to: "/admin/tools",         icon: Hammer },
+  { label: "Overview",       to: "/admin/overview",      icon: PhSquaresFour },
+  { label: "Services",       to: "/admin/services",      icon: PhWrench },
+  { label: "Professionals",  to: "/admin/professionals", icon: PhBriefcase },
+  { label: "Users",            to: "/admin/users",         icon: PhUsers },
+  { label: "Requests",       to: "/admin/requests",      icon: PhClipboardText },
+  { label: "Tools",          to: "/admin/tools",         icon: PhHammer },
 ];
 
 function isActive(to: string): boolean {

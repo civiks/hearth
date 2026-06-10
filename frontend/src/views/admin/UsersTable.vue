@@ -12,7 +12,11 @@
 </template>
 
 <script lang="ts" setup>
-import { Lock, Trash2, Unlock } from "@lucide/vue";
+import {
+  PhLock,
+  PhTrash,
+  PhLockOpen,
+} from '@phosphor-icons/vue';
 import { h } from "vue";
 import { RouterLink } from "vue-router";
 import type { ColumnDef } from "@tanstack/vue-table";
@@ -107,10 +111,10 @@ const columns: ColumnDef<AdminUser>[] = [
         actions: [
           {
             label: u.is_blocked ? "Unblock" : "Block",
-            icon: u.is_blocked ? Unlock : Lock,
+            icon: u.is_blocked ? PhLockOpen : PhLock,
             onClick: () => emit("toggleBlock", u),
           },
-          { label: "Delete", icon: Trash2, variant: "destructive" as const, onClick: () => emit("delete", u.id) },
+          { label: "Delete", icon: PhTrash, variant: "destructive" as const, onClick: () => emit("delete", u.id) },
         ],
       });
     },

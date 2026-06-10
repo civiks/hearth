@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { ArrowDown, ArrowUp } from "@lucide/vue";
+import {
+  PhArrowDown,
+  PhArrowUp,
+} from '@phosphor-icons/vue';
 import { computed } from "vue";
 import type { RouteLocationRaw } from "vue-router";
 
@@ -56,8 +59,8 @@ const displayValue = computed(() => isNaN(numericValue.value) ? props.value : an
             class="inline-flex items-baseline gap-0.5 text-xs font-medium"
             :class="deltaColor"
           >
-            <ArrowUp v-if="direction === 'up'" class="size-3 self-center" :stroke-width="2.5" />
-            <ArrowDown v-else class="size-3 self-center" :stroke-width="2.5" />
+            <PhArrowUp v-if="direction === 'up'" class="size-3 self-center" weight="bold" />
+            <PhArrowDown v-else class="size-3 self-center" weight="bold" />
             {{ deltaText }}
           </span>
         </div>

@@ -5,9 +5,9 @@
       class="inline-flex items-center gap-1.5 text-xs tracking-tight tabular-nums text-muted-foreground hover:text-foreground transition-colors"
       @click="openPicker"
     >
-      <MapPin class="size-3.5" />
+      <PhMapPin class="size-3.5" />
       {{ locationLabel }}
-      <ChevronDown class="size-3.5" />
+      <PhCaretDown class="size-3.5" />
     </button>
 
     <Dialog v-model:open="dialogOpen">
@@ -33,7 +33,7 @@
             />
           </div>
           <Alert v-if="error" variant="destructive">
-            <AlertCircle class="size-3.5" />
+            <PhWarningCircle class="size-3.5" />
             <AlertDescription>{{ error }}</AlertDescription>
           </Alert>
         </form>
@@ -49,7 +49,11 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, ChevronDown, MapPin } from "@lucide/vue";
+import {
+  PhWarningCircle,
+  PhCaretDown,
+  PhMapPin,
+} from '@phosphor-icons/vue';
 import { computed, reactive, ref } from "vue";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";

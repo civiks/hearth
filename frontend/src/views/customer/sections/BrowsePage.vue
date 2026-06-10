@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto w-full max-w-[1440px] px-6 pt-4 sm:pt-5 pb-4 sm:pb-8 space-y-8">
     <Alert v-if="auth.is_blocked" variant="destructive">
-      <AlertCircle class="size-3.5" />
+      <PhWarningCircle class="size-3.5" />
       <AlertTitle>Account blocked</AlertTitle>
       <AlertDescription>
         Your account has been blocked. Please contact support for assistance.
@@ -21,7 +21,7 @@
             Describe it and we'll match the right service for you.
           </span>
         </span>
-        <ChevronRight class="size-3.5 text-muted-foreground group-hover:text-primary" />
+        <PhCaretRight class="size-3.5 text-muted-foreground group-hover:text-primary" />
       </AiSurface>
 
       <section v-if="loading" class="space-y-4">
@@ -40,7 +40,7 @@
           :services="reorderServices"
           title="Order again"
           subtitle="Services you've booked before"
-          :icon="History"
+          :icon="PhClockCounterClockwise"
           sort-by="as-is"
           :limit="3"
           view-all-to="/home/requests"
@@ -51,7 +51,7 @@
           :services="services"
           title="Most booked this week"
           subtitle="Top picks from your neighbors"
-          :icon="TrendingUp"
+          :icon="PhTrendUp"
           sort-by="popular"
           :limit="3"
           view-all-to="/home/services"
@@ -62,8 +62,9 @@
           :services="services"
           title="Top rated"
           subtitle="Highest-reviewed pros, by your neighbors"
-          :icon="Star"
-          icon-class="fill-amber-400 text-amber-400"
+          :icon="PhStar"
+          icon-class="text-amber-400"
+          icon-weight="fill"
           sort-by="top-rated"
           :limit="3"
           view-all-to="/home/services"
@@ -88,7 +89,13 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertCircle, ChevronRight, History, Star, TrendingUp } from "@lucide/vue";
+import {
+  PhWarningCircle,
+  PhCaretRight,
+  PhClockCounterClockwise,
+  PhStar,
+  PhTrendUp,
+} from '@phosphor-icons/vue';
 import { computed, onMounted, ref } from "vue";
 
 import AiMark from "@/components/AiMark.vue";

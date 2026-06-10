@@ -4,16 +4,15 @@
       <Button
         variant="ghost"
         size="icon"
-        :aria-label="`Filter ${title}`"
-        :title="`Filter ${title}`"
+        :aria-label="`PhFunnel ${title}`"
+        :title="`PhFunnel ${title}`"
         :class="[
           'border border-border',
           selectedCount > 0 && 'text-primary hover:text-primary',
         ]"
       >
-        <Filter
+        <PhFunnel
           class="size-3.5"
-          :stroke-width="2"
           :fill="selectedCount > 0 ? 'currentColor' : 'none'"
         />
       </Button>
@@ -45,7 +44,9 @@
 </template>
 
 <script lang="ts" setup generic="TData">
-import { Filter } from "@lucide/vue";
+import {
+  PhFunnel,
+} from '@phosphor-icons/vue';
 import { computed } from "vue";
 import type { Column } from "@tanstack/vue-table";
 

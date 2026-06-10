@@ -36,7 +36,7 @@
         <div class="relative px-6 py-24 sm:py-28 lg:py-32">
           <div class="max-w-xl">
             <div class="inline-flex items-center gap-1.5 rounded-full border border-surface-inverse-foreground/20 bg-surface-inverse-foreground/5 px-3 py-1 mb-5 sm:mb-6 text-xs font-medium tracking-tight text-surface-inverse-foreground/80 backdrop-blur">
-              <MapPin class="size-3" />
+              <PhMapPin class="size-3" />
               Now in Bangalore
             </div>
             <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.03em] mb-5 sm:mb-6 leading-[1.05] text-balance">
@@ -51,7 +51,7 @@
                   <DropdownMenuTrigger as-child>
                     <Button size="lg">
                       Try the demo
-                      <ChevronDown class="ml-2 size-3.5" />
+                      <PhCaretDown class="ml-2 size-3.5" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" class="w-72 p-1.5">
@@ -80,20 +80,20 @@
                     </DropdownMenuItem>
                     <DropdownMenuSeparator class="-mx-1.5 mt-1 mb-1" />
                     <DropdownMenuItem variant="destructive" class="rounded-lg" @click="resetDemoData">
-                      <RotateCcw class="mr-2 size-3.5" />
+                      <PhArrowCounterClockwise class="mr-2 size-3.5" />
                       Reset demo data
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <Button v-else size="lg" @click="drawerOpen = true">
                   Try the demo
-                  <ChevronDown class="ml-2 size-3.5" />
+                  <PhCaretDown class="ml-2 size-3.5" />
                 </Button>
               </template>
               <template v-else>
                 <Button size="lg" @click="$router.push('/register')">
                   Get Started
-                  <ArrowRight class="ml-2 size-3.5" />
+                  <PhArrowRight class="ml-2 size-3.5" />
                 </Button>
                 <Button
                   variant="outline"
@@ -107,15 +107,15 @@
             </div>
             <div class="flex flex-wrap items-center gap-x-5 gap-y-2 mt-8 sm:mt-10 text-xs font-medium tracking-tight text-surface-inverse-foreground/70">
               <div class="flex items-center gap-2">
-                <Star class="size-3.5 fill-amber-400 text-amber-400" />
+                <PhStar weight="fill" class="size-3.5 text-amber-400" />
                 <span>4.7 average rating</span>
               </div>
               <div class="flex items-center gap-2">
-                <ShieldCheck class="size-3.5 text-surface-inverse-foreground/90" />
+                <PhShieldCheck class="size-3.5 text-surface-inverse-foreground/90" />
                 <span>Verified professionals</span>
               </div>
               <div class="hidden sm:flex items-center gap-2">
-                <Clock class="size-3.5 text-surface-inverse-foreground/90" />
+                <PhClock class="size-3.5 text-surface-inverse-foreground/90" />
                 <span>Same-day service</span>
               </div>
             </div>
@@ -147,7 +147,7 @@
                   <DropdownMenuTrigger as-child>
                     <Button size="lg">
                       Try the demo
-                      <ChevronDown class="ml-2 size-3.5" />
+                      <PhCaretDown class="ml-2 size-3.5" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center" class="w-72 p-1.5">
@@ -176,19 +176,19 @@
                     </DropdownMenuItem>
                     <DropdownMenuSeparator class="-mx-1.5 mt-1 mb-1" />
                     <DropdownMenuItem variant="destructive" class="rounded-lg" @click="resetDemoData">
-                      <RotateCcw class="mr-2 size-3.5" />
+                      <PhArrowCounterClockwise class="mr-2 size-3.5" />
                       Reset demo data
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <Button v-else size="lg" @click="drawerOpen = true">
                   Try the demo
-                  <ChevronDown class="ml-2 size-3.5" />
+                  <PhCaretDown class="ml-2 size-3.5" />
                 </Button>
               </template>
               <Button v-else size="lg" @click="$router.push('/register')">
                 Get started
-                <ArrowRight class="ml-2 size-3.5" />
+                <PhArrowRight class="ml-2 size-3.5" />
               </Button>
             </div>
           </div>
@@ -222,7 +222,7 @@
 
       <template #footer>
         <Button variant="destructive-soft" class="flex-1 h-11" @click="resetDemoData">
-          <RotateCcw class="size-4 shrink-0" />
+          <PhArrowCounterClockwise class="size-4 shrink-0" />
           Reset demo data
         </Button>
       </template>
@@ -231,7 +231,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ArrowRight, ChevronDown, Clock, MapPin, RotateCcw, ShieldCheck, Star } from "@lucide/vue";
+import {
+  PhArrowRight,
+  PhCaretDown,
+  PhClock,
+  PhMapPin,
+  PhArrowCounterClockwise,
+  PhShieldCheck,
+  PhStar,
+} from '@phosphor-icons/vue';
 import { onMounted, ref } from "vue";
 import { useMediaQuery } from "@vueuse/core";
 
@@ -269,7 +277,6 @@ const ROLE_COLORS: Record<string, string> = {
   professional: "bg-emerald-500",
   admin: "bg-violet-500",
 };
-
 
 interface PublicService {
   id: number;

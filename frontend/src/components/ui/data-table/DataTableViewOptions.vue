@@ -8,7 +8,7 @@
         title="Toggle columns"
         class="border border-border"
       >
-        <SlidersHorizontal class="size-3.5" :stroke-width="2" />
+        <PhSlidersHorizontal class="size-3.5" />
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" class="w-44">
@@ -30,7 +30,9 @@
 </template>
 
 <script lang="ts" setup generic="TData">
-import { SlidersHorizontal } from "@lucide/vue";
+import {
+  PhSlidersHorizontal,
+} from '@phosphor-icons/vue';
 import { computed } from "vue";
 import type { Column, Table } from "@tanstack/vue-table";
 

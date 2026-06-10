@@ -68,7 +68,7 @@
 
       <Button class="mt-6 w-full rounded-full h-12 font-semibold justify-center" @click="step = 'form'">
         Continue
-        <ArrowRight class="size-4" />
+        <PhArrowRight class="size-4" />
       </Button>
     </template>
 
@@ -78,7 +78,7 @@
         class="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 cursor-pointer self-start"
         @click="step = 'role'"
       >
-        <ArrowLeft class="size-3.5" /> Back
+        <PhArrowLeft class="size-3.5" /> Back
       </button>
 
       <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-2">
@@ -118,8 +118,8 @@
             :aria-pressed="showPassword"
             @click="showPassword = !showPassword"
           >
-            <EyeOff v-if="showPassword" class="size-4" />
-            <Eye v-else class="size-4" />
+            <PhEyeSlash v-if="showPassword" class="size-4" />
+            <PhEye v-else class="size-4" />
           </button>
         </div>
 
@@ -202,7 +202,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ArrowLeft, ArrowRight, Eye, EyeOff } from "@lucide/vue";
+import {
+  PhArrowLeft,
+  PhArrowRight,
+  PhEye,
+  PhEyeSlash,
+} from '@phosphor-icons/vue';
 import { computed, ref, watch } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 

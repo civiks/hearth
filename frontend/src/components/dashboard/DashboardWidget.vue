@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
-import { ArrowRight } from "@lucide/vue";
+import {
+  PhArrowRight,
+} from '@phosphor-icons/vue';
 import { RouterLink, type RouteLocationRaw } from "vue-router";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -40,7 +42,7 @@ withDefaults(
             class="text-xs text-primary inline-flex items-center gap-1 hover:underline underline-offset-4 focus-visible:outline-none focus-visible:underline"
           >
             <span class="sm:hidden md:inline">{{ viewAllLabel }}</span>
-            <ArrowRight class="size-3.5" :stroke-width="2" />
+            <PhArrowRight class="size-3.5" />
           </RouterLink>
         </slot>
       </div>

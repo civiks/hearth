@@ -21,7 +21,10 @@
 </template>
 
 <script lang="ts" setup>
-import { AlertTriangle, XCircle } from "@lucide/vue";
+import {
+  PhWarning,
+  PhXCircle,
+} from '@phosphor-icons/vue';
 import { computed } from "vue";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -62,5 +65,5 @@ const CONFIG: Record<Kind, {
 const props = defineProps<{ kind: Kind }>();
 
 const config = computed(() => CONFIG[props.kind]);
-const iconFor = computed(() => (props.kind === "pending" ? AlertTriangle : XCircle));
+const iconFor = computed(() => (props.kind === "pending" ? PhWarning : PhXCircle));
 </script>

@@ -42,7 +42,11 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useMediaQuery, useScroll } from "@vueuse/core";
-import { ClipboardList, LayoutDashboard, TrendingUp } from "@lucide/vue";
+import {
+  PhClipboardText,
+  PhSquaresFour,
+  PhTrendUp,
+} from '@phosphor-icons/vue';
 import { RouterLink, useRoute } from "vue-router";
 
 import { useScrollReset } from "@/composables/useScrollReset";
@@ -54,9 +58,9 @@ const { arrivedState } = useScroll(contentRef);
 useScrollReset(contentRef);
 
 const tabs = [
-  { label: "Overview", to: "/professional/overview", icon: LayoutDashboard },
-  { label: "Requests", to: "/professional/requests", icon: ClipboardList },
-  { label: "Earnings", to: "/professional/earnings", icon: TrendingUp },
+  { label: "Overview", to: "/professional/overview", icon: PhSquaresFour },
+  { label: "Requests", to: "/professional/requests", icon: PhClipboardText },
+  { label: "Earnings", to: "/professional/earnings", icon: PhTrendUp },
 ];
 
 function isActive(to: string): boolean {
