@@ -162,7 +162,7 @@
         -->
         <div
           ref="scrollEl"
-          class="flex-1 overflow-y-auto overscroll-contain px-4 pt-4 pb-16 space-y-5 scroll-fade"
+          class="flex-1 overflow-y-auto overscroll-contain px-4 pt-4 pb-16 space-y-5 scroll-fade-y [--fade:48px]"
           role="log"
           aria-label="Conversation"
           aria-live="polite"
@@ -600,15 +600,3 @@ watch(
 );
 
 </script>
-
-<style scoped>
-/*
- * Bottom fade mask on the message scroller — content dissolves into the
- * composer. Fixed at 48px so the pb-16 (64px) bottom padding always leaves
- * ~16px of unmasked clearance regardless of viewport height.
- */
-.scroll-fade {
-  mask-image: linear-gradient(180deg, black, black calc(100% - 48px), transparent);
-  -webkit-mask-image: linear-gradient(180deg, black, black calc(100% - 48px), transparent);
-}
-</style>

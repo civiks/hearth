@@ -24,7 +24,7 @@
         <slot />
       </div>
 
-      <div v-if="$slots.footer" :class="footerClasses">
+      <div v-if="$slots.footer" class="sheet-footer">
         <slot name="footer" />
       </div>
     </component>
@@ -69,13 +69,13 @@ const headerClasses = computed(() =>
     : "flex flex-col gap-1.5 px-5 pt-3",
 );
 
+// Bottom padding clears the floating footer so content scrolls fully into
+// view above the CTA instead of resting hidden behind it.
 const bodyClasses = computed(() =>
-  cn("flex-1 overflow-y-auto min-h-0 px-5 py-5 space-y-4", props.bodyClass),
-);
-
-const footerClasses = computed(() =>
-  isDesktop.value
-    ? "flex flex-row gap-2 px-5 pt-3 pb-5 border-t"
-    : "flex flex-row gap-2 px-5 pt-3 pb-5",
+  cn(
+    "flex-1 overflow-y-auto min-h-0 px-5 pt-5 space-y-4",
+    slots.footer ? "pb-24" : "pb-5",
+    props.bodyClass,
+  ),
 );
 </script>

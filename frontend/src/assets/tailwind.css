@@ -160,6 +160,56 @@
     0 24px 56px -12px rgb(0 0 0 / 0.45);
 }
 
+/*
+ * Footer that floats over the bottom of a scrollable sheet/drawer body so
+ * content dissolves under the CTA. `--sheet-surface` is set per shell
+ * (SheetContent = popover, DrawerContent = card) so the fade matches the
+ * surface in either context. Pair with bottom padding on the scroll body.
+ */
+.sheet-footer {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 0 1.25rem max(1.25rem, env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+.sheet-footer::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: -2.75rem;
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    var(--sheet-surface, hsl(var(--popover))) calc(100% - 2.75rem),
+    transparent
+  );
+}
+.sheet-footer > * {
+  position: relative;
+  pointer-events: auto;
+}
+
+@utility scroll-fade-y {
+  --fade: 2rem;
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    black,
+    black calc(100% - var(--fade)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    180deg,
+    black,
+    black calc(100% - var(--fade)),
+    transparent
+  );
+}
+
 @utility soft-card-selected {
   background-image: linear-gradient(
     hsl(var(--primary) / 0.06),
