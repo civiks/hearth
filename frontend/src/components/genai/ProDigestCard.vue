@@ -29,8 +29,8 @@
           @click="collapsed = !collapsed"
         >
           <span v-if="collapsed" class="text-xs tracking-tight">Show</span>
-          <PhCaretUp v-if="!collapsed" class="size-3.5" />
-          <PhCaretDown v-else class="size-3.5" />
+          <PhCaretUp v-if="!collapsed" class="size-3.5" weight="bold" />
+          <PhCaretDown v-else class="size-3.5" weight="bold" />
         </button>
       </div>
     </template>

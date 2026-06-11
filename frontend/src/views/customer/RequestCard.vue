@@ -15,7 +15,7 @@
         class="size-full object-cover"
       />
       <div v-else class="size-full flex items-center justify-center">
-        <PhImage class="size-5 text-muted-foreground/40" />
+        <PhImage class="size-5 text-muted-foreground/40" weight="bold" />
       </div>
       <div
         class="absolute bottom-0 inset-x-0 py-1 text-center text-[9px] font-semibold uppercase tracking-wider"
@@ -30,16 +30,16 @@
           <p class="text-sm font-medium tracking-tight truncate">{{ request.service_name }}</p>
         </div>
         <div v-if="request.scheduled_time" class="flex items-center gap-1 mt-1 text-xs tracking-tight tabular-nums text-muted-foreground">
-          <PhCalendarDots class="size-3 shrink-0" />
+          <PhCalendarDots class="size-3 shrink-0" weight="bold" />
           <span>{{ formatSmartDateTime(request.scheduled_time) }}</span>
         </div>
         <div class="flex items-center gap-1 mt-0.5 text-xs tracking-tight text-muted-foreground truncate">
-          <PhUser class="size-3 shrink-0" />
+          <PhUser class="size-3 shrink-0" weight="bold" />
           <span v-if="professional" class="truncate">{{ professional.full_name }}</span>
           <span v-else-if="!cancelled" class="truncate">Awaiting assignment</span>
         </div>
       </div>
-      <PhCaretRight class="size-3.5 text-muted-foreground/40 shrink-0" />
+      <PhCaretRight class="size-3.5 text-muted-foreground/40 shrink-0" weight="bold" />
     </div>
   </button>
 </template>

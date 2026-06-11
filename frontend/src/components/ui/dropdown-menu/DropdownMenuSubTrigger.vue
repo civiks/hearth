@@ -29,6 +29,6 @@ const forwardedProps = useForwardProps(delegatedProps)
     )"
   >
     <slot />
-    <PhCaretRight class="cn-rtl-flip ml-auto" />
+    <PhCaretRight class="cn-rtl-flip ml-auto" weight="bold" />
   </DropdownMenuSubTrigger>
 </template>

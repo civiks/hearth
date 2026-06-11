@@ -40,16 +40,16 @@ const props = defineProps<ToasterProps>()
     v-bind="props"
   >
     <template #success-icon>
-      <PhCheckCircle class="size-3.5" />
+      <PhCheckCircle class="size-3.5" weight="bold" />
     </template>
     <template #info-icon>
-      <PhInfo class="size-3.5" />
+      <PhInfo class="size-3.5" weight="bold" />
     </template>
     <template #warning-icon>
-      <PhWarning class="size-3.5" />
+      <PhWarning class="size-3.5" weight="bold" />
     </template>
     <template #error-icon>
-      <PhXCircle class="size-3.5" />
+      <PhXCircle class="size-3.5" weight="bold" />
     </template>
     <template #loading-icon>
       <div>

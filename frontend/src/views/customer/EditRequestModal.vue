@@ -32,7 +32,7 @@
     </div>
 
     <Alert v-if="errorMessage" variant="destructive">
-      <PhWarningCircle class="size-4" />
+      <PhWarningCircle class="size-4" weight="bold" />
       <AlertDescription>{{ errorMessage }}</AlertDescription>
     </Alert>
 

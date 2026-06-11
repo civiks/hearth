@@ -14,6 +14,7 @@
       <div v-if="searchable" class="relative flex-1 min-w-0">
         <PhMagnifyingGlass
           class="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground"
+          weight="bold"
         />
         <Input
           :model-value="globalFilter ?? ''"

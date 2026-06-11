@@ -39,7 +39,7 @@ const forwardedProps = useForwardProps(delegatedProps)
   >
     <slot />
     <SelectIcon as-child>
-      <PhCaretDown class="text-muted-foreground size-3.5 pointer-events-none" />
+      <PhCaretDown class="text-muted-foreground size-3.5 pointer-events-none" weight="bold" />
     </SelectIcon>
   </SelectTrigger>
 </template>

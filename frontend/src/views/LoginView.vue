@@ -8,7 +8,7 @@
       <BrandMark class="h-10 w-auto" />
     </RouterLink>
 
-    <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-6">
+    <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-b from-zinc-900 via-zinc-800 to-zinc-500 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-500">
       Welcome back
     </h1>
 
@@ -39,8 +39,8 @@
             :aria-pressed="showPassword"
             @click="showPassword = !showPassword"
           >
-            <PhEyeSlash v-if="showPassword" class="size-4" />
-            <PhEye v-else class="size-4" />
+            <PhEyeSlash v-if="showPassword" class="size-4" weight="bold" />
+            <PhEye v-else class="size-4" weight="bold" />
           </button>
         </div>
         <div class="flex justify-end px-1">

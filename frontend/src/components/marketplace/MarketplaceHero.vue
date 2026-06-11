@@ -4,7 +4,7 @@
       class="mx-auto w-full max-w-[1440px] px-6 py-2 sm:py-3 flex flex-col sm:flex-row sm:items-center gap-4"
     >
       <div class="relative w-full sm:w-72 shrink-0">
-        <PhMagnifyingGlass class="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
+        <PhMagnifyingGlass class="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" weight="bold" />
         <Input
           :model-value="search"
           placeholder="Search for services"

@@ -9,7 +9,7 @@
   >
     <template #actions>
       <Button @click="openCreate">
-        <PhPlus class="size-4" />
+        <PhPlus class="size-4" weight="bold" />
         <span class="ml-1 hidden sm:inline">Add service</span>
       </Button>
     </template>
@@ -103,7 +103,7 @@
     </div>
 
     <Alert v-if="errorMessage" variant="destructive">
-      <PhWarningCircle class="size-4" />
+      <PhWarningCircle class="size-4" weight="bold" />
       <AlertDescription>{{ errorMessage }}</AlertDescription>
     </Alert>
 

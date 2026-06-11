@@ -29,7 +29,7 @@
             :variant="f.severity === 'high' ? 'destructive' : 'secondary'"
             class="text-[10px] font-normal"
           >
-            <PhWarning v-if="f.severity === 'high'" class="size-3 mr-1" />
+            <PhWarning v-if="f.severity === 'high'" class="size-3 mr-1" weight="bold" />
             {{ f.label }}
           </Badge>
         </div>

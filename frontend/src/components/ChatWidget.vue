@@ -52,7 +52,7 @@
                 :title="`Model: ${chat.currentModel.name}`"
               >
                 hearth AI
-                <PhCaretDown class="size-3.5 opacity-60" />
+                <PhCaretDown class="size-3.5 opacity-60" weight="bold" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" class="w-64">
@@ -94,7 +94,7 @@
                   class="size-8"
                   aria-label="Conversation history"
                 >
-                  <PhClockCounterClockwise class="size-4" />
+                  <PhClockCounterClockwise class="size-4" weight="bold" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" class="w-72 max-h-80 overflow-y-auto">
@@ -126,7 +126,7 @@
                     aria-label="Delete conversation"
                     @click.stop="chat.deleteConversation(c.id)"
                   >
-                    <PhTrash class="size-3.5" />
+                    <PhTrash class="size-3.5" weight="bold" />
                   </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -140,7 +140,7 @@
               :disabled="!chat.hasMessages && !chat.streaming"
               @click="chat.startNew()"
             >
-              <PhPlus class="size-4" />
+              <PhPlus class="size-4" weight="bold" />
             </Button>
             <Button
               variant="ghost"
@@ -244,10 +244,12 @@
                     <PhCheckCircle
                       v-else-if="tc.status === 'ok'"
                       class="size-3 shrink-0 text-success"
+                      weight="bold"
                     />
                     <PhWarningCircle
                       v-else
                       class="size-3 shrink-0 text-destructive"
+                      weight="bold"
                     />
                     <span class="truncate">
                       {{ labelForTool(auth.role, tc.name, tc.args) }}
@@ -282,7 +284,7 @@
                     aria-label="Helpful"
                     @click="chat.setFeedback(m.id, 'up')"
                   >
-                    <PhThumbsUp class="size-3.5" />
+                    <PhThumbsUp class="size-3.5" weight="bold" />
                   </button>
                   <button
                     type="button"
@@ -291,7 +293,7 @@
                     aria-label="Not helpful"
                     @click="chat.setFeedback(m.id, 'down')"
                   >
-                    <PhThumbsDown class="size-3.5" />
+                    <PhThumbsDown class="size-3.5" weight="bold" />
                   </button>
                   <button
                     type="button"
@@ -300,7 +302,7 @@
                     :disabled="chat.streaming"
                     @click="onRegenerate(m.id)"
                   >
-                    <PhArrowClockwise class="size-3.5" />
+                    <PhArrowClockwise class="size-3.5" weight="bold" />
                   </button>
                 </div>
               </div>
@@ -326,7 +328,7 @@
               tabindex="-1"
               disabled
             >
-              <PhEquals class="size-4" />
+              <PhEquals class="size-4" weight="bold" />
             </button>
             <textarea
               v-model="composer"
@@ -346,7 +348,7 @@
               tabindex="-1"
               disabled
             >
-              <PhMicrophone class="size-4" />
+              <PhMicrophone class="size-4" weight="bold" />
             </button>
             <button
               type="submit"
@@ -355,7 +357,7 @@
               aria-label="Send"
             >
               <PhCircleNotch v-if="chat.streaming" class="size-4 animate-spin" />
-              <PhPaperPlaneRight v-else class="size-4" />
+              <PhPaperPlaneRight v-else class="size-4" weight="bold" />
             </button>
           </div>
         </form>

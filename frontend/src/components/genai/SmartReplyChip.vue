@@ -21,7 +21,7 @@
         class="text-xs whitespace-normal items-start gap-2 cursor-pointer"
         @click="onPick(s)"
       >
-        <PhPaperPlaneRight class="size-3 shrink-0 mt-0.5 text-primary" />
+        <PhPaperPlaneRight class="size-3 shrink-0 mt-0.5 text-primary" weight="bold" />
         <span>{{ s }}</span>
       </DropdownMenuItem>
     </DropdownMenuContent>

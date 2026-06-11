@@ -9,7 +9,7 @@
     </RouterLink>
 
     <template v-if="step === 'role'">
-      <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-6">
+      <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-b from-zinc-900 via-zinc-800 to-zinc-500 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-500">
         Join hearth
       </h1>
 
@@ -62,7 +62,7 @@
 
       <Button class="mt-4 w-full rounded-full h-12 font-semibold justify-center" @click="step = 'form'">
         Continue
-        <PhArrowRight class="size-4" />
+        <PhArrowRight class="size-4" weight="bold" />
       </Button>
 
       <p class="mt-5 text-center text-sm text-muted-foreground">
@@ -77,10 +77,10 @@
         class="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-5 cursor-pointer self-start"
         @click="step = 'role'"
       >
-        <PhArrowLeft class="size-3.5" /> Back
+        <PhArrowLeft class="size-3.5" weight="bold" /> Back
       </button>
 
-      <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-1">
+      <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-1 text-transparent bg-clip-text bg-gradient-to-b from-zinc-900 via-zinc-800 to-zinc-500 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-500">
         {{ role === "user" ? "Create account" : "Sign up as Pro" }}
       </h1>
       <p class="mb-6 text-center text-sm text-muted-foreground">
@@ -113,8 +113,8 @@
             :aria-pressed="showPassword"
             @click="showPassword = !showPassword"
           >
-            <PhEyeSlash v-if="showPassword" class="size-4" />
-            <PhEye v-else class="size-4" />
+            <PhEyeSlash v-if="showPassword" class="size-4" weight="bold" />
+            <PhEye v-else class="size-4" weight="bold" />
           </button>
         </div>
 

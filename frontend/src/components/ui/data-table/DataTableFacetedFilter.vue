@@ -13,7 +13,7 @@
       >
         <PhFunnel
           class="size-3.5"
-          :fill="selectedCount > 0 ? 'currentColor' : 'none'"
+          :weight="selectedCount > 0 ? 'fill' : 'bold'"
         />
       </Button>
     </DropdownMenuTrigger>

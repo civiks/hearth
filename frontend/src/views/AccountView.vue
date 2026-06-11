@@ -5,7 +5,7 @@
     </div>
 
     <Alert v-else-if="error" variant="destructive">
-      <PhWarningCircle class="size-4" />
+      <PhWarningCircle class="size-4" weight="bold" />
       <AlertDescription>{{ error }}</AlertDescription>
     </Alert>
 
@@ -52,11 +52,11 @@
       <!-- Own profile actions -->
       <div v-if="isOwnProfile && !isAdmin" class="flex flex-wrap gap-2">
         <Button @click="openEdit">
-          <PhPencilSimple class="mr-2 size-4" />
+          <PhPencilSimple class="mr-2 size-4" weight="bold" />
           Edit details
         </Button>
         <Button variant="destructive" @click="confirmDelete">
-          <PhTrash class="mr-2 size-4" />
+          <PhTrash class="mr-2 size-4" weight="bold" />
           Delete account
         </Button>
       </div>
@@ -69,16 +69,16 @@
         </Button>
         <template v-if="userData.role === 'professional' && userData.approval_status === 'pending'">
           <Button @click="updateApproval('approved')">
-            <PhCheckCircle class="mr-2 size-4" />
+            <PhCheckCircle class="mr-2 size-4" weight="bold" />
             Approve
           </Button>
           <Button variant="secondary" @click="updateApproval('rejected')">
-            <PhXCircle class="mr-2 size-4" />
+            <PhXCircle class="mr-2 size-4" weight="bold" />
             Reject
           </Button>
         </template>
         <Button variant="destructive" @click="deleteUserAccount">
-          <PhTrash class="mr-2 size-4" />
+          <PhTrash class="mr-2 size-4" weight="bold" />
           Delete user
         </Button>
       </div>

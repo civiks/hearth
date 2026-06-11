@@ -1,6 +1,6 @@
 <template>
   <div v-if="cancelled" class="flex items-center gap-2 text-xs text-destructive">
-    <PhProhibit class="size-3.5" />
+    <PhProhibit class="size-3.5" weight="bold" />
     <span class="font-medium">Cancelled</span>
   </div>
   <ol v-else>

@@ -13,7 +13,7 @@
           :disabled="loading.daily"
           @click="trigger('daily-reminders', 'daily', 'Daily reminders sent.')"
         >
-          <PhBell class="mr-2 size-3.5" />
+          <PhBell class="mr-2 size-3.5" weight="bold" />
           {{ loading.daily ? "Sending…" : "Daily reminders" }}
         </Button>
         <Button
@@ -21,7 +21,7 @@
           :disabled="loading.monthly"
           @click="trigger('monthly-reports', 'monthly', 'Monthly reports generated.')"
         >
-          <PhFileText class="mr-2 size-3.5" />
+          <PhFileText class="mr-2 size-3.5" weight="bold" />
           {{ loading.monthly ? "Generating…" : "Monthly reports" }}
         </Button>
         <Button
@@ -29,12 +29,12 @@
           :disabled="loading.activity"
           @click="trigger('activity-reports', 'activity', 'Activity reports generated.')"
         >
-          <PhActivity class="mr-2 size-3.5" />
+          <PhActivity class="mr-2 size-3.5" weight="bold" />
           {{ loading.activity ? "Generating…" : "Activity reports" }}
         </Button>
       </div>
       <Button variant="ghost" size="sm" @click="openMailHog">
-        <PhArrowSquareOut class="mr-2 size-3.5" />
+        <PhArrowSquareOut class="mr-2 size-3.5" weight="bold" />
         Open MailHog
       </Button>
     </CardContent>

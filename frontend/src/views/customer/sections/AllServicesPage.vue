@@ -1,7 +1,7 @@
 <template>
   <div>
     <Alert v-if="auth.is_blocked" variant="destructive" class="mx-6 mt-6">
-      <PhWarningCircle class="size-3.5" />
+      <PhWarningCircle class="size-3.5" weight="bold" />
       <AlertTitle>Account blocked</AlertTitle>
       <AlertDescription>
         Your account has been blocked. Please contact support for assistance.

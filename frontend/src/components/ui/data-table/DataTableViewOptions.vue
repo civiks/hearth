@@ -8,7 +8,7 @@
         title="Toggle columns"
         class="border border-border"
       >
-        <PhSlidersHorizontal class="size-3.5" />
+        <PhSlidersHorizontal class="size-3.5" weight="bold" />
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" class="w-44">

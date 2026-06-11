@@ -35,7 +35,7 @@ const forwardedProps = useForwardProps(delegatedProps)
     <span class="pointer-events-none absolute right-2 flex size-3.5 items-center justify-center">
       <SelectItemIndicator>
         <slot name="indicator-icon">
-          <PhCheck class="pointer-events-none" />
+          <PhCheck class="pointer-events-none" weight="bold" />
         </slot>
       </SelectItemIndicator>
     </span>

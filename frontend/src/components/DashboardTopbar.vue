@@ -30,7 +30,7 @@
             class="flex items-center gap-2 px-2 py-1 rounded-full transition hover:bg-surface-inverse-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse"
           >
             <Avatar :name="auth.full_name ?? ''" :src="auth.avatar_url" size="size-6" fallback-class="text-[10px]" />
-            <PhCaretDown class="size-3.5 opacity-70" />
+            <PhCaretDown class="size-3.5 opacity-70" weight="bold" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" class="w-56">
@@ -42,11 +42,11 @@
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem @click="$router.push('/account')">
-            <PhUserCircle class="mr-2 size-4" />
+            <PhUserCircle class="mr-2 size-4" weight="bold" />
             Account
           </DropdownMenuItem>
           <DropdownMenuItem @click="settingsDrawer.show()">
-            <PhGear class="mr-2 size-4" />
+            <PhGear class="mr-2 size-4" weight="bold" />
             Settings
           </DropdownMenuItem>
           <DropdownMenuSub>
@@ -60,15 +60,15 @@
                 @update:model-value="(v) => setTheme(v as Theme)"
               >
                 <DropdownMenuRadioItem value="light">
-                  <PhSun class="mr-2 size-4" />
+                  <PhSun class="mr-2 size-4" weight="bold" />
                   Light
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="dark">
-                  <PhMoon class="mr-2 size-4" />
+                  <PhMoon class="mr-2 size-4" weight="bold" />
                   Dark
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="system">
-                  <PhMonitor class="mr-2 size-4" />
+                  <PhMonitor class="mr-2 size-4" weight="bold" />
                   System
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
@@ -76,7 +76,7 @@
           </DropdownMenuSub>
           <DropdownMenuSub v-if="DEMO">
             <DropdownMenuSubTrigger>
-              <PhRepeat class="mr-2 size-4" />
+              <PhRepeat class="mr-2 size-4" weight="bold" />
               Switch role
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent class="w-44">
@@ -97,11 +97,11 @@
           </DropdownMenuSub>
           <DropdownMenuSeparator />
           <DropdownMenuItem v-if="DEMO" @click="handleResetDemo">
-            <PhArrowCounterClockwise class="mr-2 size-4" />
+            <PhArrowCounterClockwise class="mr-2 size-4" weight="bold" />
             Reset demo data
           </DropdownMenuItem>
           <DropdownMenuItem variant="destructive" @click="handleLogout">
-            <PhSignOut class="mr-2 size-4" />
+            <PhSignOut class="mr-2 size-4" weight="bold" />
             Sign out
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -120,7 +120,7 @@
           @click="menuOpen = true"
         >
           <Avatar :name="auth.full_name ?? ''" :src="auth.avatar_url" size="size-6" fallback-class="text-[10px]" />
-          <PhCaretDown class="size-3.5 opacity-70" />
+          <PhCaretDown class="size-3.5 opacity-70" weight="bold" />
         </button>
 
         <Drawer v-model:open="menuOpen" should-scale-background>
@@ -139,14 +139,14 @@
                   aria-label="Account"
                   @click="navigate('/account')"
                 >
-                  <PhUserCircle class="size-5" />
+                  <PhUserCircle class="size-5" weight="bold" />
                 </button>
                 <button
                   class="p-2 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                   aria-label="Settings"
                   @click="menuOpen = false; settingsDrawer.show()"
                 >
-                  <PhGear class="size-5" />
+                  <PhGear class="size-5" weight="bold" />
                 </button>
                 <button
                   v-if="auth.role === 'admin'"
@@ -154,7 +154,7 @@
                   aria-label="Tools"
                   @click="navigate('/admin/tools')"
                 >
-                  <PhHammer class="size-5" />
+                  <PhHammer class="size-5" weight="bold" />
                 </button>
               </div>
             </div>
@@ -172,7 +172,7 @@
               >
                 <component :is="t.icon" class="size-4" :class="theme === t.value ? '' : 'text-muted-foreground'" />
                 {{ t.label }}
-                <PhCheck v-if="theme === t.value" class="ml-auto size-3.5 text-primary" />
+                <PhCheck v-if="theme === t.value" class="ml-auto size-3.5 text-primary" weight="bold" />
               </button>
 
               <template v-if="DEMO">
@@ -186,7 +186,7 @@
                 >
                   <component :is="r.icon" class="size-4" :class="auth.role === r.value ? '' : 'text-muted-foreground'" />
                   {{ r.label }}
-                  <PhCheck v-if="auth.role === r.value" class="ml-auto size-3.5 text-primary" />
+                  <PhCheck v-if="auth.role === r.value" class="ml-auto size-3.5 text-primary" weight="bold" />
                 </button>
               </template>
 
@@ -197,14 +197,14 @@
                 class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium tracking-tight hover:bg-accent transition-colors"
                 @click="handleResetDemo"
               >
-                <PhArrowCounterClockwise class="size-4 text-muted-foreground" />
+                <PhArrowCounterClockwise class="size-4 text-muted-foreground" weight="bold" />
                 Reset demo data
               </button>
               <button
                 class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium tracking-tight text-destructive hover:bg-destructive/10 transition-colors"
                 @click="handleLogout"
               >
-                <PhSignOut class="size-4" />
+                <PhSignOut class="size-4" weight="bold" />
                 Sign out
               </button>
 

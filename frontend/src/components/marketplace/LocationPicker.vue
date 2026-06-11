@@ -5,9 +5,9 @@
       class="inline-flex items-center gap-1.5 text-xs tracking-tight tabular-nums text-muted-foreground hover:text-foreground transition-colors"
       @click="openPicker"
     >
-      <PhMapPin class="size-3.5" />
+      <PhMapPin class="size-3.5" weight="bold" />
       {{ locationLabel }}
-      <PhCaretDown class="size-3.5" />
+      <PhCaretDown class="size-3.5" weight="bold" />
     </button>
 
     <Dialog v-model:open="dialogOpen">
@@ -33,7 +33,7 @@
             />
           </div>
           <Alert v-if="error" variant="destructive">
-            <PhWarningCircle class="size-3.5" />
+            <PhWarningCircle class="size-3.5" weight="bold" />
             <AlertDescription>{{ error }}</AlertDescription>
           </Alert>
         </form>

@@ -41,7 +41,7 @@ defineProps<{
           class="mt-1.5 inline-flex items-center gap-1 text-xs text-primary hover:underline underline-offset-4 focus-visible:outline-none focus-visible:underline"
         >
           {{ tile.viewAllLabel ?? "View all" }}
-          <PhArrowRight class="size-3.5" />
+          <PhArrowRight class="size-3.5" weight="bold" />
         </RouterLink>
       </div>
     </CardContent>
