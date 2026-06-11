@@ -2,19 +2,15 @@
   <div class="w-full max-w-sm flex flex-col">
     <RouterLink
       to="/"
-      class="self-center mb-8 hover:opacity-80 transition-opacity"
+      class="self-center mb-6 hover:opacity-80 transition-opacity"
       aria-label="hearth — back to home"
     >
       <BrandMark class="h-10 w-auto" />
     </RouterLink>
 
-    <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-2">
+    <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-6">
       Welcome back
     </h1>
-    <p class="mb-8 text-center text-sm text-muted-foreground">
-      Don't have an account?
-      <RouterLink to="/register" class="text-primary font-semibold hover:underline underline-offset-2">Sign up</RouterLink>
-    </p>
 
     <form class="space-y-3" @submit.prevent="submit">
       <Input
@@ -23,7 +19,7 @@
         placeholder="Email address"
         autocomplete="email"
         required
-        class="bg-muted border-transparent h-12 px-5"
+        class="bg-muted border-transparent h-12 px-5 rounded-full"
       />
 
       <div class="space-y-1.5">
@@ -33,7 +29,7 @@
             :type="showPassword ? 'text' : 'password'"
             placeholder="Password"
             autocomplete="current-password"
-            class="bg-muted border-transparent h-12 px-5 pr-12"
+            class="bg-muted border-transparent h-12 px-5 pr-12 rounded-full"
             required
           />
           <button
@@ -63,11 +59,16 @@
       </Button>
     </form>
 
-    <p class="mt-6 text-[11px] text-center text-muted-foreground">
+    <p class="mt-5 text-center text-sm text-muted-foreground">
+      Don't have an account?
+      <RouterLink to="/register" class="text-primary font-semibold hover:underline underline-offset-2">Sign up</RouterLink>
+    </p>
+
+    <p class="mt-4 text-[11px] text-center text-muted-foreground/60">
       By signing in you agree to hearth's
-      <RouterLink to="/terms" target="_blank" class="text-primary underline underline-offset-2">Terms of Service</RouterLink>
+      <RouterLink to="/terms" target="_blank" class="underline underline-offset-2 hover:text-muted-foreground">Terms of Service</RouterLink>
       and
-      <RouterLink to="/privacy" target="_blank" class="text-primary underline underline-offset-2">Privacy Policy</RouterLink>.
+      <RouterLink to="/privacy" target="_blank" class="underline underline-offset-2 hover:text-muted-foreground">Privacy Policy</RouterLink>.
     </p>
   </div>
 </template>

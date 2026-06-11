@@ -2,28 +2,22 @@
   <div class="w-full max-w-sm flex flex-col">
     <RouterLink
       to="/"
-      class="self-center mb-8 hover:opacity-80 transition-opacity"
+      class="self-center mb-6 hover:opacity-80 transition-opacity"
       aria-label="hearth — back to home"
     >
       <BrandMark class="h-10 w-auto" />
     </RouterLink>
 
     <template v-if="step === 'role'">
-      <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-2">
+      <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-6">
         Join hearth
       </h1>
-      <p class="mb-8 text-center text-sm text-muted-foreground">
-        Already have an account?
-        <RouterLink to="/login" class="text-primary font-semibold hover:underline underline-offset-2">
-          Sign in
-        </RouterLink>
-      </p>
 
       <div class="flex flex-col gap-2">
         <button
           type="button"
           :class="[
-            'flex items-center justify-between gap-4 rounded-lg bg-card px-4 py-3.5 text-left cursor-pointer card-lift',
+            'flex items-center justify-between gap-4 rounded-xl bg-card px-4 py-3.5 text-left cursor-pointer card-lift',
             role === 'user' ? 'soft-card-selected' : 'soft-card hover:soft-card-hover',
           ]"
           :aria-pressed="role === 'user'"
@@ -45,7 +39,7 @@
         <button
           type="button"
           :class="[
-            'flex items-center justify-between gap-4 rounded-lg bg-card px-4 py-3.5 text-left cursor-pointer card-lift',
+            'flex items-center justify-between gap-4 rounded-xl bg-card px-4 py-3.5 text-left cursor-pointer card-lift',
             role === 'professional' ? 'soft-card-selected' : 'soft-card hover:soft-card-hover',
           ]"
           :aria-pressed="role === 'professional'"
@@ -66,30 +60,31 @@
         </button>
       </div>
 
-      <Button class="mt-6 w-full rounded-full h-12 font-semibold justify-center" @click="step = 'form'">
+      <Button class="mt-4 w-full rounded-full h-12 font-semibold justify-center" @click="step = 'form'">
         Continue
         <PhArrowRight class="size-4" />
       </Button>
+
+      <p class="mt-5 text-center text-sm text-muted-foreground">
+        Already have an account?
+        <RouterLink to="/login" class="text-primary font-semibold hover:underline underline-offset-2">Sign in</RouterLink>
+      </p>
     </template>
 
     <template v-else>
       <button
         type="button"
-        class="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 cursor-pointer self-start"
+        class="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-5 cursor-pointer self-start"
         @click="step = 'role'"
       >
         <PhArrowLeft class="size-3.5" /> Back
       </button>
 
-      <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-2">
+      <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-1">
         {{ role === "user" ? "Create account" : "Sign up as Pro" }}
       </h1>
-      <p class="mb-8 text-center text-sm text-muted-foreground">
-        {{
-          role === "user"
-            ? "A few details and you're set"
-            : "We'll review your profile before going live"
-        }}
+      <p class="mb-6 text-center text-sm text-muted-foreground">
+        {{ role === "user" ? "A few details and you're set" : "We'll review your profile before going live" }}
       </p>
 
       <form class="space-y-3" @submit.prevent="submit">
@@ -99,7 +94,7 @@
           placeholder="Email address"
           autocomplete="email"
           required
-          class="bg-muted border-transparent h-12 px-5"
+          class="bg-muted border-transparent h-12 px-5 rounded-full"
         />
 
         <div class="relative">
@@ -108,7 +103,7 @@
             :type="showPassword ? 'text' : 'password'"
             placeholder="Password"
             autocomplete="new-password"
-            class="bg-muted border-transparent h-12 px-5 pr-12"
+            class="bg-muted border-transparent h-12 px-5 pr-12 rounded-full"
             required
           />
           <button
@@ -128,7 +123,7 @@
           placeholder="Full name"
           autocomplete="name"
           required
-          class="bg-muted border-transparent h-12 px-5"
+          class="bg-muted border-transparent h-12 px-5 rounded-full"
         />
 
         <Input
@@ -136,7 +131,7 @@
           placeholder="Address"
           autocomplete="street-address"
           required
-          class="bg-muted border-transparent h-12 px-5"
+          class="bg-muted border-transparent h-12 px-5 rounded-full"
         />
 
         <Input
@@ -144,12 +139,12 @@
           placeholder="Pincode"
           autocomplete="postal-code"
           required
-          class="bg-muted border-transparent h-12 px-5"
+          class="bg-muted border-transparent h-12 px-5 rounded-full"
         />
 
         <div v-if="role === 'professional'" class="space-y-3 pt-1">
           <Select v-model="serviceId">
-            <SelectTrigger class="bg-muted border-transparent h-12 px-5">
+            <SelectTrigger class="bg-muted border-transparent h-12 px-5 rounded-full">
               <SelectValue placeholder="Service category" />
             </SelectTrigger>
             <SelectContent>
@@ -169,33 +164,31 @@
             min="0"
             max="60"
             placeholder="Years of experience"
-            class="bg-muted border-transparent h-12 px-5"
+            class="bg-muted border-transparent h-12 px-5 rounded-full"
           />
 
           <Textarea
             v-model="description"
             placeholder="Professional description"
             rows="3"
-            class="bg-muted border-transparent px-5 py-3 resize-none"
+            class="bg-muted border-transparent px-5 py-3 resize-none rounded-2xl"
           />
         </div>
 
-        <div class="flex items-start gap-2.5 pt-2">
+        <div class="flex items-start gap-2.5 pt-1">
           <Checkbox id="tos" v-model:checked="agreedToTos" class="mt-0.5" />
-          <label for="tos" class="text-[11px] leading-relaxed text-muted-foreground cursor-pointer">
+          <label for="tos" class="text-[11px] leading-relaxed text-muted-foreground/60 cursor-pointer">
             I agree to hearth's
-            <RouterLink to="/terms" target="_blank" class="text-primary underline underline-offset-2">Terms of Service</RouterLink>
+            <RouterLink to="/terms" target="_blank" class="underline underline-offset-2 hover:text-muted-foreground">Terms of Service</RouterLink>
             and
-            <RouterLink to="/privacy" target="_blank" class="text-primary underline underline-offset-2">Privacy Policy</RouterLink>.
+            <RouterLink to="/privacy" target="_blank" class="underline underline-offset-2 hover:text-muted-foreground">Privacy Policy</RouterLink>.
             <span v-if="role === 'professional'">Professional profiles are reviewed before going live.</span>
           </label>
         </div>
 
-        <div class="pt-1">
-          <Button type="submit" class="w-full rounded-full h-12 font-semibold" :disabled="loading || !agreedToTos">
-            {{ loading ? "Creating…" : "Create account" }}
-          </Button>
-        </div>
+        <Button type="submit" class="w-full rounded-full h-12 font-semibold" :disabled="loading || !agreedToTos">
+          {{ loading ? "Creating…" : "Create account" }}
+        </Button>
       </form>
     </template>
   </div>
