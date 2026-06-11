@@ -1,5 +1,16 @@
 import { nextTick } from "vue";
 import { createRouter, createWebHistory, type RouteLocationNormalized } from "vue-router";
+import {
+  PhBriefcase,
+  PhClipboardText,
+  PhGridFour,
+  PhHammer,
+  PhShoppingBag,
+  PhSquaresFour,
+  PhTrendUp,
+  PhUsers,
+  PhWrench,
+} from "@phosphor-icons/vue";
 
 import { LOGGED_OUT_PATH, homePathForRole } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
@@ -38,8 +49,15 @@ const routes = [
   // Customer
   {
     path: "/home",
-    component: () => import("@/views/customer/CustomerLayout.vue"),
-    meta: { requiresAuth: true, role: "user", layout: "dashboard" },
+    component: () => import("@/views/DashboardTabsLayout.vue"),
+    meta: {
+      requiresAuth: true, role: "user", layout: "dashboard",
+      tabs: [
+        { label: "Browse",      to: "/home/browse",    icon: PhShoppingBag },
+        { label: "Services",    to: "/home/services",  icon: PhGridFour },
+        { label: "My requests", to: "/home/requests",  icon: PhClipboardText },
+      ],
+    },
     children: [
       { path: "", redirect: "/home/browse" },
       {
@@ -62,8 +80,15 @@ const routes = [
   // Professional
   {
     path: "/professional",
-    component: () => import("@/views/professional/ProfessionalLayout.vue"),
-    meta: { requiresAuth: true, role: "professional", layout: "dashboard" },
+    component: () => import("@/views/DashboardTabsLayout.vue"),
+    meta: {
+      requiresAuth: true, role: "professional", layout: "dashboard",
+      tabs: [
+        { label: "Overview",  to: "/professional/overview",  icon: PhSquaresFour },
+        { label: "Requests",  to: "/professional/requests",  icon: PhClipboardText },
+        { label: "Earnings",  to: "/professional/earnings",  icon: PhTrendUp },
+      ],
+    },
     children: [
       { path: "", redirect: "/professional/overview" },
       {
@@ -87,8 +112,18 @@ const routes = [
   // Admin
   {
     path: "/admin",
-    component: () => import("@/views/admin/AdminTabsLayout.vue"),
-    meta: { requiresAuth: true, role: "admin", layout: "dashboard" },
+    component: () => import("@/views/DashboardTabsLayout.vue"),
+    meta: {
+      requiresAuth: true, role: "admin", layout: "dashboard",
+      tabs: [
+        { label: "Overview",       to: "/admin/overview",      icon: PhSquaresFour },
+        { label: "Services",       to: "/admin/services",      icon: PhWrench },
+        { label: "Professionals",  to: "/admin/professionals", icon: PhBriefcase },
+        { label: "Users",          to: "/admin/users",         icon: PhUsers },
+        { label: "Requests",       to: "/admin/requests",      icon: PhClipboardText },
+        { label: "Tools",          to: "/admin/tools",         icon: PhHammer },
+      ],
+    },
     children: [
       { path: "", redirect: "/admin/overview" },
       {

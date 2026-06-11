@@ -3,27 +3,27 @@
     <nav
       v-if="isDesktop"
       :class="[
-        'vt-tabbar shrink-0 bg-surface-inverse border-b border-surface-inverse-foreground/10 overflow-x-auto scrollbar-hide transition-shadow duration-200',
-        !arrivedState.top && 'shadow-[0_2px_8px_-2px_rgb(0_0_0/0.25)]',
+        'vt-tabbar shrink-0 bg-background/80 backdrop-blur-md border-b border-border overflow-x-auto scrollbar-hide transition-shadow duration-200',
+        !arrivedState.top && 'shadow-[0_2px_8px_-2px_rgb(0_0_0/0.08)]',
       ]"
       role="tablist"
     >
       <div class="mx-auto w-full max-w-[1440px] flex items-center gap-1 px-6">
-      <RouterLink
-        v-for="tab in tabs"
-        :key="tab.to"
-        :to="tab.to"
-        role="tab"
-        :class="[
-          'flex items-center gap-2 px-2.5 py-1.5 my-1.5 rounded-md text-sm whitespace-nowrap transition-colors',
-          isActive(tab.to)
-            ? 'bg-surface-inverse-foreground/15 text-surface-inverse-foreground font-medium'
-            : 'text-surface-inverse-foreground/50 hover:bg-surface-inverse-foreground/8 hover:text-surface-inverse-foreground',
-        ]"
-      >
-        <component :is="tab.icon" class="size-3.5" />
-        {{ tab.label }}
-      </RouterLink>
+        <RouterLink
+          v-for="tab in tabs"
+          :key="tab.to"
+          :to="tab.to"
+          role="tab"
+          :class="[
+            'flex items-center gap-2 px-2.5 py-1.5 my-1.5 rounded-md text-sm whitespace-nowrap transition-colors',
+            isActive(tab.to)
+              ? 'bg-foreground/10 text-foreground font-medium'
+              : 'text-muted-foreground hover:bg-accent hover:text-foreground',
+          ]"
+        >
+          <component :is="tab.icon" class="size-3.5" />
+          {{ tab.label }}
+        </RouterLink>
       </div>
     </nav>
 
@@ -42,11 +42,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useMediaQuery, useScroll } from "@vueuse/core";
-import {
-  PhClipboardText,
-  PhSquaresFour,
-  PhTrendUp,
-} from '@phosphor-icons/vue';
 import { RouterLink, useRoute } from "vue-router";
 
 import { useScrollReset } from "@/composables/useScrollReset";
@@ -57,11 +52,7 @@ const contentRef = ref<HTMLElement | null>(null);
 const { arrivedState } = useScroll(contentRef);
 useScrollReset(contentRef);
 
-const tabs = [
-  { label: "Overview", to: "/professional/overview", icon: PhSquaresFour },
-  { label: "Requests", to: "/professional/requests", icon: PhClipboardText },
-  { label: "Earnings", to: "/professional/earnings", icon: PhTrendUp },
-];
+const tabs = route.meta.tabs as { label: string; to: string; icon: unknown }[];
 
 function isActive(to: string): boolean {
   return route.path === to || route.path.startsWith(`${to}/`);

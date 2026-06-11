@@ -1,7 +1,7 @@
 <template>
   <header
     :class="[
-      'vt-topbar shrink-0 bg-surface-inverse text-surface-inverse-foreground border-b border-surface-inverse-foreground/10 sm:border-b-0 z-30',
+      'vt-topbar shrink-0 bg-gradient-to-b from-primary/8 to-background/90 backdrop-blur-xl saturate-150 text-foreground border-b border-primary/10 sm:border-b-0 z-30',
       isDesktop ? 'relative' : 'sticky top-0 transition-transform duration-300 ease-out will-change-transform',
       !isDesktop && headerHidden && '-translate-y-full',
     ]"
@@ -16,7 +16,7 @@
       <button
         type="button"
         aria-label="Ask AI"
-        class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-inverse-foreground/10 hover:bg-surface-inverse-foreground/20 active:bg-surface-inverse-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse text-xs font-medium"
+        class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-foreground/8 hover:bg-foreground/12 active:bg-foreground/18 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background text-xs font-medium"
         @click="chat.toggle()"
       >
         <span>Ask</span>
@@ -27,7 +27,7 @@
         <DropdownMenuTrigger as-child>
           <button
             type="button"
-            class="flex items-center gap-2 px-2 py-1 rounded-full transition hover:bg-surface-inverse-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-inverse"
+            class="flex items-center gap-2 px-2 py-1 rounded-full transition hover:bg-foreground/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <Avatar :name="auth.full_name ?? ''" :src="auth.avatar_url" size="size-6" fallback-class="text-[10px]" />
             <PhCaretDown class="size-3.5 opacity-70" weight="bold" />
