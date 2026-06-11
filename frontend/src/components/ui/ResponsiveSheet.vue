@@ -11,14 +11,10 @@
     >
       <slot name="header">
         <div v-if="hasHeader" :class="headerClasses">
-          <component :is="TitleComp" :class="titleClasses">
+          <component :is="TitleComp">
             <slot name="title">{{ title }}</slot>
           </component>
-          <component
-            v-if="hasDescription"
-            :is="DescriptionComp"
-            :class="descriptionClasses"
-          >
+          <component v-if="hasDescription" :is="DescriptionComp">
             <slot name="description">{{ description }}</slot>
           </component>
         </div>
@@ -69,20 +65,8 @@ const hasDescription = computed(() => !!(props.description || slots.description)
 
 const headerClasses = computed(() =>
   isDesktop.value
-    ? "flex flex-col gap-1 px-5 pt-5 pb-4 border-b"
-    : "flex flex-col gap-1 px-5 pt-3",
-);
-
-const titleClasses = computed(() =>
-  isDesktop.value
-    ? "font-display text-base font-medium leading-none"
-    : "font-display text-xl font-semibold tracking-tight leading-tight",
-);
-
-const descriptionClasses = computed(() =>
-  isDesktop.value
-    ? "text-muted-foreground text-sm"
-    : "text-muted-foreground text-sm tracking-tight",
+    ? "flex flex-col gap-1.5 px-5 pt-5 pb-4 border-b"
+    : "flex flex-col gap-1.5 px-5 pt-3",
 );
 
 const bodyClasses = computed(() =>

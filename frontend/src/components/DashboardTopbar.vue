@@ -96,7 +96,7 @@
             </DropdownMenuSubContent>
           </DropdownMenuSub>
           <DropdownMenuSeparator />
-          <DropdownMenuItem v-if="DEMO" @click="resetDemoData">
+          <DropdownMenuItem v-if="DEMO" @click="handleResetDemo">
             <PhArrowCounterClockwise class="mr-2 size-4" />
             Reset demo data
           </DropdownMenuItem>
@@ -195,7 +195,7 @@
               <button
                 v-if="DEMO"
                 class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium tracking-tight hover:bg-accent transition-colors"
-                @click="resetDemoData"
+                @click="handleResetDemo"
               >
                 <PhArrowCounterClockwise class="size-4 text-muted-foreground" />
                 Reset demo data
@@ -259,6 +259,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useConfirm } from "@/composables/useConfirm";
 import { DEMO_ROLES, useDemoLogin } from "@/composables/useDemoLogin";
 import { useSettingsDrawer } from "@/composables/useSettingsDrawer";
 import { useTheme, type Theme } from "@/composables/useTheme";
@@ -273,6 +274,7 @@ const auth = useAuthStore();
 const chat = useChatStore();
 const { theme, effectiveTheme, setTheme } = useTheme();
 const { loginAs, resetDemoData } = useDemoLogin();
+const { confirm } = useConfirm();
 const settingsDrawer = useSettingsDrawer();
 
 const isDesktop = useMediaQuery("(min-width: 640px)");
@@ -319,7 +321,23 @@ function navigate(path: string) {
 
 async function handleLogout() {
   menuOpen.value = false;
+  if (!await confirm({
+    title: "Sign out?",
+    description: "You'll be signed out of your account. You can sign back in anytime.",
+    confirmLabel: "Sign out",
+  })) return;
   await auth.logout();
   router.push("/");
+}
+
+async function handleResetDemo() {
+  menuOpen.value = false;
+  if (!await confirm({
+    title: "Reset demo data?",
+    description: "This restores the demo to its original state — any bookings, edits, or accounts you changed will be discarded.",
+    variant: "destructive",
+    confirmLabel: "Reset demo",
+  })) return;
+  resetDemoData();
 }
 </script>

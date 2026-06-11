@@ -79,7 +79,7 @@
                       </div>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator class="-mx-1.5 mt-1 mb-1" />
-                    <DropdownMenuItem variant="destructive" class="rounded-lg" @click="resetDemoData">
+                    <DropdownMenuItem variant="destructive" class="rounded-lg" @click="handleResetDemo">
                       <PhArrowCounterClockwise class="mr-2 size-3.5" />
                       Reset demo data
                     </DropdownMenuItem>
@@ -175,7 +175,7 @@
                       </div>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator class="-mx-1.5 mt-1 mb-1" />
-                    <DropdownMenuItem variant="destructive" class="rounded-lg" @click="resetDemoData">
+                    <DropdownMenuItem variant="destructive" class="rounded-lg" @click="handleResetDemo">
                       <PhArrowCounterClockwise class="mr-2 size-3.5" />
                       Reset demo data
                     </DropdownMenuItem>
@@ -221,7 +221,7 @@
       </button>
 
       <template #footer>
-        <Button variant="destructive-soft" class="flex-1 h-11" @click="resetDemoData">
+        <Button variant="destructive-soft" class="flex-1 h-11" @click="handleResetDemo">
           <PhArrowCounterClockwise class="size-4 shrink-0" />
           Reset demo data
         </Button>
@@ -256,6 +256,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useConfirm } from "@/composables/useConfirm";
 import { useDemoLogin, DEMO_ROLES } from "@/composables/useDemoLogin";
 import { api } from "@/lib/api";
 import { DEMO } from "@/lib/demo/flag";
@@ -263,8 +264,21 @@ import { useAuthStore } from "@/stores/auth";
 
 const auth = useAuthStore();
 const { loginAs, resetDemoData } = useDemoLogin();
+const { confirm } = useConfirm();
 const isDesktop = useMediaQuery("(min-width: 640px)");
 const drawerOpen = ref(false);
+
+async function handleResetDemo() {
+  // Dismiss the mobile "Try the demo" drawer first so the confirm isn't stacked on it.
+  drawerOpen.value = false;
+  if (!await confirm({
+    title: "Reset demo data?",
+    description: "This restores the demo to its original state — any bookings, edits, or accounts you changed will be discarded.",
+    variant: "destructive",
+    confirmLabel: "Reset demo",
+  })) return;
+  resetDemoData();
+}
 
 const ROLE_DESCRIPTIONS: Record<string, string> = {
   user: "Browse services, book professionals, and track your requests.",

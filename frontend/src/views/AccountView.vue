@@ -28,7 +28,7 @@
       </header>
 
       <!-- Contact -->
-      <section class="border-t pt-6 space-y-5">
+      <section class="bg-card rounded-xl soft-card p-6 space-y-5">
         <p class="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Contact</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
           <Field label="Email" :value="userData.email" />
@@ -38,7 +38,7 @@
       </section>
 
       <!-- Professional details -->
-      <section v-if="userData.role === 'professional'" class="border-t pt-6 space-y-5">
+      <section v-if="userData.role === 'professional'" class="bg-card rounded-xl soft-card p-6 space-y-5">
         <p class="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Professional</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
           <Field label="Service" :value="userData.service_name || '—'" />
@@ -50,7 +50,7 @@
       </section>
 
       <!-- Own profile actions -->
-      <div v-if="isOwnProfile && !isAdmin" class="border-t pt-6 flex flex-wrap gap-2">
+      <div v-if="isOwnProfile && !isAdmin" class="flex flex-wrap gap-2">
         <Button @click="openEdit">
           <PhPencilSimple class="mr-2 size-4" />
           Edit details
@@ -62,7 +62,7 @@
       </div>
 
       <!-- Admin actions -->
-      <div v-if="auth.role === 'admin' && !isOwnProfile" class="border-t pt-6 flex flex-wrap gap-2">
+      <div v-if="auth.role === 'admin' && !isOwnProfile" class="flex flex-wrap gap-2">
         <Button :variant="userData.is_blocked ? 'default' : 'destructive'" @click="toggleBlock">
           <component :is="userData.is_blocked ? PhLockOpen : PhLock" class="mr-2 size-4" />
           {{ userData.is_blocked ? "Unblock" : "Block" }} user

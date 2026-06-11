@@ -10,18 +10,19 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-button-primary text-primary-foreground hover:bg-button-primary-hover active:bg-button-primary-active btn-glow btn-bounce',
-        outline: 'border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground active:bg-primary-active active:text-primary-foreground aria-expanded:bg-primary aria-expanded:text-primary-foreground',
+        // `--halo` tints the optional Button `halo` ring to match each variant's fill.
+        default: '[--halo:var(--primary)] bg-button-primary text-primary-foreground hover:bg-button-primary-hover active:bg-button-primary-active btn-glow btn-bounce',
+        outline: '[--halo:var(--primary)] border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground active:bg-primary-active active:text-primary-foreground aria-expanded:bg-primary aria-expanded:text-primary-foreground',
         // Secondary — theme-aware: dark theme inherits gray-80 hover→gray-70; light theme uses gray-20 hover→gray-30.
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary-hover active:bg-secondary-active aria-expanded:bg-secondary-hover',
+        secondary: '[--halo:var(--muted-foreground)] bg-secondary text-secondary-foreground hover:bg-secondary-hover active:bg-secondary-active aria-expanded:bg-secondary-hover',
         // Ghost — for low-emphasis actions inside cards/menus.
-        ghost: 'hover:bg-foreground/10 hover:text-foreground active:shadow-[inset_0_0_0_2px_hsl(var(--primary))] aria-expanded:shadow-[inset_0_0_0_2px_hsl(var(--primary))]',
+        ghost: '[--halo:var(--muted-foreground)] hover:bg-foreground/10 hover:text-foreground active:shadow-[inset_0_0_0_2px_hsl(var(--primary))] aria-expanded:shadow-[inset_0_0_0_2px_hsl(var(--primary))]',
         // Danger — red-60 fill, hover red-70, active red-80, inset destructive focus.
-        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--destructive))]',
+        destructive: '[--halo:var(--destructive)] bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--destructive))]',
         // Soft danger — tinted background, works on both light and dark surfaces without being too bright.
-        'destructive-soft': 'bg-destructive/12 text-destructive hover:bg-destructive/20 active:bg-destructive/25 focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--destructive))]',
+        'destructive-soft': '[--halo:var(--destructive)] bg-destructive/12 text-destructive hover:bg-destructive/20 active:bg-destructive/25 focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--destructive))]',
         // Soft primary — tinted background for low-emphasis primary actions (e.g. back buttons).
-        'primary-soft': 'bg-primary/10 text-primary hover:bg-primary/18 active:bg-primary/25',
+        'primary-soft': '[--halo:var(--primary)] bg-primary/10 text-primary hover:bg-primary/18 active:bg-primary/25',
         link: 'text-primary underline-offset-4 hover:underline border-transparent focus-visible:shadow-none focus-visible:underline',
       },
       size: {

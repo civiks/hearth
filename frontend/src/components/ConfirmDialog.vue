@@ -1,20 +1,21 @@
 <template>
-  <!-- Desktop: compact centered modal -->
+  <!-- Desktop: centered modal -->
   <Dialog v-if="isDesktop" :open="!!pending" @update:open="(v) => !v && settle(false)">
-    <DialogContent :show-close-button="false" class="sm:max-w-xs gap-0 p-0 overflow-hidden">
-      <div class="space-y-1 px-5 pt-5 pb-3">
+    <DialogContent :show-close-button="false" class="sm:max-w-sm gap-0 p-0 overflow-hidden rounded-3xl">
+      <div class="space-y-2 px-6 pt-6 pb-2">
         <DialogTitle>{{ pending?.title }}</DialogTitle>
         <DialogDescription v-if="pending?.description">
           {{ pending.description }}
         </DialogDescription>
       </div>
-      <div class="px-5 pt-3 pb-5 flex gap-2">
-        <Button variant="secondary" @click="settle(false)">
+      <div class="px-6 pt-5 pb-6 flex gap-2 justify-end">
+        <Button variant="secondary" halo class="rounded-full px-5" @click="settle(false)">
           {{ pending?.cancelLabel ?? "Cancel" }}
         </Button>
         <Button
           :variant="pending?.variant === 'destructive' ? 'destructive' : 'default'"
-          class="flex-1"
+          halo
+          class="rounded-full px-5"
           @click="settle(true)"
         >
           {{ pending?.confirmLabel ?? "Confirm" }}
@@ -36,12 +37,13 @@
         </DrawerDescription>
       </DrawerHeader>
       <DrawerFooter>
-        <Button variant="secondary" @click="settle(false)">
+        <Button variant="secondary" halo class="rounded-full" @click="settle(false)">
           {{ pending?.cancelLabel ?? "Cancel" }}
         </Button>
         <Button
           :variant="pending?.variant === 'destructive' ? 'destructive' : 'default'"
-          class="flex-1"
+          halo
+          class="flex-1 rounded-full"
           @click="settle(true)"
         >
           {{ pending?.confirmLabel ?? "Confirm" }}

@@ -13,10 +13,10 @@ export const SheetHeader = defineComponent({
 
 export const SheetTitle = defineComponent({
   setup: (_, { slots, attrs }) =>
-    () => h(DialogTitle, { class: cn('text-base font-medium leading-none', attrs.class as string) }, slots),
+    () => h(DialogTitle, { class: cn('text-lg font-semibold leading-snug tracking-tight font-display', attrs.class as string) }, slots),
 })
 
 export const SheetDescription = defineComponent({
   setup: (_, { slots, attrs }) =>
-    () => h(DialogDescription, { class: cn('text-muted-foreground text-sm', attrs.class as string) }, slots),
+    () => h(DialogDescription, { class: cn('text-muted-foreground text-sm leading-relaxed', attrs.class as string) }, slots),
 })

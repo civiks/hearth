@@ -146,6 +146,20 @@
     0 6px 12px -2px rgb(0 0 0 / 0.45),
     0 20px 36px -8px rgb(0 0 0 / 0.55);
 }
+/* Floating-surface elevation for menus / dialogs / popovers — tighter and more layered than soft-card. */
+@utility soft-popover {
+  box-shadow:
+    0 1px 2px 0 rgb(15 23 42 / 0.06),
+    0 8px 24px -6px rgb(15 23 42 / 0.16),
+    0 16px 48px -12px rgb(15 23 42 / 0.10);
+}
+.dark .soft-popover {
+  box-shadow:
+    0 2px 4px 0 rgb(0 0 0 / 0.45),
+    0 12px 32px -6px rgb(0 0 0 / 0.55),
+    0 24px 56px -12px rgb(0 0 0 / 0.45);
+}
+
 @utility soft-card-selected {
   background-image: linear-gradient(
     hsl(var(--primary) / 0.06),
