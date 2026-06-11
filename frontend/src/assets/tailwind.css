@@ -26,9 +26,7 @@
 @utility scrollbar-hide {
   scrollbar-width: none;
   -ms-overflow-style: none;
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+  &::-webkit-scrollbar { display: none; }
 }
 
 @utility pb-safe {
@@ -54,17 +52,18 @@
       transparent 60%
     ),
     hsl(var(--background));
+  @variant dark {
+    background:
+      linear-gradient(
+        0deg,
+        rgb(99 155 255 / 0.18) 0%,
+        rgb(167 139 250 / 0.08) 40%,
+        transparent 65%
+      ),
+      hsl(var(--card));
+  }
 }
-.dark .ai-surface {
-  background:
-    linear-gradient(
-      0deg,
-      rgb(99 155 255 / 0.18) 0%,
-      rgb(167 139 250 / 0.08) 40%,
-      transparent 65%
-    ),
-    hsl(var(--card));
-}
+
 @utility ai-surface-band {
   background:
     linear-gradient(
@@ -74,34 +73,37 @@
       transparent 60%
     ),
     hsl(var(--background));
+  @variant dark {
+    background:
+      linear-gradient(
+        0deg,
+        rgb(99 155 255 / 0.18) 0%,
+        rgb(167 139 250 / 0.08) 40%,
+        transparent 65%
+      ),
+      hsl(var(--background));
+  }
 }
-.dark .ai-surface-band {
-  background:
-    linear-gradient(
-      0deg,
-      rgb(99 155 255 / 0.18) 0%,
-      rgb(167 139 250 / 0.08) 40%,
-      transparent 65%
-    ),
-    hsl(var(--background));
-}
+
 @utility ai-surface-soft {
   background: linear-gradient(
     0deg,
     rgb(78 135 255 / 0.08) 0%,
     transparent 100%
   );
+  @variant dark {
+    background: linear-gradient(
+      0deg,
+      rgb(99 155 255 / 0.10) 0%,
+      transparent 100%
+    );
+  }
 }
-.dark .ai-surface-soft {
-  background: linear-gradient(
-    0deg,
-    rgb(99 155 255 / 0.10) 0%,
-    transparent 100%
-  );
-}
+
 @utility ai-outline {
   border: 1px solid rgb(69 137 255 / 0.45);
 }
+
 @utility ai-mark {
   display: inline-block;
   flex-shrink: 0;
@@ -130,34 +132,51 @@
   box-shadow:
     0 1px 2px 0 rgb(15 23 42 / 0.05),
     0 4px 16px -4px rgb(15 23 42 / 0.10);
+  @variant dark {
+    box-shadow:
+      0 2px 4px 0 rgb(0 0 0 / 0.35),
+      0 12px 24px -6px rgb(0 0 0 / 0.45);
+  }
 }
-.dark .soft-card {
-  box-shadow:
-    0 2px 4px 0 rgb(0 0 0 / 0.35),
-    0 12px 24px -6px rgb(0 0 0 / 0.45);
-}
+
 @utility soft-card-hover {
   box-shadow:
     0 4px 8px -2px rgb(15 23 42 / 0.08),
     0 12px 28px -6px rgb(15 23 42 / 0.14);
+  @variant dark {
+    box-shadow:
+      0 6px 12px -2px rgb(0 0 0 / 0.45),
+      0 20px 36px -8px rgb(0 0 0 / 0.55);
+  }
 }
-.dark .soft-card-hover {
-  box-shadow:
-    0 6px 12px -2px rgb(0 0 0 / 0.45),
-    0 20px 36px -8px rgb(0 0 0 / 0.55);
+
+@utility soft-card-selected {
+  background-image: linear-gradient(
+    hsl(var(--primary) / 0.06),
+    hsl(var(--primary) / 0.06)
+  );
+  box-shadow: inset 0 0 0 2px hsl(var(--primary) / 0.5);
+  @variant dark {
+    background-image: linear-gradient(
+      hsl(var(--primary) / 0.12),
+      hsl(var(--primary) / 0.12)
+    );
+    box-shadow: inset 0 0 0 2px hsl(var(--primary) / 0.6);
+  }
 }
+
 /* Floating-surface elevation for menus / dialogs / popovers — tighter and more layered than soft-card. */
 @utility soft-popover {
   box-shadow:
     0 1px 2px 0 rgb(15 23 42 / 0.06),
     0 8px 24px -6px rgb(15 23 42 / 0.16),
     0 16px 48px -12px rgb(15 23 42 / 0.10);
-}
-.dark .soft-popover {
-  box-shadow:
-    0 2px 4px 0 rgb(0 0 0 / 0.45),
-    0 12px 32px -6px rgb(0 0 0 / 0.55),
-    0 24px 56px -12px rgb(0 0 0 / 0.45);
+  @variant dark {
+    box-shadow:
+      0 2px 4px 0 rgb(0 0 0 / 0.45),
+      0 12px 32px -6px rgb(0 0 0 / 0.55),
+      0 24px 56px -12px rgb(0 0 0 / 0.45);
+  }
 }
 
 /*
@@ -166,7 +185,7 @@
  * (SheetContent = popover, DrawerContent = card) so the fade matches the
  * surface in either context. Pair with bottom padding on the scroll body.
  */
-.sheet-footer {
+@utility sheet-footer {
   position: absolute;
   inset-inline: 0;
   bottom: 0;
@@ -176,22 +195,56 @@
   gap: 0.5rem;
   padding: 0 1.25rem max(1.25rem, env(safe-area-inset-bottom));
   pointer-events: none;
+  &::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: -2.75rem;
+    bottom: 0;
+    background: linear-gradient(
+      to top,
+      var(--sheet-surface, hsl(var(--popover))) calc(100% - 2.75rem),
+      transparent
+    );
+  }
+  & > * {
+    position: relative;
+    pointer-events: auto;
+  }
 }
-.sheet-footer::before {
-  content: "";
-  position: absolute;
+
+/*
+ * Same fade-and-pin treatment as sheet-footer, but for full-page contexts
+ * where there is no fixed-height scroll container. Uses position:fixed so it
+ * anchors to the viewport on mobile. Set --page-surface on the element to
+ * match the page background (defaults to --background).
+ */
+@utility page-footer {
+  position: fixed;
   inset-inline: 0;
-  top: -2.75rem;
   bottom: 0;
-  background: linear-gradient(
-    to top,
-    var(--sheet-surface, hsl(var(--popover))) calc(100% - 2.75rem),
-    transparent
-  );
-}
-.sheet-footer > * {
-  position: relative;
-  pointer-events: auto;
+  z-index: 10;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 0 1.25rem max(1.25rem, env(safe-area-inset-bottom));
+  pointer-events: none;
+  &::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: -2.75rem;
+    bottom: 0;
+    background: linear-gradient(
+      to top,
+      var(--page-surface, hsl(var(--background))) calc(100% - 2.75rem),
+      transparent
+    );
+  }
+  & > * {
+    position: relative;
+    pointer-events: auto;
+  }
 }
 
 @utility scroll-fade-y {
@@ -209,22 +262,6 @@
     transparent
   );
 }
-
-@utility soft-card-selected {
-  background-image: linear-gradient(
-    hsl(var(--primary) / 0.06),
-    hsl(var(--primary) / 0.06)
-  );
-  box-shadow: inset 0 0 0 2px hsl(var(--primary) / 0.5);
-}
-.dark .soft-card-selected {
-  background-image: linear-gradient(
-    hsl(var(--primary) / 0.12),
-    hsl(var(--primary) / 0.12)
-  );
-  box-shadow: inset 0 0 0 2px hsl(var(--primary) / 0.6);
-}
-
 
 .vt-topbar { view-transition-name: topbar; }
 .vt-brand  { view-transition-name: brand;  }
@@ -248,14 +285,14 @@
   );
   background-origin: border-box;
   background-clip: border-box;
-}
-.dark .btn-glow {
-  background-image: linear-gradient(
-    to bottom,
-    rgb(255 255 255 / 0.16),
-    rgb(255 255 255 / 0) 45%,
-    rgb(0 0 0 / 0.14)
-  );
+  @variant dark {
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.16),
+      rgb(255 255 255 / 0) 45%,
+      rgb(0 0 0 / 0.14)
+    );
+  }
 }
 
 @utility card-tilt {
@@ -300,6 +337,7 @@
     &:hover, &:active { transform: none; }
   }
 }
+
 /*
  * Design-system theme for shadcn-vue.
  * Inter + #0f62fe blue + rounded radius + soft elevation.
@@ -576,7 +614,6 @@
     letter-spacing: 0;
   }
 
-
   /*
    * inline notifications (toasts).
    * - 3px solid left bar in the status color (no outline on the other sides)
@@ -719,6 +756,7 @@
     }
   }
 }
+
 @layer base {
   :root {
     --vis-font-family: var(--font-sans);
@@ -773,7 +811,6 @@
   .chart .vis-grouped-bar:hover .vis-grouped-bar-bar:hover {
     opacity: 1;
   }
-
 }
 
 /* Vaul injects an unlayered stylesheet — override must also be unlayered to win */

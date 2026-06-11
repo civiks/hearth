@@ -87,7 +87,7 @@
         {{ role === "user" ? "A few details and you're set" : "We'll review your profile before going live" }}
       </p>
 
-      <form class="space-y-3" @submit.prevent="submit">
+      <form id="register-form" class="space-y-3 pb-24 sm:pb-0" @submit.prevent="submit">
         <Input
           v-model="email"
           type="email"
@@ -186,11 +186,17 @@
           </label>
         </div>
 
-        <Button type="submit" class="w-full rounded-full h-12 font-semibold" :disabled="loading || !agreedToTos">
+        <Button type="submit" class="hidden sm:flex w-full rounded-full h-12 font-semibold justify-center" :disabled="loading || !agreedToTos">
           {{ loading ? "Creating…" : "Create account" }}
         </Button>
       </form>
     </template>
+
+    <div v-if="step === 'form'" class="page-footer sm:hidden">
+      <Button form="register-form" type="submit" class="w-full rounded-full h-12 font-semibold justify-center" :disabled="loading || !agreedToTos">
+        {{ loading ? "Creating…" : "Create account" }}
+      </Button>
+    </div>
   </div>
 </template>
 
