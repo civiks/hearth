@@ -11,7 +11,7 @@
         aria-hidden="true"
         :class="[
           'pointer-events-none absolute inset-x-0 top-0',
-          overlayHeader ? 'h-32 topbar-mask-gradient' : 'h-14 bg-surface-inverse',
+          overlayHeader ? 'h-32 topbar-mask-gradient' : 'h-14 bg-surface-inverse border-b border-surface-inverse-foreground/10',
         ]"
       />
       <div
