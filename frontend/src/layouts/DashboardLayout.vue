@@ -74,7 +74,7 @@
             isTabActive(tab.to) ? 'bg-foreground/10' : '',
           ]"
         >
-          <component :is="tab.icon" class="size-5 transition-none" :weight="isTabActive(tab.to) ? 'fill' : 'regular'" />
+          <component :is="tab.icon" class="size-5 transition-none" :weight="isTabActive(tab.to) ? 'fill' : 'bold'" />
         </span>
         <span :class="['text-xs leading-none', isTabActive(tab.to) ? 'font-semibold' : 'font-medium']">{{ tab.label }}</span>
       </RouterLink>
