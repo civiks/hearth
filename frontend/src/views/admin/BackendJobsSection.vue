@@ -89,7 +89,6 @@ function openMailHog() {
   if (DEMO) {
     toasts.info(
       "MailHog runs in local dev only",
-      "Clone the repo and run `make dev` — MailHog catches outbound mail at :8025.",
     );
     return;
   }

@@ -424,10 +424,10 @@
   --card-foreground: 0 0% 95.7%;
   --popover: 0 0% 18%;               /* #2d2d2d — elevated above card */
   --popover-foreground: 0 0% 95.7%;
-  --primary: 219 100% 66%;           /* #5089ff — brighter so links/accents read vividly on the dark surfaces */
+  --primary: 218 100% 64%;           /* #4589ff blue-50 */
   --primary-foreground: 0 0% 100%;
-  --primary-hover: 219 100% 72%;     /* #6699ff — lighten on hover (dark direction) */
-  --primary-active: 219 100% 78%;    /* #84acff */
+  --primary-hover: 218 100% 82%;     /* #a6c8ff blue-30 */
+  --primary-active: 216 100% 89%;    /* #c9deff blue-20 */
 
   /* Neutrals — secondary direction flips: dark theme lightens on hover */
   --secondary: 0 0% 22.4%;           /* #393939 gray-80 */
@@ -457,9 +457,9 @@
   --chart-2: 219 100% 75%;
   --chart-3: 219 100% 85%;
   --chart-4: 219 100% 92%;
-  --chart-5: 137 49% 60%;
+  --chart-5: 137 49% 50%;            /* #42be65 */
 
-  --chart-cat-1: 262 81% 70%;        /* #a56eff purple-50 */
+  --chart-cat-1: 263 100% 79%;       /* #be95ff purple-40 */
   --chart-cat-2: 198 90% 65%;        /* #33b1ff cyan-40 */
   --chart-cat-3: 180 49% 58%;        /* #08bdba teal-40 */
   --chart-cat-4: 333 80% 65%;        /* #ee5396 magenta-50 */

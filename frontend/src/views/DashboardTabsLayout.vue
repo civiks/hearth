@@ -15,13 +15,13 @@
           :to="tab.to"
           role="tab"
           :class="[
-            'flex items-center gap-2 px-2.5 py-1.5 my-1.5 rounded-md text-sm whitespace-nowrap transition-colors',
+            'flex items-center gap-2 px-2.5 py-3 -mb-px border-b-[3px] text-sm whitespace-nowrap transition-colors',
             isActive(tab.to)
-              ? 'bg-foreground/10 text-foreground font-medium'
-              : 'text-muted-foreground hover:bg-accent hover:text-foreground',
+              ? 'border-primary text-foreground font-medium'
+              : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border',
           ]"
         >
-          <component :is="tab.icon" class="size-3.5" />
+          <component :is="tab.icon" class="size-3.5" :weight="isActive(tab.to) ? 'fill' : 'bold'" />
           {{ tab.label }}
         </RouterLink>
       </div>
