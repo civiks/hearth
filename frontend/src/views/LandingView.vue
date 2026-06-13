@@ -287,9 +287,9 @@ const ROLE_DESCRIPTIONS: Record<string, string> = {
 };
 
 const ROLE_COLORS: Record<string, string> = {
-  user: "bg-blue-500",
-  professional: "bg-emerald-500",
-  admin: "bg-violet-500",
+  user: "bg-gradient-to-b from-blue-400 to-blue-600",
+  professional: "bg-gradient-to-b from-emerald-400 to-emerald-600",
+  admin: "bg-gradient-to-b from-violet-400 to-violet-600",
 };
 
 interface PublicService {

@@ -34,19 +34,19 @@ import {
 const steps = [
   {
     icon: PhCursorClick,
-    iconBg: "bg-blue-500",
+    iconBg: "bg-gradient-to-b from-blue-400 to-blue-600",
     title: "Choose a service",
     body: "Browse 18+ verified household services and pick one that fits your need.",
   },
   {
     icon: PhCalendarCheck,
-    iconBg: "bg-violet-500",
+    iconBg: "bg-gradient-to-b from-violet-400 to-violet-600",
     title: "Book in seconds",
     body: "Choose a pro, lock in your time slot, and add any specific notes for the job.",
   },
   {
     icon: PhSealCheck,
-    iconBg: "bg-emerald-500",
+    iconBg: "bg-gradient-to-b from-emerald-400 to-emerald-600",
     title: "Sit back",
     body: "Your professional arrives on time with the right tools. Pay after the job is done.",
   },
