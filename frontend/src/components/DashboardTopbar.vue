@@ -215,7 +215,7 @@
               </div>
             </div>
 
-            <div class="overflow-y-auto p-1.5 pb-3">
+            <div class="overflow-y-auto p-1.5 pb-3 scroll-fade-y">
               <div class="h-px bg-border -mx-1.5 mb-1.5" />
 
               <div class="text-muted-foreground px-3 pt-2 pb-1.5 text-[11px] font-medium uppercase tracking-wider">Theme</div>

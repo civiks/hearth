@@ -27,7 +27,7 @@ const modelValue = useVModel(props, 'modelValue', emits, {
       'flex field-sizing-content min-h-16 w-full bg-muted dark:bg-input px-3 py-2 text-sm text-foreground transition-colors',
       'border border-input rounded-md input-inset',
       'placeholder:text-[hsl(0,0%,58%)] dark:placeholder:text-muted-foreground',
-      'hover:bg-secondary/60 dark:hover:bg-secondary-hover',
+      'hover:bg-input-hover',
       'focus-visible:outline-none focus-visible:bg-muted dark:focus-visible:bg-input focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30',
       'disabled:opacity-50 disabled:cursor-not-allowed',
       'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive',

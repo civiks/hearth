@@ -263,20 +263,41 @@
   }
 }
 
+@property --scroll-fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes scroll-fade-y-active {
+  from,
+  to {
+    --scroll-fade-end: var(--fade);
+  }
+}
+
 @utility scroll-fade-y {
   --fade: 2rem;
+  --scroll-fade-end: var(--fade);
   -webkit-mask-image: linear-gradient(
     180deg,
     black,
-    black calc(100% - var(--fade)),
+    black calc(100% - var(--scroll-fade-end)),
     transparent
   );
   mask-image: linear-gradient(
     180deg,
     black,
-    black calc(100% - var(--fade)),
+    black calc(100% - var(--scroll-fade-end)),
     transparent
   );
+
+  @supports (animation-timeline: scroll()) {
+    --scroll-fade-end: 0px;
+    animation-name: scroll-fade-y-active;
+    animation-fill-mode: both;
+    animation-timeline: scroll(self block);
+  }
 }
 
 .vt-topbar { view-transition-name: topbar; }
@@ -409,6 +430,7 @@
   /* Borders / focus */
   --border: 0 0% 87.8%;              /* #e0e0e0 */
   --input: 0 0% 87.8%;
+  --input-hover: 0 0% 82%;           /* gray-20-ish hover over the muted field bg */
   --ring: 219 99% 53%;               /* #0f62fe focus ring */
 
   /* Charts — sequential single-hue blue ramp for trend series */
@@ -473,6 +495,7 @@
   --info-strong: 219 100% 64%;
   --border: 0 0% 20%;                /* #333333 — subtler than gray-70 */
   --input: 0 0% 5.5%;       /* #0e0e0e */
+  --input-hover: 0 0% 11%;  /* #1c1c1c — subtle lift over #0e0e0e, not the gray-70 jump */
   --ring: 219 100% 64%;              /* lighter focus ring on dark */
   --input-inset-shadow: 0 0 0 / 0.5;
   --input-inset-highlight: 255 255 255 / 0.05;
@@ -539,6 +562,7 @@
 
   --color-ring: hsl(var(--ring));
   --color-input: hsl(var(--input));
+  --color-input-hover: hsl(var(--input-hover));
   --color-border: hsl(var(--border));
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
