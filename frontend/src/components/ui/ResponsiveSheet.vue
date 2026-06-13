@@ -2,7 +2,7 @@
   <component
     :is="isDesktop ? Sheet : Drawer"
     :open="open"
-    v-bind="isDesktop ? {} : { shouldScaleBackground: true }"
+    v-bind="isDesktop ? {} : { shouldScaleBackground: false }"
     @update:open="(v: boolean) => !v && $emit('close')"
   >
     <component

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-dvh sm:h-dvh flex-col bg-background" data-vaul-drawer-wrapper>
+  <div class="flex min-h-dvh sm:h-dvh flex-col bg-background">
     <div v-if="isDesktop" class="flex-1 min-h-0">
       <SplitterGroup
         direction="horizontal"
