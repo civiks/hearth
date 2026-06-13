@@ -12,7 +12,7 @@
 
 ## Highlights
 
-- **Chat to do anything in the app** — You type what you want; the chatbot picks the right action and runs it. [How it works ↓](#the-chatbot)
+- **Chat to do anything in the app** — You type what you want; the chatbot picks the right action and runs it.
 - **Multi-role** — customers book, professionals fulfill, admins moderate.
 - **Booking lifecycle** — `requested → accepted → in_progress → completed` (or `cancelled`), with status transitions gated by role.
 - **Background jobs** — daily reminder emails to pros with pending requests, monthly activity reports to customers, async CSV exports admins can kick off and poll.
