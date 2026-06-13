@@ -33,10 +33,19 @@
           <PhCalendarDots class="size-3 shrink-0" weight="bold" />
           <span>{{ formatSmartDateTime(request.scheduled_time) }}</span>
         </div>
-        <div class="flex items-center gap-1 mt-0.5 text-xs tracking-tight text-muted-foreground truncate">
-          <PhUser class="size-3 shrink-0" weight="bold" />
-          <span v-if="professional" class="truncate">{{ professional.full_name }}</span>
-          <span v-else-if="!cancelled" class="truncate">Awaiting assignment</span>
+        <div class="flex items-center gap-1.5 mt-1 text-xs tracking-tight text-muted-foreground truncate">
+          <template v-if="professional">
+            <Avatar :name="professional.full_name" :src="professional.avatar_url" size="size-4 shrink-0" fallback-class="text-[8px]" />
+            <span class="truncate">{{ professional.full_name }}</span>
+            <span v-if="professional.rating != null" class="inline-flex items-center gap-0.5 shrink-0 tabular-nums">
+              <PhStar class="size-3 text-amber-400" weight="fill" />
+              {{ professional.rating.toFixed(1) }}
+            </span>
+          </template>
+          <template v-else-if="!cancelled">
+            <PhUser class="size-3 shrink-0" weight="bold" />
+            <span class="truncate">Awaiting assignment</span>
+          </template>
         </div>
       </div>
       <PhCaretRight class="size-3.5 text-muted-foreground/40 shrink-0" weight="bold" />
@@ -49,10 +58,12 @@ import {
   PhCalendarDots,
   PhCaretRight,
   PhImage,
+  PhStar,
   PhUser,
 } from '@phosphor-icons/vue';
 import { computed } from "vue";
 
+import Avatar from "@/components/Avatar.vue";
 import { formatSmartDateTime } from "@/lib/format";
 
 export interface CustomerRequest {

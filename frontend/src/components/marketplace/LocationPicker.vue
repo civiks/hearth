@@ -10,15 +10,15 @@
       <PhCaretDown class="size-3.5" weight="bold" />
     </button>
 
-    <Dialog v-model:open="dialogOpen">
-      <DialogContent class="sm:max-w-sm">
-        <DialogHeader>
+    <Dialog v-if="isDesktop" v-model:open="dialogOpen">
+      <DialogContent :show-close-button="false" class="sm:max-w-sm gap-0 p-0 overflow-hidden rounded-3xl">
+        <div class="space-y-2 px-6 pt-6 pb-2">
           <DialogTitle>Service location</DialogTitle>
           <DialogDescription>
             We use this to show relevant professionals near you.
           </DialogDescription>
-        </DialogHeader>
-        <form class="space-y-4" @submit.prevent="save">
+        </div>
+        <form class="px-6 pt-4 space-y-4" @submit.prevent="save">
           <div class="space-y-2">
             <Label for="loc_address">Address</Label>
             <Input id="loc_address" v-model="form.address" placeholder="Street address" />
@@ -37,18 +37,55 @@
             <AlertDescription>{{ error }}</AlertDescription>
           </Alert>
         </form>
-        <DialogFooter>
-          <Button variant="outline" type="button" @click="dialogOpen = false">Cancel</Button>
-          <Button type="button" :disabled="saving" @click="save">
+        <div class="px-6 pt-5 pb-6 flex gap-2 justify-end">
+          <Button variant="secondary" halo class="rounded-full px-5" @click="dialogOpen = false">Cancel</Button>
+          <Button halo class="rounded-full px-5" :disabled="saving" @click="save">
             {{ saving ? "Saving…" : "Save" }}
           </Button>
-        </DialogFooter>
+        </div>
       </DialogContent>
     </Dialog>
+
+    <Drawer v-else v-model:open="dialogOpen">
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Service location</DrawerTitle>
+          <DrawerDescription>
+            We use this to show relevant professionals near you.
+          </DrawerDescription>
+        </DrawerHeader>
+        <form class="px-4 space-y-4" @submit.prevent="save">
+          <div class="space-y-2">
+            <Label for="loc_address_m">Address</Label>
+            <Input id="loc_address_m" v-model="form.address" placeholder="Street address" />
+          </div>
+          <div class="space-y-2">
+            <Label for="loc_pincode_m">Pincode</Label>
+            <Input
+              id="loc_pincode_m"
+              v-model="form.pincode"
+              placeholder="6-digit pincode"
+              pattern="[0-9]{6}"
+            />
+          </div>
+          <Alert v-if="error" variant="destructive">
+            <PhWarningCircle class="size-3.5" weight="bold" />
+            <AlertDescription>{{ error }}</AlertDescription>
+          </Alert>
+        </form>
+        <DrawerFooter>
+          <Button variant="secondary" halo class="rounded-full" @click="dialogOpen = false">Cancel</Button>
+          <Button halo class="flex-1 rounded-full" :disabled="saving" @click="save">
+            {{ saving ? "Saving…" : "Save" }}
+          </Button>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useMediaQuery } from "@vueuse/core";
 import {
   PhWarningCircle,
   PhCaretDown,
@@ -62,16 +99,23 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ApiError, api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 
 const auth = useAuthStore();
+const isDesktop = useMediaQuery("(min-width: 640px)");
 
 const locationLabel = computed(() => {
   if (auth.pincode) return auth.pincode;

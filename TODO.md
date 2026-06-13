@@ -11,13 +11,12 @@
 
 - [ ] **Notification preferences** — email opt-in toggles
 - [x] **Theme toggle** — light/dark mode (done)
-- [ ] **Compact/comfortable spacing** — density preference
 
 ## Marketplace
 
 - [ ] **Ratings & reviews** — customers rate professionals after bookings
-- [ ] **Service categories filter** — filter by category
-- [ ] **Search** — global search for services + professionals
+- [x] **Service categories filter** — filter by category
+- [x] **Search** — global search for services + professionals
 
 ## Site
 

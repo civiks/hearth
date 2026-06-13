@@ -3,17 +3,6 @@
     <div
       class="mx-auto w-full max-w-[1440px] px-6 py-2 sm:py-3 flex flex-col sm:flex-row sm:items-center gap-4"
     >
-      <div class="relative w-full sm:w-72 shrink-0">
-        <PhMagnifyingGlass class="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" weight="bold" />
-        <Input
-          :model-value="search"
-          placeholder="Search for services"
-          class="pl-9 h-10"
-          @update:model-value="$emit('update:search', String($event))"
-          @keyup.enter="$emit('submit', search)"
-        />
-      </div>
-
       <ul
         v-if="categories.length"
         class="flex gap-2 overflow-x-auto scrollbar-hide scroll-x-mask sm:flex-1 min-w-0"
@@ -57,27 +46,19 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  PhMagnifyingGlass,
-} from '@phosphor-icons/vue';
 import { computed } from "vue";
-
-import { Input } from "@/components/ui/input";
 
 interface ServiceLike {
   category?: string | null;
 }
 
 const props = defineProps<{
-  search: string;
   category: string | null;
   services: ServiceLike[];
 }>();
 
 defineEmits<{
-  "update:search": [value: string];
   "update:category": [value: string | null];
-  submit: [value: string];
 }>();
 
 const activeChip = "bg-primary text-primary-foreground border-primary";

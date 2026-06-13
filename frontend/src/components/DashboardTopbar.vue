@@ -6,13 +6,69 @@
       !isDesktop && headerHidden && '-translate-y-full',
     ]"
   >
-    <div class="mx-auto w-full max-w-[1440px] flex h-14 items-center justify-between px-6">
+    <div class="relative mx-auto w-full max-w-[1440px] flex h-14 items-center justify-between px-6">
+    <div
+      v-if="mobileSearchOpen"
+      class="sm:hidden absolute inset-0 z-10 flex items-center gap-2 bg-background px-4"
+    >
+      <form
+        class="flex flex-1 items-center gap-2 h-9 px-3 rounded-full bg-foreground/6 focus-within:bg-foreground/8 focus-within:ring-2 focus-within:ring-ring transition-colors"
+        role="search"
+        @submit.prevent="submitSearch"
+      >
+        <PhMagnifyingGlass class="size-4 shrink-0 text-muted-foreground" weight="bold" />
+        <input
+          ref="mobileSearchInput"
+          v-model="searchText"
+          type="search"
+          placeholder="Search services"
+          aria-label="Search services"
+          class="min-w-0 flex-1 bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
+          @keydown.enter.prevent="submitSearch"
+        />
+      </form>
+      <button
+        type="button"
+        class="shrink-0 text-sm font-medium text-muted-foreground px-1"
+        @click="mobileSearchOpen = false"
+      >
+        Cancel
+      </button>
+    </div>
+
     <RouterLink to="/" class="vt-brand flex items-center gap-2.5 shrink-0">
       <BrandMark class="h-5 w-auto" />
       <span class="font-display font-semibold text-lg tracking-tight">hearth</span>
     </RouterLink>
 
+    <form
+      v-if="isCustomer"
+      class="hidden sm:flex flex-1 max-w-md mx-6 items-center gap-2 h-9 px-3 rounded-full bg-foreground/6 focus-within:bg-foreground/8 focus-within:ring-2 focus-within:ring-ring transition-colors"
+      role="search"
+      @submit.prevent="submitSearch"
+    >
+      <PhMagnifyingGlass class="size-4 shrink-0 text-muted-foreground" weight="bold" />
+      <input
+        v-model="searchText"
+        type="search"
+        placeholder="Search services"
+        aria-label="Search services"
+        class="min-w-0 flex-1 bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
+        @keydown.enter.prevent="submitSearch"
+      />
+    </form>
+
     <div class="flex items-center gap-2">
+      <button
+        v-if="isCustomer"
+        type="button"
+        aria-label="Search services"
+        class="sm:hidden flex items-center justify-center size-9 rounded-full hover:bg-foreground/8 active:bg-foreground/12 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        @click="openMobileSearch"
+      >
+        <PhMagnifyingGlass class="size-5" weight="bold" />
+      </button>
+
       <button
         type="button"
         aria-label="Ask AI"
@@ -230,6 +286,7 @@ import {
   PhCheck,
   PhCaretDown,
   PhHammer,
+  PhMagnifyingGlass,
   PhSignOut,
   PhMonitor,
   PhMoon,
@@ -239,7 +296,7 @@ import {
   PhSun,
   PhUserCircle,
 } from '@phosphor-icons/vue';
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
 import AiMark from "@/components/AiMark.vue";
@@ -279,6 +336,30 @@ const settingsDrawer = useSettingsDrawer();
 
 const isDesktop = useMediaQuery("(min-width: 640px)");
 const menuOpen = ref(false);
+
+const isCustomer = computed(() => auth.role === "user");
+const searchText = ref(typeof route.query.search === "string" ? route.query.search : "");
+const mobileSearchOpen = ref(false);
+const mobileSearchInput = ref<HTMLInputElement | null>(null);
+
+watch(
+  () => route.query.search,
+  (s) => {
+    if (route.path === "/home/services") searchText.value = typeof s === "string" ? s : "";
+  },
+);
+
+async function openMobileSearch() {
+  mobileSearchOpen.value = true;
+  await nextTick();
+  mobileSearchInput.value?.focus();
+}
+
+function submitSearch() {
+  const q = searchText.value.trim();
+  mobileSearchOpen.value = false;
+  router.push({ path: "/home/services", query: q ? { search: q } : {} });
+}
 
 const { y: windowY } = useScroll(window, { throttle: 80 });
 const headerHidden = ref(false);

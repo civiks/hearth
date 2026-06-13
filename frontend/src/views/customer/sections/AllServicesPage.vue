@@ -9,14 +9,14 @@
     </Alert>
 
     <template v-else>
-      <div class="mx-auto w-full max-w-[1440px] px-6 pt-4 sm:pt-5 [&_header]:mb-0">
-        <PageHeader title="Services">
-          <LocationPicker />
-        </PageHeader>
+      <div class="mx-auto w-full max-w-[1440px] px-6 pt-4 sm:pt-5">
+        <div class="flex items-baseline gap-3">
+          <h1 class="font-display text-xl sm:text-2xl font-semibold tracking-tight">Services</h1>
+          <LocationPicker class="shrink-0" />
+        </div>
       </div>
 
       <MarketplaceHero
-        v-model:search="search"
         v-model:category="category"
         :services="services"
       />
@@ -54,7 +54,6 @@ import {
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import PageHeader from "@/components/PageHeader.vue";
 import LocationPicker from "@/components/marketplace/LocationPicker.vue";
 import MarketplaceHero from "@/components/marketplace/MarketplaceHero.vue";
 import ServiceCardSkeleton from "@/components/marketplace/ServiceCardSkeleton.vue";
