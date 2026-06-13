@@ -25,7 +25,7 @@ const forwardedProps = useForwardProps(delegatedProps)
     v-bind="forwardedProps"
     :class="cn(
       'flex w-full items-center justify-between gap-2 whitespace-nowrap bg-muted dark:bg-black/25 px-3 text-sm text-foreground select-none transition-colors',
-      'border border-input rounded-md',
+      'border border-input rounded-md input-inset',
       'data-[size=default]:h-10 data-[size=sm]:h-8',
       'data-placeholder:text-muted-foreground',
       'hover:bg-secondary/60 dark:hover:bg-black/35',

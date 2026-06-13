@@ -71,7 +71,7 @@
         <span
           :class="[
             'flex items-center justify-center rounded-full px-4 py-1 transition-colors',
-            isTabActive(tab.to) ? 'bg-primary/10' : '',
+            isTabActive(tab.to) ? 'bg-primary/10 dark:bg-primary/25' : '',
           ]"
         >
           <component :is="tab.icon" class="size-5 transition-none" :weight="isTabActive(tab.to) ? 'fill' : 'bold'" />
@@ -90,7 +90,7 @@
         <span
           :class="[
             'flex items-center justify-center rounded-full px-4 py-1 transition-colors',
-            chat.open ? 'bg-primary/10' : '',
+            chat.open ? 'bg-primary/10 dark:bg-primary/25' : '',
           ]"
         >
           <AiMark class="size-5" />
