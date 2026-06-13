@@ -18,23 +18,47 @@
         class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"
         aria-hidden="true"
       />
+
+      <span
+        v-if="badge"
+        :class="[
+          'absolute left-2 top-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold leading-none shadow-sm backdrop-blur-sm',
+          badge.class,
+        ]"
+      >
+        <component :is="badge.icon" class="size-3" weight="fill" />
+        {{ badge.label }}
+      </span>
+
+      <span
+        v-if="service.rating != null"
+        class="absolute right-2 bottom-2 inline-flex items-center gap-1 rounded-full bg-black/55 px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-white backdrop-blur-sm"
+      >
+        <PhStar weight="fill" class="size-3 text-amber-400" />
+        {{ service.rating.toFixed(1) }}
+        <span v-if="service.review_count" class="text-white/70">({{ service.review_count }})</span>
+      </span>
     </div>
 
     <div class="px-3 pb-3 mt-2">
+      <div v-if="service.category || service.time_required" class="flex items-center gap-1.5 text-[11px] text-muted-foreground mb-1">
+        <span v-if="service.category" class="rounded bg-foreground/8 px-1.5 py-0.5 font-medium text-foreground/70">{{ service.category }}</span>
+        <span v-if="service.category && service.time_required" aria-hidden="true">·</span>
+        <span v-if="service.time_required" class="inline-flex items-center gap-0.5">
+          <PhClock class="size-3" weight="bold" />
+          {{ durationLabel }}
+        </span>
+      </div>
+
       <h3 class="text-sm font-medium tracking-tight leading-snug truncate">{{ service.name }}</h3>
 
-      <div class="mt-1 flex items-center justify-between gap-2">
-        <span class="inline-flex items-end gap-0.5 text-base font-semibold tabular-nums">
-          <span class="text-[11px] font-normal leading-none text-muted-foreground mb-px">Rs</span>
-          <span class="leading-none">{{ service.base_price }}</span>
-        </span>
-        <span
-          v-if="service.rating != null"
-          class="inline-flex items-center gap-1 text-xs tabular-nums shrink-0"
-        >
-          <PhStar weight="fill" class="size-3 text-amber-400" />
-          <span class="font-medium">{{ service.rating.toFixed(1) }}</span>
-        </span>
+      <p v-if="service.description" class="mt-0.5 text-xs text-muted-foreground leading-snug line-clamp-1">
+        {{ service.description }}
+      </p>
+
+      <div class="mt-2 inline-flex items-center gap-0.5 tabular-nums text-foreground">
+        <PhCurrencyInr class="size-4" weight="bold" />
+        <span class="text-xl font-extrabold leading-none tracking-tight">{{ service.base_price }}</span>
       </div>
     </div>
   </button>
@@ -42,9 +66,16 @@
 
 <script lang="ts" setup>
 import {
+  PhClock,
+  PhCurrencyInr,
   PhStar,
+  PhTrendUp,
+  PhSparkle,
+  PhCrown,
 } from '@phosphor-icons/vue';
-import { computed } from "vue";
+import { computed, type Component } from "vue";
+
+type BadgeKind = "popular" | "top-rated" | "new";
 
 const props = defineProps<{
   service: {
@@ -58,9 +89,27 @@ const props = defineProps<{
     rating?: number;
     review_count?: number;
   };
+  badge?: BadgeKind | null;
 }>();
 
 defineEmits<{ select: [] }>();
+
+const BADGES: Record<BadgeKind, { label: string; icon: Component; class: string }> = {
+  popular: { label: "Most booked", icon: PhTrendUp, class: "bg-white/90 text-foreground" },
+  "top-rated": { label: "Top rated", icon: PhCrown, class: "bg-amber-400/95 text-amber-950" },
+  new: { label: "New", icon: PhSparkle, class: "bg-primary text-primary-foreground" },
+};
+
+const badge = computed(() => (props.badge ? BADGES[props.badge] : null));
+
+const durationLabel = computed(() => {
+  const mins = props.service.time_required;
+  if (!mins) return "";
+  if (mins < 60) return `${mins} min`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m ? `${h}h ${m}m` : `${h}h`;
+});
 
 // Builds a responsive srcset from an Unsplash URL by swapping the `w=` param.
 // Returns undefined for non-Unsplash URLs so the browser falls back to `src`.

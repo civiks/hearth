@@ -24,6 +24,7 @@
         v-for="service in featured"
         :key="service.id"
         :service="service"
+        :badge="cardBadge"
         @select="$emit('select', service)"
       />
     </div>
@@ -53,6 +54,7 @@ interface Service {
 }
 
 type SortMode = "popular" | "top-rated" | "as-is";
+type BadgeKind = "popular" | "top-rated" | "new";
 
 const props = withDefaults(
   defineProps<{
@@ -65,6 +67,7 @@ const props = withDefaults(
     sortBy?: SortMode;
     limit?: number;
     viewAllTo?: RouteLocationRaw;
+    badge?: BadgeKind | null;
   }>(),
   {
     title: "Most booked this week",
@@ -76,6 +79,11 @@ const props = withDefaults(
   },
 );
 defineEmits<{ select: [service: Service] }>();
+
+const cardBadge = computed<BadgeKind | null>(() => {
+  if (props.badge !== undefined) return props.badge;
+  return props.sortBy === "top-rated" || props.sortBy === "popular" ? props.sortBy : null;
+});
 
 const featured = computed(() => {
   if (props.sortBy === "as-is") {

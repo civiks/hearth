@@ -4,7 +4,7 @@
 
     <div
       ref="gridEl"
-      class="grid gap-x-3 gap-y-6 [grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]"
+      class="grid gap-x-4 gap-y-6 [grid-template-columns:repeat(auto-fill,minmax(264px,1fr))]"
     >
       <ServiceCard
         v-for="service in pageItems"
@@ -53,8 +53,8 @@ defineEmits<{ select: [service: Service] }>();
 // reveal and each "load more" increment.
 const gridEl = ref<HTMLElement | null>(null);
 const { width: gridWidth } = useElementSize(gridEl);
-const MIN_CARD = 220;
-const GAP = 12;
+const MIN_CARD = 264;
+const GAP = 16;
 const ROWS_PER_PAGE = 3;
 const pageSize = computed(() => {
   if (props.pageSize) return props.pageSize;

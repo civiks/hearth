@@ -53,7 +53,7 @@ const displayValue = computed(() => isNaN(numericValue.value) ? props.value : an
       <div class="min-w-0 space-y-1.5">
         <p v-if="unit" class="text-xs text-muted-foreground leading-none">{{ unit }}</p>
         <div class="flex items-baseline gap-2 min-w-0">
-          <span class="text-2xl sm:text-3xl font-light leading-none tabular-nums">{{ displayValue }}</span>
+          <span class="text-3xl sm:text-4xl font-light leading-none tabular-nums">{{ displayValue }}</span>
           <span
             v-if="deltaText"
             class="inline-flex items-baseline gap-0.5 text-xs font-medium"
