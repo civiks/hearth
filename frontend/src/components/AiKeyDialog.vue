@@ -1,14 +1,14 @@
 <template>
-  <Dialog v-model:open="open">
-    <DialogContent class="sm:max-w-md">
-      <DialogHeader>
+  <Dialog v-if="isDesktop" v-model:open="open">
+    <DialogContent :show-close-button="false" class="sm:max-w-md gap-0 p-0 overflow-hidden rounded-3xl">
+      <div class="space-y-2 px-6 pt-6 pb-2">
         <DialogTitle>Add your Gemini key</DialogTitle>
         <DialogDescription>
           Paste your Gemini key to start chatting.
         </DialogDescription>
-      </DialogHeader>
+      </div>
 
-      <form class="space-y-3 pt-1" @submit.prevent="onSave">
+      <form class="px-6 pt-4" @submit.prevent="onSave">
         <div class="space-y-1.5">
           <Label for="gemini-key" class="text-xs">API key</Label>
           <Input
@@ -33,27 +33,82 @@
           </p>
         </div>
 
-        <DialogFooter>
+        <div class="pt-5 pb-6 flex gap-2 justify-end">
           <Button
             v-if="gemini.hasKey.value"
             type="button"
-            variant="ghost"
-            size="sm"
+            variant="secondary"
+            halo
+            class="rounded-full px-5"
             :disabled="saving"
             @click="onClear"
           >
             Remove saved key
           </Button>
-          <Button type="submit" size="sm" :disabled="!canSave || saving">
+          <Button type="submit" halo class="rounded-full px-5" :disabled="!canSave || saving">
             {{ gemini.hasKey.value ? "Update" : "Save" }}
           </Button>
-        </DialogFooter>
+        </div>
       </form>
     </DialogContent>
   </Dialog>
+
+  <Drawer v-else v-model:open="open">
+    <DrawerContent>
+      <DrawerHeader>
+        <DrawerTitle>Add your Gemini key</DrawerTitle>
+        <DrawerDescription>
+          Paste your Gemini key to start chatting.
+        </DrawerDescription>
+      </DrawerHeader>
+
+      <form class="px-4" @submit.prevent="onSave">
+        <div class="space-y-1.5">
+          <Label for="gemini-key-m" class="text-xs">API key</Label>
+          <Input
+            id="gemini-key-m"
+            v-model="draft"
+            type="password"
+            placeholder="AIza..."
+            autocomplete="off"
+            spellcheck="false"
+            class="font-mono text-xs"
+            :disabled="saving"
+          />
+          <p class="text-[11px] text-muted-foreground">
+            Get one at
+            <a
+              href="https://aistudio.google.com/apikey"
+              target="_blank"
+              rel="noopener"
+              class="text-primary hover:underline"
+            >aistudio.google.com/apikey</a>.
+          </p>
+        </div>
+
+        <DrawerFooter class="px-0">
+          <Button
+            v-if="gemini.hasKey.value"
+            type="button"
+            variant="secondary"
+            halo
+            class="rounded-full"
+            :disabled="saving"
+            @click="onClear"
+          >
+            Remove saved key
+          </Button>
+          <Button type="submit" halo class="flex-1 rounded-full" :disabled="!canSave || saving">
+            {{ gemini.hasKey.value ? "Update" : "Save" }}
+          </Button>
+        </DrawerFooter>
+      </form>
+    </DrawerContent>
+  </Drawer>
 </template>
 
 <script lang="ts" setup>
+import { useMediaQuery } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 
 import { Button } from "@/components/ui/button";
@@ -61,16 +116,24 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useGeminiKey } from "@/composables/useGeminiKey";
 import { useNotificationsStore } from "@/stores/notifications";
 
 const open = defineModel<boolean>("open", { default: false });
+
+const isDesktop = useMediaQuery("(min-width: 640px)");
 
 const gemini = useGeminiKey();
 const toasts = useNotificationsStore();
