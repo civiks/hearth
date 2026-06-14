@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="group relative block w-full text-left rounded-xl overflow-hidden bg-card soft-card hover:soft-card-hover transition-shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+    class="group relative block w-full text-left rounded-xl overflow-hidden bg-card soft-card hover:soft-card-hover press focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     @click="$emit('select')"
   >
     <div class="relative aspect-[16/9] overflow-hidden bg-muted">
@@ -12,10 +12,10 @@
         :sizes="imageSrcset ? '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px' : undefined"
         :alt="service.name"
         loading="lazy"
-        class="size-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+        class="size-full object-cover"
       />
       <div
-        class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"
+        class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent transition-opacity duration-300 group-hover:opacity-65"
         aria-hidden="true"
       />
 

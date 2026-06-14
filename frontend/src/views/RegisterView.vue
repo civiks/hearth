@@ -17,7 +17,7 @@
         <button
           type="button"
           :class="[
-            'flex items-center justify-between gap-4 rounded-xl bg-card px-4 py-3.5 text-left cursor-pointer card-lift',
+            'flex items-center justify-between gap-4 rounded-xl bg-card px-4 py-3.5 text-left cursor-pointer press',
             role === 'user' ? 'soft-card-selected' : 'soft-card hover:soft-card-hover',
           ]"
           :aria-pressed="role === 'user'"
@@ -39,7 +39,7 @@
         <button
           type="button"
           :class="[
-            'flex items-center justify-between gap-4 rounded-xl bg-card px-4 py-3.5 text-left cursor-pointer card-lift',
+            'flex items-center justify-between gap-4 rounded-xl bg-card px-4 py-3.5 text-left cursor-pointer press',
             role === 'professional' ? 'soft-card-selected' : 'soft-card hover:soft-card-hover',
           ]"
           :aria-pressed="role === 'professional'"

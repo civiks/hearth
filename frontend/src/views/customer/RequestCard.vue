@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="w-full text-left bg-card rounded-lg soft-card hover:soft-card-hover transition-shadow overflow-hidden flex items-stretch focus-visible:outline-2 focus-visible:outline-primary"
+    class="w-full text-left bg-card rounded-lg soft-card hover:soft-card-hover press overflow-hidden flex items-stretch focus-visible:outline-2 focus-visible:outline-primary"
     :class="cancelled ? 'opacity-60' : ''"
     @click="$emit('open')"
   >

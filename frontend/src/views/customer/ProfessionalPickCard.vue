@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="w-full text-left rounded-lg p-3 flex items-center gap-3 bg-card card-lift transition-shadow"
+    class="w-full text-left rounded-lg p-3 flex items-center gap-3 bg-card press"
     :class="selected ? 'soft-card-selected' : 'soft-card hover:soft-card-hover'"
     @click="$emit('select')"
   >
