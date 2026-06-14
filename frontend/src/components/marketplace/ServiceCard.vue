@@ -95,7 +95,7 @@ const props = defineProps<{
 defineEmits<{ select: [] }>();
 
 const BADGES: Record<BadgeKind, { label: string; icon: Component; class: string }> = {
-  popular: { label: "Most booked", icon: PhTrendUp, class: "bg-white/90 text-foreground" },
+  popular: { label: "Most booked", icon: PhTrendUp, class: "bg-white/90 text-zinc-900" },
   "top-rated": { label: "Top rated", icon: PhCrown, class: "bg-amber-400/95 text-amber-950" },
   new: { label: "New", icon: PhSparkle, class: "bg-primary text-primary-foreground" },
 };
