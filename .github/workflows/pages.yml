@@ -40,6 +40,7 @@ jobs:
         env:
           VITE_DEMO: "1"
           VITE_BASE: /${{ github.event.repository.name }}/
+          VITE_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
         run: pnpm build
 
       # SPA fallback: GitHub Pages serves 404.html for unknown paths; copying
