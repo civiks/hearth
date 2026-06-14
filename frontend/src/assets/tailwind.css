@@ -160,6 +160,15 @@
   }
 }
 
+/* Solid dominant-color wash under a card photo — card-tinted scrim over a heavily blurred copy of the image. */
+@utility image-wash {
+  background: hsl(var(--card) / 0.34);
+
+  @variant dark {
+    background: hsl(var(--card) / 0.46);
+  }
+}
+
 /* Recessed/inset form fields, dark mode only. Feeds `--tw-shadow` so it composes with `ring-*`. */
 @utility input-inset {
   @variant dark {

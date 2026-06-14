@@ -40,25 +40,40 @@
       </span>
     </div>
 
-    <div class="px-3 pb-3 mt-2">
-      <div v-if="service.category || service.time_required" class="flex items-center gap-1.5 text-[11px] text-muted-foreground mb-1">
-        <span v-if="service.category" class="rounded bg-foreground/8 px-1.5 py-0.5 font-medium text-foreground/70">{{ service.category }}</span>
-        <span v-if="service.category && service.time_required" aria-hidden="true">·</span>
-        <span v-if="service.time_required" class="inline-flex items-center gap-0.5">
-          <PhClock class="size-3" weight="bold" />
-          {{ durationLabel }}
-        </span>
-      </div>
+    <div class="relative px-4 pt-3.5 pb-5 overflow-hidden">
+      <template v-if="service.image_url">
+        <img
+          :src="service.image_url"
+          aria-hidden="true"
+          loading="lazy"
+          class="pointer-events-none absolute inset-x-0 -top-[80%] h-[180%] w-full scale-150 object-cover object-bottom blur-3xl saturate-[1.7]"
+        />
+        <div class="image-wash pointer-events-none absolute inset-0" aria-hidden="true" />
+      </template>
 
-      <h3 class="text-sm font-medium tracking-tight leading-snug truncate">{{ service.name }}</h3>
+      <h3 class="relative text-[15px] font-semibold tracking-[-0.01em] leading-snug line-clamp-2">{{ service.name }}</h3>
 
-      <p v-if="service.description" class="mt-0.5 text-xs text-muted-foreground leading-snug line-clamp-1">
+      <p v-if="service.description" class="relative mt-1 text-xs text-muted-foreground leading-snug line-clamp-1">
         {{ service.description }}
       </p>
 
-      <div class="mt-2 inline-flex items-center gap-0.5 tabular-nums text-foreground">
-        <PhCurrencyInr class="size-4" weight="bold" />
-        <span class="text-xl font-extrabold leading-none tracking-tight">{{ service.base_price }}</span>
+      <div class="relative mt-3.5 flex items-end justify-between gap-3">
+        <div class="inline-flex items-center gap-0.5 tabular-nums text-foreground">
+          <PhCurrencyInr class="size-3.5" weight="bold" />
+          <span class="text-lg font-bold leading-none tracking-tight">{{ service.base_price }}</span>
+        </div>
+
+        <div
+          v-if="service.category || service.time_required"
+          class="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground"
+        >
+          <span v-if="service.category" class="truncate">{{ service.category }}</span>
+          <span v-if="service.category && service.time_required" aria-hidden="true" class="text-muted-foreground/50">·</span>
+          <span v-if="service.time_required" class="inline-flex shrink-0 items-center gap-0.5">
+            <PhClock class="size-3" weight="bold" />
+            {{ durationLabel }}
+          </span>
+        </div>
       </div>
     </div>
   </button>
