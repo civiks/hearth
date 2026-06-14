@@ -17,8 +17,8 @@
       <div
         class="relative mx-auto w-full max-w-7xl h-14 flex items-center justify-between px-6"
       >
-        <RouterLink to="/" class="vt-brand flex items-center gap-2.5">
-          <BrandMark class="h-6 w-auto" />
+        <RouterLink to="/" class="flex items-center gap-2.5">
+          <BrandMark class="vt-brand h-6 w-auto" />
           <span class="font-display font-semibold text-lg tracking-tight">hearth</span>
         </RouterLink>
 

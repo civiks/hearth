@@ -7,8 +7,8 @@
     ]"
   >
     <div class="relative mx-auto w-full max-w-[1440px] flex h-14 items-center justify-between gap-3 px-6">
-    <RouterLink to="/" class="vt-brand flex items-center gap-2.5 shrink-0">
-      <BrandMark class="h-6 w-auto" />
+    <RouterLink to="/" class="flex items-center gap-2.5 shrink-0">
+      <BrandMark class="vt-brand h-6 w-auto" />
       <span class="font-display font-semibold text-lg tracking-tight" :class="isCustomer ? 'hidden sm:inline' : ''">hearth</span>
     </RouterLink>
 
