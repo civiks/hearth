@@ -106,8 +106,8 @@
       </div>
 
       <template #footer>
-        <Button type="button" variant="outline" @click="closeEdit">Cancel</Button>
-        <Button type="button" class="flex-1" :disabled="loading" @click="saveChanges">Save changes</Button>
+        <Button type="button" variant="secondary" class="rounded-xl" @click="closeEdit">Cancel</Button>
+        <Button type="button" class="flex-1 rounded-xl" :disabled="loading" @click="saveChanges">Save changes</Button>
       </template>
     </ResponsiveSheet>
   </div>
