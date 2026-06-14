@@ -6,99 +6,72 @@
       class="relative bg-surface-inverse text-surface-inverse-foreground overflow-hidden"
     >
       <div class="relative mx-auto max-w-7xl">
-        <img
-          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1280&q=75&auto=format&fit=crop"
-          srcset="
-            https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=640&q=75&auto=format&fit=crop 640w,
-            https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=960&q=75&auto=format&fit=crop 960w,
-            https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1280&q=75&auto=format&fit=crop 1280w,
-            https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1920&q=75&auto=format&fit=crop 1920w
-          "
-          sizes="(max-width: 1280px) 100vw, 1280px"
-          fetchpriority="high"
-          decoding="async"
-          alt=""
-          aria-hidden="true"
-          class="absolute inset-0 w-full h-full object-cover opacity-90"
-        />
-        <div
-          class="absolute inset-0 bg-gradient-to-r from-surface-inverse from-30% via-surface-inverse/85 to-surface-inverse/20"
-          aria-hidden="true"
-        />
-        <div
-          class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-surface-inverse via-surface-inverse/80 to-transparent"
-          aria-hidden="true"
-        />
-        <div
-          class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-surface-inverse via-surface-inverse/70 to-transparent"
-          aria-hidden="true"
-        />
-        <div class="relative px-6 py-24 sm:py-28 lg:py-32">
+        <div class="relative px-6 pt-24 pb-16 sm:pt-28 sm:pb-20">
           <div class="max-w-xl">
-            <div class="inline-flex items-center gap-1.5 rounded-full border border-surface-inverse-foreground/20 bg-surface-inverse-foreground/5 px-3 py-1 mb-5 sm:mb-6 text-xs font-medium tracking-tight text-surface-inverse-foreground/80 backdrop-blur">
-              <PhMapPin class="size-3" />
+            <div class="inline-flex items-center gap-1.5 mb-4 sm:mb-5 text-sm font-medium tracking-tight text-surface-inverse-foreground/55">
+              <PhMapPin class="size-3.5 text-surface-inverse-foreground/70" weight="bold" />
               Now in Bangalore
             </div>
-            <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.03em] mb-5 sm:mb-6 leading-[1.05] text-balance text-surface-inverse-foreground/90">
+            <h1 class="font-display text-4xl sm:text-5xl font-semibold tracking-[-0.03em] mb-5 sm:mb-6 leading-[1.05] text-balance text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-100 to-zinc-400">
               Home services, done right.
             </h1>
             <p class="text-base sm:text-lg text-surface-inverse-foreground/65 mb-7 sm:mb-8 max-w-lg leading-relaxed tracking-[-0.01em]">
               Verified plumbers, electricians, cleaners and more. At your doorstep within hours, with honest pricing and real reviews.
             </p>
+          </div>
+          <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-x-12 gap-y-7">
+            <div>
             <div class="flex flex-wrap gap-3">
               <template v-if="DEMO">
                 <DropdownMenu v-if="isDesktop" :modal="false">
                   <DropdownMenuTrigger as-child>
-                    <Button size="lg">
+                    <Button class="rounded-full h-16 px-8 text-base">
                       Try the demo
-                      <PhCaretDown class="ml-2 size-3.5" />
+                      <PhCaretDown class="ml-2 size-3.5" weight="bold" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" class="w-72 p-1.5">
-                    <div class="px-2 py-1.5 mb-1">
-                      <p class="text-sm font-medium">Demo mode</p>
-                      <p class="text-xs text-muted-foreground">State persists in your browser only.</p>
+                  <DropdownMenuContent align="start" class="w-80 p-2.5">
+                    <div class="flex flex-col gap-1 px-2 pt-1.5 pb-3">
+                      <p class="font-display text-lg font-semibold leading-snug tracking-tight">Demo mode</p>
+                      <p class="text-sm text-muted-foreground leading-snug">State persists in your browser only.</p>
                     </div>
-                    <DropdownMenuSeparator class="-mx-1.5 mb-1" />
-                    <DropdownMenuLabel class="text-[10px] uppercase tracking-widest text-muted-foreground font-medium px-2 mb-0.5">
-                      Sign in as
-                    </DropdownMenuLabel>
-                    <DropdownMenuItem
-                      v-for="r in DEMO_ROLES"
-                      :key="r.value"
-                      class="gap-3 py-2 rounded-lg"
-                      :class="auth.role === r.value ? 'bg-muted' : ''"
-                      @click="loginAs(r.value)"
-                    >
-                      <div :class="['inline-flex size-8 items-center justify-center rounded-full shrink-0 text-white', ROLE_COLORS[r.value]]">
-                        <component :is="r.icon" class="size-4" />
-                      </div>
-                      <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium tracking-tight">{{ r.label }}</p>
-                        <p class="text-xs text-muted-foreground tracking-tight">{{ ROLE_DESCRIPTIONS[r.value] }}</p>
-                      </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator class="-mx-1.5 mt-1 mb-1" />
-                    <DropdownMenuItem variant="destructive" class="rounded-lg" @click="handleResetDemo">
-                      <PhArrowCounterClockwise class="mr-2 size-3.5" />
+                    <p class="px-2 mb-2 text-[11px] uppercase tracking-wide text-muted-foreground">Sign in as</p>
+                    <div class="space-y-2">
+                      <DropdownMenuItem
+                        v-for="r in DEMO_ROLES"
+                        :key="r.value"
+                        class="gap-3 p-3 rounded-xl bg-card transition-shadow focus:bg-card press"
+                        :class="auth.role === r.value ? 'soft-card-selected' : 'soft-card hover:soft-card-hover'"
+                        @click="loginAs(r.value)"
+                      >
+                        <div :class="['inline-flex size-10 items-center justify-center rounded-full shrink-0 text-white', ROLE_COLORS[r.value]]">
+                          <component :is="r.icon" class="size-5" />
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <div class="text-sm font-medium tracking-tight">{{ r.label }}</div>
+                          <p class="text-xs text-muted-foreground tracking-tight mt-0.5">{{ ROLE_DESCRIPTIONS[r.value] }}</p>
+                        </div>
+                      </DropdownMenuItem>
+                    </div>
+                    <DropdownMenuItem variant="destructive" class="mt-4 gap-2 rounded-lg justify-center bg-destructive/10 hover:bg-destructive/15 focus:bg-destructive/15 py-3 font-medium press" @click="handleResetDemo">
+                      <PhArrowCounterClockwise class="size-4 shrink-0" />
                       Reset demo data
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Button v-else size="lg" @click="drawerOpen = true">
+                <Button v-else class="rounded-full h-16 px-8 text-base" @click="drawerOpen = true">
                   Try the demo
-                  <PhCaretDown class="ml-2 size-3.5" />
+                  <PhCaretDown class="ml-2 size-3.5" weight="bold" />
                 </Button>
               </template>
               <template v-else>
-                <Button size="lg" @click="$router.push('/register')">
+                <Button class="rounded-full h-16 px-8 text-base" @click="$router.push('/register')">
                   Get Started
-                  <PhArrowRight class="ml-2 size-3.5" />
+                  <PhArrowRight class="ml-2 size-3.5" weight="bold" />
                 </Button>
                 <Button
-                  variant="outline"
-                  size="lg"
-                  class="bg-transparent text-surface-inverse-foreground border-surface-inverse-foreground/30 hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground hover:border-surface-inverse-foreground/60"
+                  variant="ghost"
+                  class="rounded-full h-16 px-8 text-base bg-surface-inverse-foreground/10 text-surface-inverse-foreground hover:bg-surface-inverse-foreground/20 hover:text-surface-inverse-foreground"
                   @click="$router.push('/login')"
                 >
                   Sign In
@@ -111,13 +84,37 @@
                 <span>4.7 average rating</span>
               </div>
               <div class="flex items-center gap-2">
-                <PhShieldCheck class="size-3.5 text-surface-inverse-foreground/90" />
+                <PhShieldCheck class="size-3.5 text-surface-inverse-foreground/90" weight="bold" />
                 <span>Verified professionals</span>
               </div>
               <div class="hidden sm:flex items-center gap-2">
-                <PhClock class="size-3.5 text-surface-inverse-foreground/90" />
+                <PhClock class="size-3.5 text-surface-inverse-foreground/90" weight="bold" />
                 <span>Same-day service</span>
               </div>
+            </div>
+            </div>
+            <p class="hidden lg:block lg:max-w-[15rem] text-sm leading-relaxed text-surface-inverse-foreground/55 tracking-tight">
+              Book in under two minutes — no hidden fees. Pay only after the job's done, with verified pros and real reviews.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-surface-inverse">
+      <div class="mx-auto max-w-7xl px-6 pb-12 sm:pb-16">
+        <div class="relative overflow-hidden rounded-3xl soft-card bg-surface-inverse">
+          <img
+            src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=2400&q=85"
+            alt="A couple cooking together in their kitchen"
+            class="h-[clamp(15rem,42vh,20rem)] sm:h-[clamp(28rem,70vh,44rem)] w-full object-cover object-center"
+          />
+          <div class="absolute inset-0 flex items-center justify-center bg-surface-inverse/20 bg-gradient-to-t from-surface-inverse/75 via-surface-inverse/30 to-surface-inverse/40">
+            <div class="inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-medium tracking-tight text-gray-900 backdrop-blur soft-card">
+              <PhPlay class="size-3.5" weight="fill" />
+              Watch how it works
+              <span class="text-gray-400">·</span>
+              <span class="text-gray-500">41s</span>
             </div>
           </div>
         </div>
@@ -145,9 +142,9 @@
               <template v-if="DEMO">
                 <DropdownMenu v-if="isDesktop" :modal="false">
                   <DropdownMenuTrigger as-child>
-                    <Button size="lg">
+                    <Button size="lg" class="rounded-full px-7">
                       Try the demo
-                      <PhCaretDown class="ml-2 size-3.5" />
+                      <PhCaretDown class="ml-2 size-3.5" weight="bold" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center" class="w-72 p-1.5">
@@ -181,14 +178,14 @@
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Button v-else size="lg" @click="drawerOpen = true">
+                <Button v-else size="lg" class="rounded-full px-7" @click="drawerOpen = true">
                   Try the demo
-                  <PhCaretDown class="ml-2 size-3.5" />
+                  <PhCaretDown class="ml-2 size-3.5" weight="bold" />
                 </Button>
               </template>
-              <Button v-else size="lg" @click="$router.push('/register')">
+              <Button v-else size="lg" class="rounded-full px-7" @click="$router.push('/register')">
                 Get started
-                <PhArrowRight class="ml-2 size-3.5" />
+                <PhArrowRight class="ml-2 size-3.5" weight="bold" />
               </Button>
             </div>
           </div>
@@ -236,6 +233,7 @@ import {
   PhCaretDown,
   PhClock,
   PhMapPin,
+  PhPlay,
   PhArrowCounterClockwise,
   PhShieldCheck,
   PhStar,

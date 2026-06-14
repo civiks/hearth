@@ -1,5 +1,15 @@
 <template>
   <div class="w-full max-w-sm flex flex-col">
+    <button
+      v-if="step === 'form'"
+      type="button"
+      class="fixed top-5 left-5 z-10 grid place-items-center size-10 rounded-full bg-muted text-foreground hover:bg-muted/70 cursor-pointer press"
+      aria-label="Back"
+      @click="step = 'role'"
+    >
+      <PhArrowLeft class="size-4" weight="bold" />
+    </button>
+
     <RouterLink
       to="/"
       class="self-center mb-6 hover:opacity-80 transition-opacity"
@@ -9,58 +19,56 @@
     </RouterLink>
 
     <template v-if="step === 'role'">
-      <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-b from-zinc-900 via-zinc-800 to-zinc-500 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-500">
-        Join hearth
-      </h1>
-
-      <div class="flex flex-col gap-2">
-        <button
-          type="button"
-          :class="[
-            'flex items-center justify-between gap-4 rounded-xl bg-card px-4 py-3.5 text-left cursor-pointer press',
-            role === 'user' ? 'soft-card-selected' : 'soft-card hover:soft-card-hover',
-          ]"
-          :aria-pressed="role === 'user'"
-          @click="role = 'user'"
-        >
-          <div>
-            <div class="text-sm font-medium">Customer</div>
-            <div class="text-xs text-muted-foreground mt-0.5">Book and manage home services</div>
-          </div>
-          <div
-            :class="[
-              'size-3.5 rounded-full border-2 shrink-0 flex items-center justify-center',
-              role === 'user' ? 'border-primary' : 'border-muted-foreground/30',
-            ]"
-          >
-            <div v-if="role === 'user'" class="size-1.5 rounded-full bg-primary" />
-          </div>
-        </button>
-        <button
-          type="button"
-          :class="[
-            'flex items-center justify-between gap-4 rounded-xl bg-card px-4 py-3.5 text-left cursor-pointer press',
-            role === 'professional' ? 'soft-card-selected' : 'soft-card hover:soft-card-hover',
-          ]"
-          :aria-pressed="role === 'professional'"
-          @click="role = 'professional'"
-        >
-          <div>
-            <div class="text-sm font-medium">Service Professional</div>
-            <div class="text-xs text-muted-foreground mt-0.5">Offer services and accept bookings</div>
-          </div>
-          <div
-            :class="[
-              'size-3.5 rounded-full border-2 shrink-0 flex items-center justify-center',
-              role === 'professional' ? 'border-primary' : 'border-muted-foreground/30',
-            ]"
-          >
-            <div v-if="role === 'professional'" class="size-1.5 rounded-full bg-primary" />
-          </div>
-        </button>
+      <div class="text-center mb-7">
+        <h1 class="font-display text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-zinc-900 via-zinc-800 to-zinc-500 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-500">
+          Join hearth
+        </h1>
+        <p class="mt-1.5 text-sm text-muted-foreground">
+          See how hearth gets verified pros to your doorstep within hours
+        </p>
       </div>
 
-      <Button class="mt-4 w-full rounded-full h-12 font-semibold justify-center" @click="step = 'form'">
+      <div class="rounded-3xl bg-card soft-card p-2">
+        <div class="px-3 pt-2 pb-2.5 text-sm text-muted-foreground">I want to…</div>
+        <div class="grid grid-cols-2 gap-1.5">
+          <button
+            type="button"
+            :class="[
+              'group/role relative flex aspect-[5/6] flex-col justify-between rounded-2xl p-4 text-left cursor-pointer press transition-colors',
+              role === 'user'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-secondary hover:bg-secondary-hover',
+            ]"
+            :aria-pressed="role === 'user'"
+            @click="role = 'user'"
+          >
+            <PhHouseLine
+              :class="['size-7', role === 'user' ? 'text-primary-foreground' : 'text-muted-foreground/60']"
+              :weight="role === 'user' ? 'fill' : 'bold'"
+            />
+            <div class="font-medium leading-snug">Book a service</div>
+          </button>
+          <button
+            type="button"
+            :class="[
+              'group/role relative flex aspect-[5/6] flex-col justify-between rounded-2xl p-4 text-left cursor-pointer press transition-colors',
+              role === 'professional'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-secondary hover:bg-secondary-hover',
+            ]"
+            :aria-pressed="role === 'professional'"
+            @click="role = 'professional'"
+          >
+            <PhWrench
+              :class="['size-7', role === 'professional' ? 'text-primary-foreground' : 'text-muted-foreground/60']"
+              :weight="role === 'professional' ? 'fill' : 'bold'"
+            />
+            <div class="font-medium leading-snug">Offer my services</div>
+          </button>
+        </div>
+      </div>
+
+      <Button variant="secondary" :disabled="!role" class="mt-4 w-full rounded-full h-12 font-semibold justify-center" @click="step = 'form'">
         Continue
         <PhArrowRight class="size-4" weight="bold" />
       </Button>
@@ -72,14 +80,6 @@
     </template>
 
     <template v-else>
-      <button
-        type="button"
-        class="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-5 cursor-pointer self-start"
-        @click="step = 'role'"
-      >
-        <PhArrowLeft class="size-3.5" weight="bold" /> Back
-      </button>
-
       <h1 class="font-display text-center text-3xl font-bold tracking-tight mb-1 text-transparent bg-clip-text bg-gradient-to-b from-zinc-900 via-zinc-800 to-zinc-500 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-500">
         {{ role === "user" ? "Create account" : "Sign up as Pro" }}
       </h1>
@@ -206,6 +206,8 @@ import {
   PhArrowRight,
   PhEye,
   PhEyeSlash,
+  PhHouseLine,
+  PhWrench,
 } from '@phosphor-icons/vue';
 import { computed, ref, watch } from "vue";
 import { RouterLink, useRouter } from "vue-router";
@@ -236,7 +238,7 @@ const auth = useAuthStore();
 const toasts = useNotificationsStore();
 
 const step = ref<"role" | "form">("role");
-const role = ref<"user" | "professional">("user");
+const role = ref<"user" | "professional" | null>(null);
 const email = ref("");
 const password = ref("");
 const showPassword = ref(false);

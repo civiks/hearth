@@ -27,13 +27,14 @@
           <Button
             v-if="!auth.logged_in"
             variant="ghost"
-            class="text-surface-inverse-foreground hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground"
+            class="rounded-full h-9 px-5 bg-surface-inverse-foreground/10 text-surface-inverse-foreground hover:bg-surface-inverse-foreground/20 hover:text-surface-inverse-foreground"
             @click="$router.push('/login')"
           >
             Sign in
           </Button>
           <Button
             v-if="!auth.logged_in"
+            class="rounded-full h-9 px-5"
             @click="$router.push('/register')"
           >
             Get started
@@ -41,7 +42,7 @@
           <Button
             v-else
             variant="ghost"
-            class="text-surface-inverse-foreground hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground"
+            class="rounded-full h-9 px-5 bg-surface-inverse-foreground/10 text-surface-inverse-foreground hover:bg-surface-inverse-foreground/20 hover:text-surface-inverse-foreground"
             @click="$router.push(home)"
           >
             Go to dashboard
@@ -166,10 +167,6 @@ const route = useRoute();
 const router = useRouter();
 const home = computed(() => homePathForRole(auth.role));
 
-// On the homepage (/) the hero has its own full-bleed background image, so
-// the header floats over it with a soft mask-gradient backdrop instead of
-// sitting on a solid dark bar. Landing also gets the full footer (link
-// columns); /terms, /privacy, etc. get the minimal one-row variant.
 const isLanding = computed(() => route.path === "/");
 const overlayHeader = isLanding;
 </script>
