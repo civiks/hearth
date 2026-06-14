@@ -78,13 +78,13 @@
     <template v-if="isActionable" #footer>
       <Button
         v-if="request.service_status === 'requested'"
-        variant="outline"
-        class="flex-1"
+        variant="secondary"
+        class="flex-1 rounded-xl"
         @click="onEdit"
       >
         Edit booking
       </Button>
-      <Button variant="destructive-soft" class="flex-1" @click="onCancel">
+      <Button variant="destructive-soft" class="flex-1 rounded-xl" @click="onCancel">
         Cancel request
       </Button>
     </template>

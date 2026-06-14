@@ -129,9 +129,9 @@
       <div
         class="mx-auto max-w-7xl px-6 py-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-xs"
       >
-        <div class="flex items-center gap-2">
-          <BrandMark class="h-3 w-auto" />
-          <span class="font-display font-semibold tracking-tight leading-none">hearth</span>
+        <div class="flex items-center gap-2.5">
+          <BrandMark class="h-5 w-auto" />
+          <span class="font-display font-semibold text-lg tracking-tight leading-none">hearth</span>
           <span class="text-surface-inverse-foreground/60 ml-3">© 2026</span>
         </div>
         <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-surface-inverse-foreground/70">
