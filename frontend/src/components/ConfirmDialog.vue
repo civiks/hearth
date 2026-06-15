@@ -37,13 +37,12 @@
         </DrawerDescription>
       </DrawerHeader>
       <DrawerFooter>
-        <Button variant="secondary" halo class="rounded-full" @click="settle(false)">
+        <Button variant="secondary" class="rounded-[1rem]" @click="settle(false)">
           {{ pending?.cancelLabel ?? "Cancel" }}
         </Button>
         <Button
           :variant="pending?.variant === 'destructive' ? 'destructive' : 'default'"
-          halo
-          class="flex-1 rounded-full"
+          class="flex-1 rounded-[1rem]"
           @click="settle(true)"
         >
           {{ pending?.confirmLabel ?? "Confirm" }}

@@ -230,6 +230,7 @@
   & > * {
     position: relative;
     pointer-events: auto;
+    min-height: 3rem;
   }
 }
 
@@ -264,6 +265,7 @@
   & > * {
     position: relative;
     pointer-events: auto;
+    min-height: 3rem;
   }
 }
 

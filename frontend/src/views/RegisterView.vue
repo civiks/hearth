@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-sm flex flex-col">
+  <div :class="['w-full flex flex-col', step === 'role' ? 'max-w-sm sm:max-w-xl' : 'max-w-sm']">
     <button
       v-if="step === 'form'"
       type="button"
@@ -28,13 +28,13 @@
         </p>
       </div>
 
-      <div class="rounded-3xl bg-card soft-card p-2">
-        <div class="px-3 pt-2 pb-2.5 text-sm text-muted-foreground">I want to…</div>
-        <div class="grid grid-cols-2 gap-1.5">
+      <div class="rounded-3xl bg-card soft-card p-2 sm:p-3">
+        <div class="px-3 pt-2 pb-2.5 text-sm text-muted-foreground sm:px-4 sm:pt-3 sm:pb-4">I want to…</div>
+        <div class="grid grid-cols-2 gap-1.5 sm:gap-3">
           <button
             type="button"
             :class="[
-              'group/role relative flex aspect-[5/6] flex-col justify-between rounded-2xl p-4 text-left cursor-pointer press transition-colors',
+              'group/role relative flex aspect-[5/6] sm:aspect-square flex-col justify-between rounded-2xl p-4 sm:p-6 text-left cursor-pointer press transition-colors',
               role === 'user'
                 ? 'bg-primary text-primary-foreground'
                 : 'bg-secondary hover:bg-secondary-hover',
@@ -43,7 +43,7 @@
             @click="role = 'user'"
           >
             <PhHouseLine
-              :class="['size-7', role === 'user' ? 'text-primary-foreground' : 'text-muted-foreground/60']"
+              :class="['size-7 sm:size-9', role === 'user' ? 'text-primary-foreground' : 'text-muted-foreground/60']"
               :weight="role === 'user' ? 'fill' : 'bold'"
             />
             <div class="font-medium leading-snug">Book a service</div>
@@ -51,7 +51,7 @@
           <button
             type="button"
             :class="[
-              'group/role relative flex aspect-[5/6] flex-col justify-between rounded-2xl p-4 text-left cursor-pointer press transition-colors',
+              'group/role relative flex aspect-[5/6] sm:aspect-square flex-col justify-between rounded-2xl p-4 sm:p-6 text-left cursor-pointer press transition-colors',
               role === 'professional'
                 ? 'bg-primary text-primary-foreground'
                 : 'bg-secondary hover:bg-secondary-hover',

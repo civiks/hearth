@@ -17,7 +17,7 @@ export const DrawerHeader = defineComponent({
 
 export const DrawerFooter = defineComponent({
   props: { class: String as () => HTMLAttributes['class'] },
-  setup: (p, { slots }) => () => h('div', { class: cn('flex flex-row gap-2 px-5 pt-3 pb-5', p.class) }, slots.default?.()),
+  setup: (p, { slots }) => () => h('div', { class: cn('flex flex-row gap-2 px-5 pt-3 pb-5 [&>*]:min-h-12', p.class) }, slots.default?.()),
 })
 
 export const DrawerTitle = defineComponent({

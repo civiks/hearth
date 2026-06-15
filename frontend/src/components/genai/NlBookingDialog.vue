@@ -91,23 +91,23 @@
 
     <template #footer>
       <template v-if="stage === 'compose'">
-        <Button type="button" variant="secondary" class="rounded-xl" @click="$emit('close')">Cancel</Button>
-        <Button type="button" class="flex-1 rounded-xl" :disabled="!prompt.trim()" @click="onParse">
+        <Button type="button" variant="secondary" class="rounded-[1rem]" @click="$emit('close')">Cancel</Button>
+        <Button type="button" class="flex-1 rounded-[1rem]" :disabled="!prompt.trim()" @click="onParse">
           Parse
         </Button>
       </template>
       <template v-else-if="stage === 'review'">
-        <Button type="button" variant="secondary" class="rounded-xl" @click="restart">Start over</Button>
-        <Button type="button" class="flex-1 rounded-xl" :disabled="streaming || !matchedService" @click="stage = 'form'">
+        <Button type="button" variant="secondary" class="rounded-[1rem]" @click="restart">Start over</Button>
+        <Button type="button" class="flex-1 rounded-[1rem]" :disabled="streaming || !matchedService" @click="stage = 'form'">
           Looks good
           <PhCaretRight class="size-3.5 ml-1" weight="bold" />
         </Button>
       </template>
       <template v-else>
-        <Button type="button" variant="primary-soft" size="icon" class="rounded-full" @click="stage = 'review'">
+        <Button type="button" variant="primary-soft" size="icon" class="size-12 rounded-full" @click="stage = 'review'">
           <PhArrowLeft class="size-4" weight="bold" />
         </Button>
-        <Button type="button" class="flex-1 rounded-xl" :disabled="submitting" @click="onSubmit">
+        <Button type="button" class="flex-1 rounded-[1rem]" :disabled="submitting" @click="onSubmit">
           {{ submitting ? "Booking…" : "Confirm booking" }}
         </Button>
       </template>

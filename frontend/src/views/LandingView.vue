@@ -218,7 +218,7 @@
       </button>
 
       <template #footer>
-        <Button variant="destructive-soft" class="flex-1 h-11" @click="handleResetDemo">
+        <Button variant="destructive-soft" class="flex-1" @click="handleResetDemo">
           <PhArrowCounterClockwise class="size-4 shrink-0" />
           Reset demo data
         </Button>

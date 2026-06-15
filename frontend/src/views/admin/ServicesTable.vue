@@ -108,8 +108,8 @@
     </Alert>
 
     <template #footer>
-      <Button type="button" variant="secondary" class="rounded-xl" @click="closeModal">Cancel</Button>
-      <Button type="button" class="flex-1 rounded-xl" :disabled="submitting" @click="submitService">
+      <Button type="button" variant="secondary" class="rounded-[1rem]" @click="closeModal">Cancel</Button>
+      <Button type="button" class="flex-1 rounded-[1rem]" :disabled="submitting" @click="submitService">
         {{ submitting ? "Saving…" : editingId === null ? "Create service" : "Save changes" }}
       </Button>
     </template>

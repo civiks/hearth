@@ -37,8 +37,8 @@
     </Alert>
 
     <template #footer>
-      <Button type="button" variant="secondary" class="rounded-xl" @click="$emit('close')">Cancel</Button>
-      <Button type="button" class="flex-1 rounded-xl" :disabled="submitting" @click="onSubmit">
+      <Button type="button" variant="secondary" class="rounded-[1rem]" @click="$emit('close')">Cancel</Button>
+      <Button type="button" class="flex-1 rounded-[1rem]" :disabled="submitting" @click="onSubmit">
         {{ submitting ? "Updating…" : "Update" }}
       </Button>
     </template>
