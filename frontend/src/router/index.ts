@@ -37,6 +37,36 @@ const routes = [
     meta: { layout: "public", title: "Privacy Policy" },
   },
   {
+    path: "/help",
+    component: () => import("@/views/StubView.vue"),
+    meta: {
+      layout: "public",
+      title: "Help center",
+      heading: "Help center",
+      body: "Our help center is on the way. In the meantime, sign in and use the in-app support form, and we'll get back to you.",
+    },
+  },
+  {
+    path: "/pros",
+    component: () => import("@/views/StubView.vue"),
+    meta: {
+      layout: "public",
+      title: "Become a pro",
+      heading: "Become a pro",
+      body: "Grow your home-services business with hearth — set your availability, accept jobs, and get paid. Pro onboarding is opening soon.",
+    },
+  },
+  {
+    path: "/pro-app",
+    component: () => import("@/views/StubView.vue"),
+    meta: {
+      layout: "public",
+      title: "Pro app",
+      heading: "The hearth pro app",
+      body: "Manage jobs on the go from your phone. The dedicated pro app is in the works — for now, everything works great in your browser.",
+    },
+  },
+  {
     path: "/login",
     component: () => import("@/views/LoginView.vue"),
     meta: { requiresUnauth: true, layout: "auth", title: "Sign in" },

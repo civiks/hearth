@@ -81,46 +81,50 @@
 
     <footer v-if="isLanding" class="bg-surface-inverse text-surface-inverse-foreground">
       <div class="mx-auto max-w-7xl px-6 py-12 sm:py-16">
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-8">
-          <div class="col-span-2 sm:col-span-1">
+        <div class="flex flex-col sm:flex-row sm:justify-between gap-y-10 gap-x-12">
+          <div class="max-w-xs">
             <div class="flex items-center gap-2.5">
               <BrandMark class="h-5 w-auto" />
               <span class="font-display font-semibold text-lg tracking-tight leading-none">hearth</span>
             </div>
+            <p class="mt-4 text-sm leading-relaxed text-surface-inverse-foreground/60">
+              Verified home-service professionals at your doorstep, with honest pricing and real reviews.
+            </p>
           </div>
-          <div>
-            <h3
-              class="text-[11px] uppercase tracking-wider text-surface-inverse-foreground/60 font-normal mb-3"
-            >
-              For customers
-            </h3>
-            <ul class="space-y-2 text-sm">
-              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Book a service</a></li>
-              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Browse services</a></li>
-              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Help center</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3
-              class="text-[11px] uppercase tracking-wider text-surface-inverse-foreground/60 font-normal mb-3"
-            >
-              For pros
-            </h3>
-            <ul class="space-y-2 text-sm">
-              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Become a pro</a></li>
-              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Pro resources</a></li>
-              <li><a href="#" class="text-surface-inverse-foreground/85 hover:underline">Pro app</a></li>
-            </ul>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-12 gap-y-8">
+            <div>
+              <h3 class="text-[11px] uppercase tracking-wider text-surface-inverse-foreground/60 font-normal mb-3">
+                For customers
+              </h3>
+              <ul class="space-y-2 text-sm">
+                <li><RouterLink to="/register" class="text-surface-inverse-foreground/85 hover:underline">Browse services</RouterLink></li>
+                <li><RouterLink to="/help" class="text-surface-inverse-foreground/85 hover:underline">Help center</RouterLink></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-[11px] uppercase tracking-wider text-surface-inverse-foreground/60 font-normal mb-3">
+                For pros
+              </h3>
+              <ul class="space-y-2 text-sm">
+                <li><RouterLink to="/pros" class="text-surface-inverse-foreground/85 hover:underline">Become a pro</RouterLink></li>
+                <li><RouterLink to="/pro-app" class="text-surface-inverse-foreground/85 hover:underline">Pro app</RouterLink></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-[11px] uppercase tracking-wider text-surface-inverse-foreground/60 font-normal mb-3">
+                Legal
+              </h3>
+              <ul class="space-y-2 text-sm">
+                <li><RouterLink to="/privacy" class="text-surface-inverse-foreground/85 hover:underline">Privacy</RouterLink></li>
+                <li><RouterLink to="/terms" class="text-surface-inverse-foreground/85 hover:underline">Terms</RouterLink></li>
+              </ul>
+            </div>
           </div>
         </div>
         <div
-          class="mt-10 sm:mt-12 pt-6 border-t border-surface-inverse-foreground/10 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-xs text-surface-inverse-foreground/60"
+          class="mt-10 sm:mt-12 pt-6 border-t border-surface-inverse-foreground/10 text-xs text-surface-inverse-foreground/60"
         >
-          <span>© 2026 hearth</span>
-          <div class="flex gap-x-6">
-            <RouterLink to="/privacy" class="hover:underline">Privacy</RouterLink>
-            <RouterLink to="/terms" class="hover:underline">Terms</RouterLink>
-          </div>
+          © 2026 hearth
         </div>
       </div>
     </footer>
