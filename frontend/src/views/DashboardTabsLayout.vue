@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useMediaQuery, useScroll } from "@vueuse/core";
 import { RouterLink, useRoute } from "vue-router";
 
@@ -52,7 +52,7 @@ const contentRef = ref<HTMLElement | null>(null);
 const { arrivedState } = useScroll(contentRef);
 useScrollReset(contentRef);
 
-const tabs = route.meta.tabs as { label: string; to: string; icon: unknown }[];
+const tabs = computed(() => route.meta.tabs as { label: string; to: string; icon: unknown }[]);
 
 function isActive(to: string): boolean {
   return route.path === to || route.path.startsWith(`${to}/`);

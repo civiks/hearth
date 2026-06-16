@@ -17,7 +17,11 @@
   [data-vaul-drawer] button:not([class*="rounded-full"]),
   [data-vaul-drawer] input,
   [data-vaul-drawer] textarea,
-  [data-vaul-drawer] [role="combobox"] {
+  [data-vaul-drawer] [role="combobox"],
+  [data-sheet-content] button:not([class*="rounded-full"]),
+  [data-sheet-content] input,
+  [data-sheet-content] textarea,
+  [data-sheet-content] [role="combobox"] {
     @apply rounded-2xl;
   }
 
