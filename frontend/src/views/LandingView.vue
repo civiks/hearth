@@ -32,8 +32,8 @@
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" class="w-80 p-2.5">
                     <div class="flex flex-col gap-1 px-2 pt-1.5 pb-3">
-                      <p class="font-display text-lg font-semibold leading-snug tracking-tight">Demo mode</p>
-                      <p class="text-sm text-muted-foreground leading-snug">State persists in your browser only.</p>
+                      <p class="text-lg font-semibold leading-snug tracking-tight font-display">Demo mode</p>
+                      <p class="text-muted-foreground text-sm leading-relaxed">State persists in your browser only.</p>
                     </div>
                     <p class="px-2 mb-2 text-[11px] uppercase tracking-wide text-muted-foreground">Sign in as</p>
                     <div class="space-y-2">

@@ -224,7 +224,7 @@ const columns: ColumnDef<AdminService>[] = [
       return h(RowActions, {
         actions: [
           { label: "Edit", icon: PhPencilSimple, onClick: () => openEdit(s) },
-          { label: "Delete", icon: PhTrash, variant: "destructive", onClick: () => emit("delete", s.id) },
+          { label: "Delete", icon: PhTrash, variant: "destructive", morphsInPlace: true, onClick: () => emit("delete", s.id) },
         ],
       });
     },

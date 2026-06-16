@@ -292,11 +292,15 @@ const auth = useAuthStore();
 const chat = useChatStore();
 const { theme, effectiveTheme, setTheme } = useTheme();
 const { loginAs, resetDemoData } = useDemoLogin();
-const { confirm } = useConfirm();
+const { confirm, pending, settle } = useConfirm();
 const settingsDrawer = useSettingsDrawer();
 
 const isDesktop = useMediaQuery("(min-width: 640px)");
 const menuOpen = ref(false);
+
+watch(menuOpen, (open) => {
+  if (!open && pending.value) settle(false);
+});
 
 const isCustomer = computed(() => auth.role === "user");
 const searchText = ref(typeof route.query.search === "string" ? route.query.search : "");

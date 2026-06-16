@@ -43,11 +43,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, useSlots } from "vue";
+import { computed, useSlots, watch } from "vue";
 import { useMediaQuery } from "@vueuse/core";
 
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from "@/components/ui/drawer";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
+import { useConfirm } from "@/composables/useConfirm";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -64,6 +65,14 @@ defineEmits<{ close: [] }>();
 
 const slots = useSlots();
 const isDesktop = useMediaQuery("(min-width: 640px)");
+
+const { pending, settle } = useConfirm();
+watch(
+  () => props.open,
+  (open) => {
+    if (!open && pending.value) settle(false);
+  },
+);
 
 const TitleComp = computed(() => (isDesktop.value ? SheetTitle : DrawerTitle));
 const DescriptionComp = computed(() =>

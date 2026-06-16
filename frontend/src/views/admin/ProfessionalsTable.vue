@@ -154,7 +154,7 @@ const columns: ColumnDef<AdminUser>[] = [
         actions.push({ label: "Approve", icon: PhCheckCircle, onClick: () => emit("approve", u.id) });
         actions.push({ label: "Reject", icon: PhXCircle, onClick: () => emit("reject", u.id) });
       }
-      actions.push({ label: "Delete", icon: PhTrash, variant: "destructive" as const, onClick: () => emit("delete", u.id) });
+      actions.push({ label: "Delete", icon: PhTrash, variant: "destructive" as const, morphsInPlace: true, onClick: () => emit("delete", u.id) });
       return h(RowActions, { actions });
     },
   },

@@ -112,9 +112,10 @@ const columns: ColumnDef<AdminUser>[] = [
           {
             label: u.is_blocked ? "Unblock" : "Block",
             icon: u.is_blocked ? PhLockOpen : PhLock,
+            morphsInPlace: true,
             onClick: () => emit("toggleBlock", u),
           },
-          { label: "Delete", icon: PhTrash, variant: "destructive" as const, onClick: () => emit("delete", u.id) },
+          { label: "Delete", icon: PhTrash, variant: "destructive" as const, morphsInPlace: true, onClick: () => emit("delete", u.id) },
         ],
       });
     },

@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col">
-    <div class="flex flex-col gap-1.5 px-5 pt-3 pb-3">
+    <div class="flex flex-col gap-1.5 px-5 pt-5 pb-3">
       <component :is="icon" :class="['size-12 mb-2 self-start', iconClass]" weight="bold" />
       <DrawerTitle class="text-2xl leading-tight font-display font-semibold tracking-tight">
         {{ pending?.title }}
