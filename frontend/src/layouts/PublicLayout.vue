@@ -60,10 +60,8 @@
           </Button>
         </div>
 
-        <Sheet :open="mobileNavOpen" @update:open="mobileNavOpen = $event">
-          <SheetContent class="max-w-[14rem]">
-            <div class="px-4 pt-4 pb-2 text-xs font-medium tracking-tight text-foreground/40">hearth</div>
-            <nav class="flex flex-col px-3 pb-3">
+        <ResponsiveSheet :open="mobileNavOpen" title="hearth" @close="mobileNavOpen = false">
+          <nav class="flex flex-col">
               <template v-if="!auth.logged_in">
                 <button class="text-left text-sm font-medium py-1.5 px-1 text-foreground hover:text-primary transition-colors" @click="router.push('/login'); mobileNavOpen = false">Sign in</button>
                 <button class="text-left text-sm font-medium py-1.5 px-1 text-foreground hover:text-primary transition-colors" @click="router.push('/register'); mobileNavOpen = false">Get started</button>
@@ -79,9 +77,8 @@
                   @click="router.push(link.to); mobileNavOpen = false"
                 >{{ link.label }}</button>
               </template>
-            </nav>
-          </SheetContent>
-        </Sheet>
+          </nav>
+        </ResponsiveSheet>
       </div>
     </header>
     <main :class="['flex-1', !overlayHeader && 'sm:pt-14']">
@@ -166,7 +163,7 @@ import { RouterLink, useRoute, useRouter } from "vue-router";
 
 import BrandMark from "@/components/BrandMark.vue";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import ResponsiveSheet from "@/components/ui/ResponsiveSheet.vue";
 import { homePathForRole } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 

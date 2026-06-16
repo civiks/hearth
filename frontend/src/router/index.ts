@@ -230,6 +230,12 @@ router.beforeResolve((to, from) => {
   if (!from.matched.length) return;
   // Same-path navigation (e.g., query change) — nothing to morph.
   if (from.path === to.path) return;
+  if (
+    from.matched[0] &&
+    to.matched[0] &&
+    from.matched[0] === to.matched[0]
+  )
+    return;
   if (typeof document === "undefined") return;
   const startViewTransition = (
     document as Document & {

@@ -28,9 +28,9 @@
     </nav>
 
     <div ref="contentRef" class="min-w-0 sm:flex-1 sm:overflow-auto">
-      <div class="mx-auto w-full max-w-[1440px]">
+      <div class="mx-auto grid w-full max-w-[1440px] grid-cols-1 [&>*]:col-start-1 [&>*]:row-start-1">
         <router-view v-slot="{ Component, route: r }">
-          <Transition name="page" mode="out-in" :appear="false">
+          <Transition name="page" :appear="false">
             <component :is="Component" :key="r.path" />
           </Transition>
         </router-view>
