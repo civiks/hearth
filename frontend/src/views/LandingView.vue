@@ -267,14 +267,13 @@ const isDesktop = useMediaQuery("(min-width: 640px)");
 const drawerOpen = ref(false);
 
 async function handleResetDemo() {
-  // Dismiss the mobile "Try the demo" drawer first so the confirm isn't stacked on it.
-  drawerOpen.value = false;
   if (!await confirm({
     title: "Reset demo data?",
     description: "This restores the demo to its original state — any bookings, edits, or accounts you changed will be discarded.",
     variant: "destructive",
     confirmLabel: "Reset demo",
   })) return;
+  drawerOpen.value = false;
   resetDemoData();
 }
 

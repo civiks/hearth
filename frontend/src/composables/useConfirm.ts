@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 interface ConfirmOptions {
   title: string;
@@ -14,6 +14,9 @@ interface PendingConfirm extends ConfirmOptions {
 
 const pending = ref<PendingConfirm | null>(null);
 
+const hostCount = ref(0);
+const hasHost = computed(() => hostCount.value > 0);
+
 export function useConfirm() {
   function confirm(opts: ConfirmOptions): Promise<boolean> {
     return new Promise((resolve) => {
@@ -26,5 +29,13 @@ export function useConfirm() {
     pending.value = null;
   }
 
-  return { confirm, pending, settle };
+  function registerHost() {
+    hostCount.value++;
+  }
+
+  function unregisterHost() {
+    hostCount.value = Math.max(0, hostCount.value - 1);
+  }
+
+  return { confirm, pending, settle, hasHost, registerHost, unregisterHost };
 }

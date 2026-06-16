@@ -141,7 +141,7 @@
 
         <Drawer v-model:open="menuOpen">
           <DrawerContent>
-            <div class="flex items-center gap-3 px-5 pt-5 pb-3">
+            <div class="flex items-center gap-3 px-5 pt-5 pb-3 shrink-0">
               <button class="flex items-center gap-3 min-w-0 flex-1 text-left" @click="navigate('/account')">
                 <Avatar :name="auth.full_name ?? ''" :src="auth.avatar_url" size="size-10 shrink-0" fallback-class="text-sm" />
                 <div class="flex flex-col leading-tight min-w-0">
@@ -175,7 +175,7 @@
               </div>
             </div>
 
-            <div class="overflow-y-auto px-2.5 pb-3 scroll-fade-y">
+            <div class="flex-1 min-h-0 overflow-y-auto px-2.5 pb-3 scroll-fade-y">
               <div class="h-px bg-border -mx-2.5 mb-2" />
 
               <div class="text-muted-foreground px-3 pt-2 pb-1.5 text-[11px] font-medium uppercase tracking-wider">Theme</div>
@@ -352,24 +352,24 @@ function navigate(path: string) {
 }
 
 async function handleLogout() {
-  menuOpen.value = false;
   if (!await confirm({
     title: "Sign out?",
     description: "You'll be signed out of your account. You can sign back in anytime.",
     confirmLabel: "Sign out",
   })) return;
+  menuOpen.value = false;
   await auth.logout();
   router.push("/");
 }
 
 async function handleResetDemo() {
-  menuOpen.value = false;
   if (!await confirm({
     title: "Reset demo data?",
     description: "This restores the demo to its original state — any bookings, edits, or accounts you changed will be discarded.",
     variant: "destructive",
     confirmLabel: "Reset demo",
   })) return;
+  menuOpen.value = false;
   resetDemoData();
 }
 </script>
