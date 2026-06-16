@@ -5,7 +5,7 @@
     @close="$emit('close')"
   >
     <template #header>
-      <div :class="isDesktop ? 'flex flex-col gap-1.5 px-5 pt-5 pb-4 border-b' : 'flex flex-col gap-1.5 px-5 pt-3'">
+      <div :class="isDesktop ? 'flex flex-col gap-1.5 px-5 pt-5 pb-4 pr-14 border-b' : 'flex flex-col gap-1.5 px-5 pt-5 pr-14'">
         <p class="text-2xl font-semibold tracking-tight tabular-nums">
           {{ request.scheduled_time ? formatSmartDateTime(request.scheduled_time) : `Order #${request.id}` }}
         </p>
@@ -15,10 +15,8 @@
       </div>
     </template>
 
-    <!-- Status -->
     <StatusTimeline :status="request.service_status" />
 
-    <!-- Professional -->
     <div class="border-t pt-5">
       <div v-if="professional" class="flex items-center gap-3">
         <ProfessionalAvatar
@@ -47,7 +45,6 @@
       <p v-else class="text-sm text-muted-foreground">No professional assigned</p>
     </div>
 
-    <!-- Details -->
     <div class="border-t pt-5 space-y-3 text-sm tracking-tight">
       <div class="flex items-start gap-2.5">
         <PhMapPin class="size-4 shrink-0 mt-0.5 text-muted-foreground" />
@@ -69,7 +66,6 @@
       </p>
     </div>
 
-    <!-- Notes -->
     <div v-if="request.remarks" class="border-t pt-5">
       <p class="text-[11px] font-medium uppercase tracking-wide text-muted-foreground mb-2">Notes</p>
       <p class="text-sm tracking-tight leading-relaxed">{{ request.remarks }}</p>

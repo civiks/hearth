@@ -65,12 +65,10 @@ const hasDescription = computed(() => !!(props.description || slots.description)
 
 const headerClasses = computed(() =>
   isDesktop.value
-    ? "flex flex-col gap-1.5 px-5 pt-5 pb-4"
-    : "flex flex-col gap-1.5 px-5 pt-3",
+    ? "flex flex-col gap-1.5 px-5 pt-5 pb-4 pr-14"
+    : "flex flex-col gap-1.5 px-5 pt-5 pr-14",
 );
 
-// Bottom padding clears the floating footer so content scrolls fully into
-// view above the CTA instead of resting hidden behind it.
 const bodyClasses = computed(() =>
   cn(
     "flex-1 overflow-y-auto min-h-0 px-5 pt-5 space-y-4",

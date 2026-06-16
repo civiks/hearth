@@ -141,72 +141,59 @@
 
         <Drawer v-model:open="menuOpen">
           <DrawerContent>
-            <div class="flex items-center gap-3 px-5 pt-5 pb-3 shrink-0">
+            <div class="flex items-center gap-3 px-5 pt-3 pb-3 pr-14 shrink-0">
               <button class="flex items-center gap-3 min-w-0 flex-1 text-left" @click="navigate('/account')">
                 <Avatar :name="auth.full_name ?? ''" :src="auth.avatar_url" size="size-10 shrink-0" fallback-class="text-sm" />
                 <div class="flex flex-col leading-tight min-w-0">
-                  <span class="text-base font-semibold tracking-tight truncate">{{ auth.full_name }}</span>
+                  <span class="flex items-center gap-1 text-base font-semibold tracking-tight min-w-0">
+                    <span class="truncate">{{ auth.full_name }}</span>
+                    <PhCaretDown class="size-3.5 shrink-0 text-muted-foreground" weight="bold" />
+                  </span>
                   <span class="text-sm tracking-tight text-muted-foreground truncate">{{ auth.email }}</span>
                 </div>
               </button>
-              <div class="flex items-center gap-0.5 shrink-0">
-                <button
-                  class="p-2 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
-                  aria-label="Account"
-                  @click="navigate('/account')"
-                >
-                  <PhUserCircle class="size-5" weight="bold" />
-                </button>
-                <button
-                  class="p-2 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
-                  aria-label="Settings"
-                  @click="menuOpen = false; settingsDrawer.show()"
-                >
-                  <PhGear class="size-5" weight="bold" />
-                </button>
-                <button
-                  v-if="auth.role === 'admin'"
-                  class="p-2 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
-                  aria-label="Tools"
-                  @click="navigate('/admin/tools')"
-                >
-                  <PhHammer class="size-5" weight="bold" />
-                </button>
-              </div>
             </div>
 
             <div class="flex-1 min-h-0 overflow-y-auto px-2.5 pb-3 scroll-fade-y">
-              <div class="h-px bg-border -mx-2.5 mb-2" />
+              <div class="h-px bg-border/50 mx-3 mb-2" />
 
-              <div class="text-muted-foreground px-3 pt-2 pb-1.5 text-[11px] font-medium uppercase tracking-wider">Theme</div>
-              <button
-                v-for="t in themeOptions"
-                :key="t.value"
-                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent transition-colors"
-                :class="theme === t.value ? 'bg-accent/60 text-accent-foreground' : ''"
-                @click="setTheme(t.value as Theme)"
-              >
-                <component :is="t.icon" class="size-5" :class="theme === t.value ? '' : 'text-muted-foreground'" />
-                {{ t.label }}
-                <PhCheck v-if="theme === t.value" class="ml-auto size-4 text-primary" weight="bold" />
-              </button>
+              <div class="flex items-center justify-between gap-3 px-3 py-2">
+                <span class="text-[15px] font-medium tracking-tight">Theme</span>
+                <div class="flex items-center gap-0.5 rounded-full bg-foreground/6 p-1">
+                  <button
+                    v-for="t in themeOptions"
+                    :key="t.value"
+                    :aria-label="t.label"
+                    :aria-pressed="theme === t.value"
+                    class="flex h-8 items-center justify-center gap-1.5 rounded-full text-[13px] font-medium tracking-tight transition-colors"
+                    :class="theme === t.value ? 'bg-card text-foreground soft-card px-3 dark:bg-foreground/10 dark:shadow-none' : 'text-muted-foreground hover:text-foreground w-8'"
+                    @click="setTheme(t.value as Theme)"
+                  >
+                    <component :is="t.icon" class="size-[1.1rem] shrink-0" weight="bold" />
+                    <span v-if="theme === t.value">{{ t.label }}</span>
+                  </button>
+                </div>
+              </div>
 
-              <template v-if="DEMO">
-                <div class="text-muted-foreground px-3 pt-3 pb-1.5 text-[11px] font-medium uppercase tracking-wider">Switch role</div>
-                <button
-                  v-for="r in DEMO_ROLES"
-                  :key="r.value"
-                  class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent transition-colors"
-                  :class="auth.role === r.value ? 'bg-accent/60 text-accent-foreground' : ''"
-                  @click="menuOpen = false; loginAs(r.value as Role)"
-                >
-                  <component :is="r.icon" class="size-5" :class="auth.role === r.value ? '' : 'text-muted-foreground'" />
-                  {{ r.label }}
-                  <PhCheck v-if="auth.role === r.value" class="ml-auto size-4 text-primary" weight="bold" />
-                </button>
-              </template>
+              <div v-if="DEMO" class="flex items-center justify-between gap-3 px-3 py-2">
+                <span class="text-[15px] font-medium tracking-tight shrink-0">Role</span>
+                <div class="flex items-center gap-0.5 rounded-full bg-foreground/6 p-1">
+                  <button
+                    v-for="r in DEMO_ROLES"
+                    :key="r.value"
+                    :aria-label="r.label"
+                    :aria-pressed="auth.role === r.value"
+                    class="flex h-8 items-center justify-center gap-1.5 rounded-full text-[13px] font-medium tracking-tight transition-colors"
+                    :class="auth.role === r.value ? 'bg-card text-foreground soft-card px-3 dark:bg-foreground/10 dark:shadow-none' : 'text-muted-foreground hover:text-foreground w-8'"
+                    @click="menuOpen = false; loginAs(r.value as Role)"
+                  >
+                    <component :is="r.icon" class="size-[1.1rem] shrink-0" weight="bold" />
+                    <span v-if="auth.role === r.value">{{ r.label }}</span>
+                  </button>
+                </div>
+              </div>
 
-              <div class="h-px bg-border -mx-2.5 mt-2 mb-2" />
+              <div class="h-px bg-border/50 mx-3 my-2" />
 
               <button
                 v-if="DEMO"
@@ -217,6 +204,21 @@
                 Reset demo data
               </button>
               <button
+                v-if="auth.role === 'admin'"
+                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent transition-colors"
+                @click="navigate('/admin/tools')"
+              >
+                <PhHammer class="size-5 text-muted-foreground" weight="bold" />
+                Tools
+              </button>
+              <button
+                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent transition-colors"
+                @click="menuOpen = false; settingsDrawer.show()"
+              >
+                <PhGear class="size-5 text-muted-foreground" weight="bold" />
+                Settings
+              </button>
+              <button
                 class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight text-destructive hover:bg-destructive/10 transition-colors"
                 @click="handleLogout"
               >
@@ -224,7 +226,7 @@
                 Sign out
               </button>
 
-              <div class="h-px bg-border -mx-2.5 mt-2 mb-2" />
+              <div class="h-px bg-border/50 mx-3 my-2" />
 
               <div class="flex items-center gap-1.5 px-3 py-2 text-xs text-muted-foreground">
                 <button class="hover:text-foreground transition-colors" @click="navigate('/privacy')">Privacy policy</button>
@@ -243,7 +245,6 @@
 <script lang="ts" setup>
 import { useMediaQuery, useScroll } from "@vueuse/core";
 import {
-  PhCheck,
   PhCaretDown,
   PhHammer,
   PhMagnifyingGlass,

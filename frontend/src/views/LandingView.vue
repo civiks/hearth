@@ -152,7 +152,7 @@
                       <p class="text-sm font-medium">Demo mode</p>
                       <p class="text-xs text-muted-foreground">State persists in your browser only.</p>
                     </div>
-                    <DropdownMenuSeparator class="-mx-1.5 mb-1" />
+                    <DropdownMenuSeparator class="mb-1" />
                     <DropdownMenuLabel class="text-[10px] uppercase tracking-widest text-muted-foreground font-medium px-2 mb-0.5">
                       Sign in as
                     </DropdownMenuLabel>
@@ -171,7 +171,7 @@
                         <p class="text-xs text-muted-foreground tracking-tight">{{ ROLE_DESCRIPTIONS[r.value] }}</p>
                       </div>
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator class="-mx-1.5 mt-1 mb-1" />
+                    <DropdownMenuSeparator class="mt-1 mb-1" />
                     <DropdownMenuItem variant="destructive" class="rounded-lg" @click="handleResetDemo">
                       <PhArrowCounterClockwise class="mr-2 size-3.5" />
                       Reset demo data

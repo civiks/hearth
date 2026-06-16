@@ -30,7 +30,7 @@
     :open="!!pending"
     @update:open="(v) => !v && settle(false)"
   >
-    <DrawerContent :host-confirm="false">
+    <DrawerContent :host-confirm="false" :show-close="false">
       <ConfirmContent />
     </DrawerContent>
   </Drawer>

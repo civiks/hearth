@@ -12,7 +12,7 @@ export { default as DrawerContent } from './DrawerContent.vue'
 
 export const DrawerHeader = defineComponent({
   props: { class: String as () => HTMLAttributes['class'] },
-  setup: (p, { slots }) => () => h('div', { class: cn('flex flex-col gap-1.5 px-5 pt-3 pb-3', p.class) }, slots.default?.()),
+  setup: (p, { slots }) => () => h('div', { class: cn('flex flex-col gap-1.5 px-5 pt-5 pb-3 pr-14', p.class) }, slots.default?.()),
 })
 
 export const DrawerFooter = defineComponent({
