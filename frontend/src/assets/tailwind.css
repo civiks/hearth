@@ -49,6 +49,24 @@
   padding-bottom: calc(4rem + env(safe-area-inset-bottom));
 }
 
+/* Shake for invalid form fields. */
+@keyframes field-shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-5px); }
+  30% { transform: translateX(4px); }
+  45% { transform: translateX(-3px); }
+  60% { transform: translateX(2px); }
+  75% { transform: translateX(-1px); }
+}
+
+@utility animate-field-shake {
+  animation: field-shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
 /*
  * AI surface — subtle blue→violet wash from the bottom + blue
  * outline. Use `ai-surface ai-outline` together on any container that
@@ -516,24 +534,6 @@
   --switch-off-hover: 0 0% 43.5%;
   /* #6f6f6f  gray-60 */
 
-  /* Toast notification palette (consumed via @style block in Sonner.vue) */
-  --toast-success-bg: 130 71% 92%;
-  /* #defbe6  green-10 */
-  --toast-success-text: 145 100% 22%;
-  /* #0e6027 green-90 */
-  --toast-error-bg: 0 100% 97%;
-  /* #fff1f1  red-10 */
-  --toast-error-text: 357 71% 36%;
-  /* #a2191f red-90 */
-  --toast-warning-bg: 50 89% 93%;
-  /* #fdf6dd  yellow-10 */
-  --toast-warning-text: 47 100% 20%;
-  /* #684e00 yellow-90 */
-  --toast-info-bg: 213 100% 96%;
-  /* #edf5ff  blue-10 */
-  --toast-info-text: 222 100% 31%;
-  /* #002d9c blue-90 */
-
   /* Borders / focus */
   --border: 0 0% 87.8%;
   /* #e0e0e0 */
@@ -663,16 +663,6 @@
   --sidebar-accent-foreground: 0 0% 95.7%;
   --sidebar-border: 0 0% 20%;
   --sidebar-ring: 219 100% 64%;
-
-  /* Toast dark variants — deep tinted bg, mid-tone text */
-  --toast-success-bg: 145 60% 9%;
-  --toast-success-text: 137 49% 60%;
-  --toast-error-bg: 354 60% 10%;
-  --toast-error-text: 354 94% 70%;
-  --toast-warning-bg: 47 60% 10%;
-  --toast-warning-text: 47 89% 65%;
-  --toast-info-bg: 219 60% 11%;
-  --toast-info-text: 219 100% 72%;
 }
 
 @theme inline {
@@ -787,44 +777,89 @@
     letter-spacing: 0;
   }
 
-  /*
-   * inline notifications (toasts).
-   * - 3px solid left bar in the status color (no outline on the other sides)
-   * - Title bold + subtitle inline next to it
-   * - Filled status icon on the left
-   * - No close button
-   */
+  /* Toasts — card surface + soft-popover elevation, status via the colored glyph. */
   [data-sonner-toast] {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-    padding: 14px 16px !important;
-    gap: 12px !important;
+    --toast-accent: hsl(var(--muted-foreground));
+    padding: 0.875rem 1rem !important;
+    gap: 0.75rem !important;
+    border-radius: 1rem !important;
     font-family: var(--font-sans);
+    box-shadow:
+      0 1px 2px 0 rgb(15 23 42 / 0.06),
+      0 8px 24px -6px rgb(15 23 42 / 0.16),
+      0 16px 48px -12px rgb(15 23 42 / 0.10) !important;
   }
+
+  .dark [data-sonner-toast] {
+    background: hsl(var(--card) / 0.88) !important;
+    backdrop-filter: blur(24px);
+    box-shadow:
+      0 2px 4px 0 rgb(0 0 0 / 0.45),
+      0 12px 32px -6px rgb(0 0 0 / 0.55),
+      0 24px 56px -12px rgb(0 0 0 / 0.45) !important;
+  }
+
+  [data-sonner-toast][data-type="success"] { --toast-accent: hsl(var(--success)); }
+  [data-sonner-toast][data-type="error"] { --toast-accent: hsl(var(--destructive)); }
+  [data-sonner-toast][data-type="warning"] { --toast-accent: hsl(var(--warning)); }
+  [data-sonner-toast][data-type="info"] { --toast-accent: hsl(var(--info)); }
+  [data-sonner-toast][data-type="loading"] { --toast-accent: hsl(var(--muted-foreground)); }
 
   [data-sonner-toast] [data-content] {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px 6px;
+    flex-direction: column;
+    gap: 0.125rem;
   }
 
   [data-sonner-toast] [data-title] {
     font-weight: 600;
     font-size: 0.875rem;
     line-height: 1.25rem;
+    letter-spacing: -0.01em;
+    color: hsl(var(--card-foreground)) !important;
   }
 
+  /* !important: vue-sonner's stylesheet is unlayered and outranks this @layer rule. */
   [data-sonner-toast] [data-description] {
     font-weight: 400;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    opacity: 1;
+    font-size: 0.8125rem;
+    line-height: 1.2rem;
+    color: hsl(var(--muted-foreground)) !important;
+    opacity: 1 !important;
     margin: 0;
   }
 
   [data-sonner-toast] [data-icon] {
-    align-self: flex-start;
-    margin-top: 1px;
+    align-self: center;
+    flex-shrink: 0;
+    margin: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--toast-accent);
+  }
+
+  [data-sonner-toast] [data-icon] svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  [data-sonner-toast] [data-icon] > div {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  [data-sonner-toast] [data-close-button] {
+    border: none !important;
+    border-radius: 9999px !important;
+    background: hsl(var(--foreground) / 0.08) !important;
+    color: hsl(var(--muted-foreground)) !important;
+    transition: background-color 110ms, color 110ms;
+  }
+
+  [data-sonner-toast] [data-close-button]:hover {
+    background: hsl(var(--foreground) / 0.12) !important;
+    color: hsl(var(--foreground)) !important;
   }
 }
 

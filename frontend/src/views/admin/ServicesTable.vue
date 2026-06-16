@@ -25,13 +25,13 @@
   >
     <div class="space-y-2">
       <Label for="svc_name">Service name</Label>
-      <Input id="svc_name" v-model="form.name" placeholder="e.g. Kitchen Sink Repair" required />
+      <Input id="svc_name" v-model="form.name" placeholder="e.g. Kitchen Sink Repair" required :aria-invalid="invalid.name || undefined" />
     </div>
 
     <div class="space-y-2">
       <Label for="svc_category">Category</Label>
       <Select v-model="form.category">
-        <SelectTrigger id="svc_category">
+        <SelectTrigger id="svc_category" :aria-invalid="invalid.category || undefined">
           <SelectValue placeholder="Select a category" />
         </SelectTrigger>
         <SelectContent>
@@ -86,11 +86,25 @@
     <div class="grid grid-cols-2 gap-3">
       <div class="space-y-2">
         <Label for="svc_price">Base price (₹)</Label>
-        <Input id="svc_price" v-model.number="form.base_price" type="number" min="1" required />
+        <Input
+          id="svc_price"
+          v-model.number="form.base_price"
+          type="number"
+          min="1"
+          required
+          :aria-invalid="invalid.base_price || undefined"
+        />
       </div>
       <div class="space-y-2">
         <Label for="svc_time">Duration (min)</Label>
-        <Input id="svc_time" v-model.number="form.time_required" type="number" min="1" required />
+        <Input
+          id="svc_time"
+          v-model.number="form.time_required"
+          type="number"
+          min="1"
+          required
+          :aria-invalid="invalid.time_required || undefined"
+        />
       </div>
     </div>
 
@@ -101,11 +115,6 @@
       </div>
       <Switch v-model="form.is_active" />
     </div>
-
-    <Alert v-if="errorMessage" variant="destructive">
-      <PhWarningCircle class="size-4" weight="bold" />
-      <AlertDescription>{{ errorMessage }}</AlertDescription>
-    </Alert>
 
     <template #footer>
       <Button type="button" variant="secondary" @click="closeModal">Cancel</Button>
@@ -118,19 +127,17 @@
 
 <script lang="ts" setup>
 import {
-  PhWarningCircle,
   PhPencilSimple,
   PhPlus,
   PhTrash,
 } from '@phosphor-icons/vue';
-import { computed, h, reactive, ref } from "vue";
+import { computed, h, nextTick, reactive, ref, watch } from "vue";
 import type { ColumnDef } from "@tanstack/vue-table";
 
 import AiMark from "@/components/AiMark.vue";
 import AiSurface from "@/components/AiSurface.vue";
 import RowActions from "@/components/RowActions.vue";
 import StatusBadge from "@/components/StatusBadge.vue";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
@@ -142,6 +149,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
 import { CATEGORY_NAMES as CATEGORIES } from "@/lib/categories";
 import { generateServiceDescription, type AgentEvent } from "@/lib/genai";
+import { useNotificationsStore } from "@/stores/notifications";
 
 export interface AdminService {
   id: number;
@@ -162,7 +170,8 @@ const editingId = ref<number | null>(null);
 const submitting = ref(false);
 const generating = ref(false);
 const aiDescription = ref(false);
-const errorMessage = ref("");
+const toasts = useNotificationsStore();
+const invalid = reactive({ name: false, category: false, base_price: false, time_required: false });
 
 const form = reactive({
   name: "",
@@ -172,6 +181,11 @@ const form = reactive({
   time_required: 0,
   is_active: true,
 });
+
+watch(() => form.name, (v) => { if (v.trim()) invalid.name = false; });
+watch(() => form.category, (v) => { if (v) invalid.category = false; });
+watch(() => form.base_price, (v) => { if (v > 0) invalid.base_price = false; });
+watch(() => form.time_required, (v) => { if (v > 0) invalid.time_required = false; });
 
 const descriptionStr = computed<string>({
   get: () => form.description ?? "",
@@ -234,8 +248,11 @@ const columns: ColumnDef<AdminService>[] = [
 function openCreate() {
   editingId.value = null;
   Object.assign(form, { name: "", description: "", category: "", base_price: 0, time_required: 0, is_active: true });
+  invalid.name = false;
+  invalid.category = false;
+  invalid.base_price = false;
+  invalid.time_required = false;
   aiDescription.value = false;
-  errorMessage.value = "";
   modalOpen.value = true;
 }
 
@@ -249,8 +266,11 @@ function openEdit(service: AdminService) {
     time_required: service.time_required,
     is_active: service.is_active,
   });
+  invalid.name = false;
+  invalid.category = false;
+  invalid.base_price = false;
+  invalid.time_required = false;
   aiDescription.value = false;
-  errorMessage.value = "";
   modalOpen.value = true;
 }
 
@@ -278,12 +298,33 @@ async function onGenerate() {
 
 async function submitService() {
   if (submitting.value) return;
-  if (form.base_price <= 0 || form.time_required <= 0) {
-    errorMessage.value = "Price and duration must be greater than 0.";
+  const nameMissing = !form.name.trim();
+  const categoryMissing = !form.category;
+  const priceBad = form.base_price <= 0;
+  const durationBad = form.time_required <= 0;
+  if (nameMissing || categoryMissing || priceBad || durationBad) {
+    toasts.error(
+      "Check the form",
+      nameMissing
+        ? "Service name is required."
+        : categoryMissing
+          ? "Pick a category."
+          : "Price and duration must be greater than 0.",
+    );
+    // Re-flag next tick so the shake animation replays on a repeat submit.
+    invalid.name = false;
+    invalid.category = false;
+    invalid.base_price = false;
+    invalid.time_required = false;
+    void nextTick(() => {
+      invalid.name = nameMissing;
+      invalid.category = categoryMissing;
+      invalid.base_price = priceBad;
+      invalid.time_required = durationBad;
+    });
     return;
   }
   submitting.value = true;
-  errorMessage.value = "";
   try {
     const payload = {
       name: form.name,
@@ -301,7 +342,7 @@ async function submitService() {
     emit("changed");
     closeModal();
   } catch (err) {
-    errorMessage.value = err instanceof ApiError ? err.detail : "Failed to save service.";
+    toasts.error("Couldn't save service", err instanceof ApiError ? err.detail : "Please try again.");
   } finally {
     submitting.value = false;
   }

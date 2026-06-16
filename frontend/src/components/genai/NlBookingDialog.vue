@@ -83,10 +83,6 @@
         </Label>
         <Textarea id="nl-remarks" v-model="form.remarks" rows="2" />
       </div>
-      <Alert v-if="errorMessage" variant="destructive">
-        <PhWarningCircle class="size-4" weight="bold" />
-        <AlertDescription>{{ errorMessage }}</AlertDescription>
-      </Alert>
     </div>
 
     <template #footer>
@@ -117,7 +113,6 @@
 
 <script lang="ts" setup>
 import {
-  PhWarningCircle,
   PhArrowLeft,
   PhCaretRight,
 } from '@phosphor-icons/vue';
@@ -125,7 +120,6 @@ import { reactive, ref } from "vue";
 
 import AiMark from "@/components/AiMark.vue";
 import AiSurface from "@/components/AiSurface.vue";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -135,6 +129,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
 import { parseRequestIntent, streamScript, tokenize, type AgentEvent } from "@/lib/genai";
 import { useAuthStore } from "@/stores/auth";
+import { useNotificationsStore } from "@/stores/notifications";
 
 interface ServiceLite {
   id: number;
@@ -154,6 +149,7 @@ const EXAMPLES = [
 ];
 
 const auth = useAuthStore();
+const toasts = useNotificationsStore();
 
 const stage = ref<"compose" | "review" | "form">("compose");
 const prompt = ref("");
@@ -161,7 +157,6 @@ const narrative = ref("");
 const streaming = ref(false);
 const matchedService = ref<ServiceLite | null>(null);
 const submitting = ref(false);
-const errorMessage = ref("");
 
 const form = reactive({
   scheduled_time: "",
@@ -232,13 +227,11 @@ function restart() {
   stage.value = "compose";
   narrative.value = "";
   matchedService.value = null;
-  errorMessage.value = "";
 }
 
 async function onSubmit() {
   if (!matchedService.value) return;
   submitting.value = true;
-  errorMessage.value = "";
   try {
     await api.post("/api/requests", {
       service_id: matchedService.value.id,
@@ -249,8 +242,10 @@ async function onSubmit() {
     });
     emit("booked");
   } catch (err) {
-    errorMessage.value =
-      err instanceof ApiError ? err.detail : "Failed to book service.";
+    toasts.error(
+      "Couldn't book service",
+      err instanceof ApiError ? err.detail : "Please try again.",
+    );
   } finally {
     submitting.value = false;
   }

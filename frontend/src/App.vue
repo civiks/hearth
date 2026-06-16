@@ -5,7 +5,7 @@
       <router-view />
     </component>
   </TooltipProvider>
-  <Toaster :position="isDesktop ? 'top-right' : 'bottom-center'" rich-colors />
+  <Toaster :position="isDesktop ? 'top-right' : 'top-center'" />
   <ConfirmDialog />
 </template>
 

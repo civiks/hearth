@@ -31,7 +31,7 @@ const forwardedProps = useForwardProps(delegatedProps)
       'hover:bg-secondary/60 dark:hover:bg-black/35',
       'focus-visible:outline-none focus-visible:bg-muted dark:focus-visible:bg-black/30 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive',
+      'aria-invalid:border-destructive aria-invalid:bg-destructive/8 dark:aria-invalid:bg-destructive/15 aria-invalid:ring-2 aria-invalid:ring-destructive/30 aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive/30 aria-invalid:animate-field-shake',
       '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-3.5',
       '*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5',
       props.class,

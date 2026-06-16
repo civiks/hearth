@@ -12,13 +12,14 @@
       Welcome back
     </h1>
 
-    <form class="space-y-3" @submit.prevent="submit">
+    <form class="space-y-3" novalidate @submit.prevent="submit">
       <Input
         v-model="email"
         type="email"
         placeholder="Email address"
         autocomplete="email"
         required
+        :aria-invalid="invalid.email || undefined"
         class="bg-muted border-transparent h-12 px-5 rounded-full"
       />
 
@@ -31,6 +32,7 @@
             autocomplete="current-password"
             class="bg-muted border-transparent h-12 px-5 pr-12 rounded-full"
             required
+            :aria-invalid="invalid.password || undefined"
           />
           <button
             type="button"
@@ -54,7 +56,7 @@
         </div>
       </div>
 
-      <Button type="submit" class="w-full rounded-full h-12 font-semibold" :disabled="loading">
+      <Button type="submit" class="w-full rounded-full h-12 font-semibold" :disabled="loading || !email.trim() || !password">
         {{ loading ? "Signing in…" : "Sign in" }}
       </Button>
     </form>
@@ -78,7 +80,7 @@ import {
   PhEye,
   PhEyeSlash,
 } from '@phosphor-icons/vue';
-import { ref } from "vue";
+import { nextTick, reactive, ref, watch } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import BrandMark from "@/components/BrandMark.vue";
@@ -96,6 +98,10 @@ const email = ref("");
 const password = ref("");
 const showPassword = ref(false);
 const loading = ref(false);
+const invalid = reactive({ email: false, password: false });
+
+watch(email, (v) => { if (v.trim()) invalid.email = false; });
+watch(password, (v) => { if (v) invalid.password = false; });
 
 function onForgotPassword() {
   if (!email.value.trim()) {
@@ -109,6 +115,19 @@ function onForgotPassword() {
 }
 
 async function submit() {
+  const emailMissing = !email.value.trim();
+  const passwordMissing = !password.value;
+  if (emailMissing || passwordMissing) {
+    toasts.error("Check the form", "Enter your email and password.");
+    invalid.email = false;
+    invalid.password = false;
+    // Re-flag next tick so the shake animation replays on a repeat submit.
+    void nextTick(() => {
+      invalid.email = emailMissing;
+      invalid.password = passwordMissing;
+    });
+    return;
+  }
   loading.value = true;
   try {
     const user = await api.post<User>("/api/auth/login", {

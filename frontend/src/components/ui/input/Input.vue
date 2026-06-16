@@ -30,7 +30,7 @@ const modelValue = useVModel(props, 'modelValue', emits, {
       'hover:bg-input-hover',
       'focus-visible:outline-none focus-visible:bg-muted dark:focus-visible:bg-input focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30',
       'disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none',
-      'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive',
+      'aria-invalid:border-destructive aria-invalid:bg-destructive/8 dark:aria-invalid:bg-destructive/15 aria-invalid:ring-2 aria-invalid:ring-destructive/30 aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive/30 aria-invalid:animate-field-shake',
       'file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:text-foreground',
       props.class,
     )"

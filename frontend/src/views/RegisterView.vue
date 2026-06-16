@@ -87,13 +87,14 @@
         {{ role === "user" ? "A few details and you're set" : "We'll review your profile before going live" }}
       </p>
 
-      <form id="register-form" class="space-y-3 pb-24 sm:pb-0" @submit.prevent="submit">
+      <form id="register-form" class="space-y-3 pb-24 sm:pb-0" novalidate @submit.prevent="submit">
         <Input
           v-model="email"
           type="email"
           placeholder="Email address"
           autocomplete="email"
           required
+          :aria-invalid="invalid.email || undefined"
           class="bg-muted border-transparent h-12 px-5 rounded-full"
         />
 
@@ -105,6 +106,7 @@
             autocomplete="new-password"
             class="bg-muted border-transparent h-12 px-5 pr-12 rounded-full"
             required
+            :aria-invalid="invalid.password || undefined"
           />
           <button
             type="button"
@@ -123,6 +125,7 @@
           placeholder="Full name"
           autocomplete="name"
           required
+          :aria-invalid="invalid.full_name || undefined"
           class="bg-muted border-transparent h-12 px-5 rounded-full"
         />
 
@@ -131,6 +134,7 @@
           placeholder="Address"
           autocomplete="street-address"
           required
+          :aria-invalid="invalid.address || undefined"
           class="bg-muted border-transparent h-12 px-5 rounded-full"
         />
 
@@ -139,6 +143,7 @@
           placeholder="Pincode"
           autocomplete="postal-code"
           required
+          :aria-invalid="invalid.pincode || undefined"
           class="bg-muted border-transparent h-12 px-5 rounded-full"
         />
 
@@ -209,7 +214,7 @@ import {
   PhHouseLine,
   PhWrench,
 } from '@phosphor-icons/vue';
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, reactive, ref, watch } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import BrandMark from "@/components/BrandMark.vue";
@@ -260,6 +265,20 @@ const agreedToTos = ref(false);
 const services = ref<Service[]>([]);
 const loading = ref(false);
 
+const invalid = reactive({
+  email: false,
+  password: false,
+  full_name: false,
+  address: false,
+  pincode: false,
+});
+
+watch(email, (v) => { if (v.trim()) invalid.email = false; });
+watch(password, (v) => { if (v) invalid.password = false; });
+watch(full_name, (v) => { if (v.trim()) invalid.full_name = false; });
+watch(address, (v) => { if (v.trim()) invalid.address = false; });
+watch(pincode, (v) => { if (v.trim()) invalid.pincode = false; });
+
 watch(
   [step, role],
   ([s, r]) => {
@@ -279,6 +298,20 @@ async function loadServices() {
 }
 
 async function submit() {
+  const checks = {
+    email: !email.value.trim(),
+    password: !password.value,
+    full_name: !full_name.value.trim(),
+    address: !address.value.trim(),
+    pincode: !pincode.value.trim(),
+  };
+  if (Object.values(checks).some(Boolean)) {
+    toasts.error("Check the form", "Please fill in all required fields.");
+    Object.keys(invalid).forEach((k) => { invalid[k as keyof typeof invalid] = false; });
+    // Re-flag next tick so the shake animation replays on a repeat submit.
+    void nextTick(() => Object.assign(invalid, checks));
+    return;
+  }
   loading.value = true;
   try {
     const payload: Record<string, unknown> = {

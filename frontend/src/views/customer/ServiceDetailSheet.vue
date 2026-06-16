@@ -166,10 +166,6 @@
         <Textarea id="remarks" v-model="form.remarks" rows="3" placeholder="Any specific requirements…" />
       </div>
 
-      <Alert v-if="errorMessage" variant="destructive">
-        <PhWarningCircle class="size-4" />
-        <AlertDescription>{{ errorMessage }}</AlertDescription>
-      </Alert>
     </form>
 
     <template #footer>
@@ -212,6 +208,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
 import { formatSmartDate } from "@/lib/format";
 import { useAuthStore } from "@/stores/auth";
+import { useNotificationsStore } from "@/stores/notifications";
 import ProfessionalPickCard from "@/views/customer/ProfessionalPickCard.vue";
 import type { Service } from "@/views/customer/ServicesGrid.vue";
 
@@ -254,8 +251,8 @@ const selectedProName = computed(() =>
     : professionals.value.find((p) => p.id === selectedProId.value)?.full_name ?? null,
 );
 
+const toasts = useNotificationsStore();
 const submitting = ref(false);
-const errorMessage = ref("");
 
 const form = reactive({
   scheduled_time: defaultScheduledTime(),
@@ -316,11 +313,10 @@ function useDefault() {
 
 async function onSubmit() {
   if (auth.is_blocked) {
-    errorMessage.value = "Account is blocked.";
+    toasts.error("Account blocked", "Please contact support to resolve this.");
     return;
   }
   submitting.value = true;
-  errorMessage.value = "";
   try {
     await api.post("/api/requests", {
       service_id: props.service.id,
@@ -332,7 +328,7 @@ async function onSubmit() {
     });
     emit("booked");
   } catch (err) {
-    errorMessage.value = err instanceof ApiError ? err.detail : "Failed to book service.";
+    toasts.error("Couldn't book service", err instanceof ApiError ? err.detail : "Please try again.");
   } finally {
     submitting.value = false;
   }

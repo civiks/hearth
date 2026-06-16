@@ -31,11 +31,6 @@
       <Textarea id="edit_remarks" v-model="form.remarks" />
     </div>
 
-    <Alert v-if="errorMessage" variant="destructive">
-      <PhWarningCircle class="size-4" weight="bold" />
-      <AlertDescription>{{ errorMessage }}</AlertDescription>
-    </Alert>
-
     <template #footer>
       <Button type="button" variant="secondary" @click="$emit('close')">Cancel</Button>
       <Button type="button" class="flex-1" :disabled="submitting" @click="onSubmit">
@@ -46,25 +41,22 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  PhWarningCircle,
-} from '@phosphor-icons/vue';
 import { reactive, ref } from "vue";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ResponsiveSheet from "@/components/ui/ResponsiveSheet.vue";
 import { Textarea } from "@/components/ui/textarea";
 import { ApiError, api } from "@/lib/api";
+import { useNotificationsStore } from "@/stores/notifications";
 import type { CustomerRequest } from "./RequestCard.vue";
 
 const props = defineProps<{ request: CustomerRequest }>();
 const emit = defineEmits<{ close: []; updated: [] }>();
 
+const toasts = useNotificationsStore();
 const submitting = ref(false);
-const errorMessage = ref("");
 
 const initialDate = props.request.scheduled_time
   ? new Date(props.request.scheduled_time)
@@ -84,7 +76,6 @@ function nowLocal(): string {
 
 async function onSubmit() {
   submitting.value = true;
-  errorMessage.value = "";
   try {
     await api.put(`/api/requests/${props.request.id}`, {
       scheduled_time: form.scheduled_time,
@@ -94,8 +85,10 @@ async function onSubmit() {
     });
     emit("updated");
   } catch (err) {
-    errorMessage.value =
-      err instanceof ApiError ? err.detail : "Failed to update service request.";
+    toasts.error(
+      "Couldn't update request",
+      err instanceof ApiError ? err.detail : "Please try again.",
+    );
   } finally {
     submitting.value = false;
   }
