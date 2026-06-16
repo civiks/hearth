@@ -14,65 +14,74 @@
           overlayHeader ? 'h-32 topbar-mask-gradient' : 'h-14 bg-surface-inverse border-b border-surface-inverse-foreground/10',
         ]"
       />
-      <div
-        class="relative mx-auto w-full max-w-7xl h-14 flex items-center justify-between px-6"
-      >
+      <div class="relative mx-auto w-full max-w-7xl h-14 flex items-center justify-between sm:grid sm:grid-cols-[1fr_auto_1fr] px-6">
         <RouterLink to="/" class="flex items-center gap-2.5">
           <BrandMark class="vt-brand h-6 w-auto" />
           <span class="font-display font-semibold text-lg tracking-tight">hearth</span>
         </RouterLink>
 
-        <!-- Desktop nav -->
-        <nav class="hidden sm:flex items-center gap-1">
-          <Button
-            v-if="!auth.logged_in"
-            variant="ghost"
-            class="rounded-full h-9 px-5 bg-surface-inverse-foreground/10 text-surface-inverse-foreground hover:bg-surface-inverse-foreground/20 hover:text-surface-inverse-foreground"
-            @click="$router.push('/login')"
-          >
-            Sign in
-          </Button>
-          <Button
-            v-if="!auth.logged_in"
-            class="rounded-full h-9 px-5"
-            @click="$router.push('/register')"
-          >
-            Get started
-          </Button>
+        <!-- Desktop nav links (centered) -->
+        <nav v-if="!auth.logged_in" class="hidden sm:flex items-center gap-1">
+          <RouterLink
+            v-for="link in NAV_LINKS"
+            :key="link.to"
+            :to="link.to"
+            class="text-sm px-3 py-1.5 text-surface-inverse-foreground/70 hover:text-surface-inverse-foreground transition-colors"
+          >{{ link.label }}</RouterLink>
+        </nav>
+
+        <!-- Desktop auth buttons + mobile hamburger -->
+        <div class="flex items-center gap-1 justify-end">
+          <template v-if="!auth.logged_in">
+            <Button
+              variant="ghost"
+              class="hidden sm:inline-flex rounded-full h-9 px-5 bg-surface-inverse-foreground/10 text-surface-inverse-foreground hover:bg-surface-inverse-foreground/20 hover:text-surface-inverse-foreground"
+              @click="$router.push('/login')"
+            >Sign in</Button>
+            <Button class="hidden sm:inline-flex rounded-full h-9 px-5" @click="$router.push('/register')">
+              Get started
+            </Button>
+          </template>
           <Button
             v-else
             variant="ghost"
-            class="rounded-full h-9 px-5 bg-surface-inverse-foreground/10 text-surface-inverse-foreground hover:bg-surface-inverse-foreground/20 hover:text-surface-inverse-foreground"
+            class="hidden sm:inline-flex rounded-full h-9 px-5 bg-surface-inverse-foreground/10 text-surface-inverse-foreground hover:bg-surface-inverse-foreground/20 hover:text-surface-inverse-foreground"
             @click="$router.push(home)"
-          >
-            Go to dashboard
-          </Button>
-        </nav>
+          >Go to dashboard</Button>
 
-        <!-- Mobile menu -->
-        <DropdownMenu class="sm:hidden">
-          <DropdownMenuTrigger as-child>
-            <Button
-              variant="ghost"
-              size="icon"
-              class="sm:hidden text-surface-inverse-foreground hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground"
-              aria-label="Menu"
-            >
-              <PhEquals class="size-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" class="w-44">
-            <DropdownMenuItem v-if="!auth.logged_in" @click="router.push('/login')">
-              Sign in
-            </DropdownMenuItem>
-            <DropdownMenuItem v-if="!auth.logged_in" @click="router.push('/register')">
-              Get started
-            </DropdownMenuItem>
-            <DropdownMenuItem v-else @click="router.push(home)">
-              Go to dashboard
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          <Button
+            variant="ghost"
+            size="icon"
+            class="sm:hidden text-surface-inverse-foreground hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground"
+            aria-label="Menu"
+            @click="mobileNavOpen = true"
+          >
+            <PhEquals class="size-5" weight="bold" />
+          </Button>
+        </div>
+
+        <Sheet :open="mobileNavOpen" @update:open="mobileNavOpen = $event">
+          <SheetContent class="max-w-[14rem]">
+            <div class="px-4 pt-4 pb-2 text-xs font-medium tracking-tight text-foreground/40">hearth</div>
+            <nav class="flex flex-col px-3 pb-3">
+              <template v-if="!auth.logged_in">
+                <button class="text-left text-sm font-medium py-1.5 px-1 text-foreground hover:text-primary transition-colors" @click="router.push('/login'); mobileNavOpen = false">Sign in</button>
+                <button class="text-left text-sm font-medium py-1.5 px-1 text-foreground hover:text-primary transition-colors" @click="router.push('/register'); mobileNavOpen = false">Get started</button>
+              </template>
+              <button v-else class="text-left text-sm font-medium py-1.5 px-1 text-foreground hover:text-primary transition-colors" @click="router.push(home); mobileNavOpen = false">Go to dashboard</button>
+
+              <template v-for="group in NAV_GROUPS" :key="group.label">
+                <div class="my-2 text-xs font-medium text-foreground/40 px-1 pt-1">{{ group.label }}</div>
+                <button
+                  v-for="link in group.links"
+                  :key="link.to"
+                  class="text-left text-sm py-1.5 px-1 text-foreground/80 hover:text-primary transition-colors"
+                  @click="router.push(link.to); mobileNavOpen = false"
+                >{{ link.label }}</button>
+              </template>
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
     <main :class="['flex-1', !overlayHeader && 'sm:pt-14']">
@@ -152,17 +161,12 @@
 import {
   PhEquals,
 } from '@phosphor-icons/vue';
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
 import BrandMark from "@/components/BrandMark.vue";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { homePathForRole } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 
@@ -170,7 +174,30 @@ const auth = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 const home = computed(() => homePathForRole(auth.role));
+const mobileNavOpen = ref(false);
 
 const isLanding = computed(() => route.path === "/");
 const overlayHeader = isLanding;
+
+const NAV_LINKS = [
+  { label: "Browse services", to: "/register" },
+  { label: "For pros", to: "/pros" },
+  { label: "Help", to: "/help" },
+];
+
+const NAV_GROUPS = [
+  { label: "Explore", links: [
+    { label: "Browse services", to: "/register" },
+    { label: "How it works", to: "/help" },
+    { label: "Help center", to: "/help" },
+  ]},
+  { label: "Professionals", links: [
+    { label: "Become a pro", to: "/pros" },
+    { label: "Pro app", to: "/pro-app" },
+  ]},
+  { label: "Legal", links: [
+    { label: "Privacy", to: "/privacy" },
+    { label: "Terms", to: "/terms" },
+  ]},
+];
 </script>
