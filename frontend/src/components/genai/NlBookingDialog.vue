@@ -1,5 +1,5 @@
 <template>
-  <ResponsiveSheet :open="true" @close="$emit('close')">
+  <ResponsiveSheet :open="true" :morph-key="stage" @close="$emit('close')">
     <template #title>
       <span class="flex items-center gap-2">
         <AiMark class="size-4" />

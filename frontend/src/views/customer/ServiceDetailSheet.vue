@@ -3,6 +3,7 @@
     :open="true"
     :title="step === 'schedule' ? `Book ${service.name}` : service.name"
     :description="step === 'schedule' ? 'Choose a time and address.' : (service.category ?? undefined)"
+    :morph-key="step"
     body-class="space-y-6"
     @close="$emit('close')"
   >

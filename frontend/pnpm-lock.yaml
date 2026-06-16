@@ -14,9 +14,6 @@ importers:
       '@fontsource-variable/inter-tight':
         specifier: ^5.2.7
         version: 5.2.7
-      '@fontsource-variable/manrope':
-        specifier: ^5.2.8
-        version: 5.2.8
       '@fontsource/metropolis':
         specifier: ^5.2.5
         version: 5.2.5
@@ -345,9 +342,6 @@ packages:
 
   '@fontsource-variable/inter@5.2.8':
     resolution: {integrity: sha512-kOfP2D+ykbcX/P3IFnokOhVRNoTozo5/JxhAIVYLpea/UBmCQ/YWPBfWIDuBImXX/15KH+eKh4xpEUyS2sQQGQ==}
-
-  '@fontsource-variable/manrope@5.2.8':
-    resolution: {integrity: sha512-nc9lOuCRz73UHnovDE2bwXUdghE2SEOc7Aii0qGe3CLyE03W1a7VnY5Z6euRiapiKbCkGS+eXbY3s/kvWeGeSw==}
 
   '@fontsource/metropolis@5.2.5':
     resolution: {integrity: sha512-zAz6XS1ZXVXZadcqsOnToiePAKEiEywxOwILEaE4sRl+pVOFQI/30xMiKvjQae1NRK3TbeKxJAmt+yFkPguXJw==}
@@ -3460,8 +3454,6 @@ snapshots:
   '@fontsource-variable/inter-tight@5.2.7': {}
 
   '@fontsource-variable/inter@5.2.8': {}
-
-  '@fontsource-variable/manrope@5.2.8': {}
 
   '@fontsource/metropolis@5.2.5': {}
 

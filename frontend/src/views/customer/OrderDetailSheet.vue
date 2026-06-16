@@ -127,6 +127,5 @@ function onEdit() {
 
 function onCancel() {
   emit("cancel");
-  emit("close");
 }
 </script>

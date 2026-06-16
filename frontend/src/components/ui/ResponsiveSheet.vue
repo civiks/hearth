@@ -20,7 +20,18 @@
         </div>
       </slot>
 
-      <div :class="bodyClasses" data-vaul-no-drag>
+      <div
+        v-if="morphKey !== undefined"
+        class="relative flex-1 min-h-0 overflow-y-auto"
+        data-vaul-no-drag
+      >
+        <Transition name="dm">
+          <div :key="morphKey" :class="paneClasses">
+            <slot />
+          </div>
+        </Transition>
+      </div>
+      <div v-else :class="bodyClasses" data-vaul-no-drag>
         <slot />
       </div>
 
@@ -45,6 +56,7 @@ interface Props {
   description?: string | null;
   contentClass?: string;
   bodyClass?: string;
+  morphKey?: string | number;
 }
 
 const props = defineProps<Props>();
@@ -75,5 +87,9 @@ const bodyClasses = computed(() =>
     slots.footer ? "pb-24" : "pb-5",
     props.bodyClass,
   ),
+);
+
+const paneClasses = computed(() =>
+  cn("px-5 pt-5 space-y-4", slots.footer ? "pb-24" : "pb-5", props.bodyClass),
 );
 </script>
