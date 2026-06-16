@@ -139,14 +139,14 @@
           <Avatar :name="auth.full_name ?? ''" :src="auth.avatar_url" size="size-8" fallback-class="text-xs" />
         </button>
 
-        <Drawer v-model:open="menuOpen" should-scale-background>
+        <Drawer v-model:open="menuOpen">
           <DrawerContent>
-            <div class="flex items-center gap-2.5 px-4 pt-4 pb-3">
-              <button class="flex items-center gap-2.5 min-w-0 flex-1 text-left" @click="navigate('/account')">
-                <Avatar :name="auth.full_name ?? ''" :src="auth.avatar_url" size="size-8 shrink-0" fallback-class="text-xs" />
+            <div class="flex items-center gap-3 px-5 pt-5 pb-3">
+              <button class="flex items-center gap-3 min-w-0 flex-1 text-left" @click="navigate('/account')">
+                <Avatar :name="auth.full_name ?? ''" :src="auth.avatar_url" size="size-10 shrink-0" fallback-class="text-sm" />
                 <div class="flex flex-col leading-tight min-w-0">
-                  <span class="text-sm font-semibold tracking-tight truncate">{{ auth.full_name }}</span>
-                  <span class="text-xs tracking-tight text-muted-foreground truncate">{{ auth.email }}</span>
+                  <span class="text-base font-semibold tracking-tight truncate">{{ auth.full_name }}</span>
+                  <span class="text-sm tracking-tight text-muted-foreground truncate">{{ auth.email }}</span>
                 </div>
               </button>
               <div class="flex items-center gap-0.5 shrink-0">
@@ -175,20 +175,20 @@
               </div>
             </div>
 
-            <div class="overflow-y-auto p-1.5 pb-3 scroll-fade-y">
-              <div class="h-px bg-border -mx-1.5 mb-1.5" />
+            <div class="overflow-y-auto px-2.5 pb-3 scroll-fade-y">
+              <div class="h-px bg-border -mx-2.5 mb-2" />
 
               <div class="text-muted-foreground px-3 pt-2 pb-1.5 text-[11px] font-medium uppercase tracking-wider">Theme</div>
               <button
                 v-for="t in themeOptions"
                 :key="t.value"
-                class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium tracking-tight hover:bg-accent transition-colors"
+                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent transition-colors"
                 :class="theme === t.value ? 'bg-accent/60 text-accent-foreground' : ''"
                 @click="setTheme(t.value as Theme)"
               >
-                <component :is="t.icon" class="size-4" :class="theme === t.value ? '' : 'text-muted-foreground'" />
+                <component :is="t.icon" class="size-5" :class="theme === t.value ? '' : 'text-muted-foreground'" />
                 {{ t.label }}
-                <PhCheck v-if="theme === t.value" class="ml-auto size-3.5 text-primary" weight="bold" />
+                <PhCheck v-if="theme === t.value" class="ml-auto size-4 text-primary" weight="bold" />
               </button>
 
               <template v-if="DEMO">
@@ -196,35 +196,35 @@
                 <button
                   v-for="r in DEMO_ROLES"
                   :key="r.value"
-                  class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium tracking-tight hover:bg-accent transition-colors"
+                  class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent transition-colors"
                   :class="auth.role === r.value ? 'bg-accent/60 text-accent-foreground' : ''"
                   @click="menuOpen = false; loginAs(r.value as Role)"
                 >
-                  <component :is="r.icon" class="size-4" :class="auth.role === r.value ? '' : 'text-muted-foreground'" />
+                  <component :is="r.icon" class="size-5" :class="auth.role === r.value ? '' : 'text-muted-foreground'" />
                   {{ r.label }}
-                  <PhCheck v-if="auth.role === r.value" class="ml-auto size-3.5 text-primary" weight="bold" />
+                  <PhCheck v-if="auth.role === r.value" class="ml-auto size-4 text-primary" weight="bold" />
                 </button>
               </template>
 
-              <div class="h-px bg-border -mx-1.5 mt-1.5 mb-1.5" />
+              <div class="h-px bg-border -mx-2.5 mt-2 mb-2" />
 
               <button
                 v-if="DEMO"
-                class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium tracking-tight hover:bg-accent transition-colors"
+                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent transition-colors"
                 @click="handleResetDemo"
               >
-                <PhArrowCounterClockwise class="size-4 text-muted-foreground" weight="bold" />
+                <PhArrowCounterClockwise class="size-5 text-muted-foreground" weight="bold" />
                 Reset demo data
               </button>
               <button
-                class="w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm font-medium tracking-tight text-destructive hover:bg-destructive/10 transition-colors"
+                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight text-destructive hover:bg-destructive/10 transition-colors"
                 @click="handleLogout"
               >
-                <PhSignOut class="size-4" weight="bold" />
+                <PhSignOut class="size-5" weight="bold" />
                 Sign out
               </button>
 
-              <div class="h-px bg-border -mx-1.5 mt-1.5 mb-1.5" />
+              <div class="h-px bg-border -mx-2.5 mt-2 mb-2" />
 
               <div class="flex items-center gap-1.5 px-3 py-2 text-xs text-muted-foreground">
                 <button class="hover:text-foreground transition-colors" @click="navigate('/privacy')">Privacy policy</button>

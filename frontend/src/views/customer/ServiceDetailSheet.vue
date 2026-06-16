@@ -173,7 +173,7 @@
 
     <template #footer>
       <template v-if="step === 'details'">
-        <Button type="button" class="flex-1 rounded-[1rem]" :disabled="auth.is_blocked" @click="step = 'schedule'">
+        <Button type="button" class="flex-1" :disabled="auth.is_blocked" @click="step = 'schedule'">
           Book now
         </Button>
       </template>
@@ -181,7 +181,7 @@
         <Button type="button" variant="primary-soft" size="icon" class="size-12 rounded-full" @click="step = 'details'">
           <PhArrowLeft class="size-4" />
         </Button>
-        <Button type="button" class="flex-1 rounded-[1rem]" :disabled="submitting || auth.is_blocked" @click="onSubmit">
+        <Button type="button" class="flex-1" :disabled="submitting || auth.is_blocked" @click="onSubmit">
           {{ submitting ? "Booking…" : "Confirm booking" }}
         </Button>
       </template>

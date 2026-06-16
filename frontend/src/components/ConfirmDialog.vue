@@ -1,21 +1,22 @@
 <template>
   <!-- Desktop: centered modal -->
   <Dialog v-if="isDesktop" :open="!!pending" @update:open="(v) => !v && settle(false)">
-    <DialogContent :show-close-button="false" class="sm:max-w-sm gap-0 p-0 overflow-hidden rounded-3xl">
-      <div class="space-y-2 px-6 pt-6 pb-2">
-        <DialogTitle>{{ pending?.title }}</DialogTitle>
-        <DialogDescription v-if="pending?.description">
+    <DialogContent :show-close-button="false" class="sm:max-w-sm gap-0 p-0 overflow-hidden rounded-[2.5rem]">
+      <div class="space-y-2.5 px-7 pt-7 pb-3">
+        <component :is="icon" :class="['size-12 mb-3', iconClass]" weight="bold" />
+        <DialogTitle class="text-2xl leading-tight">{{ pending?.title }}</DialogTitle>
+        <DialogDescription v-if="pending?.description" class="text-base leading-relaxed">
           {{ pending.description }}
         </DialogDescription>
       </div>
-      <div class="px-6 pt-5 pb-6 flex gap-2 justify-end">
-        <Button variant="secondary" halo class="rounded-full px-5" @click="settle(false)">
+      <div class="px-7 pt-4 pb-7 flex gap-2.5">
+        <Button variant="secondary" halo class="flex-1 rounded-full h-11" @click="settle(false)">
           {{ pending?.cancelLabel ?? "Cancel" }}
         </Button>
         <Button
           :variant="pending?.variant === 'destructive' ? 'destructive' : 'default'"
           halo
-          class="rounded-full px-5"
+          class="flex-1 rounded-full h-11"
           @click="settle(true)"
         >
           {{ pending?.confirmLabel ?? "Confirm" }}
@@ -31,18 +32,19 @@
   >
     <DrawerContent>
       <DrawerHeader>
-        <DrawerTitle>{{ pending?.title }}</DrawerTitle>
-        <DrawerDescription v-if="pending?.description">
+        <component :is="icon" :class="['size-12 mb-2 self-start', iconClass]" weight="bold" />
+        <DrawerTitle class="text-2xl leading-tight">{{ pending?.title }}</DrawerTitle>
+        <DrawerDescription v-if="pending?.description" class="text-base leading-relaxed">
           {{ pending.description }}
         </DrawerDescription>
       </DrawerHeader>
       <DrawerFooter>
-        <Button variant="secondary" class="rounded-[1rem]" @click="settle(false)">
+        <Button variant="secondary" class="flex-1" @click="settle(false)">
           {{ pending?.cancelLabel ?? "Cancel" }}
         </Button>
         <Button
           :variant="pending?.variant === 'destructive' ? 'destructive' : 'default'"
-          class="flex-1 rounded-[1rem]"
+          class="flex-1"
           @click="settle(true)"
         >
           {{ pending?.confirmLabel ?? "Confirm" }}
@@ -53,7 +55,9 @@
 </template>
 
 <script lang="ts" setup>
+import { PhQuestion, PhWarning } from "@phosphor-icons/vue";
 import { useMediaQuery } from "@vueuse/core";
+import { computed } from "vue";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -74,4 +78,10 @@ import { useConfirm } from "@/composables/useConfirm";
 
 const { pending, settle } = useConfirm();
 const isDesktop = useMediaQuery("(min-width: 640px)");
+
+const isDestructive = computed(() => pending.value?.variant === "destructive");
+const icon = computed(() => (isDestructive.value ? PhWarning : PhQuestion));
+const iconClass = computed(() =>
+  isDestructive.value ? "text-destructive" : "text-primary",
+);
 </script>
