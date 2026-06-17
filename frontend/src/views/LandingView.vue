@@ -12,7 +12,7 @@
               <PhMapPin class="size-3.5 text-surface-inverse-foreground/70" weight="bold" />
               Now in Bangalore
             </div>
-            <h1 v-reveal="80" class="font-display text-4xl sm:text-5xl font-semibold tracking-[-0.03em] mb-5 sm:mb-6 leading-[1.05] text-balance text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-100 to-zinc-400">
+            <h1 v-reveal="80" class="font-display text-4xl sm:text-5xl font-semibold tracking-[-0.03em] mb-5 sm:mb-6 pb-[0.12em] leading-[1.1] text-balance text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-100 to-zinc-400">
               Home services, done right.
             </h1>
             <p v-reveal="160" class="text-base sm:text-lg text-surface-inverse-foreground/65 mb-7 sm:mb-8 max-w-lg leading-relaxed tracking-[-0.01em]">

@@ -2,10 +2,10 @@ import { createPinia } from "pinia";
 import { createApp } from "vue";
 
 import "@fontsource-variable/inter";
-import "@fontsource/metropolis/300.css";
-import "@fontsource/metropolis/400.css";
-import "@fontsource/metropolis/600.css";
-import "@fontsource/metropolis/700.css";
+import "@fontsource/open-runde/400.css";
+import "@fontsource/open-runde/500.css";
+import "@fontsource/open-runde/600.css";
+import "@fontsource/open-runde/700.css";
 
 import App from "./App.vue";
 import "./assets/tailwind.css";

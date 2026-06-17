@@ -6,7 +6,7 @@ export { default as Button } from './Button.vue'
 export const buttonVariants = cva(
   // -style focus: 2px solid inset primary outline (drawn inside the button bounds, never clipped).
   // `press` carries the color/shadow transitions and the scale-on-active feedback.
-  'group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap text-sm font-normal cursor-pointer press outline-none select-none rounded-md border border-transparent [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--primary))] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive',
+  'group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap font-display text-sm font-medium cursor-pointer press outline-none select-none rounded-md border border-transparent [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_hsl(var(--primary))] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive',
   {
     variants: {
       variant: {
