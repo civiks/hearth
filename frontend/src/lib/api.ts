@@ -45,6 +45,35 @@ async function request<T>(
   return (await res.json()) as T;
 }
 
+async function upload<T>(path: string, file: File): Promise<T> {
+  if (DEMO) {
+    const { demoUpload } = await import("./demo/mockApi");
+    return demoUpload<T>(path, file);
+  }
+
+  const form = new FormData();
+  form.append("file", file);
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: "POST",
+    credentials: "include",
+    body: form,
+  });
+
+  if (!res.ok) {
+    let detail = res.statusText;
+    try {
+      const data = (await res.json()) as { detail?: string };
+      if (data.detail) detail = data.detail;
+    } catch {
+      // not JSON, swallow
+    }
+    throw new ApiError(res.status, detail);
+  }
+
+  if (res.status === 204) return undefined as T;
+  return (await res.json()) as T;
+}
+
 export const api = {
   get: <T>(path: string, init?: RequestInit) => request<T>("GET", path, undefined, init),
   post: <T>(path: string, body?: unknown, init?: RequestInit) =>
@@ -52,6 +81,7 @@ export const api = {
   put: <T>(path: string, body?: unknown, init?: RequestInit) =>
     request<T>("PUT", path, body, init),
   delete: <T>(path: string, init?: RequestInit) => request<T>("DELETE", path, undefined, init),
+  upload: <T>(path: string, file: File) => upload<T>(path, file),
 };
 
 // Fallback when there's no role: in DEMO the demo entry lives on the landing

@@ -1,5 +1,8 @@
 <template>
-  <span class="inline-flex items-center gap-1.5 text-xs capitalize whitespace-nowrap">
+  <span
+    class="inline-flex items-center gap-1.5 text-xs capitalize whitespace-nowrap"
+    :class="pill && 'rounded-full bg-muted px-2.5 py-1 font-medium text-foreground'"
+  >
     <span
       class="inline-block size-2 rounded-full shrink-0"
       :class="dotClass"
@@ -15,6 +18,7 @@ import { computed } from "vue";
 const props = defineProps<{
   status: string;
   label?: string | null;
+  pill?: boolean;
 }>();
 
 const STATUS_TO_DOT: Record<string, string> = {

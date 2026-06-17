@@ -70,6 +70,29 @@ export async function demoFetch<T>(
   return delay(result) as Promise<T>;
 }
 
+function readAsDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("Could not read file"));
+    reader.readAsDataURL(file);
+  });
+}
+
+export async function demoUpload<T>(path: string, file: File): Promise<T> {
+  if (path !== "/api/users/me/avatar") {
+    return fail(404, `No demo handler for upload ${path}`);
+  }
+  const u = requireAuth();
+  const dataUrl = await readAsDataUrl(file);
+  mutate((s) => {
+    const target = s.users.find((x) => x.id === u.id);
+    if (target) target.avatar_url = dataUrl;
+  });
+  const fresh = getState().users.find((x) => x.id === u.id)!;
+  return delay(toUserRead(fresh)) as Promise<T>;
+}
+
 function handle(
   method: string,
   path: string,

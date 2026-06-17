@@ -17,6 +17,7 @@ from backend.api.routers import agent, analytics, auth, exports, requests, servi
 from backend.core.config import get_settings
 from backend.core.db import get_session
 from backend.core.logging import configure_logging
+from backend.core.storage import MEDIA_ROOT, ensure_media_dirs
 
 settings = get_settings()
 
@@ -61,6 +62,9 @@ def create_app() -> FastAPI:
     app.include_router(exports.router)
     app.include_router(analytics.router)
     app.include_router(agent.router)
+
+    ensure_media_dirs()
+    app.mount("/media", StaticFiles(directory=MEDIA_ROOT), name="media")
 
     # Mount the built frontend if present (bundled Docker image path).
     # Skipped during dev since the Vite dev server serves the frontend separately.

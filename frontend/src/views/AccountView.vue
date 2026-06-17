@@ -12,17 +12,46 @@
     <div v-else-if="userData" class="space-y-7">
       <!-- Hero -->
       <header class="flex flex-col items-center gap-4 text-center">
-        <Avatar class="size-24 shrink-0">
-          <AvatarFallback :class="avatarFallbackClass" class="text-2xl font-medium">
-            {{ initials(userData.full_name) }}
-          </AvatarFallback>
-        </Avatar>
+        <component
+          :is="canEditSelf ? 'button' : 'div'"
+          :type="canEditSelf ? 'button' : undefined"
+          class="relative inline-block rounded-full"
+          :class="canEditSelf && 'press'"
+          :disabled="canEditSelf ? uploadingAvatar : undefined"
+          @click="canEditSelf && pickAvatar()"
+        >
+          <UserAvatar
+            :name="userData.full_name"
+            :src="userData.avatar_url"
+            size="size-24"
+            :fallback-class="cn(avatarFallbackClass, 'text-2xl font-medium')"
+          />
+          <span
+            v-if="uploadingAvatar"
+            class="absolute inset-0 flex items-center justify-center rounded-full bg-black/45"
+          >
+            <PhCircleNotch class="size-6 animate-spin text-white" weight="bold" />
+          </span>
+          <span
+            v-if="canEditSelf"
+            class="absolute -bottom-0.5 -right-0.5 flex size-7 items-center justify-center rounded-full bg-foreground text-background ring-2 ring-card"
+          >
+            <PhCamera class="size-3.5" weight="bold" />
+          </span>
+          <input
+            ref="avatarInput"
+            type="file"
+            accept="image/*"
+            class="hidden"
+            @change="onAvatarSelected"
+          />
+        </component>
         <div class="min-w-0">
           <h1 class="font-display text-2xl font-semibold tracking-tight">{{ userData.full_name }}</h1>
-          <p class="mt-1.5 flex items-center justify-center gap-2 text-sm tracking-tight text-muted-foreground">
+          <p class="mt-2 flex items-center justify-center gap-2 text-sm tracking-tight text-muted-foreground">
             <span class="capitalize">{{ userData.role }}</span>
             <span class="text-muted-foreground/30">·</span>
-            <StatusBadge :status="accountStatus" />
+            <StatusBadge :status="accountStatus" pill />
           </p>
         </div>
       </header>
@@ -31,7 +60,7 @@
       <Button
         v-if="isOwnProfile && !isAdmin"
         variant="secondary"
-        class="h-12 w-full rounded-full text-[0.95rem]"
+        class="h-12 w-full rounded-full text-[0.95rem] font-medium"
         @click="openEdit"
       >
         <PhPencilSimple class="mr-2 size-4" weight="bold" />
@@ -72,7 +101,7 @@
           />
           <AccountRow :icon="PhSealCheck" label="Approval">
             <template #value>
-              <StatusBadge :status="userData.approval_status ?? 'pending'" />
+              <StatusBadge :status="userData.approval_status ?? 'pending'" pill />
             </template>
           </AccountRow>
         </div>
@@ -177,19 +206,20 @@ import {
   PhBriefcase,
   PhMedal,
   PhSealCheck,
+  PhCamera,
 } from '@phosphor-icons/vue';
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import StatusBadge from "@/components/StatusBadge.vue";
 import { useConfirm } from "@/composables/useConfirm";
+import UserAvatar from "@/components/Avatar.vue";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ResponsiveSheet from "@/components/ui/ResponsiveSheet.vue";
 import { ApiError, api } from "@/lib/api";
-import { initials } from "@/lib/format";
+import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth";
 import { useNotificationsStore } from "@/stores/notifications";
 import AccountRow from "@/views/account/AccountRow.vue";
@@ -202,6 +232,7 @@ interface UserData {
   address: string | null;
   pincode: string | null;
   is_blocked: boolean;
+  avatar_url?: string | null;
   service_id?: number | null;
   service_name?: string | null;
   experience?: number | null;
@@ -219,6 +250,8 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 const showEdit = ref(false);
 const editForm = ref({ full_name: "", address: "", pincode: "" });
+const avatarInput = ref<HTMLInputElement | null>(null);
+const uploadingAvatar = ref(false);
 
 const userId = computed(() => route.params.id as string | undefined);
 const isOwnProfile = computed(() => !userId.value || userId.value === String(auth.user_id));
@@ -283,6 +316,36 @@ function openEdit() {
 }
 function closeEdit() {
   showEdit.value = false;
+}
+
+function pickAvatar() {
+  if (!uploadingAvatar.value) avatarInput.value?.click();
+}
+
+async function onAvatarSelected(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  input.value = "";
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    toasts.error("Please choose an image file.");
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    toasts.error("Image must be 5 MB or smaller.");
+    return;
+  }
+  uploadingAvatar.value = true;
+  try {
+    const updated = await api.upload<UserData>("/api/users/me/avatar", file);
+    userData.value = updated;
+    auth.updateUserDetails({ avatar_url: updated.avatar_url });
+    toasts.success("Photo updated");
+  } catch (err) {
+    toasts.error(err instanceof ApiError ? err.detail : "Failed to upload photo.");
+  } finally {
+    uploadingAvatar.value = false;
+  }
 }
 
 async function saveChanges() {
