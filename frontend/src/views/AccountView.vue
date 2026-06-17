@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6 py-8 max-w-2xl mx-auto">
+  <div class="px-6 py-8 max-w-lg mx-auto">
     <div v-if="loading" class="flex justify-center py-16">
       <PhCircleNotch class="size-6 animate-spin text-muted-foreground" />
     </div>
@@ -9,17 +9,17 @@
       <AlertDescription>{{ error }}</AlertDescription>
     </Alert>
 
-    <div v-else-if="userData" class="space-y-8">
+    <div v-else-if="userData" class="space-y-7">
       <!-- Hero -->
-      <header class="flex items-center gap-5">
-        <Avatar class="size-16 shrink-0">
-          <AvatarFallback :class="avatarFallbackClass" class="text-xl font-medium">
+      <header class="flex flex-col items-center gap-4 text-center">
+        <Avatar class="size-24 shrink-0">
+          <AvatarFallback :class="avatarFallbackClass" class="text-2xl font-medium">
             {{ initials(userData.full_name) }}
           </AvatarFallback>
         </Avatar>
         <div class="min-w-0">
-          <h1 class="font-display text-2xl font-semibold tracking-tight truncate">{{ userData.full_name }}</h1>
-          <p class="text-sm tracking-tight text-muted-foreground mt-1 flex items-center gap-2 flex-wrap">
+          <h1 class="font-display text-2xl font-semibold tracking-tight">{{ userData.full_name }}</h1>
+          <p class="mt-1.5 flex items-center justify-center gap-2 text-sm tracking-tight text-muted-foreground">
             <span class="capitalize">{{ userData.role }}</span>
             <span class="text-muted-foreground/30">·</span>
             <StatusBadge :status="accountStatus" />
@@ -27,61 +27,109 @@
         </div>
       </header>
 
+      <!-- Edit details -->
+      <Button
+        v-if="isOwnProfile && !isAdmin"
+        variant="secondary"
+        class="h-12 w-full rounded-full text-[0.95rem]"
+        @click="openEdit"
+      >
+        <PhPencilSimple class="mr-2 size-4" weight="bold" />
+        Edit details
+      </Button>
+
       <!-- Contact -->
-      <section class="bg-card rounded-xl soft-card p-6 space-y-5">
-        <p class="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Contact</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
-          <Field label="Email" :value="userData.email" />
-          <Field label="Address" :value="userData.address || '—'" />
-          <Field label="Pincode" :value="userData.pincode || '—'" />
+      <section class="space-y-2">
+        <p class="px-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Contact</p>
+        <div class="divide-y divide-border overflow-hidden rounded-xl bg-card soft-card">
+          <AccountRow :icon="PhEnvelopeSimple" label="Email" :value="userData.email" />
+          <AccountRow
+            :icon="PhMapPin"
+            label="Address"
+            :value="userData.address || 'Not set'"
+            :interactive="canEditSelf"
+            @click="openEdit"
+          />
+          <AccountRow
+            :icon="PhNavigationArrow"
+            label="Pincode"
+            :value="userData.pincode || 'Not set'"
+            :interactive="canEditSelf"
+            @click="openEdit"
+          />
         </div>
       </section>
 
       <!-- Professional details -->
-      <section v-if="userData.role === 'professional'" class="bg-card rounded-xl soft-card p-6 space-y-5">
-        <p class="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Professional</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
-          <Field label="Service" :value="userData.service_name || '—'" />
-          <Field label="Experience" :value="userData.experience ? `${userData.experience} yrs` : '—'" />
-          <Field label="Approval status">
-            <StatusBadge :status="userData.approval_status ?? 'pending'" />
-          </Field>
+      <section v-if="userData.role === 'professional'" class="space-y-2">
+        <p class="px-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Professional</p>
+        <div class="divide-y divide-border overflow-hidden rounded-xl bg-card soft-card">
+          <AccountRow :icon="PhBriefcase" label="Service" :value="userData.service_name || '—'" />
+          <AccountRow
+            :icon="PhMedal"
+            label="Experience"
+            :value="userData.experience ? `${userData.experience} yrs` : '—'"
+          />
+          <AccountRow :icon="PhSealCheck" label="Approval">
+            <template #value>
+              <StatusBadge :status="userData.approval_status ?? 'pending'" />
+            </template>
+          </AccountRow>
         </div>
       </section>
 
-      <!-- Own profile actions -->
-      <div v-if="isOwnProfile && !isAdmin" class="flex flex-wrap gap-2">
-        <Button @click="openEdit">
-          <PhPencilSimple class="mr-2 size-4" weight="bold" />
-          Edit details
-        </Button>
-        <Button variant="destructive" @click="confirmDelete">
-          <PhTrash class="mr-2 size-4" weight="bold" />
-          Delete account
-        </Button>
-      </div>
+      <!-- Advanced (own profile) -->
+      <section v-if="canEditSelf" class="space-y-2">
+        <p class="px-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Advanced</p>
+        <div class="overflow-hidden rounded-xl bg-card soft-card">
+          <AccountRow
+            :icon="PhTrash"
+            label="Delete account"
+            description="Permanently erase this account and all its data."
+            interactive
+            danger
+            @click="confirmDelete"
+          />
+        </div>
+      </section>
 
       <!-- Admin actions -->
-      <div v-if="auth.role === 'admin' && !isOwnProfile" class="flex flex-wrap gap-2">
-        <Button :variant="userData.is_blocked ? 'default' : 'destructive'" @click="toggleBlock">
-          <component :is="userData.is_blocked ? PhLockOpen : PhLock" class="mr-2 size-4" />
-          {{ userData.is_blocked ? "Unblock" : "Block" }} user
-        </Button>
-        <template v-if="userData.role === 'professional' && userData.approval_status === 'pending'">
-          <Button @click="updateApproval('approved')">
-            <PhCheckCircle class="mr-2 size-4" weight="bold" />
-            Approve
-          </Button>
-          <Button variant="secondary" @click="updateApproval('rejected')">
-            <PhXCircle class="mr-2 size-4" weight="bold" />
-            Reject
-          </Button>
-        </template>
-        <Button variant="destructive" @click="deleteUserAccount">
-          <PhTrash class="mr-2 size-4" weight="bold" />
-          Delete user
-        </Button>
-      </div>
+      <section v-if="isAdmin && !isOwnProfile" class="space-y-2">
+        <p class="px-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Manage user</p>
+        <div class="divide-y divide-border overflow-hidden rounded-xl bg-card soft-card">
+          <template v-if="userData.role === 'professional' && userData.approval_status === 'pending'">
+            <AccountRow
+              :icon="PhCheckCircle"
+              label="Approve professional"
+              description="Let them accept requests and appear in search."
+              interactive
+              @click="updateApproval('approved')"
+            />
+            <AccountRow
+              :icon="PhXCircle"
+              label="Reject professional"
+              description="Keep their account but hide them from customers."
+              interactive
+              @click="updateApproval('rejected')"
+            />
+          </template>
+          <AccountRow
+            :icon="userData.is_blocked ? PhLockOpen : PhLock"
+            :label="userData.is_blocked ? 'Unblock user' : 'Block user'"
+            :description="userData.is_blocked ? 'Restore full access to the platform.' : 'Sign them out and prevent new sign-ins.'"
+            interactive
+            @click="toggleBlock"
+          />
+          <AccountRow
+            :icon="PhTrash"
+            label="Delete user"
+            description="Permanently erase this account and all its data."
+            interactive
+            danger
+            @click="deleteUserAccount"
+          />
+        </div>
+      </section>
     </div>
 
     <!-- Edit drawer -->
@@ -123,6 +171,12 @@ import {
   PhTrash,
   PhLockOpen,
   PhXCircle,
+  PhEnvelopeSimple,
+  PhMapPin,
+  PhNavigationArrow,
+  PhBriefcase,
+  PhMedal,
+  PhSealCheck,
 } from '@phosphor-icons/vue';
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -138,7 +192,7 @@ import { ApiError, api } from "@/lib/api";
 import { initials } from "@/lib/format";
 import { useAuthStore } from "@/stores/auth";
 import { useNotificationsStore } from "@/stores/notifications";
-import Field from "@/views/account/Field.vue";
+import AccountRow from "@/views/account/AccountRow.vue";
 
 interface UserData {
   id: number;
@@ -169,6 +223,7 @@ const editForm = ref({ full_name: "", address: "", pincode: "" });
 const userId = computed(() => route.params.id as string | undefined);
 const isOwnProfile = computed(() => !userId.value || userId.value === String(auth.user_id));
 const isAdmin = computed(() => auth.role === "admin");
+const canEditSelf = computed(() => isOwnProfile.value && !isAdmin.value);
 
 const accountStatus = computed(() => {
   if (!userData.value) return "active";

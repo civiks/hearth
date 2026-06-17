@@ -13,7 +13,12 @@
 
 <script setup lang="ts">
 import { useElementSize } from "@vueuse/core";
-import { ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
+import { useConfirm } from "@/composables/useConfirm";
+
+const { registerHost, unregisterHost } = useConfirm();
+onMounted(registerHost);
+onUnmounted(unregisterHost);
 
 const measure = ref<HTMLElement | null>(null);
 const { height } = useElementSize(measure);

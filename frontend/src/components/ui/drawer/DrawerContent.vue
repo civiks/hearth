@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-import { onMounted, onUnmounted } from 'vue'
 import { PhX } from '@phosphor-icons/vue'
 import { DrawerClose, DrawerContent, DrawerOverlay, DrawerPortal } from 'vaul-vue'
 import ConfirmContent from '@/components/ConfirmContent.vue'
@@ -13,9 +12,7 @@ const props = withDefaults(
   { hostConfirm: true, showClose: true },
 )
 
-const { pending, registerHost, unregisterHost } = useConfirm()
-onMounted(() => { if (props.hostConfirm) registerHost() })
-onUnmounted(() => { if (props.hostConfirm) unregisterHost() })
+const { pending } = useConfirm()
 </script>
 
 <template>
