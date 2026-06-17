@@ -12,22 +12,7 @@
       <span class="font-display font-semibold text-lg tracking-tight" :class="isCustomer ? 'hidden sm:inline' : ''">hearth</span>
     </RouterLink>
 
-    <form
-      v-if="isCustomer"
-      class="flex flex-1 min-w-0 max-w-md sm:mx-6 items-center gap-2 h-9 px-3 rounded-full bg-foreground/6 focus-within:bg-foreground/8 focus-within:ring-2 focus-within:ring-ring transition-colors"
-      role="search"
-      @submit.prevent="submitSearch"
-    >
-      <PhMagnifyingGlass class="size-4 shrink-0 text-muted-foreground" weight="bold" />
-      <input
-        v-model="searchText"
-        type="search"
-        placeholder="Search services"
-        aria-label="Search services"
-        class="min-w-0 flex-1 bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
-        @keydown.enter.prevent="submitSearch"
-      />
-    </form>
+    <ServiceSearch v-if="isCustomer" />
 
     <div class="flex items-center gap-2 shrink-0">
       <button
@@ -247,7 +232,6 @@ import { useMediaQuery, useScroll } from "@vueuse/core";
 import {
   PhCaretDown,
   PhHammer,
-  PhMagnifyingGlass,
   PhSignOut,
   PhMonitor,
   PhMoon,
@@ -263,6 +247,7 @@ import { RouterLink, useRoute, useRouter } from "vue-router";
 import AiMark from "@/components/AiMark.vue";
 import Avatar from "@/components/Avatar.vue";
 import BrandMark from "@/components/BrandMark.vue";
+import ServiceSearch from "@/components/marketplace/ServiceSearch.vue";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import {
   DropdownMenu,
@@ -303,19 +288,6 @@ watch(menuOpen, (open) => {
 });
 
 const isCustomer = computed(() => auth.role === "user");
-const searchText = ref(typeof route.query.search === "string" ? route.query.search : "");
-
-watch(
-  () => route.query.search,
-  (s) => {
-    if (route.path === "/home/services") searchText.value = typeof s === "string" ? s : "";
-  },
-);
-
-function submitSearch() {
-  const q = searchText.value.trim();
-  router.push({ path: "/home/services", query: q ? { search: q } : {} });
-}
 
 const { y: windowY } = useScroll(window, { throttle: 80 });
 const headerHidden = ref(false);

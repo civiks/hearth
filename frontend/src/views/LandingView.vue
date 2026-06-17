@@ -40,11 +40,11 @@
                       <DropdownMenuItem
                         v-for="r in DEMO_ROLES"
                         :key="r.value"
-                        class="gap-3 p-3 rounded-xl bg-card transition-shadow focus:bg-card press"
+                        class="items-start gap-3 p-3 rounded-lg bg-card transition-shadow focus:bg-card press"
                         :class="auth.role === r.value ? 'soft-card-selected' : 'soft-card hover:soft-card-hover'"
                         @click="loginAs(r.value)"
                       >
-                        <div :class="['inline-flex size-10 items-center justify-center rounded-full shrink-0 text-white', ROLE_COLORS[r.value]]">
+                        <div :class="['inline-flex size-9 items-center justify-center rounded-full shrink-0 text-white', ROLE_COLORS[r.value]]">
                           <component :is="r.icon" class="size-5" />
                         </div>
                         <div class="flex-1 min-w-0">
@@ -204,11 +204,11 @@
       <button
         v-for="r in DEMO_ROLES"
         :key="r.value"
-        class="w-full flex items-center gap-3 p-3 rounded-lg text-left transition-shadow bg-card"
+        class="w-full flex items-start gap-3 p-3 rounded-lg text-left transition-shadow bg-card"
         :class="auth.role === r.value ? 'soft-card-selected' : 'soft-card hover:soft-card-hover'"
         @click="loginAs(r.value); drawerOpen = false"
       >
-        <div :class="['inline-flex size-10 items-center justify-center rounded-full shrink-0 text-white', ROLE_COLORS[r.value]]">
+        <div :class="['inline-flex size-9 items-center justify-center rounded-full shrink-0 text-white', ROLE_COLORS[r.value]]">
           <component :is="r.icon" class="size-5" />
         </div>
         <div class="flex-1 min-w-0">
