@@ -2,7 +2,7 @@
   <div>
     <button
       type="button"
-      class="inline-flex items-center gap-1.5 text-xs tracking-tight tabular-nums text-muted-foreground hover:text-foreground transition-colors"
+      class="inline-flex items-center gap-1.5 text-xs tracking-tight tabular-nums text-muted-foreground hover:text-foreground press transition-colors"
       @click="openPicker"
     >
       <PhMapPin class="size-3.5" weight="bold" />

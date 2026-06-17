@@ -22,7 +22,7 @@
         v-if="query"
         type="button"
         aria-label="Clear search"
-        class="shrink-0 grid place-items-center size-5 rounded-full text-muted-foreground hover:bg-foreground/10 hover:text-foreground transition-colors"
+        class="shrink-0 grid place-items-center size-5 rounded-full text-muted-foreground hover:bg-foreground/10 hover:text-foreground press transition-colors"
         @click="clear"
       >
         <PhX class="size-3.5" weight="bold" />
@@ -45,7 +45,7 @@
           <template v-if="query.trim()">
             <button
               type="button"
-              class="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors"
+              class="flex w-full items-center gap-3 px-4 py-2.5 text-left press transition-colors"
               :class="activeIndex === 0 ? 'bg-accent' : 'hover:bg-accent'"
               @mousemove="activeIndex = 0"
               @click="commitSearch(query)"
@@ -63,7 +63,7 @@
               v-for="(s, i) in matches"
               :key="s.id"
               type="button"
-              class="flex w-full items-baseline gap-3 px-4 py-2 text-left transition-colors"
+              class="flex w-full items-baseline gap-3 px-4 py-2 text-left press transition-colors"
               :class="activeIndex === i + 1 ? 'bg-accent' : 'hover:bg-accent'"
               @mousemove="activeIndex = i + 1"
               @click="selectService(s)"
@@ -89,7 +89,7 @@
               v-for="term in popular"
               :key="term"
               type="button"
-              class="flex w-full items-center gap-3 px-4 py-2 text-left transition-colors hover:bg-accent"
+              class="flex w-full items-center gap-3 px-4 py-2 text-left press transition-colors hover:bg-accent"
               @click="commitSearch(term)"
             >
               <PhMagnifyingGlass class="size-3.5 shrink-0 text-muted-foreground/60" weight="bold" />
@@ -103,7 +103,7 @@
               v-for="c in categories"
               :key="c"
               type="button"
-              class="flex w-full items-center justify-between gap-3 px-4 py-2 text-left transition-colors hover:bg-accent group"
+              class="flex w-full items-center justify-between gap-3 px-4 py-2 text-left press transition-colors hover:bg-accent group"
               @click="selectCategory(c)"
             >
               <span class="min-w-0 truncate text-sm font-medium tracking-tight text-foreground">{{ c }}</span>

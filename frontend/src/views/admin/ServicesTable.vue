@@ -50,14 +50,14 @@
           <button
             v-if="aiDescription"
             type="button"
-            class="text-xs text-muted-foreground hover:text-foreground transition"
+            class="text-xs text-muted-foreground hover:text-foreground press transition"
             @click="aiDescription = false"
           >
             Edit
           </button>
           <button
             type="button"
-            class="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition disabled:opacity-40"
+            class="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 press transition disabled:opacity-40"
             :disabled="!form.name || generating"
             @click="onGenerate"
           >

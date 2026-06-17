@@ -3,7 +3,7 @@
     <DropdownMenuTrigger as-child>
       <button
         type="button"
-        class="inline-flex items-center gap-1.5 px-2 py-1 text-[11px] text-foreground ai-surface ai-outline hover:brightness-105 transition"
+        class="inline-flex items-center gap-1.5 px-2 py-1 text-[11px] text-foreground ai-surface ai-outline hover:brightness-105 press transition"
         :aria-label="`AI summary for ${professional.full_name}`"
       >
         <AiMark class="size-3" />

@@ -82,7 +82,7 @@
         type="button"
         role="tab"
         :class="[
-          'flex flex-1 min-w-[72px] flex-col items-center justify-center gap-1 py-3 transition-colors',
+          'flex flex-1 min-w-[72px] flex-col items-center justify-center gap-1 py-3 press transition-colors',
           chat.open ? 'text-foreground' : 'text-muted-foreground',
         ]"
         @click="chat.toggle()"
@@ -102,7 +102,7 @@
         <div class="absolute inset-y-0 right-0 w-14 bg-gradient-to-l from-card/80 to-transparent" />
         <button
           type="button"
-          class="relative pointer-events-auto z-10 mr-2 flex size-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm"
+          class="relative pointer-events-auto z-10 mr-2 flex size-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm press"
           @click="scrollTabbar"
         >
           <PhCaretRight class="size-4" />

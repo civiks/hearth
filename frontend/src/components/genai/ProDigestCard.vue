@@ -16,7 +16,7 @@
         <button
           v-show="!collapsed"
           type="button"
-          class="text-xs text-primary inline-flex items-center gap-1.5 hover:underline underline-offset-4 disabled:opacity-50"
+          class="text-xs text-primary inline-flex items-center gap-1.5 hover:underline underline-offset-4 press disabled:opacity-50"
           :disabled="streaming"
           @click="regenerate"
         >
@@ -24,7 +24,7 @@
         </button>
         <button
           type="button"
-          class="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+          class="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground press transition-colors"
           :aria-label="collapsed ? 'Expand digest' : 'Collapse digest'"
           @click="collapsed = !collapsed"
         >

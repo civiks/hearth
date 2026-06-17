@@ -133,7 +133,7 @@
         <span class="flex items-center gap-1.5">
           <PhUserCheck class="size-3.5 text-primary" />
           <span>{{ selectedProName ?? "Any available pro" }}</span>
-          <button type="button" class="text-xs tracking-tight text-primary underline underline-offset-2" @click="step = 'details'">change</button>
+          <button type="button" class="text-xs tracking-tight text-primary underline underline-offset-2 press" @click="step = 'details'">change</button>
         </span>
       </div>
 

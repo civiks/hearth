@@ -10,7 +10,7 @@
         <li>
           <button
             type="button"
-            class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors whitespace-nowrap"
+            class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs press transition-colors whitespace-nowrap"
             :class="category === null ? activeChip : inactiveChip"
             @click="$emit('update:category', null)"
           >
@@ -27,7 +27,7 @@
         <li v-for="entry in categories" :key="entry.name">
           <button
             type="button"
-            class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors whitespace-nowrap"
+            class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs press transition-colors whitespace-nowrap"
             :class="category === entry.name ? activeChip : inactiveChip"
             @click="$emit('update:category', entry.name)"
           >

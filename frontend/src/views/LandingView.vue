@@ -204,7 +204,7 @@
       <button
         v-for="r in DEMO_ROLES"
         :key="r.value"
-        class="w-full flex items-start gap-3 p-3 rounded-lg text-left transition-shadow bg-card"
+        class="w-full flex items-start gap-3 p-3 rounded-lg text-left press transition-shadow bg-card"
         :class="auth.role === r.value ? 'soft-card-selected' : 'soft-card hover:soft-card-hover'"
         @click="loginAs(r.value); drawerOpen = false"
       >

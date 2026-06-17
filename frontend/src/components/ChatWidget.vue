@@ -48,7 +48,7 @@
             <DropdownMenuTrigger as-child>
               <button
                 type="button"
-                class="flex items-center gap-1 px-2 h-8 text-sm font-medium rounded-md hover:bg-muted transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                class="flex items-center gap-1 px-2 h-8 text-sm font-medium rounded-md hover:bg-muted press transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                 :title="`Model: ${chat.currentModel.name}`"
               >
                 hearth AI
@@ -122,7 +122,7 @@
                   </div>
                   <button
                     type="button"
-                    class="opacity-0 group-hover:opacity-100 p-1 -m-1 text-muted-foreground hover:text-destructive transition"
+                    class="opacity-0 group-hover:opacity-100 p-1 -m-1 text-muted-foreground hover:text-destructive press transition"
                     aria-label="Delete conversation"
                     @click.stop="chat.deleteConversation(c.id)"
                   >
@@ -184,7 +184,7 @@
                   v-for="p in suggestedPrompts"
                   :key="p"
                   type="button"
-                  class="text-left text-sm border border-primary/30 text-primary hover:bg-primary/5 px-3 py-2 rounded-full transition truncate"
+                  class="text-left text-sm border border-primary/30 text-primary hover:bg-primary/5 px-3 py-2 rounded-full press transition truncate"
                   @click="onSuggested(p)"
                 >
                   {{ p }}
@@ -194,7 +194,7 @@
 
             <p v-if="!DEMO" class="text-[11px] text-muted-foreground pt-2">
               API key isn't configured.
-              <button class="text-primary hover:underline" @click="settingsDrawer.show()">Settings → AI</button>.
+              <button class="text-primary hover:underline press" @click="settingsDrawer.show()">Settings → AI</button>.
             </p>
           </div>
 
@@ -279,7 +279,7 @@
                 >
                   <button
                     type="button"
-                    class="p-1.5 text-muted-foreground hover:text-foreground transition rounded"
+                    class="p-1.5 text-muted-foreground hover:text-foreground press transition rounded"
                     :class="m.feedback === 'up' && 'text-primary'"
                     aria-label="Helpful"
                     @click="chat.setFeedback(m.id, 'up')"
@@ -288,7 +288,7 @@
                   </button>
                   <button
                     type="button"
-                    class="p-1.5 text-muted-foreground hover:text-foreground transition rounded"
+                    class="p-1.5 text-muted-foreground hover:text-foreground press transition rounded"
                     :class="m.feedback === 'down' && 'text-destructive'"
                     aria-label="Not helpful"
                     @click="chat.setFeedback(m.id, 'down')"
@@ -297,7 +297,7 @@
                   </button>
                   <button
                     type="button"
-                    class="p-1.5 text-muted-foreground hover:text-foreground transition rounded disabled:opacity-50"
+                    class="p-1.5 text-muted-foreground hover:text-foreground press transition rounded disabled:opacity-50"
                     aria-label="Regenerate"
                     :disabled="chat.streaming"
                     @click="onRegenerate(m.id)"
@@ -323,7 +323,7 @@
           <div class="flex items-end gap-1 px-1 py-1">
             <button
               type="button"
-              class="text-muted-foreground hover:text-foreground p-1 transition"
+              class="text-muted-foreground hover:text-foreground p-1 press transition"
               aria-label="Conversation menu"
               tabindex="-1"
               disabled
@@ -343,7 +343,7 @@
             />
             <button
               type="button"
-              class="text-muted-foreground hover:text-foreground p-1 transition"
+              class="text-muted-foreground hover:text-foreground p-1 press transition"
               aria-label="Voice (coming soon)"
               tabindex="-1"
               disabled
@@ -353,7 +353,7 @@
             <button
               type="submit"
               :disabled="!composer.trim() || chat.streaming"
-              class="text-primary hover:text-primary/80 disabled:text-muted-foreground/60 p-1 transition"
+              class="text-primary hover:text-primary/80 disabled:text-muted-foreground/60 p-1 press transition"
               aria-label="Send"
             >
               <PhCircleNotch v-if="chat.streaming" class="size-4 animate-spin" />

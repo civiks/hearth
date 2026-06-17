@@ -2,7 +2,7 @@
   <button
     v-if="canSort"
     type="button"
-    class="inline-flex items-center gap-1 -mx-1 px-1 h-7 hover:bg-muted text-left transition-colors cursor-pointer text-xs font-medium uppercase tracking-wide text-muted-foreground"
+    class="inline-flex items-center gap-1 -mx-1 px-1 h-7 hover:bg-muted text-left press transition-colors cursor-pointer text-xs font-medium uppercase tracking-wide text-muted-foreground"
     :aria-label="`Sort by ${label}`"
     @click="toggleSort"
   >

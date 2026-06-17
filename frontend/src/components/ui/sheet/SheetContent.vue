@@ -17,9 +17,9 @@ const props = withDefaults(
       <DialogClose
         v-if="props.showClose"
         aria-label="Close"
-        class="absolute top-4 right-4 z-10 flex size-8 items-center justify-center rounded-full bg-foreground/8 text-muted-foreground hover:bg-foreground/12 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        class="absolute top-4 right-4 z-10 flex size-8 items-center justify-center rounded-full bg-foreground/5 text-muted-foreground/60 hover:bg-foreground/8 hover:text-muted-foreground press transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <PhX class="size-[1.15rem]" weight="bold" />
+        <PhX class="size-[1.15rem] [&_*]:[stroke:currentColor] [&_*]:[stroke-width:8]" weight="bold" />
       </DialogClose>
       <slot />
     </DialogContent>

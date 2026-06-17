@@ -18,7 +18,7 @@
       <button
         type="button"
         aria-label="Ask AI"
-        class="hidden sm:flex items-center gap-1.5 h-9 px-4 rounded-full bg-foreground/8 hover:bg-foreground/12 active:bg-foreground/18 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background text-sm font-medium"
+        class="hidden sm:flex items-center gap-1.5 h-9 px-4 rounded-full bg-foreground/8 hover:bg-foreground/12 active:bg-foreground/18 press transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background text-sm font-medium"
         @click="chat.toggle()"
       >
         <span>Ask</span>
@@ -29,7 +29,7 @@
         <DropdownMenuTrigger as-child>
           <button
             type="button"
-            class="flex items-center gap-2 px-2 py-1 rounded-full transition hover:bg-foreground/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            class="flex items-center gap-2 px-2 py-1 rounded-full press transition hover:bg-foreground/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <Avatar :name="auth.full_name ?? ''" :src="auth.avatar_url" size="size-8" fallback-class="text-xs" />
             <PhCaretDown class="size-3.5 opacity-70" weight="bold" />
@@ -108,9 +108,9 @@
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <div class="flex items-center gap-1.5 px-2 py-1.5 text-[11px] text-muted-foreground">
-            <button class="hover:text-foreground transition-colors" @click="$router.push('/privacy')">Privacy policy</button>
+            <button class="hover:text-foreground press transition-colors" @click="$router.push('/privacy')">Privacy policy</button>
             <span>·</span>
-            <button class="hover:text-foreground transition-colors" @click="$router.push('/terms')">Terms of service</button>
+            <button class="hover:text-foreground press transition-colors" @click="$router.push('/terms')">Terms of service</button>
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -118,7 +118,7 @@
       <template v-else>
         <button
           type="button"
-          class="flex items-center gap-2 px-2 py-1 rounded-full transition hover:bg-foreground/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          class="flex items-center gap-2 px-2 py-1 rounded-full press transition hover:bg-foreground/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           @click="menuOpen = true"
         >
           <Avatar :name="auth.full_name ?? ''" :src="auth.avatar_url" size="size-8" fallback-class="text-xs" />
@@ -127,7 +127,7 @@
         <Drawer v-model:open="menuOpen">
           <DrawerContent>
             <div class="flex items-center gap-3 px-5 pt-3 pb-3 pr-14 shrink-0">
-              <button class="flex items-center gap-3 min-w-0 flex-1 text-left" @click="navigate('/account')">
+              <button class="flex items-center gap-3 min-w-0 flex-1 text-left press" @click="navigate('/account')">
                 <Avatar :name="auth.full_name ?? ''" :src="auth.avatar_url" size="size-10 shrink-0" fallback-class="text-sm" />
                 <div class="flex flex-col leading-tight min-w-0">
                   <span class="flex items-center gap-1 text-base font-semibold tracking-tight min-w-0">
@@ -150,7 +150,7 @@
                     :key="t.value"
                     :aria-label="t.label"
                     :aria-pressed="theme === t.value"
-                    class="flex h-8 items-center justify-center gap-1.5 rounded-full text-[13px] font-medium tracking-tight transition-colors"
+                    class="flex h-8 items-center justify-center gap-1.5 rounded-full text-[13px] font-medium tracking-tight press transition-colors"
                     :class="theme === t.value ? 'bg-card text-foreground soft-card px-3 dark:bg-foreground/10 dark:shadow-none' : 'text-muted-foreground hover:text-foreground w-8'"
                     @click="setTheme(t.value as Theme)"
                   >
@@ -168,7 +168,7 @@
                     :key="r.value"
                     :aria-label="r.label"
                     :aria-pressed="auth.role === r.value"
-                    class="flex h-8 items-center justify-center gap-1.5 rounded-full text-[13px] font-medium tracking-tight transition-colors"
+                    class="flex h-8 items-center justify-center gap-1.5 rounded-full text-[13px] font-medium tracking-tight press transition-colors"
                     :class="auth.role === r.value ? 'bg-card text-foreground soft-card px-3 dark:bg-foreground/10 dark:shadow-none' : 'text-muted-foreground hover:text-foreground w-8'"
                     @click="menuOpen = false; loginAs(r.value as Role)"
                   >
@@ -182,7 +182,7 @@
 
               <button
                 v-if="DEMO"
-                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent transition-colors"
+                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent press transition-colors"
                 @click="handleResetDemo"
               >
                 <PhArrowCounterClockwise class="size-5 text-muted-foreground" weight="bold" />
@@ -190,21 +190,21 @@
               </button>
               <button
                 v-if="auth.role === 'admin'"
-                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent transition-colors"
+                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent press transition-colors"
                 @click="navigate('/admin/tools')"
               >
                 <PhHammer class="size-5 text-muted-foreground" weight="bold" />
                 Tools
               </button>
               <button
-                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent transition-colors"
+                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight hover:bg-accent press transition-colors"
                 @click="menuOpen = false; settingsDrawer.show()"
               >
                 <PhGear class="size-5 text-muted-foreground" weight="bold" />
                 Settings
               </button>
               <button
-                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight text-destructive hover:bg-destructive/10 transition-colors"
+                class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium tracking-tight text-destructive hover:bg-destructive/10 press transition-colors"
                 @click="handleLogout"
               >
                 <PhSignOut class="size-5" weight="bold" />
@@ -214,9 +214,9 @@
               <div class="h-px bg-border/50 mx-3 my-2" />
 
               <div class="flex items-center gap-1.5 px-3 py-2 text-xs text-muted-foreground">
-                <button class="hover:text-foreground transition-colors" @click="navigate('/privacy')">Privacy policy</button>
+                <button class="hover:text-foreground press transition-colors" @click="navigate('/privacy')">Privacy policy</button>
                 <span>·</span>
-                <button class="hover:text-foreground transition-colors" @click="navigate('/terms')">Terms of service</button>
+                <button class="hover:text-foreground press transition-colors" @click="navigate('/terms')">Terms of service</button>
               </div>
             </div>
           </DrawerContent>

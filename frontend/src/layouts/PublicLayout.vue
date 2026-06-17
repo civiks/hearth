@@ -63,17 +63,17 @@
         <ResponsiveSheet :open="mobileNavOpen" title="hearth" @close="mobileNavOpen = false">
           <nav class="flex flex-col">
               <template v-if="!auth.logged_in">
-                <button class="text-left text-sm font-medium py-1.5 px-1 text-foreground hover:text-primary transition-colors" @click="router.push('/login'); mobileNavOpen = false">Sign in</button>
-                <button class="text-left text-sm font-medium py-1.5 px-1 text-foreground hover:text-primary transition-colors" @click="router.push('/register'); mobileNavOpen = false">Get started</button>
+                <button class="text-left text-sm font-medium py-1.5 px-1 text-foreground hover:text-primary press transition-colors" @click="router.push('/login'); mobileNavOpen = false">Sign in</button>
+                <button class="text-left text-sm font-medium py-1.5 px-1 text-foreground hover:text-primary press transition-colors" @click="router.push('/register'); mobileNavOpen = false">Get started</button>
               </template>
-              <button v-else class="text-left text-sm font-medium py-1.5 px-1 text-foreground hover:text-primary transition-colors" @click="router.push(home); mobileNavOpen = false">Go to dashboard</button>
+              <button v-else class="text-left text-sm font-medium py-1.5 px-1 text-foreground hover:text-primary press transition-colors" @click="router.push(home); mobileNavOpen = false">Go to dashboard</button>
 
               <template v-for="group in NAV_GROUPS" :key="group.label">
                 <div class="my-2 text-xs font-medium text-foreground/40 px-1 pt-1">{{ group.label }}</div>
                 <button
                   v-for="link in group.links"
                   :key="link.to"
-                  class="text-left text-sm py-1.5 px-1 text-foreground/80 hover:text-primary transition-colors"
+                  class="text-left text-sm py-1.5 px-1 text-foreground/80 hover:text-primary press transition-colors"
                   @click="router.push(link.to); mobileNavOpen = false"
                 >{{ link.label }}</button>
               </template>

@@ -36,7 +36,7 @@
           />
           <button
             type="button"
-            class="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none"
+            class="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground cursor-pointer press focus-visible:outline-none"
             :aria-label="showPassword ? 'Hide password' : 'Show password'"
             :aria-pressed="showPassword"
             @click="showPassword = !showPassword"
@@ -48,7 +48,7 @@
         <div class="flex justify-end px-1">
           <button
             type="button"
-            class="text-xs text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            class="text-xs text-muted-foreground hover:text-foreground cursor-pointer press focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             @click="onForgotPassword"
           >
             Forgot password?

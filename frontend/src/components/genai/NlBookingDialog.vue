@@ -24,7 +24,7 @@
           v-for="ex in EXAMPLES"
           :key="ex"
           type="button"
-          class="text-xs bg-muted hover:bg-muted/70 px-2 py-1 rounded transition"
+          class="text-xs bg-muted hover:bg-muted/70 px-2 py-1 rounded press transition"
           @click="prompt = ex"
         >
           {{ ex }}
