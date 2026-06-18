@@ -24,7 +24,7 @@ const { pending } = useConfirm()
         aria-label="Close"
         class="absolute top-6 right-4 z-10 flex size-8 items-center justify-center rounded-full bg-foreground/5 text-muted-foreground/60 hover:bg-foreground/8 hover:text-muted-foreground press transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <PhX class="size-[1.15rem] [&_*]:[stroke:currentColor] [&_*]:[stroke-width:8]" weight="bold" />
+        <PhX class="size-[1.15rem]" weight="bold" />
       </DrawerClose>
       <DrawerMorph v-if="hostConfirm">
         <ConfirmContent v-if="pending" key="confirm" />

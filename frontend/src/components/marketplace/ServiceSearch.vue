@@ -1,7 +1,7 @@
 <template>
   <div ref="rootEl" class="relative flex flex-1 min-w-0 max-w-md sm:mx-6">
     <form
-      class="flex w-full items-center gap-2 h-9 px-3 rounded-full bg-foreground/6 transition-colors"
+      class="relative z-50 flex w-full items-center gap-2 h-9 px-3 rounded-full bg-foreground/6 transition-colors"
       :class="open ? 'bg-foreground/8 ring-2 ring-ring' : 'focus-within:bg-foreground/8 focus-within:ring-2 focus-within:ring-ring'"
       role="search"
       @submit.prevent="commitSearch(query)"
@@ -28,6 +28,21 @@
         <PhX class="size-3.5" weight="bold" />
       </button>
     </form>
+
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition-opacity duration-150 ease-out"
+        leave-active-class="transition-opacity duration-100 ease-in"
+        enter-from-class="opacity-0"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="open"
+          class="fixed inset-0 z-20 bg-black/40"
+          @click="close"
+        />
+      </Transition>
+    </Teleport>
 
     <Transition
       enter-active-class="transition duration-150 ease-out"
@@ -96,19 +111,21 @@
               <span class="min-w-0 truncate text-sm tracking-tight text-foreground">{{ term }}</span>
             </button>
 
-            <p class="px-4 pt-4 pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground/70">
-              Browse categories
-            </p>
-            <button
-              v-for="c in categories"
-              :key="c"
-              type="button"
-              class="flex w-full items-center justify-between gap-3 px-4 py-2 text-left press transition-colors hover:bg-accent group"
-              @click="selectCategory(c)"
-            >
-              <span class="min-w-0 truncate text-sm font-medium tracking-tight text-foreground">{{ c }}</span>
-              <PhArrowRight class="size-3.5 shrink-0 text-muted-foreground/40 transition-colors group-hover:text-muted-foreground" weight="bold" />
-            </button>
+            <div class="hidden sm:block">
+              <p class="px-4 pt-4 pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground/70">
+                Browse categories
+              </p>
+              <button
+                v-for="c in categories"
+                :key="c"
+                type="button"
+                class="flex w-full items-center justify-between gap-3 px-4 py-2 text-left press transition-colors hover:bg-accent group"
+                @click="selectCategory(c)"
+              >
+                <span class="min-w-0 truncate text-sm font-medium tracking-tight text-foreground">{{ c }}</span>
+                <PhArrowRight class="size-3.5 shrink-0 text-muted-foreground/40 transition-colors group-hover:text-muted-foreground" weight="bold" />
+              </button>
+            </div>
           </template>
         </div>
       </div>
