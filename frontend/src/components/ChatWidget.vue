@@ -194,7 +194,7 @@
 
             <p v-if="!DEMO" class="text-[11px] text-muted-foreground pt-2">
               API key isn't configured.
-              <button class="text-primary hover:underline press" @click="settingsDrawer.show()">Settings → AI</button>.
+              <button class="text-primary hover:underline" @click="settingsDrawer.show()">Settings → AI</button>.
             </p>
           </div>
 

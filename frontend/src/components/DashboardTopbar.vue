@@ -108,9 +108,9 @@
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <div class="flex items-center gap-1.5 px-2 py-1.5 text-[11px] text-muted-foreground">
-            <button class="hover:text-foreground press transition-colors" @click="$router.push('/privacy')">Privacy policy</button>
+            <button class="hover:text-foreground transition-colors" @click="$router.push('/privacy')">Privacy policy</button>
             <span>·</span>
-            <button class="hover:text-foreground press transition-colors" @click="$router.push('/terms')">Terms of service</button>
+            <button class="hover:text-foreground transition-colors" @click="$router.push('/terms')">Terms of service</button>
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -214,9 +214,9 @@
               <div class="h-px bg-border/50 mx-3 my-2" />
 
               <div class="flex items-center gap-1.5 px-3 py-2 text-xs text-muted-foreground">
-                <button class="hover:text-foreground press transition-colors" @click="navigate('/privacy')">Privacy policy</button>
+                <button class="hover:text-foreground transition-colors" @click="navigate('/privacy')">Privacy policy</button>
                 <span>·</span>
-                <button class="hover:text-foreground press transition-colors" @click="navigate('/terms')">Terms of service</button>
+                <button class="hover:text-foreground transition-colors" @click="navigate('/terms')">Terms of service</button>
               </div>
             </div>
           </DrawerContent>
