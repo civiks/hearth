@@ -110,11 +110,11 @@
             class="aspect-[16/10] max-h-80 sm:max-h-[32rem] w-full object-cover object-center"
           />
           <div class="absolute inset-0 flex items-center justify-center bg-surface-inverse/20 bg-gradient-to-t from-surface-inverse/75 via-surface-inverse/30 to-surface-inverse/40">
-            <div class="inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-medium tracking-tight text-gray-900 backdrop-blur soft-card">
+            <div class="inline-flex items-center gap-2 rounded-2xl max-[380px]:rounded-full bg-white/95 px-4 py-2 max-[380px]:p-3 text-sm font-medium tracking-tight text-gray-900 backdrop-blur soft-card">
               <PhPlay class="size-3.5" weight="fill" />
-              Watch how it works
-              <span class="text-gray-400">·</span>
-              <span class="text-gray-500">41s</span>
+              <span class="max-[380px]:hidden">Watch how it works</span>
+              <span class="max-[380px]:hidden text-gray-400">·</span>
+              <span class="max-[380px]:hidden text-gray-500">41s</span>
             </div>
           </div>
         </div>
