@@ -8,18 +8,18 @@
       <div class="relative mx-auto max-w-7xl">
         <div class="relative px-6 pt-24 pb-16 sm:pt-28 sm:pb-20">
           <div class="max-w-xl">
-            <div v-reveal class="inline-flex items-center gap-1.5 mb-4 sm:mb-5 text-sm font-medium tracking-tight text-surface-inverse-foreground/55">
+            <div class="inline-flex items-center gap-1.5 mb-4 sm:mb-5 text-sm font-medium tracking-tight text-surface-inverse-foreground/55">
               <PhMapPin class="size-3.5 text-surface-inverse-foreground/70" weight="bold" />
               Now in Bangalore
             </div>
-            <h1 v-reveal="80" class="font-display text-4xl sm:text-5xl font-semibold tracking-[-0.03em] mb-5 sm:mb-6 pb-[0.12em] leading-[1.1] text-balance text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-100 to-zinc-400">
+            <h1 class="font-display text-4xl sm:text-5xl font-semibold tracking-[-0.03em] mb-5 sm:mb-6 pb-[0.12em] leading-[1.1] text-balance text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-100 to-zinc-400">
               Home services, done right.
             </h1>
-            <p v-reveal="160" class="text-base sm:text-lg text-surface-inverse-foreground/65 mb-7 sm:mb-8 max-w-lg leading-relaxed tracking-[-0.01em]">
+            <p class="text-base sm:text-lg text-surface-inverse-foreground/65 mb-7 sm:mb-8 max-w-lg leading-relaxed tracking-[-0.01em]">
               Verified plumbers, electricians, cleaners and more. At your doorstep within hours, with honest pricing and real reviews.
             </p>
           </div>
-          <div v-reveal="240" class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-x-12 gap-y-7">
+          <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-x-12 gap-y-7">
             <div>
             <div class="flex flex-wrap gap-3">
               <template v-if="DEMO">
@@ -103,7 +103,7 @@
 
     <section class="bg-surface-inverse">
       <div class="mx-auto max-w-7xl px-6 pb-12 sm:pb-16">
-        <div v-reveal class="relative overflow-hidden rounded-3xl soft-card bg-surface-inverse">
+        <div class="relative overflow-hidden rounded-3xl soft-card bg-surface-inverse">
           <img
             src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=2400&q=85"
             alt="A couple cooking together in their kitchen"
@@ -121,13 +121,13 @@
       </div>
     </section>
 
-    <PopularServicesRow v-reveal :services="services" :loading="loading" />
+    <PopularServicesRow :services="services" :loading="loading" />
 
-    <HowItWorks v-reveal />
+    <HowItWorks />
 
-    <Testimonials v-reveal />
+    <Testimonials />
 
-    <section v-reveal class="ai-surface-band">
+    <section class="ai-surface-band">
         <div class="mx-auto max-w-7xl px-6 py-10 sm:py-16">
           <div class="mx-auto max-w-2xl text-center">
             <h2 class="font-display text-3xl sm:text-4xl font-semibold tracking-[-0.03em] mb-4 leading-[1.1] text-balance">

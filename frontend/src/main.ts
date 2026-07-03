@@ -14,6 +14,10 @@ import { vReveal } from "./directives/reveal";
 import router from "./router";
 import { useAuthStore } from "./stores/auth";
 
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+
 async function bootstrap() {
   const app = createApp(App);
   const pinia = createPinia();
