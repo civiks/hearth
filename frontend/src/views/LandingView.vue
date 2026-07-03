@@ -107,7 +107,7 @@
           <img
             src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=2400&q=85"
             alt="A couple cooking together in their kitchen"
-            class="h-[clamp(15rem,42vh,20rem)] sm:h-[clamp(28rem,70vh,44rem)] w-full object-cover object-center"
+            class="aspect-[16/10] max-h-80 sm:max-h-[32rem] w-full object-cover object-center"
           />
           <div class="absolute inset-0 flex items-center justify-center bg-surface-inverse/20 bg-gradient-to-t from-surface-inverse/75 via-surface-inverse/30 to-surface-inverse/40">
             <div class="inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-medium tracking-tight text-gray-900 backdrop-blur soft-card">
