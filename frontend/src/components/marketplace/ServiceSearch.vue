@@ -32,7 +32,7 @@
     <Teleport to="body">
       <Transition
         enter-active-class="transition-opacity duration-150 ease-out"
-        leave-active-class="transition-opacity duration-100 ease-in"
+        leave-active-class="transition-opacity duration-100 ease-out"
         enter-from-class="opacity-0"
         leave-to-class="opacity-0"
       >
@@ -46,9 +46,9 @@
 
     <Transition
       enter-active-class="transition duration-150 ease-out"
-      enter-from-class="opacity-0 -translate-y-1 scale-[0.98]"
-      leave-active-class="transition duration-100 ease-in"
-      leave-to-class="opacity-0 -translate-y-1 scale-[0.98]"
+      enter-from-class="opacity-0 -translate-y-1 scale-[0.98] motion-reduce:translate-y-0 motion-reduce:scale-100"
+      leave-active-class="transition duration-100 ease-out"
+      leave-to-class="opacity-0 -translate-y-1 scale-[0.98] motion-reduce:translate-y-0 motion-reduce:scale-100"
     >
       <div
         v-if="open"

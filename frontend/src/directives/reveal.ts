@@ -27,6 +27,15 @@ export const vReveal: Directive<HTMLElement, number | undefined> = {
       el.style.setProperty("--reveal-delay", `${binding.value}ms`);
     }
 
+    // Already visible on initial load (common on tall/wide viewports) — reveal
+    // immediately instead of waiting on the observer's shrunk rootMargin, which
+    // would otherwise leave it blank until the next scroll event.
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.classList.add(REVEAL_IN);
+      return;
+    }
+
     const obs = getObserver();
     if (!obs) {
       el.classList.add(REVEAL_IN);
